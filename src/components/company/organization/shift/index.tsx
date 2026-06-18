@@ -87,17 +87,6 @@ const Shift: React.FC = () => {
     navigate(pathNames.ADD_SHIFT);
   };
 
-  // handle edit branch details
-  const handleEditShiftDetails = async (branchId: string) => {
-    setLoading(true);
-    // const response = await getShiftById(branchId);
-    // if(response.success){
-    //     handleOnAddOpenClose();
-    //     setShift(response.data);
-    // }
-    setLoading(false);
-  };
-
   // handle status open close
   const handleStatusOpenClose = () => {
     setStatusOpen((prev) => !prev);
@@ -127,6 +116,13 @@ const Shift: React.FC = () => {
     }
     setStatusLoading(false);
   };
+
+  // handle search branch
+  const handleOnSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  }
+
   return (
     <>
       <TopBar
@@ -139,6 +135,9 @@ const Shift: React.FC = () => {
             leftIcon={<i className="fa-solid fa-plus"></i>}
           />
         }
+        isSearch
+        searchPlaceholder="Search shift..."
+        onSearch={handleOnSearch}
         isExcel
       />
       <div className="content-area">
@@ -146,7 +145,6 @@ const Shift: React.FC = () => {
         <ShiftTable
           shiftList={shiftList}
           handleUpdateStatus={handleUpdateStatus}
-          handleEditShiftDetails={handleEditShiftDetails}
         />
         <Pagination
           totalRecords={total}

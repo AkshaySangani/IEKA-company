@@ -52,18 +52,18 @@ const Department: React.FC = () => {
   const [department, setDepartment] = useState<IDepartment>(initialDepartment);
   // useEffect for get branch
   useEffect(() => {
-    fetchDepartmentList(page, limit, search);
+    fetchDepartmentList({ page, limit, search });
   }, [page, limit, search]);
 
   // get branch list
-  const fetchDepartmentList = async (
-    page: number,
-    limit: number,
-    search: string = "",
-    status: string = "",
-  ) => {
+  const fetchDepartmentList = async (payload: {
+    page: number;
+    limit: number;
+    search: string;
+    status?: string;
+  }) => {
     setLoading(true);
-    const response = await getDepartmentList({ page, limit, search, status });
+    const response = await getDepartmentList(payload);
     if (response.success && response.data?.departments?.length > 0) {
       setDepartmentList(response.data?.departments);
       setTotal(response.data?.total);
@@ -71,6 +71,7 @@ const Department: React.FC = () => {
     } else {
       setDepartmentList([]);
       setTotal(0);
+      setPage(1);
       setLoading(false);
     }
   };
@@ -105,10 +106,22 @@ const Department: React.FC = () => {
 
     const response = await updateDepartmentStatus(payload, department._id);
     if (response.success) {
-      fetchDepartmentList(page, limit, search);
+      fetchDepartmentList({ page, limit, search });
     }
     setStatusLoading(false);
   };
+
+  // handle search branch
+  const handleOnSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handlePageSizeChange = (value: number) => {
+    setLimit(value);
+    setPage(1);
+  };
+
   return (
     <>
       <TopBar
@@ -121,6 +134,9 @@ const Department: React.FC = () => {
             leftIcon={<i className="fa-solid fa-plus"></i>}
           />
         }
+        isSearch
+        searchPlaceholder="Search department..."
+        onSearch={handleOnSearch}
         isExcel
       />
       <div className="content-area">
@@ -134,7 +150,7 @@ const Department: React.FC = () => {
           currentPage={page}
           pageSize={limit}
           onPageChange={setPage}
-          onPageSizeChange={setLimit}
+          onPageSizeChange={handlePageSizeChange}
         />
       </div>
 

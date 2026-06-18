@@ -120,6 +120,12 @@ const Branch: React.FC = () => {
     }
     setStatusLoading(false);
   };
+
+  // handle search branch
+  const handleOnSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  }
   return (
     <>
       <TopBar
@@ -132,6 +138,9 @@ const Branch: React.FC = () => {
             leftIcon={<i className="fa-solid fa-plus"></i>}
           />
         }
+        isSearch
+        searchPlaceholder="Search branch..."
+        onSearch={handleOnSearch}
         isExcel
       />
       <div className="content-area">

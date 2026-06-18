@@ -14,7 +14,7 @@ export interface DepartmentFormData {
 
 export const getDepartmentList = (payload: {
   search: string;
-  status: string;
+  status?: string;
   page: number;
   limit: number;
 }) => {

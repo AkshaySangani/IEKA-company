@@ -11,8 +11,7 @@ import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
 
 interface IShiftListProps {
-  shiftList: IShift[]
-  handleEditShiftDetails: (value: string) => void;
+  shiftList: IShift[];
   handleUpdateStatus: (value: IShift) => void;
 }
 
