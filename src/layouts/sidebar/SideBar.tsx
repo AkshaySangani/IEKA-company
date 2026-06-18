@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
   useEffect(() => {
     const activeParent = accessibleMenus.find((menu) =>
-      menu.submenu?.some((sub) => sub.path === location.pathname),
+      menu.submenu?.some((sub) => location.pathname.startsWith(sub.path)),
     );
 
     if (activeParent) {
@@ -201,7 +201,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                   `}
                 >
                   {menu.submenu.map((subMenu) => {
-                    const isActive = location.pathname === subMenu.path;
+                    const isActive = location.pathname.startsWith(subMenu.path);
 
                     return (
                       <li
