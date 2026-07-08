@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
-import StatusCards from "./StatusCards";
-import { StatusType } from "../../../../types/common-types";
+import StatusCards, { LeaveStats } from "./StatusCards";
+import { FilterCardItem, StatusType } from "../../../../types/common-types";
 import {
   getLeaveById,
+  getLeaveCount,
   getLeaves,
   updateLeaveStatus,
 } from "../../../../apis/organization/leave.api";
@@ -48,6 +49,77 @@ const Leave = () => {
     updatedAt: "",
   };
   const [leave, setLeave] = useState<ILeave>(initialLeave);
+
+  const [cards, setCards] = useState<FilterCardItem[]>([
+    {
+      id: "",
+      title: "Total",
+      count: 0,
+      activeColor: "bg-info",
+      textColor: "text-info",
+      icon: <i className="fa-solid fa-align-justify"></i>,
+    },
+    {
+      id: "ACTIVE",
+      title: "Active",
+      count: 0,
+      activeColor: "bg-success",
+      textColor: "text-success",
+      icon: <i className="fa-solid fa-user-check"></i>,
+    },
+    {
+      id: "INACTIVE",
+      title: "Inactive",
+      count: 0,
+      activeColor: "bg-warning",
+      textColor: "text-warning",
+      icon: <i className="fa-solid fa-user-xmark"></i>,
+    },
+    {
+      id: "DELETED",
+      title: "Deleted",
+      count: 0,
+      activeColor: "bg-danger",
+      textColor: "text-danger",
+      icon: <i className="fa-solid fa-trash-can"></i>,
+    },
+  ]);
+
+  useEffect(() => {
+    getLeaveCounts();
+  }, []);
+
+  const getLeaveCounts = async () => {
+    const response = await getLeaveCount();
+    if (response?.success) {
+      updateCards(response?.data);
+    }
+  };
+
+  // update cards
+  const updateCards = (stats: LeaveStats) => {
+    setCards((prev) =>
+      prev.map((card) => {
+        switch (card.id) {
+          case "":
+            return { ...card, count: stats.total };
+
+          case statusEnum.ACTIVE:
+            return { ...card, count: stats.active };
+
+          case statusEnum.INACTIVE:
+            return { ...card, count: stats.inactive };
+
+          case statusEnum.DELETED:
+            return { ...card, count: stats.deleted };
+
+          default:
+            return card;
+        }
+      }),
+    );
+  };
+
   // useEffect for get leave
   useEffect(() => {
     fetchLeaveList(page, limit, search, activeCard);
@@ -72,6 +144,11 @@ const Leave = () => {
       setLoading(false);
     }
   };
+
+  const handleRefreshData = () => {
+    fetchLeaveList(page, limit, search, activeCard);
+    getLeaveCounts();
+  }
 
   // handle click add new
   const handleOnAddOpenClose = () => {
@@ -115,7 +192,7 @@ const Leave = () => {
 
     const response = await updateLeaveStatus(payload, leave._id);
     if (response.success) {
-      fetchLeaveList(page, limit, search);
+      handleRefreshData();
     }
     setStatusLoading(false);
   };
@@ -144,7 +221,11 @@ const Leave = () => {
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />
-        <StatusCards activeCard={activeCard} setActiveCard={setActiveCard} />
+        <StatusCards
+          cards={cards}
+          activeCard={activeCard}
+          setActiveCard={setActiveCard}
+        />
         <LeaveTable
           leaveList={leaveList}
           handleEditLeaveDetails={handleEditLeaveDetails}
@@ -154,7 +235,7 @@ const Leave = () => {
       <AddLeave
         isOpen={isOpen}
         handleOpenClose={handleOnAddOpenClose}
-        fetchLeaveList={() => fetchLeaveList(page, limit, search, activeCard)}
+        fetchLeaveList={() => handleRefreshData()}
         leave={leave}
       />
       <StatusUpdateModal

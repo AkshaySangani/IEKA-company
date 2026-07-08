@@ -4,17 +4,9 @@ import TextField from "../../../common/text-field/TextField";
 import TextAreaField from "../../../common/text-area/TextAreaField";
 import RadioButton from "../../../common/radio-button";
 import {
-  branchEnum,
-  branchOptions,
   leaveTypeEnum,
   leaveTypeOptions,
-  yesNoOption,
 } from "../../../../constants/constants";
-import {
-  addBranch,
-  updateBranch,
-} from "../../../../apis/organization/branch.api";
-import { BranchType } from "../../../../types/common-types";
 import { ILeave } from ".";
 import { addLeave, updateLeave } from "../../../../apis/organization/leave.api";
 

@@ -54,6 +54,7 @@ const AddBranch: React.FC<IAddBranchProps> = ({
           shiftApplicable: branchDetails.shiftApplicable ? "YES" : "NO"
       })
     }
+    // eslint-disable-next-line
   }, [branchDetails._id]);
 
   const [errors, setErrors] = useState<

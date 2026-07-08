@@ -53,3 +53,7 @@ export const updateHolidayStatus = (
   apiRequest.patch(`/organization/holidays/status/${holidayId}`, payload, {
     showSuccessToast: true,
   });
+
+export const getHolidayCount = (year: number) => {
+  return apiRequest.get<ApiResponse>(`/organization/holidays/count?year=${year}`);
+};

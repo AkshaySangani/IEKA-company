@@ -48,7 +48,6 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
   >({});
 
   useEffect(() => {
-    console.log("holiday", holiday);
     if (holiday?._id) {
       setFormData({
         name: holiday.name,
@@ -60,6 +59,7 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
     } else {
       setFormData(initialFormData);
     }
+    // eslint-disable-next-line
   }, [holiday]);
 
   const handleChange = (
@@ -182,8 +182,6 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
     resetForm();
     handleOpenClose();
   };
-
-  console.log("formData.effectiveYear", formData.effectiveYear);
 
   return (
     <Modal

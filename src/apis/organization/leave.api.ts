@@ -9,7 +9,7 @@ export const getLeaves = (payload: {
 }) => {
   const { page, limit, search, status } = payload;
   return apiRequest.get<ApiResponse>(
-    `/organization/leaves?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}`,
+    `/organization/leaves?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}`,
   );
 };
 
@@ -22,7 +22,7 @@ export const addLeave = (payload: {
     showSuccessToast: true,
   });
 
-  export const getLeaveById = (leaveId: string) => {
+export const getLeaveById = (leaveId: string) => {
   return apiRequest.get<ApiResponse>(`/organization/leaves/${leaveId}`);
 };
 
@@ -48,3 +48,7 @@ export const updateLeaveStatus = (
   apiRequest.patch(`/organization/leaves/status/${leaveId}`, payload, {
     showSuccessToast: true,
   });
+
+export const getLeaveCount = () => {
+  return apiRequest.get<ApiResponse>(`/organization/leaves/count`);
+};
