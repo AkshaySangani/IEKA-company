@@ -20,6 +20,8 @@ import NotFoundPage from "./pages/not-found";
 import DesignationPage from "./pages/company/organization/designation";
 import LeavePage from "./pages/company/organization/leave";
 import HolidaysPage from "./pages/company/organization/holidays";
+import OnBoardingPage from "./pages/company/workforce/onboarding";
+import InviteEmployeePage from "./pages/company/workforce/onboarding/InviteEmployePage";
 
 function App() {
   return (
@@ -84,9 +86,15 @@ function App() {
             <Route path={pathNames.HOLIDAYS} element={<HolidaysPage />} />
           </Route>
 
+          <Route path={pathNames.WORKFORCE}>
+            <Route path={pathNames.ONBOARDING} element={<OnBoardingPage />} />
+            
+          </Route>
           <Route path="my-profile" element={<MyProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
+
+        <Route path={pathNames.INVITE_EMPLOYEE_FORM + "/:id"} element={<InviteEmployeePage />} />
 
         {/* Catch all unmatched routes */}
         <Route path="*" element={<NotFoundPage />} />

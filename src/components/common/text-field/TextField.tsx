@@ -34,7 +34,7 @@ const TextField: React.FC<InputProps> = ({
             py-[5px]
             text-sm
             font-medium
-            leading-[25px]
+            ${props.type === "date" ? "leading-[25px]" : "leading-[27px]"}
             text-[#383838]
             outline-none
             placeholder:transition-all

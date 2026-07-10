@@ -1,6 +1,5 @@
 export interface IUser {
-  companyId: string;
-  companyLogo: string;
+  company: { _id: string; companyLogo: string };
   email: string;
   firstName: string;
   lastName: string;

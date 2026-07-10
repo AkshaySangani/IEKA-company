@@ -9,6 +9,24 @@ export type AccountType = "SAVING" | "CURRENT";
 
 export type StatusType = "ACTIVE" | "INACTIVE" | "DELETED";
 
+export enum statusEnum {
+    REJECTED = "REJECTED",
+    ACCEPTED = "ACCEPTED",
+    PENDING = "PENDING",
+}
+
+export enum RoleEnum {
+    EMPLOYEE = "EMPLOYEE",
+    ADMIN = "ADMIN",
+    OWNER = "OWNER",
+}
+
+export enum employeeDocuments {
+  aadhaarCard = "Aadhaar Card",
+  panCard = "Pan Card",
+  drivingLicense = "Driving License"
+}
+
 export type BranchType = "HEAD_OFFICE" | "BRANCH";
 
 export interface ObjectType {[key: string]: any};

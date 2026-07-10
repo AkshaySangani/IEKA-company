@@ -36,6 +36,7 @@ module.exports = {
         error: "#ff4d4f",
         disabledBg: "#f5f5f5",
         disabledText: "#999",
+        formBg: "#5f6976",
 
         /* Button */
         "btn-primary": "#4483df",

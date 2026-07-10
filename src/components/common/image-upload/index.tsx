@@ -83,15 +83,15 @@ const ImageUpload = ({
 
   return (
     <div ref={ref}>
-      <label className="text-sm text-inputLabel font-medium mb-2">
-        {label}
+      {label && (
+        <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
+          {label} {required && <span className="text-error">*</span>}
+        </label>
+      )}
 
-        {required && <span className="text-error ml-1">*</span>}
-      </label>
-
-      <div className="flex flex-col gap-3 mt-1">
+      <div className="flex flex-col gap-3">
         {!preview && (
-          <div className="flex items-start gap-10 bg-white border border-gray-300 p-1">
+          <div className="flex items-start gap-10 bg-white border border-inputBorder p-1">
             {/* File Input */}
                 <input
                   ref={fileInputRef}

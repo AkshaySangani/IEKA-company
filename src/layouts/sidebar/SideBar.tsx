@@ -87,7 +87,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       >
         <NavLink to="/">
           <Image
-            src={user?.companyLogo || logo}
+            src={user?.company?.companyLogo || logo}
             alt="Logo"
             className="w-[90px] transition-all duration-300"
           />

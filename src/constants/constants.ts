@@ -31,6 +31,7 @@ export const pathNames = {
   WORKFORCE: "/workforce",
   ALL_EMPLOYEES: "/workforce/all-employees",
   ONBOARDING: "/workforce/onboarding",
+  INVITE_EMPLOYEE_FORM: "/invite_employee_form",
   RESIGNED: "/workforce/resigned",
   TERMINATION: "/workforce/termination",
   PROMOTION: "/workforce/promotion",
@@ -230,12 +231,18 @@ export const statusMessage: { [key: string]: string } = {
   ACTIVE: "Active",
   INACTIVE: "Inactive",
   DELETED: "Deleted",
+  ACCEPTED: "Accepted",
+  REJECTED: "Rejected",
+  PENDING: "Pending",
 };
 
 export const statusColor: { [key: string]: string } = {
   ACTIVE: "text-success",
   INACTIVE: "text-warning",
   DELETED: "text-danger",
+  ACCEPTED: "text-success",
+  REJECTED: "text-danger",
+  PENDING: "text-pending",
 };
 
 export const moduleEnum: ObjectType = {
@@ -268,6 +275,9 @@ export const statusEnum: ObjectType = {
   ACTIVE: "ACTIVE",
   INACTIVE: "INACTIVE",
   DELETED: "DELETED",
+  ACCEPTED: "ACCEPTED",
+  REJECTED: "REJECTED",
+  PENDING: "PENDING",
 }
 
 export const branchEnum: {
@@ -304,6 +314,71 @@ export const genderOptions: IOption[] = [
     label: gender.other,
     value: "other",
   },
+];
+
+export const roleOptions: IOption[] = [
+  {
+    label: roleEnum.OWNER,
+    value: roleEnum.OWNER,
+  },
+  {
+    label: roleEnum.ADMIN,
+    value: roleEnum.ADMIN,
+  },
+  {
+    label: roleEnum.EMPLOYEE,
+    value: roleEnum.EMPLOYEE,
+  },
+];
+
+export const bloodGroupOptions: IOption[] = [
+  {
+    label: "A+",
+    value: "A+",
+  },
+  {
+    label: "A-",
+    value: "A-",
+  },
+  {
+    label: "B+",
+    value: "B+",
+  },
+  {
+    label: "B-",
+    value: "B-",
+  },
+  {
+    label: "AB+",
+    value: "AB+",
+  },
+  {
+    label: "AB-",
+    value: "AB-",
+  },
+  {
+    label: "O+",
+    value: "O+",
+  },
+  {
+    label: "O-",
+    value: "O-",
+  },
+];
+
+export const maritalStatusOptions: IOption[] = [
+  {
+    label: "Single",
+    value: "single",
+  },
+  {
+    label: "Married",
+    value: "married",
+  },
+  // {
+  //   label: "Divorced",
+  //   value: "divorced",
+  // },
 ];
 
 export const accountOptions: IOption[] = [

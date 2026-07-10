@@ -122,11 +122,10 @@ const SelectField = ({
 
   return (
     <div id={`field-${name}`}>
-      {label && (
-        <div className="mb-1 text-sm font-medium text-inputLabel">
-          {label}
-          {required && <span className="text-error">*</span>}
-        </div>
+       {label && (
+        <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
+          {label} {required && <span className="text-error">*</span>}
+        </label>
       )}
 
       <Select

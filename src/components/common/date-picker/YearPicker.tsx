@@ -46,7 +46,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
   const years = Array.from({ length: 12 }, (_, i) => startYear - 1 + i);
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="" ref={ref}>
       {label && (
         <label className="mb-2 block text-sm font-medium text-inputLabel">
           {label}
@@ -64,6 +64,8 @@ const YearPicker: React.FC<YearPickerProps> = ({
           w-full cursor-pointer border border-inputBorder bg-white
           px-[15px] py-[5px] text-sm font-medium leading-[25px]
           outline-none focus:border-inputFocus
+          placeholder:text-sm
+            placeholder:font-normal
           ${disabled ? "bg-disabledBg cursor-not-allowed" : ""}
           ${error ? "border-error" : ""}
         `}
