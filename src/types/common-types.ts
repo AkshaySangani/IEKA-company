@@ -9,6 +9,11 @@ export type AccountType = "SAVING" | "CURRENT";
 
 export type StatusType = "ACTIVE" | "INACTIVE" | "DELETED";
 
+export enum ValueType { 
+  PERCENTAGE = "PERCENTAGE", 
+  FIXED = "FIXED"
+}
+
 export enum statusEnum {
     REJECTED = "REJECTED",
     ACCEPTED = "ACCEPTED",

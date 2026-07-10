@@ -1,5 +1,3 @@
-import React from "react";
-import { Trash2, Plus } from "lucide-react";
 import { ColumnDef, CustomTable } from "../../../../common/table";
 import TextField from "../../../../common/text-field/TextField";
 import YearPicker from "../../../../common/date-picker/YearPicker";

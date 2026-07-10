@@ -137,6 +137,7 @@ const SelectField = ({
         isDisabled={isDisabled}
         isMulti={isMulti}
         styles={customStyles}
+        menuPortalTarget={document.body}
         onChange={(
           option: SingleValue<SelectOption> | MultiValue<SelectOption>
         ) => onChange(option || "")}

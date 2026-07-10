@@ -1,4 +1,4 @@
-import { IOption, ObjectType } from "../types/common-types";
+import { IOption, ObjectType, ValueType } from "../types/common-types";
 import { MenuItem } from "../types/sidebar-types";
 
 export const storageKeys = {
@@ -51,8 +51,9 @@ export const pathNames = {
 
   // Pay Slip
   PAY_SLIP: "/pay-slip",
-  EARNING: "/pay-slip/earning",
-  DEDUCTION: "/pay-slip/deduction",
+  EARNING: "/pay-slip/earnings",
+  PAY_SLIP_DISCLAIMER: "/pay-slip/payslip-disclaimer",
+  DEDUCTION: "/pay-slip/deductions",
   PAY_SLIP_ANNUAL_SHEET: "/pay-slip/pay-slip-annual-sheet",
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
 } as const;
@@ -208,11 +209,11 @@ export const menuItems: MenuItem[] = [
     path: pathNames.PAY_SLIP,
     submenu: [
       {
-        label: "Earning",
+        label: "Earnings",
         path: pathNames.EARNING,
       },
       {
-        label: "Deduction",
+        label: "Deductions",
         path: pathNames.DEDUCTION,
       },
       {
@@ -464,3 +465,18 @@ export const statusOptions: IOption[] = [
   },
 ];
 
+export const payValueType = {
+  [ValueType.FIXED]: "₹",
+  [ValueType.PERCENTAGE]: "%"
+}
+
+export const payValueTypeOptions = [
+  {
+    label: payValueType[ValueType.FIXED],
+    value: ValueType.FIXED
+  },
+  {
+    label: payValueType[ValueType.PERCENTAGE],
+    value: ValueType.PERCENTAGE
+  }
+]

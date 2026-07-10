@@ -22,6 +22,8 @@ import LeavePage from "./pages/company/organization/leave";
 import HolidaysPage from "./pages/company/organization/holidays";
 import OnBoardingPage from "./pages/company/workforce/onboarding";
 import InviteEmployeePage from "./pages/company/workforce/onboarding/InviteEmployePage";
+import EarningsPage from "./pages/company/pay-slip/earnings";
+import PayslipDisclaimerPage from "./pages/company/pay-slip/earnings/PayslipDisclaimer";
 
 function App() {
   return (
@@ -89,6 +91,11 @@ function App() {
           <Route path={pathNames.WORKFORCE}>
             <Route path={pathNames.ONBOARDING} element={<OnBoardingPage />} />
             
+          </Route>
+
+          <Route path={pathNames.PAY_SLIP}>
+            <Route path={pathNames.EARNING} element={<EarningsPage />} />
+            <Route path={pathNames.PAY_SLIP_DISCLAIMER} element={<PayslipDisclaimerPage />} />
           </Route>
           <Route path="my-profile" element={<MyProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
