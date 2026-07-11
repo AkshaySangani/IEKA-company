@@ -2,17 +2,16 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { CompanyStats } from "./StatusCards";
-import { FilterCardItem, RoleEnum, statusEnum, StatusType } from "../../../../types/common-types";
-import StatusUpdateModal from "../../../common/modal/StatusModal";
+import { FilterCardItem, RoleEnum, statusEnum } from "../../../../types/common-types";
 import PageLoader from "../../../common/loader/PageLoader";
-import YearPicker from "../../../common/date-picker/YearPicker";
 import OnboardingTable from "./OnboardingTable";
-import InviteOnboarding from "./InviteOnboarding";
-import { getOnboardingById, getOnboardingCount, getOnboardings, updateOnboardingStatus } from "../../../../apis/workforce/onboardings.api";
+import { getOnboardingById, getOnboardingCount, getOnboardings } from "../../../../apis/workforce/onboardings.api";
 import AddEmployee from "./AddEmployee";
+import Pagination from "../../../common/pagination/Pagination";
 
 export interface IOnboarding {
   _id: string;
+  profileImage : string;
   firstName: string;
   lastName: string;
   email: string;
@@ -24,7 +23,6 @@ export interface IOnboarding {
 
 const Onboarding = () => {
   const [activeCard, setActiveCard] = useState<string>("");
-  const [year, setYear] = useState<number>(new Date().getFullYear());
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -37,6 +35,7 @@ const Onboarding = () => {
   const [onboardingsList, setOnboardings] = useState<IOnboarding[]>([]);
   const initialOnboarding: IOnboarding = {
   _id: "",
+  profileImage : "",
   firstName: "",
   lastName: "",
   email: "",
@@ -84,6 +83,7 @@ const Onboarding = () => {
   
     useEffect(() => {
       getOnboardingCounts();
+      // eslint-disable-next-line
     }, []);
   
     const getOnboardingCounts = async () => {
@@ -120,7 +120,8 @@ const Onboarding = () => {
   // useEffect for get holiday
   useEffect(() => {
     fetchOnboardingList(page, limit, search, activeCard);
-  }, [page, limit, search, activeCard,year]);
+    // eslint-disable-next-line
+  }, [page, limit, search, activeCard]);
 
   // get holiday list
   const fetchOnboardingList = async (
@@ -171,42 +172,12 @@ const Onboarding = () => {
     setOnboarding(onboarding);
   };
 
-  const handleStatusSubmit = async (formData: {
-    status: StatusType;
-    remarks: string;
-  }) => {
-    setStatusLoading(true);
-
-    const payload = {
-      status: formData.status.trim(),
-      remarks: formData.remarks,
-    };
-
-    const response = await updateOnboardingStatus(payload, onboarding._id);
-    if (response.success) {
-      handleRefreshData();
-    }
-    setStatusLoading(false);
-  };
-
-  // handle refresh data 
-  const handleRefreshData = () => {
-    fetchOnboardingList(page, limit, search, activeCard);
-    getOnboardingCounts();
-  }
-
   // handle search holiday
   const handleOnSearch = (value: string) => {
     setSearch(value);
     setPage(1);
   };
 
-  const handleYearChange = (year: number) => {
-    setSearch("");
-    setPage(1);
-    setYear(Number(year));
-    getOnboardingCounts();
-  }
   return (
     <>
       <TopBar
@@ -232,6 +203,7 @@ const Onboarding = () => {
           handleEditOnboardingDetails={handleEditOnboardingDetails}
           handleUpdateStatus={handleUpdateStatus}
         />
+        <Pagination totalRecords={total} currentPage={page} pageSize={limit} onPageChange={setPage} onPageSizeChange={setLimit}/>
       </div>
       <AddEmployee
         isOpen={isOpen}

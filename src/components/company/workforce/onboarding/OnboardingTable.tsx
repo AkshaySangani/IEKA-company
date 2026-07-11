@@ -1,5 +1,6 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
+  roleNames,
   statusColor,
   statusEnum,
   statusMessage,
@@ -7,8 +8,9 @@ import {
 import { IOnboarding } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import { DateFormat, formatDate, getDateDifferenceInDays } from "../../../../utils/date-format";
+import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { RoleEnum } from "../../../../types/common-types";
+import PersonInfo from "../../../common/person-info";
 
 interface IOnboardingsListProps {
   onboardingsList: IOnboarding[];
@@ -24,6 +26,7 @@ export default function OnboardingsTable({
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const initialOnboarding: IOnboarding = {
     _id: "",
+    profileImage : "",
     firstName: "",
     lastName: "",
     email: "",
@@ -44,15 +47,12 @@ export default function OnboardingsTable({
       header: "Employee Name",
       className: "w-[30%]",
       render: (row) => (
-        <div className="flex flex-col">
-          <div
-            className="text-primary cursor-pointer text-sm font-semibold"
-            onClick={() => handleEditOnboardingDetails(row)}
-          >
-            {`${row.firstName} ${row.lastName}`}
-          </div>
-          <div className="text-grayText text-xs">{""}</div>
-        </div>
+        <PersonInfo personInfo={{
+          profileImage: row.profileImage,
+          firstName: row.firstName,
+          lastName: row.lastName,
+          description: roleNames[row.role]
+        }} onClick={() => handleEditOnboardingDetails(row)}/>
       ),
     },
     {

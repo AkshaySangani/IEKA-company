@@ -1,11 +1,9 @@
-import React from "react";
-import { Plus, Trash2 } from "lucide-react";
-import Button from "../../../../common/button/Button";
 import ImageUpload from "../../../../common/image-upload";
 import TextField from "../../../../common/text-field/TextField";
 import { employeeDocuments } from "../../../../../types/common-types";
 
 export interface EmployeeDocument {
+  name: string;
   card: string;
   number: string;
   frontPhoto: File | null;
@@ -24,33 +22,6 @@ interface Props {
   ) => void;
 }
 
-const documentTypes = [
-  {
-    label: "Aadhaar Card",
-    value: "adhar",
-  },
-  {
-    label: "PAN Card",
-    value: "pan",
-  },
-  {
-    label: "Passport",
-    value: "passport",
-  },
-  {
-    label: "Driving Licence",
-    value: "driving_license",
-  },
-  {
-    label: "Voter ID",
-    value: "voter_id",
-  },
-  {
-    label: "Other",
-    value: "other",
-  },
-];
-
 const DocumentDetails = ({
   documents,
   errors,
@@ -65,19 +36,19 @@ const DocumentDetails = ({
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 bg-white p-4">
         {documents.map((ele: EmployeeDocument, index: number) => {
-            const required = ele?.card === employeeDocuments.aadhaarCard;
+            const required = ele?.name === employeeDocuments.aadhaarCard;
             return (
           <>
             <TextField
-              label={`${ele?.card} No.`}
+              label={`${ele?.name} No.`}
               value={ele?.number}
-              type={ele?.card === employeeDocuments.aadhaarCard ? "number":""}
+              type={ele?.name === employeeDocuments.aadhaarCard ? "number":""}
               name="number"
               onChange={(e) =>
                 handleDocumentChange(index, "number", e.target.value)
               }
               error={errors.documents?.[index]?.number}
-              placeholder={`Enter ${ele?.card} No.`}
+              placeholder={`Enter ${ele?.name} No.`}
               required={required}
             />
             <ImageUpload
@@ -85,7 +56,7 @@ const DocumentDetails = ({
               value={ele?.frontPhoto}
               onChange={(e) => handleDocumentChange(index, "frontPhoto", e)}
               error={errors.documents?.[index]?.frontPhoto}
-              label={`${ele?.card} Photo (Front)`}
+              label={`${ele?.name} Photo (Front)`}
               required={required}
             />
 
@@ -94,7 +65,7 @@ const DocumentDetails = ({
               value={ele?.backPhoto}
               onChange={(e) => handleDocumentChange(index, "backPhoto", e)}
               error={errors.documents?.[index]?.backPhoto}
-              label={`${ele?.card} Photo (Back)`}
+              label={`${ele?.name} Photo (Back)`}
               required={required}
             />
           </>

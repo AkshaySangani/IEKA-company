@@ -50,3 +50,7 @@ export const updateOnboardingStatus = (
 export const getOnboardingCount = () => {
   return apiRequest.get<ApiResponse>(`/workforce/onboard/count`);
 };
+
+export const getOnboardingCompanyInfo = (companyId: string) => {
+  return apiRequest.get<ApiResponse>(`/workforce/onboard/company-info/${companyId}`);
+};

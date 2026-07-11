@@ -17,7 +17,7 @@ export function CustomTable<T>({ columns, data }: CustomTableProps<T>) {
     <div className="w-full overflow-x-auto bg-white">
       <table className="w-full border-collapse text-left text-sm">
         {/* Table Header */}
-        <thead className="bg-tableHeader text-gray-700 font-semibold border-b border-gray-300">
+        <thead className="sticky top-0 bg-tableHeader text-gray-700 font-semibold border-b border-gray-300">
           <tr>
             {columns.map((col, index) => (
               <th 

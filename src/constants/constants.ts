@@ -7,7 +7,14 @@ export const storageKeys = {
 
 export const roleEnum: ObjectType = {
   OWNER: "OWNER",
-  MANAGER: "MANAGER"
+  MANAGER: "MANAGER",
+  EMPLOYEE: "EMPLOYEE"
+}
+
+export const roleNames: any = {
+  [roleEnum.OWNER]: "Owner",
+  [roleEnum.MANAGER]: "Manager",
+  [roleEnum.EMPLOYEE]: "Employee"
 }
 
 export const pathNames = {

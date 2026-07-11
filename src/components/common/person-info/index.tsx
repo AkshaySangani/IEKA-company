@@ -1,35 +1,36 @@
 import Image from "../image";
 
-export interface IOwnerInfo {
+export interface IPersonInfo {
   profileImage: string;
   firstName: string;
   lastName: string;
+  description: string;
 }
 
-interface IOwnerInfoProps {
-  ownerInfo: IOwnerInfo;
+interface IPersonInfoProps {
+  personInfo: IPersonInfo;
   onClick?: () => void;
 }
 
-const OwnerInfo: React.FC<IOwnerInfoProps> = ({
-  ownerInfo,
+const PersonInfo: React.FC<IPersonInfoProps> = ({
+  personInfo,
   onClick = () => {},
-}: IOwnerInfoProps) => {
+}: IPersonInfoProps) => {
   return (
     <div className="flex gap-3 items-center" onClick={onClick}>
       <Image
-        src={ownerInfo.profileImage}
-        alt={ownerInfo.firstName}
+        src={personInfo.profileImage}
+        alt={personInfo.firstName}
         className="w-9 h-9 object-cover rounded-full ring-1 ring-gray-200"
       />
       <div className="flex flex-col">
         <span className="text-primary font-medium text-sm cursor-pointer">
-          {ownerInfo.firstName} {ownerInfo.lastName}
+          {personInfo.firstName} {personInfo.lastName}
         </span>
-        {/* <span className="text-gray-400 text-xs">{row.ownerId}</span> */}
+        {personInfo?.description && <span className="text-gray-400 text-xs">{personInfo?.description}</span>}
       </div>
     </div>
   );
 };
 
-export default OwnerInfo;
+export default PersonInfo;

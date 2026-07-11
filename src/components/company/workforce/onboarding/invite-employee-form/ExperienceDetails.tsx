@@ -1,8 +1,5 @@
-import React from "react";
-import { Plus, Trash2 } from "lucide-react";
 import Button from "../../../../common/button/Button";
 import TextField from "../../../../common/text-field/TextField";
-import ImageUpload from "../../../../common/image-upload";
 import DocumentUpload from "../../../../common/document";
 import { ColumnDef, CustomTable } from "../../../../common/table";
 

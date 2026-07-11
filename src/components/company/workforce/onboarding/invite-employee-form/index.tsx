@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DocumentDetails, { EmployeeDocument } from "./DocumentDetails";
 import ExperienceDetails, { Experience } from "./ExperienceDetails";
 import EducationDetails, { Education } from "./EducationDetails";
@@ -7,24 +7,40 @@ import PersonalDetails from "./PersonalDetails";
 import AddressDetails from "./AddressDetails";
 import BankDetails from "./BankDetails";
 import Image from "../../../../common/image";
-import { useAuthStore } from "../../../../../store/auth-store";
 import Button from "../../../../common/button/Button";
-import { inviteEmployee } from "../../../../../apis/workforce/onboardings.api";
+import { getOnboardingCompanyInfo, inviteEmployee } from "../../../../../apis/workforce/onboardings.api";
 import { useParams } from "react-router-dom";
 import { regex } from "../../../../../constants/validation-regex";
 import { documentValidationRules } from "../../../../../utils/document-validation-rules";
-import { employeeDocuments } from "../../../../../types/common-types";
+import { documentEnum, employeeDocuments } from "../../../../../types/common-types";
 import PageLoader from "../../../../common/loader/PageLoader";
 
+interface ICompanyInfo {
+    _id: string;
+    companyName: string;
+    companyEmail: string;
+    companyAddress: string;
+    companyLogo: string;
+}
+
 const InviteEmployeeForm = () => {
-  const { user } = useAuthStore();
   const params = useParams();
+  const companyId = params?.id as string
   const formRef = useRef<HTMLFormElement>(null);
+
+  const initialCompanyInfo: ICompanyInfo = {
+    _id: "",
+    companyName: "",
+    companyEmail: "",
+    companyAddress: "",
+    companyLogo: "",
+}
+  const [companyInfo, setCompanyInfo] = useState<ICompanyInfo>(initialCompanyInfo)
 
   const [loading, setLoading] = useState<boolean>(false);
   // initial state
   const initialFormData = {
-    companyId: params?.id as string,
+    companyId: companyId,
 
     firstName: "",
     middleName: "",
@@ -89,19 +105,22 @@ const InviteEmployeeForm = () => {
 
   const initialDocuments = [
     {
-      card: employeeDocuments.aadhaarCard,
+      name: employeeDocuments.aadhaarCard,
+      card: documentEnum.adhar,
       number: "",
       frontPhoto: null,
       backPhoto: null,
     },
     {
-      card: employeeDocuments.panCard,
+      name: employeeDocuments.panCard,
+      card: documentEnum.pan,
       number: "",
       frontPhoto: null,
       backPhoto: null,
     },
     {
-      card: employeeDocuments.drivingLicense,
+      name: employeeDocuments.drivingLicense,
+      card: documentEnum.drivingId,
       number: "",
       frontPhoto: null,
       backPhoto: null,
@@ -109,6 +128,20 @@ const InviteEmployeeForm = () => {
   ];
   const [documents, setDocuments] =
     useState<EmployeeDocument[]>(initialDocuments);
+
+    useEffect(() => {
+      if(companyId){
+        fetchCompanyInfo()
+      }
+      // eslint-disable-next-line
+    },[companyId]);
+
+    const fetchCompanyInfo = async () => {
+      const response = await getOnboardingCompanyInfo(companyId);
+      if(response?.success){
+        setCompanyInfo(response?.data)
+      } else setCompanyInfo(initialCompanyInfo);
+    }
 
   // handle change function
   const handleChange = (
@@ -559,17 +592,17 @@ const InviteEmployeeForm = () => {
       setDocuments(initialDocuments);
       setEducations(initialEducations);
       setExperiences(initialExperience);
+      window.location.reload();
   }
   return (
     <div className="bg-[#ededed]">
       <div className="mx-[10%] content-card">
         <div className="flex flex-col justify-center items-center p-4 gap-3 bg-white">
           <div>
-            <Image width={100} height={50} />
+            <Image src={companyInfo?.companyLogo ? companyInfo?.companyLogo : undefined} width={100} height={100} />
           </div>
           <span>
-            Plot No.8, GIDC Dhareshwar, Dhareshwer Bistar, Jetpur, Gujarat
-            360370
+            {companyInfo.companyAddress}
           </span>
         </div>
         <form

@@ -57,3 +57,18 @@ export interface FilterCardItem {
   textColor?: string;
   icon: React.ReactNode;
 }
+
+export enum documentEnum {
+  adhar = "adhar",
+  pan = "pan",
+  voterId = "voterId",
+  passport = "passport",
+  drivingId = "drivingId"
+}
+
+export enum employmentTypeType {
+  PERMANENT = "PERMANENT",
+  CONTRACT = "CONTRACT",
+  INTERN = "INTERN",
+  CONSULTANT = "CONSULTANT",
+}
