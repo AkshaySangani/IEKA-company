@@ -10,7 +10,7 @@ import {
   updateBranchStatus,
 } from "../../../../apis/organization/branch.api";
 import Pagination from "../../../common/pagination/Pagination";
-import { BranchType, statusEnum, StatusType } from "../../../../types/common-types";
+import { BranchType, statusEnum } from "../../../../types/common-types";
 import { branchEnum } from "../../../../constants/constants";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 
@@ -21,7 +21,7 @@ export interface IBranch {
   address: string;
   shiftApplicable: boolean;
   branchType: BranchType;
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -104,7 +104,7 @@ const Branch: React.FC = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

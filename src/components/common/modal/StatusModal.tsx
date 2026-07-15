@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { statusEnum, StatusType } from "../../../types/common-types";
+import { statusEnum } from "../../../types/common-types";
 import { statusOptions } from "../../../constants/constants";
 import Modal from "./Modal";
 import RadioButton from "../radio-button";
@@ -9,7 +9,7 @@ import Image from "../image";
 
 interface IStatusUpdateProps {
   isOpen: boolean;
-  status: StatusType;
+  status: statusEnum;
   title: string;
   loading: boolean;
   handleOpenClose: () => void;
@@ -17,7 +17,7 @@ interface IStatusUpdateProps {
 }
 
 interface FormDataPayload {
-  status: StatusType;
+  status: statusEnum;
   remarks: string;
 }
 

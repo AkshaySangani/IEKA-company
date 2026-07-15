@@ -10,7 +10,7 @@ import Info from "../../../assets/icons/Info";
 import EmployeeManagementIcon from "../../../assets/images/employee_management.png";
 import ProductionManagementIcon from "../../../assets/images/production.png"
 import UserAvatar from "../../../assets/images/User-Image.jpg";
-import { ObjectType, StatusType } from "../../../types/common-types";
+import { ObjectType, statusEnum } from "../../../types/common-types";
 
 export const modules: ObjectType = {
   [moduleEnum.EMPLOYEE]: {
@@ -24,7 +24,7 @@ export const modules: ObjectType = {
 }
 
 interface IStatusFormData {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
 }
 
@@ -38,7 +38,7 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
   const [isStatusOpen, setIsStatusOpen] = useState<boolean>(false);
   const [isMailOpen, setIsMailOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<IStatusFormData>({
-    status: "ACTIVE",
+    status: statusEnum.ACTIVE,
     remarks: ""
   });
 

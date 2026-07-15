@@ -3,7 +3,7 @@ import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
-import { statusEnum, StatusType } from "../../../../types/common-types";
+import { statusEnum } from "../../../../types/common-types";
 import { pathNames } from "../../../../constants/constants";
 import DepartmentTable from "./DepartmentTable";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ export interface IDepartment {
   companyId: string;
   name: string;
   assignments: IDepartmentAssignment[];
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -94,7 +94,7 @@ const Department: React.FC = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { LeaveStats } from "./StatusCards";
-import { FilterCardItem, StatusType } from "../../../../types/common-types";
+import { FilterCardItem, statusEnum } from "../../../../types/common-types";
 import {
   getLeaveById,
   getLeaveCount,
   getLeaves,
   updateLeaveStatus,
 } from "../../../../apis/organization/leave.api";
-import { statusEnum } from "../../../../types/common-types";
 import LeaveTable from "./LeaveTable";
 import AddLeave from "./AddLeave";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
@@ -21,7 +20,7 @@ export interface ILeave {
   name: string;
   description: string;
   isPaid: boolean;
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -180,7 +179,7 @@ const Leave = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

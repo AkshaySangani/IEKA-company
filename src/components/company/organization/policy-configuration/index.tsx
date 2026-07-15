@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { CompanyStats } from "./StatusCards";
-import { FilterCardItem, statusEnum, StatusType } from "../../../../types/common-types";
+import { FilterCardItem, statusEnum } from "../../../../types/common-types";
 import {
   getPolicyById,
   getPolicyCount,
@@ -21,7 +21,7 @@ export interface IPolicy {
   _id: string;
   companyId: string;
   name: string;
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -30,7 +30,7 @@ export const initialPolicy: IPolicy = {
   _id: "",
   companyId: "",
   name: "",
-  status: "ACTIVE",
+  status: statusEnum.ACTIVE,
   createdAt: "",
   updatedAt: "",
 };
@@ -177,7 +177,7 @@ const Policy = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

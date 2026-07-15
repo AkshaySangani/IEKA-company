@@ -3,7 +3,7 @@ import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
-import { StatusType } from "../../../../types/common-types";
+import { statusEnum } from "../../../../types/common-types";
 import { pathNames } from "../../../../constants/constants";
 import {
   getShiftList,
@@ -27,7 +27,7 @@ export interface IShift {
   breakStartTime: string;
   breakEndTime: string;
   branchIds: ShiftBranch[];
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -52,7 +52,7 @@ const Shift: React.FC = () => {
     breakStartTime: "",
     breakEndTime: "",
     branchIds: [],
-    status: "INACTIVE",
+    status: statusEnum.INACTIVE,
     createdAt: "",
     updatedAt: "",
   };
@@ -100,7 +100,7 @@ const Shift: React.FC = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

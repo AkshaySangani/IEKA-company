@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { EarningStats } from "./StatusCards";
-import { FilterCardItem, statusEnum, StatusType, ValueType } from "../../../../types/common-types";
+import { FilterCardItem, statusEnum, ValueType } from "../../../../types/common-types";
 import {
   getEarningById,
   getEarningCount,
@@ -29,7 +29,7 @@ export interface IEarning {
   _id: string;
   companyId: string;
   name: string;
-  status: StatusType;
+  status: statusEnum;
   details: PayslipDetail[];
   createdAt: string;
   updatedAt: string;
@@ -39,7 +39,7 @@ export const initialEarning: IEarning = {
   _id: "",
   companyId: "",
   name: "",
-  status: "ACTIVE",
+  status: statusEnum.ACTIVE,
   details: [
     {
       _id: "",
@@ -196,7 +196,7 @@ const Earnings = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

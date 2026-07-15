@@ -5,7 +5,6 @@ import DesignationTable from "./DesignationTable";
 import AddDesignation from "./AddDesignation";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
-import { StatusType } from "../../../../types/common-types";
 import { statusEnum } from "../../../../types/common-types";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import { getDesignation, updateDesignationStatus } from "../../../../apis/organization/designation.api";
@@ -15,7 +14,7 @@ export interface IDesignation {
   companyId: string;
   name: string;
   description: string;
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -96,7 +95,7 @@ const Designation: React.FC = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

@@ -29,7 +29,7 @@ export default function HolidaysTable({
     startDate: "",
     endDate: "",
     effectiveYear: new Date().getFullYear(),
-    status: "ACTIVE",
+    status: statusEnum.ACTIVE,
     createdAt: "",
     updatedAt: "",
   };

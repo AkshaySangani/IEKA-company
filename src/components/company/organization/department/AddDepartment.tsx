@@ -12,7 +12,7 @@ import {
 import PageLoader from "../../../common/loader/PageLoader";
 import Checkbox from "../../../common/checkbox/CheckBox";
 import { addDepartment, DepartmentFormData, getBranchAndShift, getDepartmentById, updateDepartment } from "../../../../apis/organization/department.api";
-import { BranchType, StatusType } from "../../../../types/common-types";
+import { BranchType, statusEnum } from "../../../../types/common-types";
 
 export interface IBranchShift {
   _id: string;
@@ -53,7 +53,7 @@ export interface IDepartmentResponse {
   companyId: string;
   name: string;
   assignments: IDepartmentAssignment[];
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }

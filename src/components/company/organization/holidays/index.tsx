@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { CompanyStats } from "./StatusCards";
-import { FilterCardItem, StatusType } from "../../../../types/common-types";
+import { FilterCardItem, statusEnum } from "../../../../types/common-types";
 import {
   getHolidayById,
   getHolidayCount,
   getHolidays,
   updateHolidayStatus,
 } from "../../../../apis/organization/holidays.api";
-import { statusEnum } from "../../../../types/common-types";
 import HolidaysTable from "./HolidaysTable";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
@@ -24,7 +23,7 @@ export interface IHoliday {
   startDate: string;
   endDate: string;
   effectiveYear: number;
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -182,7 +181,7 @@ const Holiday = () => {
   };
 
   const handleStatusSubmit = async (formData: {
-    status: StatusType;
+    status: statusEnum;
     remarks: string;
   }) => {
     setStatusLoading(true);

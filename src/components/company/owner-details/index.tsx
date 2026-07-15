@@ -11,7 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   AccountType,
   IEmployeeStats,
-  StatusType,
+  statusEnum,
 } from "../../../types/common-types";
 import EmptyPlaceholder from "../../common/empty-paceholder";
 
@@ -21,7 +21,7 @@ export interface IBankAccount {
   ifscCode: string;
   accountHolderName: string;
   accountType: AccountType;
-  status: StatusType;
+  status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
@@ -34,7 +34,7 @@ export interface ICompanyRepresentative {
   phone: string;
   gender: string;
   profileImage: string;
-  status: StatusType;
+  status: statusEnum;
   address: string;
   lastLoginAt: string | null;
   passwordChangedAt: string | null;
@@ -45,7 +45,7 @@ export interface ICompanyRepresentative {
 
 export interface ICompanyDetails {
   _id: string;
-  status: StatusType;
+  status: statusEnum;
 
   companyName: string;
   gstin: string;
@@ -79,7 +79,7 @@ const OwnerDetails = () => {
   const [isAccountOpen, setIsAccountOpen] = useState<boolean>(false);
   const initialCompanyDetails: ICompanyDetails = {
     _id: "",
-    status: "ACTIVE",
+    status: statusEnum.ACTIVE,
 
     companyName: "",
     gstin: "",
@@ -99,7 +99,7 @@ const OwnerDetails = () => {
       ifscCode: "",
       accountHolderName: "",
       accountType: "SAVING",
-      status: "ACTIVE",
+      status: statusEnum.ACTIVE,
       createdAt: "",
       updatedAt: "",
     },
@@ -123,7 +123,7 @@ const OwnerDetails = () => {
       gender: "",
       profileImage: "",
       address: "",
-      status: "ACTIVE",
+      status: statusEnum.ACTIVE,
       lastLoginAt: null,
       passwordChangedAt: null,
       companyId: "",

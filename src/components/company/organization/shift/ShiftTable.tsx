@@ -9,6 +9,7 @@ import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
+import { statusEnum } from "../../../../types/common-types";
 
 interface IShiftListProps {
   shiftList: IShift[];
@@ -30,7 +31,7 @@ export default function ShiftTable({
   breakStartTime: "",
   breakEndTime: "",
   branchIds: [],
-  status: "INACTIVE",
+  status: statusEnum.INACTIVE,
   createdAt: "",
   updatedAt: ""
 };
