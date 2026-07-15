@@ -5,7 +5,7 @@ import TopBar from "../../../common/topbar/TopBar";
 import Button from "../../../common/button/Button";
 import TextField from "../../../common/text-field/TextField";
 
-import { branchEnum, pathNames, statusEnum } from "../../../../constants/constants";
+import { branchEnum, pathNames } from "../../../../constants/constants";
 import { getBranches } from "../../../../apis/organization/branch.api";
 import {
   addShift,
@@ -16,6 +16,7 @@ import { IBranch } from "../branch";
 import PageLoader from "../../../common/loader/PageLoader";
 import Checkbox from "../../../common/checkbox/CheckBox";
 import { IShift } from ".";
+import { statusEnum } from "../../../../types/common-types";
 
 interface ShiftFormData {
   name: string;

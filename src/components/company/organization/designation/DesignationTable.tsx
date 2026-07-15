@@ -1,13 +1,13 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   statusColor,
-  statusEnum,
   statusMessage,
 } from "../../../../constants/constants";
 import { IDesignation } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import StatusHistory from "./StatusHistory";
+import { statusEnum } from "../../../../types/common-types";
 
 interface IDesignationListProps {
   designationList: IDesignation[];

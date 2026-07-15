@@ -3,14 +3,13 @@ import {
   pathNames,
   roleNames,
   statusColor,
-  statusEnum,
   statusMessage,
 } from "../../../../constants/constants";
 import { IOnboarding } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
-import { RoleEnum } from "../../../../types/common-types";
+import { RoleEnum, statusEnum } from "../../../../types/common-types";
 import PersonInfo from "../../../common/person-info";
 import { useNavigate } from "react-router-dom";
 

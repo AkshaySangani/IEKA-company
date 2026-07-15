@@ -1,12 +1,12 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   statusColor,
-  statusEnum,
   statusMessage,
 } from "../../../../constants/constants";
 import { ILeave } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
+import { statusEnum } from "../../../../types/common-types";
 
 interface ILeaveListProps {
   leaveList: ILeave[];

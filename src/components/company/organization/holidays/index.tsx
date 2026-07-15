@@ -9,7 +9,7 @@ import {
   getHolidays,
   updateHolidayStatus,
 } from "../../../../apis/organization/holidays.api";
-import { statusEnum } from "../../../../constants/constants";
+import { statusEnum } from "../../../../types/common-types";
 import HolidaysTable from "./HolidaysTable";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";

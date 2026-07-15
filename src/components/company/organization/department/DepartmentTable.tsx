@@ -2,7 +2,6 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   pathNames,
   statusColor,
-  statusEnum,
   statusMessage,
 } from "../../../../constants/constants";
 import { IDepartment } from ".";
@@ -10,6 +9,7 @@ import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
+import { statusEnum } from "../../../../types/common-types";
 
 interface IDepartmentListProps {
   departments: IDepartment[]

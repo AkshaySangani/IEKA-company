@@ -2,13 +2,13 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   branchEnum,
   statusColor,
-  statusEnum,
   statusMessage,
 } from "../../../../constants/constants";
 import { IBranch } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import StatusHistory from "./StatusHistory";
+import { statusEnum } from "../../../../types/common-types";
 
 interface IBranchListProps {
   branches: IBranch[];

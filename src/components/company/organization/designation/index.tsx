@@ -6,7 +6,7 @@ import AddDesignation from "./AddDesignation";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
 import { StatusType } from "../../../../types/common-types";
-import { statusEnum } from "../../../../constants/constants";
+import { statusEnum } from "../../../../types/common-types";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import { getDesignation, updateDesignationStatus } from "../../../../apis/organization/designation.api";
 

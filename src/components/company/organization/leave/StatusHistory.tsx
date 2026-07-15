@@ -6,12 +6,11 @@ import RadioButton from "../../../common/radio-button";
 import {
   branchEnum,
   branchOptions,
-  statusEnum,
   statusOptions,
   yesNoOption,
 } from "../../../../constants/constants";
 import { addBranch, updateBranch, updateBranchStatus } from "../../../../apis/organization/branch.api";
-import { BranchType } from "../../../../types/common-types";
+import { BranchType, statusEnum } from "../../../../types/common-types";
 import { ILeave } from ".";
 
 interface IStatusHistoryProps {

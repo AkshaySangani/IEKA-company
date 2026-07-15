@@ -1,13 +1,13 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   statusColor,
-  statusEnum,
   statusMessage,
 } from "../../../../constants/constants";
 import { IHoliday } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import { formatDate, getDateDifferenceInDays } from "../../../../utils/date-format";
+import { statusEnum } from "../../../../types/common-types";
 
 interface IHolidaysListProps {
   holidaysList: IHoliday[];

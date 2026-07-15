@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { EarningStats } from "./StatusCards";
-import { FilterCardItem, StatusType, ValueType } from "../../../../types/common-types";
+import { FilterCardItem, statusEnum, StatusType, ValueType } from "../../../../types/common-types";
 import {
   getEarningById,
   getEarningCount,
   getEarnings,
   updateEarningStatus,
 } from "../../../../apis/pay-slip/earnings.api";
-import { pathNames, statusEnum } from "../../../../constants/constants";
+import { pathNames } from "../../../../constants/constants";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
 import EarningTable from "./EarningTable";

@@ -10,8 +10,8 @@ import {
   updateBranchStatus,
 } from "../../../../apis/organization/branch.api";
 import Pagination from "../../../common/pagination/Pagination";
-import { BranchType, StatusType } from "../../../../types/common-types";
-import { branchEnum, statusEnum } from "../../../../constants/constants";
+import { BranchType, statusEnum, StatusType } from "../../../../types/common-types";
+import { branchEnum } from "../../../../constants/constants";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 
 export interface IBranch {

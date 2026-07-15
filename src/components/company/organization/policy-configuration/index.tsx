@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { CompanyStats } from "./StatusCards";
-import { FilterCardItem, StatusType } from "../../../../types/common-types";
+import { FilterCardItem, statusEnum, StatusType } from "../../../../types/common-types";
 import {
   getPolicyById,
   getPolicyCount,
   getPolicies,
   updatePolicyStatus,
 } from "../../../../apis/organization/policy.api";
-import { pathNames, statusEnum } from "../../../../constants/constants";
+import { pathNames } from "../../../../constants/constants";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
 import YearPicker from "../../../common/date-picker/YearPicker";

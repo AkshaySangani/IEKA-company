@@ -5,7 +5,6 @@ import {
   employmentTypeOptions,
   probationPeriodOptions,
   roleOptions,
-  statusEnum,
 } from "../../../../../constants/constants";
 import { formatDate } from "../../../../../utils/date-format";
 import DetailRow from "../../../../common/detail-row";
@@ -14,7 +13,7 @@ import SelectField from "../../../../common/select/SelectField";
 import { IAssignment, IBranch, IEmployeeFormData } from ".";
 import { getDesignation } from "../../../../../apis/organization/designation.api";
 import { IDesignation } from "../../../organization/designation";
-import { IOption, RoleEnum } from "../../../../../types/common-types";
+import { IOption, RoleEnum, statusEnum } from "../../../../../types/common-types";
 
 interface Props {
   data: IEmployee;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { StatusType } from "../../../types/common-types";
-import { statusEnum, statusOptions } from "../../../constants/constants";
+import { statusEnum, StatusType } from "../../../types/common-types";
+import { statusOptions } from "../../../constants/constants";
 import Modal from "./Modal";
 import RadioButton from "../radio-button";
 import TextAreaField from "../text-area/TextAreaField";

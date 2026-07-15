@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { statusEnum } from "../../../../../constants/constants";
 import SelectField from "../../../../common/select/SelectField";
 import { IEmployeeFormData } from ".";
 import {
   IOption,
   salaryType,
+  statusEnum,
   ValueType,
 } from "../../../../../types/common-types";
 import TextField from "../../../../common/text-field/TextField";

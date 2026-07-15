@@ -1,12 +1,12 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   statusColor,
-  statusEnum,
   statusMessage,
 } from "../../../../constants/constants";
 import { IEarning, initialEarning } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
+import { statusEnum } from "../../../../types/common-types";
 
 interface IEarningListProps {
   earnings: IEarning[];

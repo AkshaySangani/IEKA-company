@@ -9,7 +9,7 @@ import {
   getLeaves,
   updateLeaveStatus,
 } from "../../../../apis/organization/leave.api";
-import { statusEnum } from "../../../../constants/constants";
+import { statusEnum } from "../../../../types/common-types";
 import LeaveTable from "./LeaveTable";
 import AddLeave from "./AddLeave";
 import StatusUpdateModal from "../../../common/modal/StatusModal";

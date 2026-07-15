@@ -1,4 +1,4 @@
-import { documentEnum, employeeDocuments, EmploymentTypeEnum, IOption, ObjectType, RoleEnum, ValueType } from "../types/common-types";
+import { documentEnum, employeeDocuments, EmploymentTypeEnum, IOption, ObjectType, RoleEnum, statusEnum, ValueType } from "../types/common-types";
 import { MenuItem } from "../types/sidebar-types";
 
 export const storageKeys = {
@@ -277,15 +277,6 @@ export const bankAccountEnum: ObjectType = {
   SAVING: "SAVING",
   CURRENT: "CURRENT",
 };
-
-export const statusEnum: ObjectType = {
-  ACTIVE: "ACTIVE",
-  INACTIVE: "INACTIVE",
-  DELETED: "DELETED",
-  ACCEPTED: "ACCEPTED",
-  REJECTED: "REJECTED",
-  PENDING: "PENDING",
-}
 
 export const branchEnum: {
   HEAD_OFFICE: "HEAD_OFFICE";

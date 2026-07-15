@@ -1,35 +1,38 @@
-export type FileType = | "pdf" | "xlsx";
+export type FileType = "pdf" | "xlsx";
 
 export interface IOption {
-    label: string;
-    value: any;
+  label: string;
+  value: any;
 }
 
 export type AccountType = "SAVING" | "CURRENT";
 
 export type StatusType = "ACTIVE" | "INACTIVE" | "DELETED";
 
-export enum ValueType { 
-  PERCENTAGE = "PERCENTAGE", 
-  FIXED = "FIXED"
+export enum ValueType {
+  PERCENTAGE = "PERCENTAGE",
+  FIXED = "FIXED",
 }
 
-export enum salaryType { 
-  EARNING = "EARNING", 
-  DEDUCTION = "DEDUCTION"
+export enum salaryType {
+  EARNING = "EARNING",
+  DEDUCTION = "DEDUCTION",
 }
 
 export enum statusEnum {
-    REJECTED = "REJECTED",
-    ACCEPTED = "ACCEPTED",
-    PENDING = "PENDING",
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  DELETED = "DELETED",
+  REJECTED = "REJECTED",
+  ACCEPTED = "ACCEPTED",
+  PENDING = "PENDING",
 }
 
 export enum RoleEnum {
-    EMPLOYEE = "EMPLOYEE",
-    MANAGER = "MANAGER",
-    ADMIN = "ADMIN",
-    OWNER = "OWNER",
+  EMPLOYEE = "EMPLOYEE",
+  MANAGER = "MANAGER",
+  ADMIN = "ADMIN",
+  OWNER = "OWNER",
 }
 
 export enum EmploymentTypeEnum {
@@ -44,12 +47,14 @@ export enum employeeDocuments {
   panCard = "Pan Card",
   drivingLicense = "Driving License",
   passport = "Passport",
-  voterId = "VoterId Card"
+  voterId = "VoterId Card",
 }
 
 export type BranchType = "HEAD_OFFICE" | "BRANCH";
 
-export interface ObjectType {[key: string]: any};
+export interface ObjectType {
+  [key: string]: any;
+}
 
 export interface BankAccount {
   bankAccountNo: number;
@@ -78,7 +83,7 @@ export enum documentEnum {
   pan = "pan",
   voterId = "voterId",
   passport = "passport",
-  drivingId = "drivingId"
+  drivingId = "drivingId",
 }
 
 export enum employmentTypeType {
