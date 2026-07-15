@@ -1,4 +1,5 @@
-import { menuItems, pathNames, roleBasePaths, roleEnum } from "../constants/constants";
+import { menuItems, pathNames, roleBasePaths } from "../constants/constants";
+import { RoleEnum } from "../types/common-types";
 import { MenuItem } from "../types/sidebar-types";
 
 export const hasPathAccess = (
@@ -40,7 +41,7 @@ export const getAccessibleMenus = (
 
 export const getDefaultRouteByRole = (role: string = ""): string => {
     return {
-        [roleEnum.OWNER]: pathNames.DASHBOARD,
-        [roleEnum.MANAGER]: pathNames.ALL_EMPLOYEES
+        [RoleEnum.OWNER]: pathNames.DASHBOARD,
+        [RoleEnum.MANAGER]: pathNames.ALL_EMPLOYEES
     }[role]??pathNames.DASHBOARD;
 };

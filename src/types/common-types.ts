@@ -14,6 +14,11 @@ export enum ValueType {
   FIXED = "FIXED"
 }
 
+export enum salaryType { 
+  EARNING = "EARNING", 
+  DEDUCTION = "DEDUCTION"
+}
+
 export enum statusEnum {
     REJECTED = "REJECTED",
     ACCEPTED = "ACCEPTED",
@@ -22,14 +27,24 @@ export enum statusEnum {
 
 export enum RoleEnum {
     EMPLOYEE = "EMPLOYEE",
+    MANAGER = "MANAGER",
     ADMIN = "ADMIN",
     OWNER = "OWNER",
+}
+
+export enum EmploymentTypeEnum {
+  PERMANENT = "PERMANENT",
+  CONTRACT = "CONTRACT",
+  INTERN = "INTERN",
+  CONSULTANT = "CONSULTANT",
 }
 
 export enum employeeDocuments {
   aadhaarCard = "Aadhaar Card",
   panCard = "Pan Card",
-  drivingLicense = "Driving License"
+  drivingLicense = "Driving License",
+  passport = "Passport",
+  voterId = "VoterId Card"
 }
 
 export type BranchType = "HEAD_OFFICE" | "BRANCH";
@@ -71,4 +86,21 @@ export enum employmentTypeType {
   CONTRACT = "CONTRACT",
   INTERN = "INTERN",
   CONSULTANT = "CONSULTANT",
+}
+
+export enum BloodGroupEnum {
+  A_POSITIVE = "A+",
+  A_NEGATIVE = "A-",
+  B_POSITIVE = "B+",
+  B_NEGATIVE = "B-",
+  AB_POSITIVE = "AB+",
+  AB_NEGATIVE = "AB-",
+  O_POSITIVE = "O+",
+  O_NEGATIVE = "O-",
+}
+
+export enum GenderEnum {
+  MALE = "male",
+  FEMALE = "female",
+  OTHER = "other",
 }

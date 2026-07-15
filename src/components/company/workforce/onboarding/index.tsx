@@ -200,8 +200,6 @@ const Onboarding = () => {
         <StatusCards cards={cards} activeCard={activeCard} setActiveCard={setActiveCard} />
         <OnboardingTable
           onboardingsList={onboardingsList}
-          handleEditOnboardingDetails={handleEditOnboardingDetails}
-          handleUpdateStatus={handleUpdateStatus}
         />
         <Pagination totalRecords={total} currentPage={page} pageSize={limit} onPageChange={setPage} onPageSizeChange={setLimit}/>
       </div>

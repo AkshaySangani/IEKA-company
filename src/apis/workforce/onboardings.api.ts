@@ -22,17 +22,25 @@ export const getOnboardingById = (onboardingId: string) => {
   return apiRequest.get<ApiResponse>(`/organization/holidays/${onboardingId}`);
 };
 
-export const updateOnboarding = (
-  payload: {
-    name: string;
-    description: string;
-    effectiveYear: number;
-    startDate: string;
-    endDate: string;
-  },
-  onboardingId: string = "",
-) =>
-  apiRequest.put(`/organization/holidays/${onboardingId}`, payload, {
+export const assignRolesAndResponsibility = (payload: {
+  userId: string;
+  role: string;
+  employmentType: string;
+  probationPeriod: number;
+  policyId: string;
+  payslipId: string;
+  salary: number;
+  assignments: {
+    branchId: string;
+    shiftId: string;
+    departmentId: string;
+    designationId: string;
+    isReporting: boolean;
+    remarks: string;
+  }[];
+  remarks: string;
+}) =>
+  apiRequest.post(`/workforce/onboard/roles-responsibility`, payload, {
     showSuccessToast: true,
   });
 
@@ -41,9 +49,9 @@ export const updateOnboardingStatus = (
     status: string;
     remarks: string;
   },
-  onboardingId: string = "",
+  userId: string = "",
 ) =>
-  apiRequest.patch(`/organization/holidays/status/${onboardingId}`, payload, {
+  apiRequest.patch(`/workforce/onboard/status/${userId}`, payload, {
     showSuccessToast: true,
   });
 
@@ -52,5 +60,17 @@ export const getOnboardingCount = () => {
 };
 
 export const getOnboardingCompanyInfo = (companyId: string) => {
-  return apiRequest.get<ApiResponse>(`/workforce/onboard/company-info/${companyId}`);
+  return apiRequest.get<ApiResponse>(
+    `/workforce/onboard/company-info/${companyId}`,
+  );
+};
+
+export const getBranchShiftDepartment = () => {
+  return apiRequest.get<ApiResponse>(
+    `/workforce/onboard/branch-shift-department`,
+  );
+};
+
+export const getEmployeeDetails = (userId: string) => {
+  return apiRequest.get<ApiResponse>(`/workforce/onboard/${userId}`);
 };

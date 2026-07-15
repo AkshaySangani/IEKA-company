@@ -25,6 +25,10 @@ import InviteEmployeePage from "./pages/company/workforce/onboarding/InviteEmplo
 import EarningsPage from "./pages/company/pay-slip/earnings";
 import PayslipDisclaimerPage from "./pages/company/pay-slip/earnings/PayslipDisclaimer";
 import PayslipDeductionsPage from "./pages/company/pay-slip/deductions";
+import EmployeeDetailsPage from "./pages/company/workforce/onboarding/EmployeeDetails";
+import AssignRolesResponsibilityPage from "./pages/company/workforce/onboarding/AssignRolesResponsibility";
+import PolicyConfigurationPage from "./pages/company/organization/policy-configuration";
+import AddPolicyPage from "./pages/company/organization/policy-configuration/AddPolicy";
 
 function App() {
   return (
@@ -87,11 +91,14 @@ function App() {
             <Route path={pathNames.DESIGNATION} element={<DesignationPage />} />
             <Route path={pathNames.LEAVE} element={<LeavePage />} />
             <Route path={pathNames.HOLIDAYS} element={<HolidaysPage />} />
+            <Route path={pathNames.POLICY_CONFIGURATION} element={<PolicyConfigurationPage />} />
+            <Route path={pathNames.ADD_POLICY} element={<AddPolicyPage />} />
           </Route>
 
           <Route path={pathNames.WORKFORCE}>
             <Route path={pathNames.ONBOARDING} element={<OnBoardingPage />} />
-            
+            <Route path={pathNames.EMPLOYEE_DETAILS} element={<EmployeeDetailsPage />}/>
+            <Route path={pathNames.ASSIGN_ROLES_RESPONSIBILITY} element={<AssignRolesResponsibilityPage />}/>
           </Route>
 
           <Route path={pathNames.PAY_SLIP}>

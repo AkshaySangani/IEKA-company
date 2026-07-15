@@ -6,7 +6,7 @@ import Select, {
 
 export interface SelectOption {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 interface SelectFieldProps {
@@ -138,6 +138,7 @@ const SelectField = ({
         isMulti={isMulti}
         styles={customStyles}
         menuPortalTarget={document.body}
+        menuPlacement="auto"
         onChange={(
           option: SingleValue<SelectOption> | MultiValue<SelectOption>
         ) => onChange(option || "")}

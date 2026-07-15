@@ -1,20 +1,16 @@
-import { IOption, ObjectType, ValueType } from "../types/common-types";
+import { documentEnum, employeeDocuments, EmploymentTypeEnum, IOption, ObjectType, RoleEnum, ValueType } from "../types/common-types";
 import { MenuItem } from "../types/sidebar-types";
 
 export const storageKeys = {
   authStorage: "authStorage",
 };
 
-export const roleEnum: ObjectType = {
-  OWNER: "OWNER",
-  MANAGER: "MANAGER",
-  EMPLOYEE: "EMPLOYEE"
-}
+
 
 export const roleNames: any = {
-  [roleEnum.OWNER]: "Owner",
-  [roleEnum.MANAGER]: "Manager",
-  [roleEnum.EMPLOYEE]: "Employee"
+  [RoleEnum.OWNER]: "Owner",
+  [RoleEnum.MANAGER]: "Manager",
+  [RoleEnum.EMPLOYEE]: "Employee"
 }
 
 export const pathNames = {
@@ -33,11 +29,14 @@ export const pathNames = {
   LEAVE: "/organization/leave",
   HOLIDAYS: "/organization/holidays",
   POLICY_CONFIGURATION: "/organization/policy-configuration",
+  ADD_POLICY: "/organization/policy-configuration/add-policy",
 
   // Workforce
   WORKFORCE: "/workforce",
   ALL_EMPLOYEES: "/workforce/all-employees",
   ONBOARDING: "/workforce/onboarding",
+  EMPLOYEE_DETAILS: "/workforce/onboarding/employee-details",
+  ASSIGN_ROLES_RESPONSIBILITY: "/workforce/onboarding/assign-roles-responsibility",
   INVITE_EMPLOYEE_FORM: "/invite_employee_form",
   RESIGNED: "/workforce/resigned",
   TERMINATION: "/workforce/termination",
@@ -59,14 +58,14 @@ export const pathNames = {
   // Pay Slip
   PAY_SLIP: "/pay-slip",
   EARNING: "/pay-slip/earnings",
-  PAY_SLIP_DISCLAIMER: "/pay-slip/payslip-disclaimer",
+  PAY_SLIP_DISCLAIMER: "/pay-slip/earnings/payslip-disclaimer",
   DEDUCTION: "/pay-slip/deductions",
   PAY_SLIP_ANNUAL_SHEET: "/pay-slip/pay-slip-annual-sheet",
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
 } as const;
 
 export const roleBasePaths: ObjectType = {
-  [roleEnum.MANAGER]: [
+  [RoleEnum.MANAGER]: [
     // Workforce
     pathNames.WORKFORCE,
     pathNames.ALL_EMPLOYEES,
@@ -90,7 +89,7 @@ export const roleBasePaths: ObjectType = {
     pathNames.ALL_EMPLOYEE_PAY_SLIP,
   ],
 
-  [roleEnum.OWNER]: Object.values(pathNames)
+  [RoleEnum.OWNER]: Object.values(pathNames)
 };
 export const menuItems: MenuItem[] = [
   {
@@ -323,19 +322,18 @@ export const genderOptions: IOption[] = [
     value: "other",
   },
 ];
-
+export const roles = {
+  [RoleEnum.MANAGER]: "Manager",
+  [RoleEnum.EMPLOYEE]: "Employee"
+}
 export const roleOptions: IOption[] = [
   {
-    label: roleEnum.OWNER,
-    value: roleEnum.OWNER,
+    label: roles.MANAGER,
+    value: RoleEnum.MANAGER,
   },
   {
-    label: roleEnum.ADMIN,
-    value: roleEnum.ADMIN,
-  },
-  {
-    label: roleEnum.EMPLOYEE,
-    value: roleEnum.EMPLOYEE,
+    label: roles.EMPLOYEE,
+    value: RoleEnum.EMPLOYEE,
   },
 ];
 
@@ -477,6 +475,14 @@ export const payValueType = {
   [ValueType.PERCENTAGE]: "%"
 }
 
+export const documentType: any = {
+  [documentEnum.adhar]: employeeDocuments.aadhaarCard,
+  [documentEnum.drivingId]: employeeDocuments.drivingLicense,
+  [documentEnum.pan]: employeeDocuments.panCard,
+  [documentEnum.passport]: employeeDocuments.passport,
+  [documentEnum.voterId]: employeeDocuments.voterId
+}
+
 export const payValueTypeOptions = [
   {
     label: payValueType[ValueType.FIXED],
@@ -487,3 +493,34 @@ export const payValueTypeOptions = [
     value: ValueType.PERCENTAGE
   }
 ]
+
+export const employmentType = {
+  [EmploymentTypeEnum.PERMANENT]: "Permanent",
+  [EmploymentTypeEnum.CONTRACT]: "Contract",
+  [EmploymentTypeEnum.INTERN]: "Intern",
+  [EmploymentTypeEnum.CONSULTANT]: "Consultant",
+}
+
+export const employmentTypeOptions = [
+  {
+    label: employmentType[EmploymentTypeEnum.PERMANENT],
+    value: EmploymentTypeEnum.PERMANENT
+  },
+  {
+    label: employmentType[EmploymentTypeEnum.CONTRACT],
+    value: EmploymentTypeEnum.CONTRACT
+  },
+  {
+    label: employmentType[EmploymentTypeEnum.INTERN],
+    value: EmploymentTypeEnum.INTERN
+  },
+  {
+    label: employmentType[EmploymentTypeEnum.CONSULTANT],
+    value: EmploymentTypeEnum.CONSULTANT
+  },
+];
+
+export const probationPeriodOptions = Array.from({ length: 7 }, (_, index) => ({
+  label: `${index} Month${index !== 1 ? "s" : ""}`,
+  value: index,
+}));

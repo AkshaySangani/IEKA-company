@@ -38,3 +38,97 @@ export const getDateDifferenceInDays = (startDate: string, endDate: string): num
       ) + 1;
     return diff > 0 ? diff : 0;
 };
+
+type DateUnit =
+  | "years"
+  | "months"
+  | "weeks"
+  | "days"
+  | "hours"
+  | "minutes"
+  | "seconds";
+
+interface DateDiffOptions {
+  from: string;
+  to: string;
+  unit: DateUnit;
+}
+
+export function getDateDifference({
+  from,
+  to,
+  unit,
+}: DateDiffOptions): number {
+  const fromDate = parseDate(from);
+  const toDate = parseDate(to);
+
+  const diffMs = toDate.getTime() - fromDate.getTime();
+
+  switch (unit) {
+    case "seconds":
+      return Math.floor(diffMs / 1000);
+
+    case "minutes":
+      return Math.floor(diffMs / (1000 * 60));
+
+    case "hours":
+      return Math.floor(diffMs / (1000 * 60 * 60));
+
+    case "days":
+      return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    case "weeks":
+      return Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7));
+
+    case "months":
+      return (
+        (toDate.getFullYear() - fromDate.getFullYear()) * 12 +
+        (toDate.getMonth() - fromDate.getMonth())
+      );
+
+    case "years":
+      return toDate.getFullYear() - fromDate.getFullYear();
+
+    default:
+      return 0;
+  }
+}
+
+function parseDate(value: string): Date {
+  const [datePart = "", timePart = ""] = value.trim().split(" ");
+
+  let day = 1;
+  let month = 1;
+  let year = 1970;
+
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
+
+  // dd/mm/yyyy
+  if (datePart.includes("/")) {
+    const parts = datePart.split("/").map(Number);
+
+    day = parts[0] || 1;
+    month = parts[1] || 1;
+    year = parts[2] || 1970;
+  }
+
+  // hh:mm or hh:mm:ss
+  if (timePart || value.includes(":")) {
+    const time = (timePart || value).split(":").map(Number);
+
+    hours = time[0] || 0;
+    minutes = time[1] || 0;
+    seconds = time[2] || 0;
+  }
+
+  return new Date(
+    year,
+    month - 1,
+    day,
+    hours,
+    minutes,
+    seconds
+  );
+}

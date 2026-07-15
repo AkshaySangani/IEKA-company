@@ -22,6 +22,7 @@ declare module "axios" {
 const logoutUser = async () => {
   try {
     removeLocalStorageData(storageKeys.authStorage);
+    window.location.href = "/login"
   } catch (error) {
     console.error("Logout Error:", error);
   }
@@ -45,7 +46,9 @@ const refreshAccessToken = async () => {
       refreshToken,
     },
   );
-
+  if(response?.status === 401){
+    logoutUser();
+  }
   return response.data;
 };
 

@@ -1,8 +1,11 @@
+import { ISalaryDetail } from "../components/company/workforce/onboarding/assign-roles-responsibility/SalaryDetails";
+import { salaryType, ValueType } from "../types/common-types";
+
 export function getLocalStorageData(key: string): any | null {
   try {
     const value = localStorage.getItem(key);
     return value ? JSON.parse(value) : null;
-  }  catch (error) {
+  } catch (error) {
     console.error("Error getting localStorage data:", error);
     return null;
   }
@@ -30,9 +33,61 @@ export function maskEmail(email: string) {
   if (!username || !domain) return email;
 
   const visiblePart = username.slice(0, 4);
-  const maskedPart = "*".repeat(
-    Math.max(username.length - 4, 0)
-  );
+  const maskedPart = "*".repeat(Math.max(username.length - 4, 0));
 
   return `${visiblePart}${maskedPart}@${domain}`;
+}
+
+export const calculateAmount = (
+  salary: number,
+  value: number,
+  calculationType: ValueType,
+) => {
+  if (calculationType === ValueType.PERCENTAGE) {
+    return (salary * value) / 100;
+  }
+
+  return value;
+};
+
+export const calculateSalaryBreakdown = (
+  salary: number,
+  components: ISalaryDetail[],
+) => {
+  const earnings = [];
+  const deductions = [];
+
+  let totalEarnings = 0;
+  let totalDeductions = 0;
+
+  for (const component of components) {
+    const amount = calculateAmount(
+      salary,
+      component.value,
+      component.valueType,
+    );
+
+    if (component.type === salaryType.EARNING) {
+      earnings.push({
+        ...component,
+        amount,
+      });
+
+      totalEarnings += amount;
+    } else {
+      deductions.push({
+        ...component,
+        amount,
+      });
+
+      totalDeductions += amount;
+    }
+  }
+
+  return {
+    earnings,
+    deductions,
+    grossSalary: totalEarnings,
+    netSalary: totalEarnings - totalDeductions,
+  };
 };

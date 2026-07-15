@@ -1,5 +1,6 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
+  pathNames,
   roleNames,
   statusColor,
   statusEnum,
@@ -11,18 +12,16 @@ import { useState } from "react";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { RoleEnum } from "../../../../types/common-types";
 import PersonInfo from "../../../common/person-info";
+import { useNavigate } from "react-router-dom";
 
 interface IOnboardingsListProps {
   onboardingsList: IOnboarding[];
-  handleEditOnboardingDetails: (value: IOnboarding) => void;
-  handleUpdateStatus: (value: IOnboarding) => void;
 }
 
 export default function OnboardingsTable({
   onboardingsList,
-  handleEditOnboardingDetails,
-  handleUpdateStatus,
 }: IOnboardingsListProps) {
+  const navigate = useNavigate();
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const initialOnboarding: IOnboarding = {
     _id: "",
@@ -36,6 +35,14 @@ export default function OnboardingsTable({
     createdAt: ""
   };
   const [onboardingDetails, setOnboardingDetails] = useState<IOnboarding>(initialOnboarding);
+
+  const handleRedirectEmployeeDetails = (row: IOnboarding) => {
+    navigate(pathNames.EMPLOYEE_DETAILS, {
+      state: {
+        id: row?._id
+      }
+    })
+  }
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IOnboarding>[] = [
     {
@@ -52,7 +59,7 @@ export default function OnboardingsTable({
           firstName: row.firstName,
           lastName: row.lastName,
           description: roleNames[row.role]
-        }} onClick={() => handleEditOnboardingDetails(row)}/>
+        }} onClick={() => handleRedirectEmployeeDetails(row)}/>
       ),
     },
     {
