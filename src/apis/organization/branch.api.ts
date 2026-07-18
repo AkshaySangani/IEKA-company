@@ -50,3 +50,7 @@ export const updateBranchStatus = (
   apiRequest.patch(`/organization/branches/status/${branchId}`, payload, {
     showSuccessToast: true,
   });
+
+  export const getMyBranchList = () => {
+  return apiRequest.get<ApiResponse>(`/organization/branches/my-managed`);
+};

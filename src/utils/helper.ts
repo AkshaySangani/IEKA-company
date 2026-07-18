@@ -91,3 +91,8 @@ export const calculateSalaryBreakdown = (
     netSalary: totalEarnings - totalDeductions,
   };
 };
+
+export function getFileNameByUrl(fileUrl: string) {
+const data = fileUrl.split("/");
+  return data[data?.length - 1]??"";
+}

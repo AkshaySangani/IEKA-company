@@ -30,6 +30,9 @@ import AssignRolesResponsibilityPage from "./pages/company/workforce/onboarding/
 import PolicyConfigurationPage from "./pages/company/organization/policy-configuration";
 import AddPolicyPage from "./pages/company/organization/policy-configuration/AddPolicy";
 import AllEmployeesPage from "./pages/company/workforce/all-employee";
+import ReimbursementPage from "./pages/company/expense/reimbursement-claims";
+import AddReimbursementPage from "./pages/company/expense/reimbursement-claims/AddReimbursement";
+import ReimbursementDetailsPage from "./pages/company/expense/reimbursement-claims/ReimbursementDetails";
 
 function App() {
   return (
@@ -102,6 +105,12 @@ function App() {
             <Route path={pathNames.ASSIGN_ROLES_RESPONSIBILITY} element={<AssignRolesResponsibilityPage />}/>
 
             <Route path={pathNames.ALL_EMPLOYEES} element={<AllEmployeesPage />}/>
+          </Route>
+
+          <Route path={pathNames.EXPENSE}>
+            <Route path={pathNames.REIMBURSEMENT} element={<ReimbursementPage />} />
+            <Route path={pathNames.ADD_REIMBURSEMENT} element={<AddReimbursementPage />} />
+            <Route path={pathNames.REIMBURSEMENT_DETAILS} element={<ReimbursementDetailsPage />} />
           </Route>
 
           <Route path={pathNames.PAY_SLIP}>

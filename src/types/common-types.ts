@@ -24,6 +24,7 @@ export enum statusEnum {
   REJECTED = "REJECTED",
   ACCEPTED = "ACCEPTED",
   PENDING = "PENDING",
+  APPROVED = "APPROVED",
 }
 
 export enum RoleEnum {
@@ -74,6 +75,7 @@ export interface FilterCardItem {
   activeColor?: string;
   textColor?: string;
   icon: React.ReactNode;
+  amount?: number | string;
 }
 
 export enum documentEnum {

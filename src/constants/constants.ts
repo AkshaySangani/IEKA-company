@@ -52,6 +52,8 @@ export const pathNames = {
   EXPENSE: "/expense",
   OVERALL_EXPENSE: "/expense/overall-expense",
   REIMBURSEMENT: "/expense/reimbursement",
+  ADD_REIMBURSEMENT: "/expense/reimbursement/add-reimbursement",
+  REIMBURSEMENT_DETAILS: "/expense/reimbursement/reimbursement-details",
   OFFICE_EXPENSE: "/expense/office-expense",
   PAYROLL: "/expense/payroll",
 
@@ -239,6 +241,7 @@ export const statusMessage: { [key: string]: string } = {
   INACTIVE: "Inactive",
   DELETED: "Deleted",
   ACCEPTED: "Accepted",
+  APPROVED: "Approved",
   REJECTED: "Rejected",
   PENDING: "Pending",
 };
@@ -250,6 +253,7 @@ export const statusColor: { [key: string]: string } = {
   ACCEPTED: "text-success",
   REJECTED: "text-danger",
   PENDING: "text-pending",
+  APPROVED: "text-success",
 };
 
 export const moduleEnum: ObjectType = {
@@ -472,6 +476,21 @@ export const statusOptions: IOption[] = [
   },
 ];
 
+export const expenseStatusOptions: IOption[] = [
+  {
+    label: statusMessage.APPROVED,
+    value: statusEnum.APPROVED,
+  },
+  {
+    label: statusMessage.PENDING,
+    value: statusEnum.PENDING,
+  },
+  {
+    label: statusMessage.REJECTED,
+    value: statusEnum.REJECTED,
+  },
+];
+
 export const payValueType = {
   [ValueType.FIXED]: "₹",
   [ValueType.PERCENTAGE]: "%"
@@ -526,3 +545,7 @@ export const probationPeriodOptions = Array.from({ length: 7 }, (_, index) => ({
   label: `${index} Month${index !== 1 ? "s" : ""}`,
   value: index,
 }));
+
+export const currency = {
+ INR: "₹" 
+}

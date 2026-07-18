@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { statusEnum } from "../../../types/common-types";
+import { IOption, statusEnum } from "../../../types/common-types";
 import { statusOptions } from "../../../constants/constants";
 import Modal from "./Modal";
 import RadioButton from "../radio-button";
@@ -12,6 +12,7 @@ interface IStatusUpdateProps {
   status: statusEnum;
   title: string;
   loading: boolean;
+  options?: IOption[];
   handleOpenClose: () => void;
   handleSubmit: (value: FormDataPayload) => void;
 }
@@ -33,6 +34,7 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
   handleSubmit,
   status,
   loading,
+  options = statusOptions,
 }) => {
   const [formData, setFormData] = useState<FormDataPayload>(initialFormData);
 
@@ -94,7 +96,7 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
             label="Status"
             name="status"
             value={formData.status}
-            options={statusOptions}
+            options={options}
             onChange={(value) => handleChange("status", value)}
           />
           <TextAreaField
