@@ -1,4 +1,5 @@
 import Image from "../image";
+import NoImage from "../../../assets/images/User-Image.png";
 
 export interface IPersonInfo {
   profileImage: string;
@@ -21,6 +22,7 @@ const PersonInfo: React.FC<IPersonInfoProps> = ({
       <Image
         src={personInfo.profileImage}
         alt={personInfo.firstName}
+        fallbackSrc={NoImage}
         className="w-9 h-9 object-cover rounded-full ring-1 ring-gray-200"
       />
       <div className="flex flex-col">

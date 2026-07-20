@@ -9,7 +9,7 @@ import { ICompanyRepresentative } from ".";
 import Info from "../../../assets/icons/Info";
 import EmployeeManagementIcon from "../../../assets/images/employee_management.png";
 import ProductionManagementIcon from "../../../assets/images/production.png"
-import UserAvatar from "../../../assets/images/User-Image.jpg";
+import UserAvatar from "../../../assets/images/User-Image.png";
 import { ObjectType, statusEnum } from "../../../types/common-types";
 
 export const modules: ObjectType = {

@@ -5,37 +5,16 @@ import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
 import { FilterCardItem, RoleEnum, statusEnum } from "../../../../types/common-types";
 import { expenseStatusOptions, pathNames } from "../../../../constants/constants";
-import ReimbursementTable from "./ReimbursementTable";
 import { useNavigate } from "react-router-dom";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import {
-  getReimbursementCount,
-  getReimbursementList,
-  updateReimbursementStatus,
-} from "../../../../apis/expense/reimbursement.api";
-import StatusCards, { ReimbursementStats } from "./StatusCards";
-
-export interface IReimbursementClaim {
-  _id: string;
-  branchId: string;
-  reimbursementIds: string[];
-}
-
-export interface IReimbursement {
-  _id: string;
-  companyId: string;
-  branchId: string;
-  userId: IUser;
-  name: string;
-  date: string;
-  description: string;
-  amount: number;
-  status: statusEnum;
-  documents: string[];
-  assignedBy: string;
-  createdAt: string;
-  updatedAt: string;
-}
+  getOfficeExpenseCount,
+  getOfficeExpenseList,
+  updateOfficeExpenseStatus,
+} from "../../../../apis/expense/office-expense.api";
+import OfficeExpenseTable from "./OfficeExpenseTable";
+import StatusCards, { OfficeExpenseStats } from "./StatusCards";
+import MonthPicker, { MonthPickerValue } from "../../../common/date-picker/MonthPicker";
 
 export interface IUser {
   _id: string;
@@ -45,28 +24,94 @@ export interface IUser {
   role: RoleEnum;
 }
 
-export const initialReimbursement: IReimbursement = {
+export interface IBranch {
+  _id: string;
+  name: string;
+}
+
+export interface IVendor {
+  name: string;
+  company: string;
+  phone: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  isOnWarranty: boolean;
+}
+
+export interface IOfficeExpense {
+  _id: string;
+  companyId: string;
+  branchId: IBranch;
+  expenseType: string;
+  name: string;
+  date: string;
+  serviceType: string;
+  description: string;
+  vendor: IVendor;
+  amount: number;
+  paymentMode: string;
+  transactionId: string;
+  documents: string[];
+  status: statusEnum;
+  assignedBy: IUser;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const initialOfficeExpense: IOfficeExpense = {
   _id: "",
   companyId: "",
-  branchId: "",
-  userId: {
+
+  branchId: {
+    _id: "",
+    name: "",
+  },
+
+  expenseType: "",
+
+  name: "",
+
+  date: "",
+
+  serviceType: "",
+
+  description: "",
+
+  vendor: {
+    name: "",
+    company: "",
+    phone: "",
+    startDate: "",
+    endDate: "",
+    description: "",
+    isOnWarranty: false,
+  },
+
+  amount: 0,
+
+  paymentMode: "",
+
+  transactionId: "",
+
+  documents: [],
+
+  status: statusEnum.PENDING,
+
+  assignedBy: {
     _id: "",
     firstName: "",
     lastName: "",
     profileImage: "",
     role: RoleEnum.EMPLOYEE,
   },
-  name: "",
-  date: "",
-  description: "",
-  amount: 0,
-  status: statusEnum.ACCEPTED,
-  documents: [],
-  assignedBy: "",
+
   createdAt: "",
+
   updatedAt: "",
 };
-const Reimbursement: React.FC = () => {
+
+const OfficeExpense: React.FC = () => {
   const navigate = useNavigate();
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -76,11 +121,16 @@ const Reimbursement: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [statusLoading, setStatusLoading] = useState<boolean>(false);
 
-  const [reimbursementList, setReimbursementList] = useState<IReimbursement[]>([]);
+  const [officeExpenses, setOfficeExpenseList] = useState<IOfficeExpense[]>([]);
   
-  const [reimbursement, setReimbursement] = useState<IReimbursement>(initialReimbursement);
+  const [officeExpense, setOfficeExpense] = useState<IOfficeExpense>(initialOfficeExpense);
 
   const [activeCard, setActiveCard] = useState<string>(""); 
+  const initialMonth: MonthPickerValue = {
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear()
+  }
+  const [month, setMonth] = useState<MonthPickerValue>(initialMonth);
   const [cards, setCards] = useState<FilterCardItem[]>([
       {
         id: "",
@@ -122,22 +172,22 @@ const Reimbursement: React.FC = () => {
 
   // useEffect for get branch
   useEffect(() => {
-    fetchReimbursementList({ page, limit, search, status: activeCard });
-  }, [page, limit, search, activeCard]);
+    fetchOfficeExpenseList({ page, limit, search, status: activeCard,month });
+  }, [page, limit, search, activeCard,month]);
 
   useEffect(() => {
-      fetchReimbursementCount();
-    }, []);
+      fetchOfficeExpenseCount();
+    }, [month]);
   
-    const fetchReimbursementCount = async () => {
-      const response = await getReimbursementCount({});
+    const fetchOfficeExpenseCount = async () => {
+      const response = await getOfficeExpenseCount(month);
       if (response?.success) {
         updateCards(response?.data);
       }
     };
   
     // update cards
-    const updateCards = (stats: ReimbursementStats) => {
+    const updateCards = (stats: OfficeExpenseStats) => {
       setCards((prev) =>
         prev.map((card) => {
           switch (card.id) {
@@ -161,20 +211,21 @@ const Reimbursement: React.FC = () => {
     };
 
   // get branch list
-  const fetchReimbursementList = async (payload: {
+  const fetchOfficeExpenseList = async (payload: {
     page: number;
     limit: number;
     search: string;
     status?: string;
+    month: MonthPickerValue;
   }) => {
     setLoading(true);
-    const response = await getReimbursementList(payload);
-    if (response.success && response.data?.reimbursements?.length > 0) {
-      setReimbursementList(response.data?.reimbursements);
+    const response = await getOfficeExpenseList(payload);
+    if (response.success && response.data?.officeExpenses?.length > 0) {
+      setOfficeExpenseList(response.data?.officeExpenses);
       setTotal(response.data?.total);
       setLoading(false);
     } else {
-      setReimbursementList([]);
+      setOfficeExpenseList([]);
       setTotal(0);
       setPage(1);
       setLoading(false);
@@ -183,19 +234,19 @@ const Reimbursement: React.FC = () => {
 
   // handle click add new
   const handleOnAdd = () => {
-    navigate(pathNames.ADD_REIMBURSEMENT);
+    navigate(pathNames.ADD_OFFICE_EXPENSE);
   };
 
   // handle status open close
   const handleStatusOpenClose = () => {
     setStatusOpen((prev) => !prev);
-    setReimbursement(initialReimbursement);
+    setOfficeExpense(initialOfficeExpense);
   };
 
   // handle update status
-  const handleUpdateStatus = (reimbursement: IReimbursement) => {
+  const handleUpdateStatus = (officeExpense: IOfficeExpense) => {
     handleStatusOpenClose();
-    setReimbursement(reimbursement);
+    setOfficeExpense(officeExpense);
   };
 
   const handleStatusSubmit = async (formData: {
@@ -209,10 +260,10 @@ const Reimbursement: React.FC = () => {
       remarks: formData.remarks,
     };
 
-    const response = await updateReimbursementStatus(payload, reimbursement._id);
+    const response = await updateOfficeExpenseStatus(payload, officeExpense._id);
     if (response.success) {
-      fetchReimbursementList({ page, limit, search });
-      fetchReimbursementCount()
+      fetchOfficeExpenseList({ page, limit, search, month, status: activeCard });
+      fetchOfficeExpenseCount()
     }
     setStatusLoading(false);
   };
@@ -228,20 +279,34 @@ const Reimbursement: React.FC = () => {
     setPage(1);
   };
 
+  const handleMonthChange = (value: MonthPickerValue) => {
+    setMonth(value);
+  }
+
   return (
     <>
       <TopBar
-        title="Reimbursement Claims"
+        title="Office & Assets Expense"
         actionButtons={
+          <div className="flex gap-2">
+            <div className="flex items-center gap-2 w-[150px]">
+              <label className="font-semibold">Month</label>
+              <MonthPicker
+                placeholder="Select Month"
+                value={month}
+                onChange={handleMonthChange}
+              />
+            </div>
           <Button
-            name="Add Expense"
+            name="Add New"
             size="sm"
             onClick={handleOnAdd}
             leftIcon={<i className="fa-solid fa-plus"></i>}
           />
+          </div>
         }
         isSearch
-        searchPlaceholder="Search reimbursement..."
+        searchPlaceholder="Search officeExpense..."
         onSearch={handleOnSearch}
         isExcel
       />
@@ -252,8 +317,8 @@ const Reimbursement: React.FC = () => {
           activeCard={activeCard}
           setActiveCard={setActiveCard}
         />
-        <ReimbursementTable
-          reimbursements={reimbursementList}
+        <OfficeExpenseTable
+          officeExpenses={officeExpenses}
           handleUpdateStatus={handleUpdateStatus}
         />
         <Pagination
@@ -268,7 +333,7 @@ const Reimbursement: React.FC = () => {
       <StatusUpdateModal
         title={`expense`}
         isOpen={statusOpen}
-        status={reimbursement.status}
+        status={officeExpense.status}
         handleOpenClose={handleStatusOpenClose}
         handleSubmit={handleStatusSubmit}
         loading={statusLoading}
@@ -278,4 +343,4 @@ const Reimbursement: React.FC = () => {
   );
 };
 
-export default Reimbursement;
+export default OfficeExpense;

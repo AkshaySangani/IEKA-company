@@ -59,6 +59,12 @@ module.exports = {
         success: "#2ba17f",
         warning: "#eb8f0c",
         danger: "#e15f5f",
+        purple: "#7a6899",
+
+        pendingBlur: "#edf3ff",
+        dangerBlur: "#fff0f0",
+        successBlur: "#ecffeb",
+        yellowBlur: "#fffee7",
 
         /* Status Light */
         infoLight: "#f1f1f1",

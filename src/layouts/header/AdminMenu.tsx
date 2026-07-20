@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-import UserAvatar from "../../assets/images/User-Image.jpg";
+import UserAvatar from "../../assets/images/User-Image.png";
 import Modal from "../../components/common/modal/Modal";
 import Image from "../../components/common/image";
 

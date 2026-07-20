@@ -33,6 +33,10 @@ import AllEmployeesPage from "./pages/company/workforce/all-employee";
 import ReimbursementPage from "./pages/company/expense/reimbursement-claims";
 import AddReimbursementPage from "./pages/company/expense/reimbursement-claims/AddReimbursement";
 import ReimbursementDetailsPage from "./pages/company/expense/reimbursement-claims/ReimbursementDetails";
+import OfficeExpensePage from "./pages/company/expense/office-expense";
+import AddOfficeExpensePage from "./pages/company/expense/office-expense/AddOfficeExpense";
+import OfficeExpenseDetailsPage from "./pages/company/expense/office-expense/OfficeExpenseDetails";
+import OverallExpensePage from "./pages/company/expense/overall-expense";
 
 function App() {
   return (
@@ -111,6 +115,10 @@ function App() {
             <Route path={pathNames.REIMBURSEMENT} element={<ReimbursementPage />} />
             <Route path={pathNames.ADD_REIMBURSEMENT} element={<AddReimbursementPage />} />
             <Route path={pathNames.REIMBURSEMENT_DETAILS} element={<ReimbursementDetailsPage />} />
+            <Route path={pathNames.OFFICE_EXPENSE} element={<OfficeExpensePage />} />
+            <Route path={pathNames.ADD_OFFICE_EXPENSE} element={<AddOfficeExpensePage />} />
+            <Route path={pathNames.OFFICE_EXPENSE_DETAILS} element={<OfficeExpenseDetailsPage />} />
+            <Route path={pathNames.OVERALL_EXPENSE} element={<OverallExpensePage />} />
           </Route>
 
           <Route path={pathNames.PAY_SLIP}>

@@ -37,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4  pt-4">
+    <div className="flex flex-wrap items-center justify-between gap-4">
       {/* Total Records */}
       <div className="text-[15px] text-gray-700">
         Total : <span className="font-semibold">{totalRecords}</span>

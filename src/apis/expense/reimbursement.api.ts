@@ -42,18 +42,6 @@ export const getReimbursementCount = ({
   return apiRequest.get<ApiResponse>(`/expense/reimbursements/count${`?year=${year}`}&month=${month}`);
 };
 
-export const getBranchAndShift = () => {
-    return apiRequest.get<ApiResponse>(`organization/departments/branch-shift-options`);
-}
-
-export const updateReimbursement = (
-  payload: ReimbursementFormData,
-  reimbursementId: string = "",
-) =>
-  apiRequest.put(`organization/departments/${reimbursementId}`, payload, {
-    showSuccessToast: true,
-  });
-
 export const updateReimbursementStatus = (
   payload: {
     status: string;

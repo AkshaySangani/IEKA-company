@@ -219,7 +219,7 @@ const AddReimbursement: React.FC = () => {
   };
 
   const handleClose = () => {
-    navigate(pathNames.DEPARTMENT);
+    navigate(pathNames.REIMBURSEMENT);
   };
 
   return (

@@ -55,7 +55,9 @@ export const pathNames = {
   ADD_REIMBURSEMENT: "/expense/reimbursement/add-reimbursement",
   REIMBURSEMENT_DETAILS: "/expense/reimbursement/reimbursement-details",
   OFFICE_EXPENSE: "/expense/office-expense",
-  PAYROLL: "/expense/payroll",
+  ADD_OFFICE_EXPENSE: "/expense/office-expense/add-expense",
+  OFFICE_EXPENSE_DETAILS: "/expense/office-expense/expense-details",
+  EMPLOYEE_PAYROLL: "/expense/payroll",
 
   // Pay Slip
   PAY_SLIP: "/pay-slip",
@@ -206,8 +208,8 @@ export const menuItems: MenuItem[] = [
         path: pathNames.OFFICE_EXPENSE,
       },
       {
-        label: "Payroll",
-        path: pathNames.PAYROLL,
+        label: "Employee Payroll",
+        path: pathNames.EMPLOYEE_PAYROLL,
       },
     ],
   },

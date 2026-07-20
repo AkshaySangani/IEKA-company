@@ -89,7 +89,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <Image
             src={user?.company?.companyLogo || logo}
             alt="Logo"
-            className="w-[90px] transition-all duration-300"
+            className="max-h-[50px] max-w-[150px] object-contain"
           />
         </NavLink>
       </div>

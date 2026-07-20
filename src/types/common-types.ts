@@ -1,3 +1,5 @@
+import React from "react";
+
 export type FileType = "pdf" | "xlsx";
 
 export interface IOption {
@@ -78,6 +80,20 @@ export interface FilterCardItem {
   amount?: number | string;
 }
 
+export interface ExpenseCardItem {
+  id: string;
+  title: string;
+  count: number;
+  activeColor?: string;
+  textColor?: string;
+  trendDetails: {
+    type: string;
+    difference: number;
+    percentage: number;
+  } | null;
+  amount?: number | string;
+}
+
 export enum documentEnum {
   adhar = "adhar",
   pan = "pan",
@@ -128,4 +144,20 @@ export enum WeeklyOffEnum {
   FOURTH_SATURDAY = "4thSATURDAY",
   FIFTH_SATURDAY = "5thSATURDAY",
   SUNDAY = "SUNDAY",
+}
+
+export enum ExpenseCategoryEnum {
+  ELECTRONICS_ITEM = "ELECTRONICS_ITEM",
+  MACHINERY_AND_TOOLS = "MACHINERY_AND_TOOLS",
+  BILL_AND_SUBSCRIPTIONS = "BILL_AND_SUBSCRIPTIONS",
+  VEHICLE = "VEHICLE",
+  MEDICAL_CARE = "MEDICAL_CARE",
+}
+
+export interface ExpenseCategoryOption {
+  label: string;
+  value: ExpenseCategoryEnum;
+  icon: React.ReactNode;
+  activeColor?: string;
+  textColor?: string;
 }

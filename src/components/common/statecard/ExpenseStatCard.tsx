@@ -25,10 +25,10 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
       onClick={onClick}
       className={`
         relative
-        min-w-[220px]
+        min-w-[200px]
         overflow-hidden
-        px-5
-        py-4
+        px-4
+        py-3
         cursor-pointer
         transition-all
         duration-300
@@ -37,7 +37,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
       `}
     >
       {/* Top right circle */}
-      <div className={`absolute -right-6 -top-6 flex h-20 w-20 items-end justify-start rounded-full ${active ? "bg-cardBg/20": "bg-[#e9e6e6]"} p-4`}>
+      <div className={`absolute -right-[2rem] -top-[2rem] flex h-20 w-20 items-end justify-start rounded-full ${active ? "bg-cardBg/20": "bg-white/30"} p-4`}>
       <div className={active ? "text-white" : "text-[#9b9b9b]"}>
           {icon}
         </div>

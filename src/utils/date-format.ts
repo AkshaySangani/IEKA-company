@@ -39,7 +39,7 @@ export const getDateDifferenceInDays = (startDate: string, endDate: string): num
     return diff > 0 ? diff : 0;
 };
 
-type DateUnit =
+export type DateUnit =
   | "years"
   | "months"
   | "weeks"
@@ -48,7 +48,7 @@ type DateUnit =
   | "minutes"
   | "seconds";
 
-interface DateDiffOptions {
+export interface DateDiffOptions {
   from: string;
   to: string;
   unit: DateUnit;
@@ -132,3 +132,48 @@ function parseDate(value: string): Date {
     seconds
   );
 }
+
+export const getDateDifferenceBetween = (
+  startDate: string | Date,
+  endDate: string | Date = new Date()
+): string => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  let years = end.getFullYear() - start.getFullYear();
+  let months = end.getMonth() - start.getMonth();
+  let days = end.getDate() - start.getDate();
+
+  if (days < 0) {
+    months--;
+
+    const previousMonth = new Date(
+      end.getFullYear(),
+      end.getMonth(),
+      0
+    );
+
+    days += previousMonth.getDate();
+  }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  const result: string[] = [];
+
+  if (years > 0) {
+    result.push(`${years} year${years > 1 ? "s" : ""}`);
+  }
+
+  if (months > 0) {
+    result.push(`${months} month${months > 1 ? "s" : ""}`);
+  }
+
+  if (days > 0) {
+    result.push(`${days} day${days > 1 ? "s" : ""}`);
+  }
+
+  return result.length ? result.join(" ") : "0 day";
+};

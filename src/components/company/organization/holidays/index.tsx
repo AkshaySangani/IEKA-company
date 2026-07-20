@@ -92,7 +92,7 @@ const Holiday = () => {
   
     useEffect(() => {
       getHolidayCounts();
-    }, []);
+    }, [year]);
   
     const getHolidayCounts = async () => {
       const response = await getHolidayCount(year);
@@ -214,7 +214,6 @@ const Holiday = () => {
     setSearch("");
     setPage(1);
     setYear(Number(year));
-    getHolidayCounts();
   }
   return (
     <>
