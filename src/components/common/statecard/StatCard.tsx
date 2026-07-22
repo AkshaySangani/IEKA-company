@@ -40,7 +40,7 @@ const StatCard: React.FC<StatCardProps> = ({
           className={`
             flex min-w-[35px] items-center justify-center
             bg-white px-[5px] py-[2px]
-            text-[20px] font-medium text-secondary
+            text-[20px] font-medium 
             shadow-[rgba(50,50,93,0.25)_0px_13px_27px_-5px,rgba(0,0,0,0.3)_0px_8px_16px_-8px]
             ${textColor}
           `}
