@@ -59,7 +59,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       id="sidebar"
       className={`
         fixed top-0 left-0
-        z-[10000]
+        z-[1000]
         h-full
         w-[250px]
         overflow-hidden

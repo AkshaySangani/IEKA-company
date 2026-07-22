@@ -1,12 +1,12 @@
 import Image from "../../../../common/image";
 import { RoleEnum } from "../../../../../types/common-types";
 import { IAssignment, IBranch, IEmployeeFormData } from ".";
-import { branch } from "../../../../../constants/constants";
 import { getDateDifference } from "../../../../../utils/date-format";
+import { BranchAssignmentFormData } from "../../all-employees/employee-details/update-modals/BranchAssignmentUpdate";
 
 interface IEmployeeAssignmentCardProps {
   data: IBranch;
-  formData: IEmployeeFormData;
+  formData: IEmployeeFormData | BranchAssignmentFormData;
   handleAssignmentChange: (assignment: IAssignment) => void;
 }
 
@@ -132,8 +132,8 @@ const EmployeeAssignmentCard = ({
                         ) : (
                           <input
                             type="checkbox"
-                            checked={department?.manager?.role === RoleEnum.MANAGER || checked}
-                            disabled={department?.manager?.role === RoleEnum.MANAGER}
+                            checked={department?.manager ? department?.manager?._id !== formData?.userId : checked}
+                            disabled={department?.manager ? department?.manager?._id !== formData?.userId : false}
                             onChange={() =>
                               handleAssignmentChange({
                                 ...assignment,

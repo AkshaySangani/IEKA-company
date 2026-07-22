@@ -24,13 +24,13 @@ export const getOnboardingById = (onboardingId: string) => {
 
 export const assignRolesAndResponsibility = (payload: {
   userId: string;
-  role: string;
-  employmentType: string;
-  probationPeriod: number;
-  policyId: string;
-  payslipId: string;
-  salary: number;
-  assignments: {
+  role?: string;
+  employmentType?: string;
+  probationPeriod?: number;
+  policyId?: string;
+  payslipId?: string;
+  salary?: number;
+  assignments?: {
     branchId: string;
     shiftId: string;
     departmentId: string;
@@ -38,7 +38,7 @@ export const assignRolesAndResponsibility = (payload: {
     isReporting: boolean;
     remarks: string;
   }[];
-  remarks: string;
+  remarks?: string;
 }) =>
   apiRequest.post(`/workforce/onboard/roles-responsibility`, payload, {
     showSuccessToast: true,

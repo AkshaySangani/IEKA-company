@@ -73,6 +73,10 @@ const InviteEmployeeForm = () => {
     accountNo: "",
     confirmAccountNo: "",
     ifscCode: "",
+    uanNo: "",
+    esicNo: "",
+    pfJoiningDate: "",
+    esicJoiningDate: "",
 
     employeePhoto: null as File | null,
   };
@@ -500,6 +504,12 @@ const InviteEmployeeForm = () => {
 
     payload.append("accountNo", formData.accountNo);
     payload.append("ifscCode", formData.ifscCode);
+    payload.append("bankName", formData.bankName);
+    payload.append("accountHolderName", formData.accountHolderName);
+    payload.append("uanNo", formData.uanNo);
+    payload.append("esicNo", formData.esicNo);
+    payload.append("pfJoiningDate", formData.pfJoiningDate);
+    payload.append("esicJoiningDate", formData.esicJoiningDate);
 
     // ===========================
     // Employee Photo

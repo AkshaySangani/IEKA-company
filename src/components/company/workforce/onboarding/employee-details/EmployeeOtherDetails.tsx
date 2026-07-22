@@ -1,7 +1,12 @@
 import React from "react";
-import Image from "../../../../common/image";
-import { bankAccount, documentType } from "../../../../../constants/constants";
-import { IDocument, IEducation, IEmployee, IEmployeeDetails, IExperience } from ".";
+import { documentType } from "../../../../../constants/constants";
+import {
+  IDocument,
+  IEducation,
+  IEmployee,
+  IEmployeeDetails,
+  IExperience,
+} from ".";
 import { formatDate } from "../../../../../utils/date-format";
 import DetailRow from "../../../../common/detail-row";
 import { ColumnDef, CustomTable } from "../../../../common/table";
@@ -14,9 +19,9 @@ interface Props {
 
 const EmployeeOtherDetailCard: React.FC<Props> = ({
   data,
-  employeeDetails
+  employeeDetails,
 }) => {
-    const educationColumns: ColumnDef<IEducation>[] = [
+  const educationColumns: ColumnDef<IEducation>[] = [
     {
       header: "Board/ University",
       className: "w-[40%] pr-2 pl-2",
@@ -38,9 +43,11 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
       header: "MarkSheet",
       className: "w-[5%] pr-2 pl-2",
       render: (education, index) => (
-        <Link to={education.document} download target="_"><i className="fa-solid fa-file-invoice text-primary"></i></Link>
+        <Link to={education.document} download target="_">
+          <i className="fa-solid fa-file-invoice text-primary"></i>
+        </Link>
       ),
-    }
+    },
   ];
 
   const experienceColumns: ColumnDef<IExperience>[] = [
@@ -64,17 +71,19 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
       className: "w-[30%] pr-2 pl-2",
       render: (experience) => experience.designation,
     },
-    
+
     {
       header: "Document",
       className: "w-[5%] pr-2 pl-2",
       render: (experience) => (
-        <Link to={experience.document} download target="_"><i className="fa-solid fa-file-invoice text-primary"></i></Link>
+        <Link to={experience.document} download target="_">
+          <i className="fa-solid fa-file-invoice text-primary"></i>
+        </Link>
       ),
-    }
+    },
   ];
 
-   const documentColumns: ColumnDef<IDocument>[] = [
+  const documentColumns: ColumnDef<IDocument>[] = [
     {
       header: "Document Name",
       className: "w-[40%] pr-2 pl-2",
@@ -89,16 +98,23 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
       header: "Front Pic",
       className: "w-[15%] pr-2 pl-2",
       render: (document) => (
-        <Link to={document.front} download target="_"><i className="fa-solid fa-image text-primary"></i></Link>
+        <Link to={document.front} download target="_">
+          <i className="fa-solid fa-image text-primary"></i>
+        </Link>
       ),
     },
     {
       header: "Back Pic",
       className: "w-[15%] pr-2 pl-2",
-      render: (document) => document.back ? (
-        <Link to={document.front} download target="_"><i className="fa-solid fa-image text-primary"></i></Link>
-      ): "-",
-    }
+      render: (document) =>
+        document.back ? (
+          <Link to={document.front} download target="_">
+            <i className="fa-solid fa-image text-primary"></i>
+          </Link>
+        ) : (
+          "-"
+        ),
+    },
   ];
   return (
     <div className="content-card bg-white border border-gray-200">
@@ -109,7 +125,10 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
           </h3>
         </div>
         <div>
-            <CustomTable columns={educationColumns} data={employeeDetails.educations} />
+          <CustomTable
+            columns={educationColumns}
+            data={employeeDetails.educations}
+          />
         </div>
       </div>
       <div className="p-5">
@@ -119,20 +138,25 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
           </h3>
         </div>
         <div>
-            <CustomTable columns={experienceColumns} data={employeeDetails.experiences} />
+          <CustomTable
+            columns={experienceColumns}
+            data={employeeDetails.experiences}
+          />
         </div>
       </div>
       <div className="p-5">
         <div className="flex items-center justify-between border-b pb-3 mb-4">
-          <h3 className="text-md text-gray-600 font-semibold">
-            Bank Details
-          </h3>
+          <h3 className="text-md text-gray-600 font-semibold">Bank Details</h3>
         </div>
 
         <div className="space-y-4">
           <DetailRow
             label="Bank Name"
-            value={"-"}
+            value={
+              employeeDetails.bank.bankName
+                ? employeeDetails.bank.bankName
+                : "-"
+            }
           />
 
           <DetailRow
@@ -140,29 +164,38 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
             value={employeeDetails.bank.accountNo}
           />
 
-          <DetailRow
-            label="IAFC Code"
-            value={employeeDetails.bank.ifscCode}
-          />
+          <DetailRow label="IFSC Code" value={employeeDetails.bank.ifscCode} />
 
           <DetailRow
             label="UAN No."
-            value={"-"}
+            value={
+              employeeDetails.bank.uanNo ? employeeDetails.bank.uanNo : "-"
+            }
           />
 
           <DetailRow
             label="ESIC No."
-            value={"-"}
+            value={
+              employeeDetails.bank.esicNo ? employeeDetails.bank.esicNo : "-"
+            }
           />
 
           <DetailRow
             label="PF Joining Date"
-            value={"-"}
+            value={
+              employeeDetails.bank.pfJoiningDate
+                ? formatDate(employeeDetails.bank.pfJoiningDate)
+                : "-"
+            }
           />
 
           <DetailRow
             label="ESIC Joining Date"
-            value={"-"}
+            value={
+              employeeDetails.bank.esicJoiningDate
+                ? formatDate(employeeDetails.bank.esicJoiningDate)
+                : "-"
+            }
           />
         </div>
       </div>
@@ -174,13 +207,14 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
         </div>
 
         <div>
-            <CustomTable columns={documentColumns} data={employeeDetails.documents} />
+          <CustomTable
+            columns={documentColumns}
+            data={employeeDetails.documents}
+          />
         </div>
       </div>
     </div>
   );
 };
-
-
 
 export default EmployeeOtherDetailCard;

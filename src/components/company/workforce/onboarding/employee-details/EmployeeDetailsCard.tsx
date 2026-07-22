@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "../../../../common/image";
-import { bankAccount } from "../../../../../constants/constants";
 import { IEmployee, IEmployeeDetails } from ".";
 import { formatDate } from "../../../../../utils/date-format";
 import DetailRow from "../../../../common/detail-row";

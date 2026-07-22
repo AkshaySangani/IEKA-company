@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Image from "../../../../common/image";
-import {
-  bankAccount,
-  employmentTypeOptions,
-  probationPeriodOptions,
-  roleOptions,
-} from "../../../../../constants/constants";
-import { formatDate } from "../../../../../utils/date-format";
-import DetailRow from "../../../../common/detail-row";
-import { IEmployee } from "../employee-details";
-import SelectField from "../../../../common/select/SelectField";
-import { IAssignment, IBranch, IEmployeeFormData } from ".";
-import { getDesignation } from "../../../../../apis/organization/designation.api";
+import { IEmployeeFormData } from ".";
 import { IDesignation } from "../../../organization/designation";
 import { IOption, statusEnum } from "../../../../../types/common-types";
 import { getPolicies } from "../../../../../apis/organization/policy.api";

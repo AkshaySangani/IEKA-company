@@ -34,8 +34,9 @@ export const pathNames = {
   // Workforce
   WORKFORCE: "/workforce",
   ALL_EMPLOYEES: "/workforce/all-employees",
+  EMPLOYEE_DETAILS: "/workforce/all-employees/employee_details",
   ONBOARDING: "/workforce/onboarding",
-  EMPLOYEE_DETAILS: "/workforce/onboarding/employee-details",
+  ONBOARDING_DETAILS: "/workforce/onboarding/employee-details",
   ASSIGN_ROLES_RESPONSIBILITY: "/workforce/onboarding/assign-roles-responsibility",
   INVITE_EMPLOYEE_FORM: "/invite_employee_form",
   RESIGNED: "/workforce/resigned",

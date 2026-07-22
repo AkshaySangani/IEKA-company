@@ -76,6 +76,42 @@ const BankDetails = ({ formData, errors, handleChange }: BankDetailsProps) => {
           error={errors.ifscCode}
           placeholder="Enter IFSC Code"
         />
+
+        <TextField
+          label="UAN No. (if Applicable)"
+          name="uanNo"
+          value={formData.uanNo}
+          onChange={handleChange}
+          error={errors.uanNo}
+          placeholder="Enter UAN No."
+        />
+
+        <TextField
+          label="ESIC No (if Applicable)"
+          name="esicNo"
+          value={formData.esicNo}
+          onChange={handleChange}
+          error={errors.esicNo}
+          placeholder="Enter ESIC No."
+        />
+
+        <TextField
+          type="date"
+          label="PF Joining Date"
+          name="pfJoiningDate"
+          value={formData.pfJoiningDate}
+          onChange={handleChange}
+          error={errors.pfJoiningDate}
+        />
+
+        <TextField
+          type="date"
+          label="ESIC Joining Date"
+          name="esicJoiningDate"
+          value={formData.esicJoiningDate}
+          onChange={handleChange}
+          error={errors.esicJoiningDate}
+        />
       </div>
     </div>
   );

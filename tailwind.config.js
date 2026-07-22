@@ -21,6 +21,7 @@ module.exports = {
         sidebarText: "#adb5bd",
         activeBg: "#385c99",
         pageBg: "#faf8fa",
+        accordionBg: "#f3f3f3",
 
         /* Base */
         white: "#ffffff",

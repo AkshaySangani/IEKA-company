@@ -37,6 +37,7 @@ import OfficeExpensePage from "./pages/company/expense/office-expense";
 import AddOfficeExpensePage from "./pages/company/expense/office-expense/AddOfficeExpense";
 import OfficeExpenseDetailsPage from "./pages/company/expense/office-expense/OfficeExpenseDetails";
 import OverallExpensePage from "./pages/company/expense/overall-expense";
+import EmployeeDetailPage from "./pages/company/workforce/all-employee/EmployeeDetails";
 
 function App() {
   return (
@@ -105,10 +106,11 @@ function App() {
 
           <Route path={pathNames.WORKFORCE}>
             <Route path={pathNames.ONBOARDING} element={<OnBoardingPage />} />
-            <Route path={pathNames.EMPLOYEE_DETAILS} element={<EmployeeDetailsPage />}/>
+            <Route path={pathNames.ONBOARDING_DETAILS} element={<EmployeeDetailsPage />}/>
             <Route path={pathNames.ASSIGN_ROLES_RESPONSIBILITY} element={<AssignRolesResponsibilityPage />}/>
 
             <Route path={pathNames.ALL_EMPLOYEES} element={<AllEmployeesPage />}/>
+            <Route path={pathNames.EMPLOYEE_DETAILS} element={<EmployeeDetailPage />}/>
           </Route>
 
           <Route path={pathNames.EXPENSE}>

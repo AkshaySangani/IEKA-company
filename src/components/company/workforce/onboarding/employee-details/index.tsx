@@ -65,6 +65,11 @@ export interface IParents {
 export interface IBank {
   accountNo: number;
   ifscCode: string;
+  bankName: string;
+  uanNo: string;
+  esicNo: string;
+  pfJoiningDate: string | null;
+  esicJoiningDate: string | null;
 }
 
 export interface IEducation {
@@ -118,7 +123,7 @@ const initialEmployee: IEmployee = {
   updatedAt: "",
 };
 
-const initialEmployeeDetails = {
+const initialEmployeeDetails: IEmployeeDetails = {
     _id: "",
     userId: "",
     parents: {
@@ -131,7 +136,12 @@ const initialEmployeeDetails = {
     },
     bank: {
         accountNo: 0,
-        ifscCode: ""
+        ifscCode: "",
+        bankName: "",
+        uanNo: "",
+        esicNo: "",
+        pfJoiningDate: "",
+        esicJoiningDate: ""
     },
     educations: [],
     experiences: [],
@@ -177,10 +187,6 @@ const EmployeeDetails = () => {
       state: {...location?.state,employee},
     });
   };
-
-  const handleClickOnReject = () => {
-    
-  }
 
   const handleConfirmReject = async () => {
     setLoading(true);

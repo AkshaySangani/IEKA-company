@@ -28,7 +28,7 @@ export interface ISalaryDetail {
   _id: string;
 }
 
-interface IDeductionDetail {
+export interface IDeductionDetail {
   name: string;
   value: number;
   valueType: ValueType;

@@ -13,19 +13,15 @@ export const getEmployees = (payload: {
   );
 };
 
-export const getEmployeeById = (leaveId: string) => {
-  return apiRequest.get<ApiResponse>(`/organization/leaves/${leaveId}`);
+export const getEmployeeById = (userId: string) => {
+  return apiRequest.get<ApiResponse>(`/workforce/employee/${userId}`);
 };
 
 export const updateEmployee = (
-  payload: {
-    name: string;
-    description: string;
-    isPaid: boolean;
-  },
-  leaveId: string = "",
+  payload: any,
+  userId: string = "",
 ) =>
-  apiRequest.put(`/organization/leaves/${leaveId}`, payload, {
+  apiRequest.put(`workforce/employee/${userId}`, payload, {
     showSuccessToast: true,
   });
 

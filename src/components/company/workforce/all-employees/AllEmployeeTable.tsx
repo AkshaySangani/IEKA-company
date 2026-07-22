@@ -1,11 +1,12 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import { statusColor, statusMessage } from "../../../../constants/constants";
+import { pathNames, statusColor, statusMessage } from "../../../../constants/constants";
 import { IEmployee } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
 import { statusEnum } from "../../../../types/common-types";
 import BranchDepartmentInfo from "../../../common/branch-department";
+import { useNavigate } from "react-router-dom";
 
 interface IEmployeeListProps {
   allEmployees: IEmployee[];
@@ -18,6 +19,7 @@ export default function AllEmployeeTable({
   handleEditAllEmployeeDetails,
   handleUpdateStatus,
 }: IEmployeeListProps) {
+  const navigate = useNavigate();
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   // const initialLeave: IEmployee = {
   //   _id: "",
@@ -31,6 +33,13 @@ export default function AllEmployeeTable({
   // };
   // const [leaveDetails, setLeaveDetails] = useState<IEmployee>(initialLeave)
   // Define configuration structures with isolated column custom components
+  const handleOnClick = (row: IEmployee) => {
+    navigate(pathNames.EMPLOYEE_DETAILS, {
+      state: {
+        employeeId: row?._id
+      }
+    })
+  }
   const columns: ColumnDef<IEmployee>[] = [
     {
       header: "#",
@@ -48,6 +57,7 @@ export default function AllEmployeeTable({
             lastName: row?.lastName,
             description: row?.role,
           }}
+          onClick={() => handleOnClick(row)}
         />
       ),
     },

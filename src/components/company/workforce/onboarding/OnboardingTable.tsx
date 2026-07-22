@@ -36,7 +36,7 @@ export default function OnboardingsTable({
   const [onboardingDetails, setOnboardingDetails] = useState<IOnboarding>(initialOnboarding);
 
   const handleRedirectEmployeeDetails = (row: IOnboarding) => {
-    navigate(pathNames.EMPLOYEE_DETAILS, {
+    navigate(pathNames.ONBOARDING_DETAILS, {
       state: {
         id: row?._id
       }

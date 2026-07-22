@@ -32,7 +32,7 @@ const AppLayout: React.FC = () => {
       <div
         onClick={() => setIsOpen(false)}
         className={`
-          fixed inset-0 z-[9999]
+          fixed inset-0 z-[999]
           bg-black/50
           transition-all duration-300 ease-in-out
           lg:hidden

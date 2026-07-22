@@ -343,7 +343,7 @@ const AssignRolesResponsibility = () => {
   };
 
   const handleClose = () => {
-    navigate(pathNames.EMPLOYEE_DETAILS, {
+    navigate(pathNames.ONBOARDING_DETAILS, {
       state: location?.state,
     });
   };
