@@ -55,6 +55,24 @@ const STATUS_CONFIG: Record<
     className: "text-danger",
     icon: <i className="fa-solid fa-circle-xmark"></i>,
   },
+
+  [statusEnum.HOLD]: {
+    label: "Hold",
+    className: "text-warning",
+    icon: <i className="fa-solid fa-clock"></i>,
+  },
+
+  [statusEnum.TERMINATE]: {
+    label: "Terminate",
+    className: "text-success",
+    icon: <i className="fa-solid fa-circle-check"></i>,
+  },
+
+  [statusEnum.CANCEL]: {
+    label: "Cancel",
+    className: "text-danger",
+    icon: <i className="fa-solid fa-circle-xmark"></i>,
+  },
 };
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({

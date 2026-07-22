@@ -247,6 +247,9 @@ export const statusMessage: { [key: string]: string } = {
   APPROVED: "Approved",
   REJECTED: "Rejected",
   PENDING: "Pending",
+  CANCEL: "Cancel",
+  TERMINATE: "Terminate",
+  HOLD: "Hold",
 };
 
 export const statusColor: { [key: string]: string } = {
@@ -257,6 +260,9 @@ export const statusColor: { [key: string]: string } = {
   REJECTED: "text-danger",
   PENDING: "text-pending",
   APPROVED: "text-success",
+  CANCEL: "text-danger",
+  TERMINATE: "text-success",
+  HOLD: "text-warning",
 };
 
 export const moduleEnum: ObjectType = {
@@ -491,6 +497,36 @@ export const expenseStatusOptions: IOption[] = [
   {
     label: statusMessage.REJECTED,
     value: statusEnum.REJECTED,
+  },
+];
+
+export const acceptStatusOptions: IOption[] = [
+  {
+    label: statusMessage.ACCEPTED,
+    value: statusEnum.ACCEPTED,
+  },
+  {
+    label: statusMessage.PENDING,
+    value: statusEnum.PENDING,
+  },
+  {
+    label: statusMessage.REJECTED,
+    value: statusEnum.REJECTED,
+  },
+];
+
+export const terminationStatusOptions: IOption[] = [
+  {
+    label: statusMessage.TERMINATE,
+    value: statusEnum.TERMINATE,
+  },
+  {
+    label: statusMessage.HOLD,
+    value: statusEnum.HOLD,
+  },
+  {
+    label: statusMessage.CANCEL,
+    value: statusEnum.CANCEL,
   },
 ];
 

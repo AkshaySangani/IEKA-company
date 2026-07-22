@@ -1,40 +1,41 @@
 import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
-import StatusCards, { ResignedEmployeeStats } from "./StatusCards";
+import StatusCards, { TerminationStats } from "./StatusCards";
 import {
   FilterCardItem,
+  IOption,
   RoleEnum,
   statusEnum,
 } from "../../../../types/common-types";
-import {
-  getEmployeeById,
-  getEmployeeCount,
-  getEmployees,
-  updateEmployeeStatus,
-} from "../../../../apis/workforce/all-employee.api";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
-import ResignedEmployeeTable from "./ResignedEmployeeTable";
-import {
-  getResignedEmployeeCount,
-  getResignedEmployees,
-  updateResignedEmployeeStatus,
-} from "../../../../apis/workforce/resigned.api";
 import Pagination from "../../../common/pagination/Pagination";
-import { acceptStatusOptions } from "../../../../constants/constants";
+import TerminationTable from "./TerminationTable";
+import {
+  getTerminationById,
+  getTerminationCount,
+  getTerminations,
+  updateTerminationStatus,
+} from "../../../../apis/workforce/termination.api";
+import { terminationStatusOptions } from "../../../../constants/constants";
+import AddTermination from "./AddTermination";
+import Button from "../../../common/button/Button";
+import { getEmployees } from "../../../../apis/workforce/all-employee.api";
+import { IEmployee } from "../all-employees";
 
-export interface ResignationRequest {
+export interface ITermination {
   _id: string;
   companyId: string;
-  userId: ResignationUser;
+  userId: ITerminationUser;
   lastWorkingDate: string;
+  terminationType: string;
   reason: string;
   status: statusEnum;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface ResignationUser {
+export interface ITerminationUser {
   _id: string;
   firstName: string;
   lastName: string;
@@ -48,11 +49,10 @@ export interface Department {
   name: string;
 }
 
-const ResignedEmployees = () => {
+const Termination = () => {
   const [activeCard, setActiveCard] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
-  const [resignation, setResignation] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
@@ -60,10 +60,9 @@ const ResignedEmployees = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [statusLoading, setStatusLoading] = useState<boolean>(false);
 
-  const [resignedEmployees, setResignedEmployees] = useState<
-    ResignationRequest[]
-  >([]);
-  const initialEmployee: ResignationRequest = {
+  const [terminations, setTerminations] = useState<ITermination[]>([]);
+  const [employees, setEmployees] = useState<IOption[]>([]);
+  const initialTermination: ITermination = {
     _id: "",
     companyId: "",
     userId: {
@@ -77,14 +76,15 @@ const ResignedEmployees = () => {
         name: "",
       },
     },
+    terminationType: "",
     lastWorkingDate: "",
     reason: "",
     status: statusEnum.REJECTED,
     createdAt: "",
     updatedAt: "",
   };
-  const [employeeDetails, setEmployeeDetails] =
-    useState<ResignationRequest>(initialEmployee);
+  const [terminationDetails, setTerminationDetails] =
+    useState<ITermination>(initialTermination);
 
   const [cards, setCards] = useState<FilterCardItem[]>([
     {
@@ -96,24 +96,25 @@ const ResignedEmployees = () => {
       icon: <i className="fa-solid fa-align-justify"></i>,
     },
     {
-      id: statusEnum.PENDING,
-      title: "Pending",
-      count: 0,
-      activeColor: "bg-pending",
-      textColor: "text-pending",
-      icon: <i className="fa-solid fa-hourglass-end"></i>,
-    },
-    {
-      id: statusEnum.ACCEPTED,
-      title: "Accepted",
+      id: statusEnum.TERMINATE,
+      title: "Terminate",
       count: 0,
       activeColor: "bg-success",
       textColor: "text-success",
       icon: <i className="fa-solid fa-user-check"></i>,
     },
     {
-      id: statusEnum.REJECTED,
-      title: "Rejected",
+      id: statusEnum.HOLD,
+      title: "Hold",
+      count: 0,
+      activeColor: "bg-warning",
+      textColor: "text-warning",
+      icon: <i className="fa-solid fa-hourglass-end"></i>,
+    },
+
+    {
+      id: statusEnum.CANCEL,
+      title: "Cancel",
       count: 0,
       activeColor: "bg-danger",
       textColor: "text-danger",
@@ -122,32 +123,51 @@ const ResignedEmployees = () => {
   ]);
 
   useEffect(() => {
-    getEmployeeCounts();
+    fetchTerminationCounts();
+    fetchEmployees();
+    // eslint-disable-next-line
   }, []);
 
-  const getEmployeeCounts = async () => {
-    const response = await getResignedEmployeeCount();
+  const fetchTerminationCounts = async () => {
+    const response = await getTerminationCount();
     if (response?.success) {
       updateCards(response?.data);
     }
   };
 
+  const fetchEmployees = async () => {
+    const response = await getEmployees({
+      page: 1,
+      limit: 200,
+      search: "",
+      status: statusEnum.ACTIVE,
+    });
+    if (response.success) {
+      setEmployees(
+        response?.data?.employee?.map((ele: IEmployee) => ({
+          label: `${ele.firstName} ${ele.lastName}`,
+          value: ele._id,
+        })),
+      );
+    } else setEmployees([]);
+  };
+
   // update cards
-  const updateCards = (stats: ResignedEmployeeStats) => {
+  const updateCards = (stats: TerminationStats) => {
     setCards((prev) =>
       prev.map((card) => {
         switch (card.id) {
           case "":
             return { ...card, count: stats.total };
 
-          case statusEnum.ACCEPTED:
-            return { ...card, count: stats.accept };
+          case statusEnum.TERMINATE:
+            return { ...card, count: stats.terminate };
 
-          case statusEnum.REJECTED:
-            return { ...card, count: stats.reject };
+          case statusEnum.CANCEL:
+            return { ...card, count: stats.cancel };
 
-          case statusEnum.PENDING:
-            return { ...card, count: stats.pending };
+          case statusEnum.HOLD:
+            return { ...card, count: stats.hold };
 
           default:
             return card;
@@ -156,56 +176,51 @@ const ResignedEmployees = () => {
     );
   };
 
-  // useEffect for get employeeDetails
+  // useEffect for get terminationDetails
   useEffect(() => {
-    fetchResignedEmployeeList(page, limit, search, activeCard);
+    fetchTerminations(page, limit, search, activeCard);
   }, [page, limit, search, activeCard]);
 
-  // get employeeDetails list
-  const fetchResignedEmployeeList = async (
+  // get terminationDetails list
+  const fetchTerminations = async (
     page: number,
     limit: number,
     search: string = "",
     status: string = "",
   ) => {
     setLoading(true);
-    const response = await getResignedEmployees({
-      page,
-      limit,
-      search,
-      status,
-    });
-    if (response.success && response.data?.resignations?.length > 0) {
-      setResignedEmployees(response.data?.resignations);
+    const response = await getTerminations({ page, limit, search, status });
+    if (response.success && response.data?.terminations?.length > 0) {
+      setTerminations(response.data?.terminations);
       setTotal(response.data?.total);
       setLoading(false);
     } else {
-      setResignedEmployees([]);
+      setTerminations([]);
       setTotal(0);
       setLoading(false);
     }
   };
 
   const handleRefreshData = () => {
-    fetchResignedEmployeeList(page, limit, search, activeCard);
-    getEmployeeCounts();
+    fetchTerminations(page, limit, search, activeCard);
+    fetchTerminationCounts();
   };
 
   // handle click add new
   const handleOnAddOpenClose = () => {
     setIsOpen((prev) => !prev);
-    setEmployeeDetails(initialEmployee);
+    setTerminationDetails(initialTermination);
   };
 
-  // handle edit employeeDetails details
-  const handleEditResignedEmployeeDetails = async (
-    employeeDetails: ResignationRequest,
+  // handle edit terminationDetails details
+  const handleEditTerminationDetails = async (
+    terminationDetails: ITermination,
   ) => {
     setLoading(true);
-    const response = await getEmployeeById(employeeDetails._id);
+    const response = await getTerminationById(terminationDetails._id);
     if (response?.success) {
       handleOnAddOpenClose();
-      setEmployeeDetails(response?.data);
+      setTerminationDetails(response?.data);
     }
     setLoading(false);
   };
@@ -213,23 +228,14 @@ const ResignedEmployees = () => {
   // handle status open close
   const handleStatusOpenClose = () => {
     setStatusOpen((prev) => !prev);
-    setEmployeeDetails(initialEmployee);
+    setTerminationDetails(initialTermination);
   };
 
   // handle update status
-  const handleUpdateStatus = (employeeDetails: ResignationRequest) => {
-    if(employeeDetails.status === statusEnum.ACCEPTED){
-      handleStatusOpenClose();
-    } else {
-      handleResignation()
-    }
-    setEmployeeDetails(employeeDetails);
+  const handleUpdateStatus = (terminationDetails: ITermination) => {
+    handleStatusOpenClose();
+    setTerminationDetails(terminationDetails);
   };
-
-  const handleResignation = () => {
-    setResignation((prev) => !prev);
-    setEmployeeDetails(initialEmployee);
-  }
 
   const handleStatusSubmit = async (formData: {
     status: statusEnum;
@@ -242,9 +248,9 @@ const ResignedEmployees = () => {
       remarks: formData.remarks,
     };
 
-    const response = await updateResignedEmployeeStatus(
+    const response = await updateTerminationStatus(
       payload,
-      employeeDetails._id,
+      terminationDetails._id,
     );
     if (response.success) {
       handleRefreshData();
@@ -252,7 +258,7 @@ const ResignedEmployees = () => {
     setStatusLoading(false);
   };
 
-  // handle search employeeDetails
+  // handle search terminationDetails
   const handleOnSearch = (value: string) => {
     setSearch(value);
     setPage(1);
@@ -260,7 +266,15 @@ const ResignedEmployees = () => {
   return (
     <>
       <TopBar
-        title="All Resigned Employee"
+        title="All Terminated Employees"
+        actionButtons={
+          <Button
+            name="Add New"
+            size="sm"
+            onClick={handleOnAddOpenClose}
+            leftIcon={<i className="fa-solid fa-plus"></i>}
+          />
+        }
         isSearch
         searchPlaceholder="Search employees..."
         onSearch={handleOnSearch}
@@ -273,9 +287,9 @@ const ResignedEmployees = () => {
           activeCard={activeCard}
           setActiveCard={setActiveCard}
         />
-        <ResignedEmployeeTable
-          resignedEmployees={resignedEmployees}
-          handleEditResignedEmployeeDetails={handleEditResignedEmployeeDetails}
+        <TerminationTable
+          terminations={terminations}
+          handleEditTerminationDetails={handleEditTerminationDetails}
           handleUpdateStatus={handleUpdateStatus}
         />
         <Pagination
@@ -286,17 +300,28 @@ const ResignedEmployees = () => {
           onPageSizeChange={setLimit}
         />
       </div>
+      <AddTermination
+        isOpen={isOpen}
+        handleOpenClose={handleOnAddOpenClose}
+        fetchTerminations={() => {
+          fetchTerminations(page, limit, search, activeCard);
+          fetchTerminationCounts();
+        }}
+        termination={terminationDetails}
+        employees={employees}
+      />
       <StatusUpdateModal
-        title={`employee ${employeeDetails.userId.firstName} ${employeeDetails.userId.lastName}`}
+      showFullTitle
+        title={`Are you sure you want to do termination of this employee ${terminationDetails.userId.firstName} ${terminationDetails.userId.lastName} ?`}
         isOpen={statusOpen}
-        status={employeeDetails.status}
+        status={terminationDetails.status}
         handleOpenClose={handleStatusOpenClose}
         handleSubmit={handleStatusSubmit}
         loading={statusLoading}
-        options={acceptStatusOptions}
+        options={terminationStatusOptions}
       />
     </>
   );
 };
 
-export default ResignedEmployees;
+export default Termination;

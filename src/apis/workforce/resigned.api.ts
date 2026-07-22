@@ -17,3 +17,13 @@ export const getResignedEmployeeCount = () => {
   return apiRequest.get<ApiResponse>(`/workforce/resignation/count`);
 };
 
+export const updateResignedEmployeeStatus = (
+  payload: {
+    status: string;
+    remarks: string;
+  },
+  resignationId: string = "",
+) =>
+  apiRequest.patch(`/workforce/resignation/status/${resignationId}`, payload, {
+    showSuccessToast: true,
+  });

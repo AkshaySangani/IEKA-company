@@ -11,6 +11,7 @@ interface IStatusUpdateProps {
   isOpen: boolean;
   status: statusEnum;
   title: string;
+  showFullTitle?: boolean;
   loading: boolean;
   options?: IOption[];
   handleOpenClose: () => void;
@@ -30,6 +31,7 @@ const initialFormData: FormDataPayload = {
 const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
   isOpen,
   title = "",
+  showFullTitle = false,
   handleOpenClose,
   handleSubmit,
   status,
@@ -87,10 +89,10 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
           />
 
           <h3 className="text-lg font-semibold">
-            Are you sure you want to update status for this {title}?
+            {showFullTitle ? title : `Are you sure you want to update status for this ${title}?`}
           </h3>
         </div>
-        <div className="grid grid-cols-1 w-[75%] gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <RadioButton
             required
             label="Status"

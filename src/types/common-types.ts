@@ -27,6 +27,9 @@ export enum statusEnum {
   ACCEPTED = "ACCEPTED",
   PENDING = "PENDING",
   APPROVED = "APPROVED",
+  CANCEL = "CANCEL",
+  TERMINATE = "TERMINATE",
+  HOLD = "HOLD"
 }
 
 export enum RoleEnum {
