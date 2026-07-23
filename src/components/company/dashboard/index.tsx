@@ -1,6 +1,8 @@
+import RightArrow from "../../common/right-arrow";
+
 const Dashboard = () => {
     return (
-        <div className="content-area">Dashboard</div>
+        <div className="content-area">Dashboard<RightArrow label="View"/></div>
     )
 }
 

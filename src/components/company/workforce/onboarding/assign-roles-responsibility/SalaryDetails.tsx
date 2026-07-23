@@ -54,14 +54,6 @@ const SalaryDetailsCard: React.FC<Props> = ({
     // eslint-disable-next-line
   }, []);
 
-  //   useEffect(() => {
-  //     if(salaryDetails?.length > 0 || deductions?.length > 0){
-  //         const combinedData = [...salaryDetails,...deductions]
-
-  //         console.log("data", data)
-  //     }
-  //   },[salaryDetails, deductions, formData.salary])
-
   const fetchPayslips = async () => {
     const response = await getEarnings({
       page: 1,
@@ -142,6 +134,7 @@ const SalaryDetailsCard: React.FC<Props> = ({
           <TextField
             label="Salary/ Month"
             name="salary"
+            type="number"
             required
             value={formData.salary}
             onChange={(e) => handleChange("salary", e.target.value)}
@@ -161,7 +154,7 @@ const SalaryDetailsCard: React.FC<Props> = ({
             {deductions?.map((deduction, index) => (
               <React.Fragment key={index}>
                 <div className="border p-2">{deduction.name}</div>
-                <div className="border p-2">-₹{deduction.amount}</div>
+                <div className="border p-2">₹-{deduction.amount}</div>
               </React.Fragment>
             ))}
             <div className="border p-2 font-bold">{"Net Salary"}</div>

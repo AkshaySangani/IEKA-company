@@ -84,11 +84,26 @@ export const calculateSalaryBreakdown = (
     }
   }
 
+  // Add Other Allowance as remaining amount
+  const otherAmount = salary - totalEarnings;
+
+  earnings.push({
+    _id: "other",
+    name: "Other",
+    value: otherAmount,
+    valueType: ValueType.FIXED,
+    type: salaryType.EARNING,
+    amount: otherAmount,
+  });
+
+  // Gross salary should always equal entered salary
+  const grossSalary = totalEarnings += otherAmount;
+
   return {
     earnings,
     deductions,
-    grossSalary: totalEarnings,
-    netSalary: totalEarnings - totalDeductions,
+    grossSalary,
+    netSalary: grossSalary - totalDeductions,
   };
 };
 
