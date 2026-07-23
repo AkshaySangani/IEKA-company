@@ -32,7 +32,7 @@ export default function PolicyUpdate({
   loading
 }: PolicyUpdateProps) {
   const initialFormData: PolicyFormData = {
-    policyId: policy.policyId._id,
+    policyId: policy?.policyId?._id,
     remarks: "",
     month: new Date().getMonth(),
     year: new Date().getFullYear()

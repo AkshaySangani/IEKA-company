@@ -249,6 +249,7 @@ export const statusMessage: { [key: string]: string } = {
   PENDING: "Pending",
   CANCEL: "Cancel",
   TERMINATE: "Terminate",
+  PROMOTED: "Promoted",
   HOLD: "Hold",
 };
 
@@ -262,6 +263,7 @@ export const statusColor: { [key: string]: string } = {
   APPROVED: "text-success",
   CANCEL: "text-danger",
   TERMINATE: "text-success",
+  PROMOTED: "text-success",
   HOLD: "text-warning",
 };
 
@@ -519,6 +521,21 @@ export const terminationStatusOptions: IOption[] = [
   {
     label: statusMessage.TERMINATE,
     value: statusEnum.TERMINATE,
+  },
+  {
+    label: statusMessage.HOLD,
+    value: statusEnum.HOLD,
+  },
+  {
+    label: statusMessage.CANCEL,
+    value: statusEnum.CANCEL,
+  },
+];
+
+export const promotionStatusOptions: IOption[] = [
+  {
+    label: statusMessage.PROMOTED,
+    value: statusEnum.PROMOTED,
   },
   {
     label: statusMessage.HOLD,

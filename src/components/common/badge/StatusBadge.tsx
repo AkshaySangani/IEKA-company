@@ -68,6 +68,12 @@ const STATUS_CONFIG: Record<
     icon: <i className="fa-solid fa-circle-check"></i>,
   },
 
+  [statusEnum.PROMOTED]: {
+    label: "Promoted",
+    className: "text-success",
+    icon: <i className="fa-solid fa-circle-check"></i>,
+  },
+
   [statusEnum.CANCEL]: {
     label: "Cancel",
     className: "text-danger",

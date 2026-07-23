@@ -29,6 +29,7 @@ export enum statusEnum {
   APPROVED = "APPROVED",
   CANCEL = "CANCEL",
   TERMINATE = "TERMINATE",
+  PROMOTED = "PROMOTED",
   HOLD = "HOLD"
 }
 
