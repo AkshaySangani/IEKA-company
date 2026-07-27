@@ -1,31 +1,30 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import Modal from "../../../../common/modal/Modal";
+import { useEffect, useRef, useState } from "react";
 import TextField from "../../../../common/text-field/TextField";
-import TextAreaField from "../../../../common/text-area/TextAreaField";
 import {
   addPolicy,
   getPolicyById,
   updatePolicy,
 } from "../../../../../apis/organization/policy.api";
-import { IPolicy } from "..";
-import { getDateDifferenceInDays } from "../../../../../utils/date-format";
 import TopBar from "../../../../common/topbar/TopBar";
 import Button from "../../../../common/button/Button";
 import PageLoader from "../../../../common/loader/PageLoader";
 import { useLocation, useNavigate } from "react-router-dom";
 import { pathNames } from "../../../../../constants/constants";
-import { leaveEncashmentType, statusEnum } from "../../../../../types/common-types";
+import {
+  leaveEncashmentType,
+  statusEnum,
+} from "../../../../../types/common-types";
 import AttendanceSettings from "./AttendanceSettings";
 import LeaveSetting from "./LeaveSettings";
 import { getLeaves } from "../../../../../apis/organization/leave.api";
 import { ILeave } from "../../leave";
 
 export interface ILeaveData {
-    name: string;
-    leaveId: string;
-    limit: number;
-    hoursBeforeLeave: number;
-  }
+  name: string;
+  leaveId: string;
+  limit: number;
+  hoursBeforeLeave: number;
+}
 
 export interface PolicyFormData {
   name: string;
@@ -87,7 +86,7 @@ export interface PolicyFormData {
 }
 
 const AddPolicy: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const formRef = useRef<HTMLFormElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -99,7 +98,7 @@ const AddPolicy: React.FC = () => {
       workingHours: 8,
       startTime: "",
       endTime: "",
-      weeklyOffs: [ ],
+      weeklyOffs: [],
       minimumHoursForHalfDay: 0,
       minimumHoursForFullDay: 0,
     },
@@ -158,39 +157,62 @@ const AddPolicy: React.FC = () => {
   >({});
 
   useEffect(() => {
-   fetchLeaves();
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    if(policyId){
-      fetchPolicy();
-    }
-  },[policyId])
+    (async () => {
+      await fetchLeaves();
+      if (policyId) {
+        await fetchPolicy();
+      }
+      setLoading(false);
+    })();
+  }, [policyId]);
 
   const fetchPolicy = async () => {
-    setLoading(true);
+    // setLoading(true);
     const response = await getPolicyById(policyId);
     if (response?.success) {
-      setFormData(response?.data)
+      setFormData((prev) => {
+        return {
+          ...response?.data,
+          leaves: prev.leaves?.map((leave: ILeaveData) => {
+            const leaveData = response?.data.leaves.find(
+                (el: any) => el.leaveId === leave.leaveId,
+              )
+            return {
+              name: leave.name,
+              leaveId: leave?.leaveId,
+              limit: leaveData?.limit,
+              hoursBeforeLeave: leaveData?.hoursBeforeLeave,
+            };
+          }),
+        };
+      });
     }
-    setLoading(false);
-  }
+    // setLoading(false);
+  };
 
   const fetchLeaves = async () => {
-    const response = await getLeaves({page: 1, limit: 200, status: statusEnum.ACTIVE});
-    if(response?.success && response?.data?.leaves?.length > 0){
-      setFormData(prev => ({
+    const response = await getLeaves({
+      page: 1,
+      limit: 200,
+      status: statusEnum.ACTIVE,
+    });
+    if (response?.success && response?.data?.leaves?.length > 0) {
+      setFormData((prev) => ({
         ...prev,
-        leaves: response?.data?.leaves?.map((leave: ILeave) => ({name: leave.name,leaveId: leave?._id, limit:0,hoursBeforeLeave: 0}))
-      }))
+        leaves: response?.data?.leaves?.map((leave: ILeave) => ({
+          name: leave.name,
+          leaveId: leave?._id,
+          limit: 0,
+          hoursBeforeLeave: 0,
+        })),
+      }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        leaves: []
-      }))
+        leaves: [],
+      }));
     }
-  }
+  };
 
   const handleChange = (
     field: string,
@@ -264,7 +286,7 @@ const AddPolicy: React.FC = () => {
     const newErrors = validate();
     const isValid = Object.keys(newErrors).length === 0;
     if (!isValid) {
-      scrollToFirstError(newErrors)
+      scrollToFirstError(newErrors);
       return;
     }
 

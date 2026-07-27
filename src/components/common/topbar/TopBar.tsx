@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import XLSX from "../../../assets/images/xls.png";
+import PDF from "../../../assets/images/pdf_icon.png";
 import TextField from "../text-field/TextField";
 
 interface TopBarProps {
@@ -83,6 +84,20 @@ const TopBar = ({
                   />
                 </button>
               </div>
+            )}
+
+            {isPdf && (
+              <button
+                type="button"
+                onClick={handleDownloadPdfClick}
+                className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center"
+              >
+                <img
+                  src={PDF}
+                  alt="Pdf"
+                  className="h-full w-full object-contain"
+                />
+              </button>
             )}
 
             {isExcel && (

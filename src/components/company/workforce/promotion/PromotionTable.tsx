@@ -9,9 +9,10 @@ import { IPromotion } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { statusEnum } from "../../../../types/common-types";
+import { RoleEnum, statusEnum } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import Badge from "../../../common/badge/Badge";
 
 interface IPromotionListProps {
   promotions: IPromotion[];
@@ -75,7 +76,8 @@ export default function PromotionTable({
     {
       header: "Letter",
       className: "w-[20%]",
-      render: (row) => <>Certificates</>,
+      render: (row) => {
+        return row.status === statusEnum.PROMOTED && <Badge label="Letter" onClick={() => navigate(`${pathNames.PROMOTION_LETTER}/${row._id}`)}/>},
     },
     {
       header: "Status",

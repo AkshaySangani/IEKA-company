@@ -41,6 +41,11 @@ import EmployeeDetailPage from "./pages/company/workforce/all-employee/EmployeeD
 import ResignedEmployeesPage from "./pages/company/workforce/resigned";
 import TerminationPage from "./pages/company/workforce/termination";
 import PromotionPage from "./pages/company/workforce/promotion";
+import PromotionLetterPage from "./pages/company/workforce/promotion/PromotionLetter";
+import TerminationLetterPage from "./pages/company/workforce/termination/TerminationLetter";
+import RelievingLetterPage from "./pages/company/workforce/resigned/RelievingLetter";
+import ExperienceLetterPage from "./pages/company/workforce/resigned/ExperienceLetter";
+import FnFLetterPage from "./pages/company/workforce/resigned/FnFLetter";
 
 function App() {
   return (
@@ -116,9 +121,14 @@ function App() {
             <Route path={pathNames.EMPLOYEE_DETAILS} element={<EmployeeDetailPage />}/>
 
             <Route path={pathNames.RESIGNED} element={<ResignedEmployeesPage />}/>
+            <Route path={pathNames.RELIEVING_LETTER_ID} element={<RelievingLetterPage />}/>
+            <Route path={pathNames.EXPERIENCE_LETTER_ID} element={<ExperienceLetterPage />}/>
+            <Route path={pathNames.FNF_LETTER_ID} element={<FnFLetterPage />}/>
             <Route path={pathNames.TERMINATION} element={<TerminationPage />}/>
+            <Route path={pathNames.TERMINATION_LETTER_ID} element={<TerminationLetterPage />}/>
 
             <Route path={pathNames.PROMOTION} element={<PromotionPage />}/>
+            <Route path={pathNames.PROMOTION_LETTER + "/:id"} element={<PromotionLetterPage />}/>
           </Route>
 
           <Route path={pathNames.EXPENSE}>

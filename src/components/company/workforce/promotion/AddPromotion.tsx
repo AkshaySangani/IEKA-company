@@ -30,7 +30,6 @@ const AddPromotion: React.FC<IAddPromotionProps> = ({
   designations
 }) => {
   const [loading, setLoading] = useState(false);
-  console.log("designations",designations)
   const initialFormData: PromotionFormData = {
     userId: "",
     designationId: "",

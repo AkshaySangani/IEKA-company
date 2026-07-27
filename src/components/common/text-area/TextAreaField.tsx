@@ -27,7 +27,7 @@ const TextAreaField: React.FC<TextAreaProps> = ({
   ...props
 }) => {
   return (
-    <div className={`w-full ${className}`}>
+    <div>
       {label && (
         <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
           {label} {required && <span className="text-error">*</span>}
@@ -60,6 +60,7 @@ const TextAreaField: React.FC<TextAreaProps> = ({
             placeholder:font-normal
             focus:placeholder:pl-[10px]
           text-sm
+           ${className}
         `}
       />
 

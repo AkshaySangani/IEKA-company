@@ -12,6 +12,7 @@ import PersonInfo from "../../../common/person-info";
 import { statusEnum } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../utils/date-format";
+import Badge from "../../../common/badge/Badge";
 
 interface ITerminationListProps {
   terminations: ITermination[];
@@ -75,7 +76,7 @@ export default function TerminationTable({
     {
       header: "Letter",
       className: "w-[20%]",
-      render: (row) => <>Certificates</>,
+      render: (row) => row.status === statusEnum.TERMINATE && <Badge label="Terminate" onClick={() => navigate(`${pathNames.TERMINATION_LETTER}/${row._id}`)}/>,
     },
     {
       header: "Status",

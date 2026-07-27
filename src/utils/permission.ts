@@ -2,12 +2,19 @@ import { menuItems, pathNames, roleBasePaths } from "../constants/constants";
 import { RoleEnum } from "../types/common-types";
 import { MenuItem } from "../types/sidebar-types";
 
+import { matchPath } from "react-router-dom";
+
 export const hasPathAccess = (
   role: string = "",
-  path: string,
+  path: string
 ): boolean => {
-  return roleBasePaths?.[role]?.includes(path) || false;
+  const allowedPaths = roleBasePaths?.[role] || [];
+
+  return allowedPaths.some((allowedPath: any) =>
+    matchPath({ path: allowedPath, end: true }, path)
+  );
 };
+
 
 export const getAccessibleMenus = (
   role: string = "",

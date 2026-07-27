@@ -13,6 +13,10 @@ export const getResignedEmployees = (payload: {
   );
 };
 
+export const getResignedEmployeeById = (resignationId: string) => {
+  return apiRequest.get<ApiResponse>(`/workforce/resignation/${resignationId}`);
+};
+
 export const getResignedEmployeeCount = () => {
   return apiRequest.get<ApiResponse>(`/workforce/resignation/count`);
 };

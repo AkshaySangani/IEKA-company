@@ -13,6 +13,7 @@ import { statusEnum } from "../../../../types/common-types";
 import BranchDepartmentInfo from "../../../common/branch-department";
 import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import Badge from "../../../common/badge/Badge";
 
 interface ResignationRequestListProps {
   resignedEmployees: ResignationRequest[];
@@ -92,7 +93,11 @@ export default function ResignedEmployeeTable({
     {
       header: "Certificate",
       className: "w-[20%]",
-      render: (row) => <>Certificates</>,
+      render: (row) => row.status === statusEnum.REJECTED && <div className="flex gap-2">
+        <Badge label="Relieving" onClick={() => navigate(`${pathNames.RELIEVING_LETTER}/${row._id}`)}/>
+        <Badge label="Experience" onClick={() => navigate(`${pathNames.EXPERIENCE_LETTER}/${row._id}`)}/>
+        <Badge label="F & F" onClick={() => navigate(`${pathNames.FNF_LETTER}/${row._id}`)}/>
+        </div>,
     },
     {
       header: "Status",

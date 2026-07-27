@@ -53,21 +53,7 @@ export interface Department {
   name: string;
 }
 
-const Promotion = () => {
-  const [activeCard, setActiveCard] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [statusOpen, setStatusOpen] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
-  const [search, setSearch] = useState<string>("");
-  const [total, setTotal] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [statusLoading, setStatusLoading] = useState<boolean>(false);
-
-  const [promotions, setPromotions] = useState<IPromotion[]>([]);
-  const [employees, setEmployees] = useState<IOption[]>([]);
-  const [designations, setDesignations] = useState<any[]>([]);
-  const initialPromotion: IPromotion = {
+export const initialPromotion: IPromotion = {
     _id: "",
     companyId: "",
     userId: {
@@ -87,6 +73,22 @@ const Promotion = () => {
     createdAt: "",
     updatedAt: "",
   };
+
+const Promotion = () => {
+  const [activeCard, setActiveCard] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [statusOpen, setStatusOpen] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+  const [search, setSearch] = useState<string>("");
+  const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [statusLoading, setStatusLoading] = useState<boolean>(false);
+
+  const [promotions, setPromotions] = useState<IPromotion[]>([]);
+  const [employees, setEmployees] = useState<IOption[]>([]);
+  const [designations, setDesignations] = useState<any[]>([]);
+  
   const [promotionDetails, setPromotionDetails] =
     useState<IPromotion>(initialPromotion);
 

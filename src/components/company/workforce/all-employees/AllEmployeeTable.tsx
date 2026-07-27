@@ -1,5 +1,5 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import { pathNames, statusColor, statusMessage } from "../../../../constants/constants";
+import { pathNames, roleNames, statusColor, statusMessage } from "../../../../constants/constants";
 import { IEmployee } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
@@ -55,7 +55,7 @@ export default function AllEmployeeTable({
             profileImage: row?.profileImage,
             firstName: row?.firstName,
             lastName: row?.lastName,
-            description: row?.role,
+            description: roleNames[row?.role],
           }}
           onClick={() => handleOnClick(row)}
         />

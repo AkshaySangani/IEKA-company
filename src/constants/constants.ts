@@ -40,8 +40,18 @@ export const pathNames = {
   ASSIGN_ROLES_RESPONSIBILITY: "/workforce/onboarding/assign-roles-responsibility",
   INVITE_EMPLOYEE_FORM: "/invite_employee_form",
   RESIGNED: "/workforce/resigned",
+  RELIEVING_LETTER: "/workforce/resigned/relieving-letter",
+  RELIEVING_LETTER_ID: "/workforce/resigned/relieving-letter/:id",
+  EXPERIENCE_LETTER: "/workforce/resigned/experience-letter",
+  EXPERIENCE_LETTER_ID: "/workforce/resigned/experience-letter/:id",
+  FNF_LETTER: "/workforce/resigned/fool-and-final-letter",
+  FNF_LETTER_ID: "/workforce/resigned/fool-and-final-letter/:id",
   TERMINATION: "/workforce/termination",
+  TERMINATION_LETTER: "/workforce/termination/termination-letter",
+  TERMINATION_LETTER_ID: "/workforce/termination/termination-letter/:id",
   PROMOTION: "/workforce/promotion",
+  PROMOTION_LETTER: "/workforce/promotion/promotion-letter",
+  PROMOTION_LETTER_ID: "/workforce/promotion/promotion-letter/:id",
 
   // Performance
   PERFORMANCE: "/performance",

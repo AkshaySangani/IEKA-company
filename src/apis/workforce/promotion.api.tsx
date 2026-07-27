@@ -25,8 +25,8 @@ export const addPromotion = (payload: PromotionFormData) =>
     showSuccessToast: true,
   });
 
-export const getPromotionById = (terminationId: string) => {
-  return apiRequest.get<ApiResponse>(`/workforce/promotion/${terminationId}`);
+export const getPromotionById = (promotionId: string) => {
+  return apiRequest.get<ApiResponse>(`/workforce/promotion/${promotionId}`);
 };
 
 export const updatePromotion = (
