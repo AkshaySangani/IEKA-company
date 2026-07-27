@@ -5,7 +5,7 @@ import {
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
-import { ITermination } from ".";
+import { initialTermination, ITermination } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
@@ -13,35 +13,43 @@ import { statusEnum } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
+import MailSendModal from "../../../common/modal/MailSendModal";
+import { sendTerminationMail } from "../../../../apis/workforce/termination.api";
 
 interface ITerminationListProps {
   terminations: ITermination[];
   handleEditTerminationDetails: (value: ITermination) => void;
   handleUpdateStatus: (value: ITermination) => void;
+  refreshData: () => void;
 }
 
 export default function TerminationTable({
   terminations,
   handleEditTerminationDetails,
   handleUpdateStatus,
+  refreshData,
 }: ITerminationListProps) {
   const navigate = useNavigate();
+  const [mailOpen, setMailOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  // const initialLeave: ITermination = {
-  //   _id: "",
-  //   companyId: "",
-  //   name: "",
-  //   description: "",
-  //   isPaid: false,
-  //   status: statusEnum.ACTIVE,
-  //   createdAt: "",
-  //   updatedAt: "",
-  // };
-  // const [leaveDetails, setLeaveDetails] = useState<ITermination>(initialLeave)
+  const [terminationDetails, setTerminationDetails] =
+    useState<ITermination>(initialTermination);
   // Define configuration structures with isolated column custom components
   const handleOnClick = (row: ITermination) => {
     handleEditTerminationDetails(row);
   };
+
+  const handleSendMail = (row: ITermination) => {
+    setMailOpen(true);
+    setTerminationDetails(row);
+  };
+
+  const handleCloseMail = () => {
+    setMailOpen(false);
+    setTerminationDetails(initialTermination);
+  };
+
   const columns: ColumnDef<ITermination>[] = [
     {
       header: "#",
@@ -74,9 +82,37 @@ export default function TerminationTable({
       render: (row) => formatDate(row.lastWorkingDate),
     },
     {
+      header: "Info Mail",
+      className: "w-[10%]",
+      render: (row) =>
+        row.status !== statusEnum.CANCEL ? (
+          <div className="flex items-center gap-1.5">
+            <span className={`text-sm `}>{row?.mailSent ? "Yes" : "No"}</span>
+
+            <i
+              onClick={() => handleSendMail(row)}
+              className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
+            ></i>
+            <InfoIcon onClick={() => handleShowHistory(row)} />
+          </div>
+        ) : (
+          <>-</>
+        ),
+    },
+    {
       header: "Letter",
-      className: "w-[20%]",
-      render: (row) => row.status === statusEnum.TERMINATE && <Badge label="Terminate" onClick={() => navigate(`${pathNames.TERMINATION_LETTER}/${row._id}`)}/>,
+      className: "w-[10%]",
+      render: (row) =>
+        row.status === statusEnum.TERMINATE ? (
+          <Badge
+            label="Terminate"
+            onClick={() =>
+              navigate(`${pathNames.TERMINATION_LETTER}/${row._id}`)
+            }
+          />
+        ): (
+          <>-</>
+        ),
     },
     {
       header: "Status",
@@ -106,19 +142,80 @@ export default function TerminationTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    // setLeaveDetails(initialLeave);
+    // setTerminationDetails(initialLeave);
   };
 
   // handle show history
   const handleShowHistory = (branch: ITermination) => {
     handleHistoryOpenClose();
-    // setLeaveDetails(branch);
+    // setTerminationDetails(branch);
+  };
+
+  const handleSubmitMail = async () => {
+    setLoading(true);
+    const response = await sendTerminationMail({
+      userId: terminationDetails?.userId?._id,
+    });
+    if (response?.success) {
+      refreshData();
+      handleCloseMail();
+    }
+    setLoading(false);
   };
 
   return (
     <>
       <CustomTable columns={columns} data={terminations} />
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+      <MailSendModal
+        isOpen={mailOpen}
+        title={"Are u sure want to send mail for this employee?"}
+        showFullTitle
+        profileImage={terminationDetails?.userId?.profileImage}
+        loading={loading}
+        handleOpenClose={handleCloseMail}
+        handleSubmit={handleSubmitMail}
+      >
+        <div className="text-[13px] font-[400] text-inputLabel flex flex-col gap-2">
+          <p>
+            Dear{" "}
+            <span id="interviewerNameGreeting">
+              {terminationDetails?.userId?.firstName}{" "}
+              {terminationDetails?.userId?.lastName}
+            </span>
+            ,
+          </p>
+
+          <p>
+            We acknowledge receipt of your resignation and would like to inform
+            you that the same has been accepted by the organization.
+          </p>
+
+          <p>
+            We appreciate the contributions and efforts you have made during
+            your tenure with us, and we thank you for your dedication and
+            support.
+          </p>
+
+          <p>
+            As you move forward, we wish you the very best in your future
+            endeavors and continued success in all your professional pursuits.
+          </p>
+
+          <p>
+            Should you require any assistance during the transition period,
+            please feel free to reach out to the HR team.
+          </p>
+
+          <p>Regards,</p>
+          <p>
+            <strong>
+              <span id="actionbyname">Arjunsinh Rathod</span>
+            </strong>
+          </p>
+          <p>Manager</p>
+        </div>
+      </MailSendModal>
+      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} terminationDetailss={terminationDetails} /> */}
     </>
   );
 }

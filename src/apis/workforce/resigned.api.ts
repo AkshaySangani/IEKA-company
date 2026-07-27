@@ -31,3 +31,8 @@ export const updateResignedEmployeeStatus = (
   apiRequest.patch(`/workforce/resignation/status/${resignationId}`, payload, {
     showSuccessToast: true,
   });
+
+export const sendResignMail = (payload: { userId: string }) =>
+  apiRequest.post(`/workforce/resignation/send-mail`, payload, {
+    showSuccessToast: true,
+  });

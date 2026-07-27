@@ -28,6 +28,7 @@ export interface ResignationRequest {
   companyId: string;
   userId: ResignationUser;
   lastWorkingDate: string;
+  mailSent: boolean;
   reason: string;
   status: statusEnum;
   createdAt: string;
@@ -48,6 +49,28 @@ export interface Department {
   name: string;
 }
 
+export const initialEmployee: ResignationRequest = {
+    _id: "",
+    companyId: "",
+    userId: {
+      _id: "",
+      firstName: "",
+      lastName: "",
+      profileImage: "",
+      role: RoleEnum.EMPLOYEE,
+      departmentId: {
+        _id: "",
+        name: "",
+      },
+    },
+    lastWorkingDate: "",
+    mailSent: false,
+    reason: "",
+    status: statusEnum.REJECTED,
+    createdAt: "",
+    updatedAt: "",
+  };
+
 const ResignedEmployees = () => {
   const [activeCard, setActiveCard] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -63,26 +86,7 @@ const ResignedEmployees = () => {
   const [resignedEmployees, setResignedEmployees] = useState<
     ResignationRequest[]
   >([]);
-  const initialEmployee: ResignationRequest = {
-    _id: "",
-    companyId: "",
-    userId: {
-      _id: "",
-      firstName: "",
-      lastName: "",
-      profileImage: "",
-      role: RoleEnum.EMPLOYEE,
-      departmentId: {
-        _id: "",
-        name: "",
-      },
-    },
-    lastWorkingDate: "",
-    reason: "",
-    status: statusEnum.REJECTED,
-    createdAt: "",
-    updatedAt: "",
-  };
+  
   const [employeeDetails, setEmployeeDetails] =
     useState<ResignationRequest>(initialEmployee);
 
@@ -275,8 +279,8 @@ const ResignedEmployees = () => {
         />
         <ResignedEmployeeTable
           resignedEmployees={resignedEmployees}
-          handleEditResignedEmployeeDetails={handleEditResignedEmployeeDetails}
           handleUpdateStatus={handleUpdateStatus}
+          refreshData={() => fetchResignedEmployeeList(page, limit, search, activeCard)}
         />
         <Pagination
           totalRecords={total}

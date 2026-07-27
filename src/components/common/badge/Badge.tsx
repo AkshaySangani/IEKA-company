@@ -42,7 +42,7 @@ const Badge: React.FC<BadgeProps> = ({
         leading-4
         whitespace-nowrap
         cursor-pointer
-        shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+        shadow-[0px_0px_21px_-5px_rgba(50,50,93,0.25),0px_8px_16px_-8px_rgba(0,0,0,0.3)]
         ${variantStyles[variant]}
         ${className}
       `}

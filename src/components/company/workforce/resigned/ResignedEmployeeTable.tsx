@@ -5,40 +5,35 @@ import {
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
-import { ResignationRequest } from ".";
+import { initialEmployee, ResignationRequest } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
 import { statusEnum } from "../../../../types/common-types";
-import BranchDepartmentInfo from "../../../common/branch-department";
 import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
+import MailSendModal from "../../../common/modal/MailSendModal";
+import { sendResignMail } from "../../../../apis/workforce/resigned.api";
 
 interface ResignationRequestListProps {
   resignedEmployees: ResignationRequest[];
-  handleEditResignedEmployeeDetails: (value: ResignationRequest) => void;
   handleUpdateStatus: (value: ResignationRequest) => void;
+  refreshData: () => void;
 }
 
 export default function ResignedEmployeeTable({
   resignedEmployees,
-  handleEditResignedEmployeeDetails,
   handleUpdateStatus,
+  refreshData,
 }: ResignationRequestListProps) {
   const navigate = useNavigate();
+  const [mailOpen, setMailOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  // const initialLeave: ResignationRequest = {
-  //   _id: "",
-  //   companyId: "",
-  //   name: "",
-  //   description: "",
-  //   isPaid: false,
-  //   status: statusEnum.ACTIVE,
-  //   createdAt: "",
-  //   updatedAt: "",
-  // };
-  // const [leaveDetails, setLeaveDetails] = useState<ResignationRequest>(initialLeave)
+  const [resignDetails, setResignDetails] =
+    useState<ResignationRequest>(initialEmployee);
+
   // Define configuration structures with isolated column custom components
   const handleOnClick = (row: ResignationRequest) => {
     navigate(pathNames.EMPLOYEE_DETAILS, {
@@ -47,6 +42,17 @@ export default function ResignedEmployeeTable({
       },
     });
   };
+
+  const handleSendMail = (row: ResignationRequest) => {
+    setMailOpen(true);
+    setResignDetails(row);
+  };
+
+  const handleCloseMail = () => {
+    setMailOpen(false);
+    setResignDetails(initialEmployee);
+  };
+
   const columns: ColumnDef<ResignationRequest>[] = [
     {
       header: "#",
@@ -91,13 +97,47 @@ export default function ResignedEmployeeTable({
       render: (row) => formatDate(row.lastWorkingDate),
     },
     {
+      header: "Info Mail",
+      className: "w-[10%]",
+      render: (row) =>
+        row.status !== statusEnum.PENDING ? (
+          <div className="flex items-center gap-1.5">
+            <span className={`text-sm `}>{row?.mailSent ? "Yes" : "No"}</span>
+
+            <i
+              onClick={() => handleSendMail(row)}
+              className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
+            ></i>
+            <InfoIcon onClick={() => handleShowHistory(row)} />
+          </div>
+        ) : (
+          <>-</>
+        ),
+    },
+    {
       header: "Certificate",
       className: "w-[20%]",
-      render: (row) => row.status === statusEnum.REJECTED && <div className="flex gap-2">
-        <Badge label="Relieving" onClick={() => navigate(`${pathNames.RELIEVING_LETTER}/${row._id}`)}/>
-        <Badge label="Experience" onClick={() => navigate(`${pathNames.EXPERIENCE_LETTER}/${row._id}`)}/>
-        <Badge label="F & F" onClick={() => navigate(`${pathNames.FNF_LETTER}/${row._id}`)}/>
-        </div>,
+      render: (row) =>
+        row.status === statusEnum.REJECTED && (
+          <div className="flex gap-2">
+            <Badge
+              label="Relieving"
+              onClick={() =>
+                navigate(`${pathNames.RELIEVING_LETTER}/${row._id}`)
+              }
+            />
+            <Badge
+              label="Experience"
+              onClick={() =>
+                navigate(`${pathNames.EXPERIENCE_LETTER}/${row._id}`)
+              }
+            />
+            <Badge
+              label="F & F"
+              onClick={() => navigate(`${pathNames.FNF_LETTER}/${row._id}`)}
+            />
+          </div>
+        ),
     },
     {
       header: "Status",
@@ -127,18 +167,84 @@ export default function ResignedEmployeeTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    // setLeaveDetails(initialLeave);
+    // setResignDetails(initialResign);
   };
 
   // handle show history
   const handleShowHistory = (branch: ResignationRequest) => {
     handleHistoryOpenClose();
-    // setLeaveDetails(branch);
+    // setResignDetails(branch);
+  };
+
+  const handleSubmitMail = async () => {
+    setLoading(true);
+    const response = await sendResignMail({
+      userId: resignDetails?.userId?._id,
+    });
+    if (response?.success) {
+      refreshData();
+      handleCloseMail();
+    }
+    setLoading(false);
   };
 
   return (
     <>
       <CustomTable columns={columns} data={resignedEmployees} />
+      <MailSendModal
+        isOpen={mailOpen}
+        title={"Are u sure want to send mail for this employee?"}
+        showFullTitle
+        profileImage={resignDetails?.userId?.profileImage}
+        loading={loading}
+        handleOpenClose={handleCloseMail}
+        handleSubmit={handleSubmitMail}
+      >
+        <div className="text-[13px] font-[400] text-inputLabel flex flex-col gap-2">
+          <p>
+            Dear{" "}
+            <span id="interviewerNameGreeting">
+              {resignDetails?.userId?.firstName}{" "}
+              {resignDetails?.userId?.lastName}
+            </span>
+            ,
+          </p>
+
+          <p>
+            This is to formally inform you that your resignation has been
+            reviewed and accepted by the organization.
+          </p>
+
+          <p>
+            Your last working day is approx{" "}
+            <span>{formatDate(resignDetails.lastWorkingDate)}</span> or also
+            discussed and mutually agreed upon.
+          </p>
+
+          <p>
+            We sincerely appreciate your valuable contributions and the
+            dedication you have shown during your time with us.
+          </p>
+
+          <p>
+            We wish you continued growth, success, and the very best in your
+            future professional journey.
+          </p>
+
+          <p>
+            Please coordinate with the HR team to complete the necessary exit
+            formalities and handover process.
+          </p>
+
+          <p>Regards,</p>
+          <p>
+            <strong>
+              <span id="actionbyname">Arjunsinh Rathod</span>
+            </strong>
+          </p>
+          <p>Manager</p>
+        </div>
+      </MailSendModal>
       {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
     </>
   );

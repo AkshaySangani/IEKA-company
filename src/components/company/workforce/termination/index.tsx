@@ -29,6 +29,7 @@ export interface ITermination {
   userId: ITerminationUser;
   lastWorkingDate: string;
   terminationType: string;
+  mailSent: boolean;
   reason: string;
   status: statusEnum;
   createdAt: string;
@@ -49,20 +50,7 @@ export interface Department {
   name: string;
 }
 
-const Termination = () => {
-  const [activeCard, setActiveCard] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [statusOpen, setStatusOpen] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
-  const [search, setSearch] = useState<string>("");
-  const [total, setTotal] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [statusLoading, setStatusLoading] = useState<boolean>(false);
-
-  const [terminations, setTerminations] = useState<ITermination[]>([]);
-  const [employees, setEmployees] = useState<IOption[]>([]);
-  const initialTermination: ITermination = {
+export const initialTermination: ITermination = {
     _id: "",
     companyId: "",
     userId: {
@@ -78,11 +66,27 @@ const Termination = () => {
     },
     terminationType: "",
     lastWorkingDate: "",
+    mailSent: false,
     reason: "",
     status: statusEnum.REJECTED,
     createdAt: "",
     updatedAt: "",
   };
+
+const Termination = () => {
+  const [activeCard, setActiveCard] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [statusOpen, setStatusOpen] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(10);
+  const [search, setSearch] = useState<string>("");
+  const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [statusLoading, setStatusLoading] = useState<boolean>(false);
+
+  const [terminations, setTerminations] = useState<ITermination[]>([]);
+  const [employees, setEmployees] = useState<IOption[]>([]);
+  
   const [terminationDetails, setTerminationDetails] =
     useState<ITermination>(initialTermination);
 
@@ -291,6 +295,7 @@ const Termination = () => {
           terminations={terminations}
           handleEditTerminationDetails={handleEditTerminationDetails}
           handleUpdateStatus={handleUpdateStatus}
+          refreshData={() => fetchTerminations(page, limit, search, activeCard)}
         />
         <Pagination
           totalRecords={total}

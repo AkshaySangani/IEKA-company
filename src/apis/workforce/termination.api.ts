@@ -51,3 +51,9 @@ export const updateTerminationStatus = (
 export const getTerminationCount = () => {
   return apiRequest.get<ApiResponse>(`/workforce/termination/count`);
 };
+
+export const sendTerminationMail = (payload: { userId: string }) =>
+  apiRequest.post(`/workforce/termination/send-mail`, payload, {
+    showSuccessToast: true,
+  });
+

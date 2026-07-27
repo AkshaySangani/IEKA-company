@@ -34,6 +34,7 @@ export interface IPromotion {
     name: string;
   };
   effectiveDate: string;
+  mailSent: boolean;
   reason: string;
   status: statusEnum;
   createdAt: string;
@@ -68,6 +69,7 @@ export const initialPromotion: IPromotion = {
       name: "",
     },
     effectiveDate: "",
+    mailSent: false,
     reason: "",
     status: statusEnum.HOLD,
     createdAt: "",
@@ -314,6 +316,7 @@ const Promotion = () => {
           promotions={promotions}
           handleEditPromotionDetails={handleEditPromotionDetails}
           handleUpdateStatus={handleUpdateStatus}
+          refreshData={() => fetchPromotions(page, limit, search, activeCard)}
         />
         <Pagination
           totalRecords={total}

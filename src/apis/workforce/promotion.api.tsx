@@ -51,3 +51,8 @@ export const updatePromotionStatus = (
 export const getPromotionCount = () => {
   return apiRequest.get<ApiResponse>(`/workforce/promotion/count`);
 };
+
+export const sendPromotionMail = (payload: {userId: string}) =>
+  apiRequest.post(`/workforce/promotion/send-mail`, payload, {
+    showSuccessToast: true,
+  });
