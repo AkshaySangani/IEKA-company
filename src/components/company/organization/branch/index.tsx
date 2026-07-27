@@ -143,7 +143,7 @@ const Branch: React.FC = () => {
         onSearch={handleOnSearch}
         isExcel
       />
-      <div className="content-area">
+      <div className="content-area gap-2 flex flex-col">
         <PageLoader loading={loading} />
         <BranchTable
           branches={branches}
