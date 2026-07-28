@@ -132,7 +132,7 @@ const EmployeeAssignmentCard = ({
                         ) : (
                           <input
                             type="checkbox"
-                            checked={department?.manager ? department?.manager?._id !== formData?.userId : checked}
+                            checked={department?.manager ? (department?.manager?._id === formData?.userId ? checked : true) : checked}
                             disabled={department?.manager ? department?.manager?._id !== formData?.userId : false}
                             onChange={() =>
                               handleAssignmentChange({

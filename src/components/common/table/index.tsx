@@ -47,7 +47,7 @@ export function CustomTable<T>({ columns, data }: CustomTableProps<T>) {
                 {columns.map((col, colIndex) => (
                   <td 
                     key={colIndex} 
-                    className={`py-1 px-4 text-gray-600 align-middle ${col.className || ''}`}
+                    className={`py-2 px-4 text-gray-600 align-middle ${col.className || ''}`}
                   >
                     {col.render(row, rowIndex)}
                   </td>

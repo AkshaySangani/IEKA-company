@@ -11,12 +11,13 @@ interface ProbationPeriodUpdateProps {
   profileImage: string;
   employeeName: string;
   setActive: (value: boolean) => void;
-  status: statusEnum;
-  refreshData: () => void;
+  probationPeriod: number;
+  handleSubmit: (payload: any) => void;
+  loading: boolean;
 }
 
 interface ProbationPeriodFormData {
-  employmentType: string;
+  probationPeriod: string;
   remarks: string;
 }
 export default function ProbationPeriodUpdate({
@@ -24,11 +25,12 @@ export default function ProbationPeriodUpdate({
   profileImage,
   employeeName,
   setActive,
-  status,
-  refreshData,
+  probationPeriod,
+  handleSubmit,
+  loading
 }: ProbationPeriodUpdateProps) {
   const initialFormData: ProbationPeriodFormData = {
-    employmentType: "",
+    probationPeriod: String(probationPeriod),
     remarks: "",
   };
   const [formData, setFormData] = useState<ProbationPeriodFormData>(initialFormData);
@@ -36,12 +38,18 @@ export default function ProbationPeriodUpdate({
   const handleChange = (field: keyof ProbationPeriodFormData, value: string) => {
     setFormData(prev => ({...prev, [field]: value}))
   };
+
+  const handleOnSubmit = async () => {
+    await handleSubmit(formData);
+  }
   return (
     <Modal
       isOpen={active}
       title={employeeName}
       width = "max-w-2xl"
+      loading={loading}
       onClose={() => setActive(false)}
+      handleOnConfirm={handleOnSubmit}
     >
       <div className="flex flex-col gap-2">
         <ConfirmationHeader
@@ -52,10 +60,10 @@ export default function ProbationPeriodUpdate({
           <RadioButton
             required
             label="Probational Period"
-            name="employmentType"
-            value={formData.employmentType}
+            name="probationPeriod"
+            value={formData.probationPeriod}
             options={probationPeriodOptions}
-            onChange={(value) => handleChange("employmentType", value)}
+            onChange={(value) => handleChange("probationPeriod", value)}
           />
           <TextAreaField
             label="Remarks"

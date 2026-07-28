@@ -146,7 +146,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
           Late Mark Setting
         </h3>
 
-        <div className="space-y-6">
+        <div className="space-y-6 ml-2">
           <div className="flex flex-wrap text-sm text-grayText items-center gap-3">
             <span>Applicable Late Mark if punch after</span>
 
@@ -291,7 +291,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
           Manual Punch Request
         </h3>
 
-        <div className="space-y-2">
+        <div className="space-y-2 ml-2">
           <div className="flex items-center text-sm text-grayText gap-4">
             <span>Manual Punch Request?</span>
 

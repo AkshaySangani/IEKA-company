@@ -55,14 +55,14 @@ const LeaveSetting = ({
           </h3>
         </div>
 
-        <div className="space-y-3 mt-2">
+        <div className="space-y-3 mt-2  ml-2">
           {data.leaves.map((leave, index) => {
             return (
               <div
                 key={leave.leaveId}
                 className="grid grid-cols-1 lg:grid-cols-[200px_180px_180px_120px] items-center gap-4"
               >
-                <label className="text-sm text-grayText">{leave.name}</label>
+                <label className="text-sm  font-semibold">{leave.name}</label>
 
                 <TextField
                   type="number"
@@ -103,7 +103,7 @@ const LeaveSetting = ({
           Continuous Leave Setting
         </h3>
 
-        <div className="space-y-3">
+        <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
             <label className="text-sm text-grayText">
               Back to back dated leave allowed ?
@@ -181,7 +181,7 @@ const LeaveSetting = ({
           Carry Forward Leave Setting
         </h3>
 
-        <div className="space-y-3">
+        <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
             <label className="text-sm text-grayText">
               Carry forward leave allowed ?
@@ -234,7 +234,7 @@ const LeaveSetting = ({
           Leave Encashment Setting
         </h3>
 
-        <div className="space-y-3">
+        <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
             <label className="text-sm text-grayText">
               Leave encashment allowed ?
@@ -306,7 +306,7 @@ const LeaveSetting = ({
           Sandwich Rule Setting
         </h3>
 
-        <div className="space-y-3">
+        <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
             <label className="text-sm text-grayText">
               Enable switch rule ?
@@ -385,7 +385,7 @@ const LeaveSetting = ({
           Overtime Rule Setting
         </h3>
 
-        <div className="space-y-3">
+        <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
             <label className="text-sm text-grayText">
               Overtime applicable ?

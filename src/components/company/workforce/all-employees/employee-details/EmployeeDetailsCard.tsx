@@ -214,16 +214,15 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
       </div>
       <StatusUpdate
         active={update === EmployeeUpdateModal.STATUS}
-        employeeName={`${employeeData?.firstName} ${employeeData?.lastName}`}
-        profileImage={employeeData?.profileImage}
+        employeeData={employeeData}
         setActive={() => setUpdate("")}
         status={employeeData?.status}
-        refreshData={() => {}}
+        refreshData={refreshData}
       />
       <DesignationUpdate
         active={update === EmployeeUpdateModal.DESIGNATION}
-        employeeName={`${employeeData?.firstName} ${employeeData?.lastName}`}
-        profileImage={employeeData?.profileImage}
+        employeeData={employeeData}
+        assignments={assignments}
         setActive={() => setUpdate("")}
         designationId={designation?._id}
         handleSubmit={handleSubmit}
@@ -234,16 +233,18 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
         employeeName={`${employeeData?.firstName} ${employeeData?.lastName}`}
         profileImage={employeeData?.profileImage}
         setActive={() => setUpdate("")}
-        status={employeeData?.status}
-        refreshData={() => {}}
+        employmentType={employeeData?.employmentType}
+        handleSubmit={handleSubmit}
+        loading={loading}
       />
       <ProbationPeriodUpdate
         active={update === EmployeeUpdateModal.PROBATION_PERIOD}
         employeeName={`${employeeData?.firstName} ${employeeData?.lastName}`}
         profileImage={employeeData?.profileImage}
         setActive={() => setUpdate("")}
-        status={employeeData?.status}
-        refreshData={() => {}}
+        probationPeriod={employeeData?.probationPeriod}
+        handleSubmit={handleSubmit}
+        loading={loading}
       />
 
       <PolicyUpdate

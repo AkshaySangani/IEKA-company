@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IOption, statusEnum } from "../../../../../../types/common-types";
+import { EmploymentTypeEnum, IOption, statusEnum } from "../../../../../../types/common-types";
 import ConfirmationHeader from "../../../../../common/confirmation-header";
 import Modal from "../../../../../common/modal/Modal";
 import RadioButton from "../../../../../common/radio-button";
@@ -11,12 +11,13 @@ interface EmploymentTypeUpdateProps {
   profileImage: string;
   employeeName: string;
   setActive: (value: boolean) => void;
-  status: statusEnum;
-  refreshData: () => void;
+  employmentType: EmploymentTypeEnum;
+  handleSubmit: (payload: any) => void;
+  loading: boolean
 }
 
 interface EmploymentTypeFormData {
-  employmentType: string;
+  employmentType: EmploymentTypeEnum;
   remarks: string;
 }
 export default function EmploymentTypeUpdate({
@@ -24,11 +25,12 @@ export default function EmploymentTypeUpdate({
   profileImage,
   employeeName,
   setActive,
-  status,
-  refreshData,
+  employmentType,
+  handleSubmit,
+  loading
 }: EmploymentTypeUpdateProps) {
   const initialFormData: EmploymentTypeFormData = {
-    employmentType: "",
+    employmentType: employmentType,
     remarks: "",
   };
   const [formData, setFormData] = useState<EmploymentTypeFormData>(initialFormData);
@@ -36,12 +38,19 @@ export default function EmploymentTypeUpdate({
   const handleChange = (field: keyof EmploymentTypeFormData, value: string) => {
     setFormData(prev => ({...prev, [field]: value}))
   };
+
+  const handleOnSubmit = async () => {
+    await handleSubmit(formData);
+  }
+  
   return (
     <Modal
       isOpen={active}
       title={employeeName}
       width = "max-w-2xl"
       onClose={() => setActive(false)}
+      handleOnConfirm={handleOnSubmit}
+      loading={loading}
     >
       <div className="flex flex-col gap-2">
         <ConfirmationHeader

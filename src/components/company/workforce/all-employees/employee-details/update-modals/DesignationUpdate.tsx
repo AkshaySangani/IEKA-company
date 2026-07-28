@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { statusOptions } from "../../../../../../constants/constants";
 import { IOption, statusEnum } from "../../../../../../types/common-types";
 import ConfirmationHeader from "../../../../../common/confirmation-header";
 import Modal from "../../../../../common/modal/Modal";
 import RadioButton from "../../../../../common/radio-button";
 import TextAreaField from "../../../../../common/text-area/TextAreaField";
-import Note from "../../../../../common/note-area/Note";
 import { IDesignation } from "../../../../organization/designation";
 import { getDesignation } from "../../../../../../apis/organization/designation.api";
+import { IAssignment, IEmployee } from "..";
+import PageLoader from "../../../../../common/loader/PageLoader";
 
 interface DesignationUpdateProps {
   active: boolean;
   loading: boolean;
-  profileImage: string;
-  employeeName: string;
+  employeeData: IEmployee;
+  assignments: IAssignment[];
   setActive: (value: boolean) => void;
   designationId: string;
   handleSubmit: (payload: any) => void;
@@ -26,8 +26,8 @@ interface DesignationFormData {
 export default function DesignationUpdate({
   active,
   loading,
-  profileImage,
-  employeeName,
+  employeeData,
+  assignments,
   setActive,
   designationId,
   handleSubmit,
@@ -37,6 +37,8 @@ export default function DesignationUpdate({
     designationId: "",
     remarks: "",
   };
+
+  const [designationLoading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] =
     useState<DesignationFormData>(initialFormData);
   useEffect(() => {
@@ -45,13 +47,14 @@ export default function DesignationUpdate({
     }
   }, [designationId]);
   useEffect(() => {
-    if (employeeName) {
+    if (employeeData?._id && active) {
       fetchDesignationList();
     }
-  }, [employeeName]);
+  }, [employeeData?._id,active]);
 
   // get designation list
   const fetchDesignationList = async () => {
+    setLoading(true);
     const response = await getDesignation({
       page: 1,
       limit: 200,
@@ -67,6 +70,7 @@ export default function DesignationUpdate({
     } else {
       setDesignations([]);
     }
+    setLoading(false);
   };
 
   const handleChange = (field: keyof DesignationFormData, value: string) => {
@@ -74,20 +78,32 @@ export default function DesignationUpdate({
   };
 
   const handleOnSubmit = async () => {
-    await handleSubmit(formData);
+    const payload = {
+      remarks: formData.remarks,
+      assignments: assignments.map(ele => ({
+            branchId: ele.branchId._id,
+            shiftId: ele.shiftId._id,
+            departmentId: ele.departmentId._id,
+            designationId: formData.designationId,
+            isReporting: ele.isReporting,
+            remarks: ele.remarks,
+        })) 
+    }
+    await handleSubmit(payload);
   }
   return (
     <Modal
       isOpen={active}
-      title={employeeName}
+      title={`${employeeData.firstName} ${employeeData?.lastName}`}
       width="max-w-2xl"
       onClose={() => setActive(false)}
       handleOnConfirm={handleOnSubmit}
       loading={loading}
     >
       <div className="flex flex-col gap-2">
+        <PageLoader loading={designationLoading} />
         <ConfirmationHeader
-          imageUrl={profileImage}
+          imageUrl={employeeData?.profileImage}
           title="Are you sure you want to update status for this employee?"
         />
         <RadioButton

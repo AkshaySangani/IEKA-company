@@ -30,9 +30,9 @@ export const updateEmployeeStatus = (
     status: string;
     remarks: string;
   },
-  leaveId: string = "",
+  userId: string = "",
 ) =>
-  apiRequest.patch(`/organization/leaves/status/${leaveId}`, payload, {
+  apiRequest.patch(`/workforce/onboard/status/${userId}`, payload, {
     showSuccessToast: true,
   });
 

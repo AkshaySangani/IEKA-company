@@ -12,6 +12,7 @@ import {
 import EmployeeAssignmentCard from "../../../onboarding/assign-roles-responsibility/EmployeeAssignmentCard";
 import { IEmployee, IAssignment as Assignment } from "..";
 import TextAreaField from "../../../../../common/text-area/TextAreaField";
+import PageLoader from "../../../../../common/loader/PageLoader";
 
 interface BranchAssignmentUpdateProps {
   active: boolean;
@@ -40,7 +41,7 @@ export default function BranchAssignmentUpdate({
   handleSubmit,
 }: BranchAssignmentUpdateProps) {
   const initialFormData: BranchAssignmentFormData = {
-    role: RoleEnum.EMPLOYEE,
+    role: employeeData.role,
     designationId: "",
     assignments: [],
     remarks: "",
@@ -50,6 +51,7 @@ export default function BranchAssignmentUpdate({
     useState<BranchAssignmentFormData>(initialFormData);
 
   const [branches, setBranches] = useState<IBranch[]>([]);
+  const [branchLoading, setBranchLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if(assignments?.length > 0 && role === "MANAGER"){
@@ -62,7 +64,7 @@ export default function BranchAssignmentUpdate({
             remarks: ele.remarks,
         }))}))
     } else {
-        const data = assignments[0];
+        const data = employeeData?.role === RoleEnum.MANAGER ? assignments.find(ele => ele?.isReporting)??assignments[0] : assignments[0];
         setFormData(prev => ({...prev,designationId: employeeData.designationId,userId: employeeData?._id, role: role === "MANAGER" ? RoleEnum.MANAGER : RoleEnum.EMPLOYEE,assignments: [{
             branchId: data.branchId._id,
             shiftId: data.shiftId._id,
@@ -74,21 +76,24 @@ export default function BranchAssignmentUpdate({
     }
   }, [assignments,role,employeeData])
   useEffect(() => {
-    fetchBranchShiftDepartment();
+    if(active){
+      fetchBranchShiftDepartment();
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [active]);
 
   const fetchBranchShiftDepartment = async () => {
+    setBranchLoading(true);
     const response = await getBranchShiftDepartment();
     if (response?.success) {
       setBranches(response?.data);
     } else {
       setBranches([]);
     }
+    setBranchLoading(false);
   };
 
   const handleAssignmentChange = (assignment: IAssignment) => {
-    console.log("assignment",assignment)
     setFormData((prev) => {
       // Employee → single assignment
       if (prev.role === RoleEnum.EMPLOYEE) {
@@ -104,7 +109,7 @@ export default function BranchAssignmentUpdate({
           item.branchId === assignment.branchId &&
           item.shiftId === assignment.shiftId &&
           item.departmentId === assignment.departmentId &&
-          item.designationId === assignment.departmentId,
+          item.designationId === employeeData.designationId,
       );
 
       return {
@@ -116,7 +121,7 @@ export default function BranchAssignmentUpdate({
                   item.branchId === assignment.branchId &&
                   item.shiftId === assignment.shiftId &&
                   item.departmentId === assignment.departmentId &&
-                  item.designationId === assignment.designationId
+                  item.designationId === employeeData.designationId
                 ),
             )
           : [...prev.assignments, assignment],
@@ -125,6 +130,7 @@ export default function BranchAssignmentUpdate({
   };
 
   const handleOnSubmit = async () => {
+    // const oldAssignMents = employeeData?.
     await handleSubmit({assignments:formData.assignments.map(ele => ({...ele,remarks: formData.remarks}))});
   }
   return (
@@ -137,10 +143,12 @@ export default function BranchAssignmentUpdate({
       loading={loading}
     >
       <div className="flex flex-col gap-2">
+        <PageLoader loading={branchLoading} />
         <ConfirmationHeader
           imageUrl={employeeData.profileImage}
           title="Are you sure you want to update branch for this employee?"
         />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {formData.role && branches?.length > 0 ? (
           branches.map((branch, index) => (
             <EmployeeAssignmentCard
@@ -153,6 +161,7 @@ export default function BranchAssignmentUpdate({
         ) : (
           <></>
         )}
+        </div>
         <TextAreaField
           label="Remarks"
           name="remarks"

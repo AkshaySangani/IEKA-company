@@ -7,6 +7,7 @@ import TextAreaField from "../../../../../common/text-area/TextAreaField";
 import { getPolicies } from "../../../../../../apis/organization/policy.api";
 import { IEmployee, IPolicy } from "..";
 import MonthPicker, { MonthPickerValue } from "../../../../../common/date-picker/MonthPicker";
+import PageLoader from "../../../../../common/loader/PageLoader";
 
 interface PolicyUpdateProps {
   active: boolean;
@@ -32,11 +33,12 @@ export default function PolicyUpdate({
   loading
 }: PolicyUpdateProps) {
   const initialFormData: PolicyFormData = {
-    policyId: policy?.policyId?._id,
+    policyId: policy?.policyId?._id??"",
     remarks: "",
     month: new Date().getMonth(),
     year: new Date().getFullYear()
   };
+  const [policyLoading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<PolicyFormData>(initialFormData);
 
   const [policies, setPolicies] = useState<IOption[]>([]);
@@ -44,11 +46,12 @@ export default function PolicyUpdate({
   useEffect(() => {
     if (active) {
       fetchPolicies();
-      setFormData(prev => ({...prev, policyId: policy.policyId._id}))
+      setFormData(prev => ({...prev, policyId: policy?.policyId?._id??""}))
     }
   }, [active]);
 
   const fetchPolicies = async () => {
+    setLoading(true);
     const response = await getPolicies({
       page: 1,
       limit: 200,
@@ -64,6 +67,7 @@ export default function PolicyUpdate({
     } else {
       setPolicies([]);
     }
+    setLoading(false);
   };
 
   const handleChange = (field: keyof PolicyFormData, value: string) => {
@@ -83,6 +87,7 @@ export default function PolicyUpdate({
       loading={loading}
     >
       <div className="flex flex-col gap-2">
+        <PageLoader loading={policyLoading} />
         <ConfirmationHeader
           imageUrl={employeeData.profileImage}
           title="Are u sure want to change leave policy of this employee ?"

@@ -35,7 +35,7 @@ const Modal = ({
         overflow-y-auto
         bg-black/45
         transition-all duration-300 ease-in-out
-        ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}
+        ${isOpen ? "opacity-100 visible" : "opacity-0 hidden"}
       `}
     >
       <div
