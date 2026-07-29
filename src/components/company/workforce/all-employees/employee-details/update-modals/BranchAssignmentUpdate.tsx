@@ -55,7 +55,7 @@ export default function BranchAssignmentUpdate({
 
   useEffect(() => {
     if(assignments?.length > 0 && role === "MANAGER"){
-        setFormData(prev => ({...prev,designationId: employeeData.designationId,userId: employeeData?._id, role: role === "MANAGER" ? RoleEnum.MANAGER : RoleEnum.EMPLOYEE,assignments: assignments.map(ele => ({
+        setFormData(prev => ({...prev,designationId: employeeData.designationId,userId: employeeData?._id, role: role === "MANAGER" ? RoleEnum.MANAGER : RoleEnum.EMPLOYEE,assignments: assignments.filter(ele => !ele?.isReporting).map(ele => ({
             branchId: ele.branchId._id,
             shiftId: ele.shiftId._id,
             departmentId: ele.departmentId._id,
@@ -130,8 +130,29 @@ export default function BranchAssignmentUpdate({
   };
 
   const handleOnSubmit = async () => {
-    // const oldAssignMents = employeeData?.
-    await handleSubmit({assignments:formData.assignments.map(ele => ({...ele,remarks: formData.remarks}))});
+    let formAssignMent: IAssignment[] = formData.assignments;
+    if(employeeData?.role === RoleEnum.MANAGER && role === "MANAGER"){
+      const reportingBranch = assignments.filter(ele => ele?.isReporting).map(ele => ({
+            branchId: ele.branchId._id,
+            shiftId: ele.shiftId._id,
+            departmentId: ele.departmentId._id,
+            designationId: employeeData.designationId,
+            isReporting: ele.isReporting,
+            remarks: ele.remarks,
+      }));
+      formAssignMent = [...formData.assignments,...reportingBranch]
+    } else if(employeeData?.role === RoleEnum.MANAGER && role === "EMPLOYEE"){
+      const norReportingBranch = assignments.filter(ele => !ele?.isReporting).map(ele => ({
+            branchId: ele.branchId._id,
+            shiftId: ele.shiftId._id,
+            departmentId: ele.departmentId._id,
+            designationId: employeeData.designationId,
+            isReporting: ele.isReporting,
+            remarks: ele.remarks,
+      }));
+      formAssignMent = [...formData.assignments.map(ele => ({...ele, isReporting: true})),...norReportingBranch]
+    }
+    await handleSubmit({assignments:formAssignMent.map(ele => ({...ele,remarks: formData.remarks}))});
   }
   return (
     <Modal

@@ -46,6 +46,10 @@ import TerminationLetterPage from "./pages/company/workforce/termination/Termina
 import RelievingLetterPage from "./pages/company/workforce/resigned/RelievingLetter";
 import ExperienceLetterPage from "./pages/company/workforce/resigned/ExperienceLetter";
 import FnFLetterPage from "./pages/company/workforce/resigned/FnFLetter";
+import LeaveRequestsPage from "./pages/company/performance/leave-requests";
+import AttendancesPage from "./pages/company/performance/attendance";
+import ManualPunchRequestPage from "./pages/company/performance/manual-punch-request";
+import CompanyHierarchyPage from "./pages/company/organization/company-hierarchy";
 
 function App() {
   return (
@@ -110,6 +114,7 @@ function App() {
             <Route path={pathNames.HOLIDAYS} element={<HolidaysPage />} />
             <Route path={pathNames.POLICY_CONFIGURATION} element={<PolicyConfigurationPage />} />
             <Route path={pathNames.ADD_POLICY} element={<AddPolicyPage />} />
+            <Route path={pathNames.COMPANY_HIERARCHY} element={<CompanyHierarchyPage />} />
           </Route>
 
           <Route path={pathNames.WORKFORCE}>
@@ -139,6 +144,12 @@ function App() {
             <Route path={pathNames.ADD_OFFICE_EXPENSE} element={<AddOfficeExpensePage />} />
             <Route path={pathNames.OFFICE_EXPENSE_DETAILS} element={<OfficeExpenseDetailsPage />} />
             <Route path={pathNames.OVERALL_EXPENSE} element={<OverallExpensePage />} />
+          </Route>
+
+          <Route path={pathNames.PERFORMANCE}>
+            <Route path={pathNames.ATTENDANCE} element={<AttendancesPage />} />
+            <Route path={pathNames.LEAVE_REQUEST} element={<LeaveRequestsPage />} />
+            <Route path={pathNames.MANUAL_PUNCH_REQUEST} element={<ManualPunchRequestPage />} />
           </Route>
 
           <Route path={pathNames.PAY_SLIP}>

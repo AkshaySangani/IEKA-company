@@ -55,6 +55,7 @@ export interface IDepartment {
   name: string;
   count: number;
   manager?: IManager;
+  employee: IManager[]
 }
 
 export interface IShift {
@@ -314,7 +315,7 @@ const AssignRolesResponsibility = () => {
       role: formData.role,
       employmentType: formData.employmentType,
       probationPeriod: formData.probationPeriod,
-      policyId: formData.payslipId,
+      policyId: formData.policyId,
       payslipId: formData.payslipId,
       salary: Number(formData.salary),
       assignments: [
