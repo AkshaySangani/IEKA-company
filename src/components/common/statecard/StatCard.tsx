@@ -8,6 +8,7 @@ interface StatCardProps {
   activeColor?: string;
   textColor?: string;
   onClick?: () => void;
+  className?: string;
 }
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -18,6 +19,7 @@ const StatCard: React.FC<StatCardProps> = ({
   activeColor = "#007bff",
   textColor = "text-secondary",
   onClick,
+  className = ""
 }) => {
   return (
     <div
@@ -33,6 +35,7 @@ const StatCard: React.FC<StatCardProps> = ({
         duration-200
         hover:-translate-y-[5px]
         ${active ? activeColor : "bg-cardBg"}
+        ${className}
       `}
     >
       <div className="flex items-center justify-between">

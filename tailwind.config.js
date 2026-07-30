@@ -14,9 +14,10 @@ module.exports = {
         primaryLight: "#5b84c4",
         primaryDark: "#2e466e",
         primaryBlur: "#efefff",
+        primaryBlue: "#468bdd",
 
         /* Layout */
-        dashboardBg: "#f4f7f9",
+        dashboardBg: "#eef3f9",
         sidebarBg: "#212936",
         sidebarText: "#adb5bd",
         activeBg: "#385c99",
