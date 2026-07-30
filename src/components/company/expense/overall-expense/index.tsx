@@ -74,15 +74,15 @@ const OverallExpense: React.FC = () => {
       textColor: "bg-success",
       trendDetails: null,
     },
-    {
-      id: pathNames.EMPLOYEE_PAYROLL,
-      title: "Employee Salary",
-      count: 0,
-      amount: 0,
-      activeColor: "bg-yellowBlur",
-      textColor: "bg-warning",
-      trendDetails: null,
-    },
+    // {
+    //   id: pathNames.EMPLOYEE_PAYROLL,
+    //   title: "Employee Salary",
+    //   count: 0,
+    //   amount: 0,
+    //   activeColor: "bg-yellowBlur",
+    //   textColor: "bg-warning",
+    //   trendDetails: null,
+    // },
   ]);
 
   useEffect(() => {
@@ -123,13 +123,13 @@ const OverallExpense: React.FC = () => {
               amount: stats.officeExpense,
             };
 
-          case pathNames.EMPLOYEE_PAYROLL:
-            const salary = getTrend(stats.salary, stats.past.salary);
-            return {
-              ...card,
-              trendDetails: salary,
-              amount: stats.salary,
-            };
+          // case pathNames.EMPLOYEE_PAYROLL:
+          //   const salary = getTrend(stats.salary, stats.past.salary);
+          //   return {
+          //     ...card,
+          //     trendDetails: salary,
+          //     amount: stats.salary,
+          //   };
 
           default:
             return card;

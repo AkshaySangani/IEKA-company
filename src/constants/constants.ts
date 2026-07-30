@@ -57,6 +57,8 @@ export const pathNames = {
   PERFORMANCE: "/performance",
   ATTENDANCE: "/performance/attendance",
   LEAVE_REQUEST: "/performance/leave-request",
+  ADD_LEAVE_REQUEST: "/performance/leave-request/add-leave-request",
+  ADD_LEAVE_REQUEST_ID: "/performance/leave-request/add-leave-request/:id",
   MANUAL_PUNCH_REQUEST: "/performance/manual-punch-request",
 
   // Expense
@@ -68,7 +70,7 @@ export const pathNames = {
   OFFICE_EXPENSE: "/expense/office-expense",
   ADD_OFFICE_EXPENSE: "/expense/office-expense/add-expense",
   OFFICE_EXPENSE_DETAILS: "/expense/office-expense/expense-details",
-  EMPLOYEE_PAYROLL: "/expense/payroll",
+  // EMPLOYEE_PAYROLL: "/expense/payroll",
 
   // Pay Slip
   PAY_SLIP: "/pay-slip",
@@ -218,10 +220,10 @@ export const menuItems: MenuItem[] = [
         label: "Office Expense",
         path: pathNames.OFFICE_EXPENSE,
       },
-      {
-        label: "Employee Payroll",
-        path: pathNames.EMPLOYEE_PAYROLL,
-      },
+      // {
+      //   label: "Employee Payroll",
+      //   path: pathNames.EMPLOYEE_PAYROLL,
+      // },
     ],
   },
   {
@@ -261,6 +263,9 @@ export const statusMessage: { [key: string]: string } = {
   TERMINATE: "Terminate",
   PROMOTED: "Promoted",
   HOLD: "Hold",
+  PRESENT: "Present",
+  ABSENT: "Absent",
+  ON_LEAVE: "On Leave"
 };
 
 export const statusColor: { [key: string]: string } = {

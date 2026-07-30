@@ -8,6 +8,7 @@ import BranchCard from "./BranchCard";
 
 export default function CompanyHierarchy() {
   const [branches, setBranches] = useState<IBranch[]>([]);
+  const [employeeCount, setEmployeeCount] = useState<number>(0);
   const [branchLoading, setBranchLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -20,6 +21,10 @@ export default function CompanyHierarchy() {
     const response = await getBranchShiftDepartment();
     if (response?.success) {
       setBranches(response?.data);
+      const count = response?.data?.reduce((total: number, branch: IBranch) => {
+              return total + branch.count;
+            }, 0);
+            setEmployeeCount(count);
     } else {
       setBranches([]);
     }
@@ -33,7 +38,7 @@ export default function CompanyHierarchy() {
           <div className="flex items-center gap-3">
             <span className="font-semibold">Total Employee</span>
             <div className="bg-black py-1.5 px-2.5 text-white font-semibold">
-              44
+              {employeeCount}
             </div>
           </div>
         }

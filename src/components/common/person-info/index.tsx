@@ -11,19 +11,23 @@ export interface IPersonInfo {
 interface IPersonInfoProps {
   personInfo: IPersonInfo;
   onClick?: () => void;
+  className?: string;
+  imageClassName?: string;
 }
 
 const PersonInfo: React.FC<IPersonInfoProps> = ({
   personInfo,
   onClick = () => {},
+  className = "",
+  imageClassName = ""
 }: IPersonInfoProps) => {
   return (
-    <div className="flex gap-3 items-center" onClick={onClick}>
+    <div className={`flex gap-3 items-center ${className}`} onClick={onClick}>
       <Image
         src={personInfo.profileImage}
         alt={personInfo.firstName}
         fallbackSrc={NoImage}
-        className="w-9 h-9 object-cover rounded-full ring-1 ring-gray-200"
+        className={`w-9 h-9 object-cover rounded-full ring-1 ring-gray-200 ${imageClassName}`}
       />
       <div className="flex flex-col">
         <span className="text-primary font-medium text-sm cursor-pointer">

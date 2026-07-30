@@ -50,6 +50,7 @@ import LeaveRequestsPage from "./pages/company/performance/leave-requests";
 import AttendancesPage from "./pages/company/performance/attendance";
 import ManualPunchRequestPage from "./pages/company/performance/manual-punch-request";
 import CompanyHierarchyPage from "./pages/company/organization/company-hierarchy";
+import PeopleHierarchyPage from "./pages/company/organization/people-hierarchy";
 
 function App() {
   return (
@@ -115,6 +116,7 @@ function App() {
             <Route path={pathNames.POLICY_CONFIGURATION} element={<PolicyConfigurationPage />} />
             <Route path={pathNames.ADD_POLICY} element={<AddPolicyPage />} />
             <Route path={pathNames.COMPANY_HIERARCHY} element={<CompanyHierarchyPage />} />
+            <Route path={pathNames.PEOPLE_HIERARCHY} element={<PeopleHierarchyPage />} />
           </Route>
 
           <Route path={pathNames.WORKFORCE}>
