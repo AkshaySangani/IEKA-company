@@ -15,6 +15,8 @@ import { RoleEnum } from "../../../../../types/common-types";
 import PolicyDetailsCard from "./PolicyDetails";
 import SalaryDetailsCard from "./SalaryDetails";
 import EmployeeAssignmentCard from "./EmployeeAssignmentCard";
+import Modal from "../../../../common/modal/Modal";
+import AddPolicy from "../../../organization/policy-configuration/add-policy/AddPolicy";
 
 export interface IManager {
   _id: string;
@@ -55,7 +57,7 @@ export interface IDepartment {
   name: string;
   count: number;
   manager?: IManager;
-  employee: IManager[]
+  employee: IManager[];
 }
 
 export interface IShift {
@@ -109,6 +111,9 @@ const AssignRolesResponsibility = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [branches, setBranches] = useState<IBranch[]>([]);
+
+  const [policyId, setPolicyId] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     fetchBranchShiftDepartment();
@@ -222,7 +227,7 @@ const AssignRolesResponsibility = () => {
     if (formData.probationPeriod !== 0 && !formData.probationPeriod) {
       newErrors.probationPeriod = "Probation Period type is required";
     }
-    if(formData.policyId === "") {
+    if (formData.policyId === "") {
       newErrors.policyId = "Policy is required";
     }
     // Common fields
@@ -241,7 +246,6 @@ const AssignRolesResponsibility = () => {
         newErrors.employee_departmentId = "Department is required";
       }
     }
-    
 
     setErrors(newErrors);
 
@@ -340,7 +344,6 @@ const AssignRolesResponsibility = () => {
       remarks: "", //pass when edit only
     };
 
-
     const response = await assignRolesAndResponsibility(payload);
     if (response.success) {
       navigate(pathNames.ALL_EMPLOYEES);
@@ -353,6 +356,11 @@ const AssignRolesResponsibility = () => {
     navigate(pathNames.ONBOARDING_DETAILS, {
       state: location?.state,
     });
+  };
+
+  const handlePolicyOpenClose = (policyId: string = "") => {
+    setPolicyId(policyId);
+    setOpen((prev) => !prev);
   };
   return (
     <>
@@ -403,6 +411,7 @@ const AssignRolesResponsibility = () => {
                   formData={formData}
                   errors={errors}
                   handleChange={handleChange}
+                  handlePolicyOpenClose={handlePolicyOpenClose}
                 />
                 <SalaryDetailsCard
                   formData={formData}
@@ -420,6 +429,20 @@ const AssignRolesResponsibility = () => {
           !loading && <EmptyPlaceholder title="Employee Not Found." />
         )}
       </div>
+      <Modal
+        isOpen={open}
+        title={`${employee?.firstName} ${employee?.lastName}`}
+        width="max-w-6xl"
+        onClose={handlePolicyOpenClose}
+        showFooter={false}
+      >
+        {open && (
+          <AddPolicy
+            editPolicyId={policyId}
+            handleClosePolicy={handlePolicyOpenClose}
+          />
+        )}
+      </Modal>
     </>
   );
 };

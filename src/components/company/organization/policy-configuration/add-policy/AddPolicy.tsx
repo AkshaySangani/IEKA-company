@@ -85,12 +85,15 @@ export interface PolicyFormData {
   };
 }
 
-const AddPolicy: React.FC = () => {
+const AddPolicy: React.FC<{
+  editPolicyId?: string;
+  handleClosePolicy?: () => void;
+}> = ({ editPolicyId, handleClosePolicy = () => {} }) => {
   const [loading, setLoading] = useState(true);
   const formRef = useRef<HTMLFormElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const policyId = location?.state?.id;
+  const policyId = editPolicyId ?? location?.state?.id;
   const initialFormData: PolicyFormData = {
     name: "",
 
@@ -175,8 +178,8 @@ const AddPolicy: React.FC = () => {
           ...response?.data,
           leaves: prev.leaves?.map((leave: ILeaveData) => {
             const leaveData = response?.data.leaves.find(
-                (el: any) => el.leaveId === leave.leaveId,
-              )
+              (el: any) => el.leaveId === leave.leaveId,
+            );
             return {
               name: leave.name,
               leaveId: leave?.leaveId,
@@ -297,7 +300,6 @@ const AddPolicy: React.FC = () => {
       : await addPolicy(formData);
 
     if (response.success) {
-      resetForm();
       handleClose();
     }
 
@@ -329,23 +331,27 @@ const AddPolicy: React.FC = () => {
 
   const handleClose = () => {
     resetForm();
-    navigate(pathNames.POLICY_CONFIGURATION);
+    if(editPolicyId) {
+      handleClosePolicy();
+    } else navigate(pathNames.POLICY_CONFIGURATION);
   };
 
   return (
     <>
-      <TopBar
-        title="Add Policy"
-        actionButtons={
-          <Button
-            size="sm"
-            variant={"danger"}
-            onClick={handleClose}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
-        }
-      />
-      <div className="content-area">
+      {!editPolicyId && (
+        <TopBar
+          title="Add Policy"
+          actionButtons={
+            <Button
+              size="sm"
+              variant={"danger"}
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
+            />
+          }
+        />
+      )}
+      <div className={!editPolicyId ? "content-area" : ""}>
         <PageLoader loading={loading} />
         <form
           className="flex flex-col gap-2"
@@ -353,17 +359,19 @@ const AddPolicy: React.FC = () => {
           method="POST"
           onSubmit={handleSubmit}
         >
-          <div className="grid grid-cols-1 w-[75%] gap-4">
-            <TextField
-              label="Policy Name"
-              required
-              name="name"
-              value={formData.name}
-              error={errors.name}
-              placeholder="Enter policy name"
-              onChange={(e) => handleChange("name", e.target.value)}
-            />
-          </div>
+          {!editPolicyId && (
+            <div className={`grid grid-cols-1 w-[75%] gap-4`}>
+              <TextField
+                label="Policy Name"
+                required
+                name="name"
+                value={formData.name}
+                error={errors.name}
+                placeholder="Enter policy name"
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
+            </div>
+          )}
           <AttendanceSettings
             data={formData}
             errors={errors}
@@ -375,9 +383,9 @@ const AddPolicy: React.FC = () => {
             handleChange={handleChange}
             leaveOptions={[]}
           />
-          <div className="mt-4 flex justify-center gap-3">
+          <div className="mt-4 flex justify-center gap-3 border-t border-gray-300 pt-3">
             <Button type="submit" name="Save" size="sm" />
-            <Button name="Cancel" variant="secondary" size="sm" />
+            <Button name="Cancel" variant="secondary" size="sm" onClick={handleClose} />
           </div>
         </form>
       </div>
