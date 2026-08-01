@@ -54,7 +54,7 @@ export default function EmployeeActivityCard({
       </div>
 
       {/* Users */}
-      <div className="mt-5 flex items-center">
+      <div className="mt-5 flex items-center gap-3">
         {users.slice(0, 4).map((user, index) => (
           <div
             key={user._id}

@@ -15,6 +15,27 @@ const TextField: React.FC<InputProps> = ({
   required,
   ...props
 }) => {
+  const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
+    if (props.type === "number") {
+      e.currentTarget.blur(); // Prevent value change on scroll
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.type === "number") {
+      let value = e.target.value;
+
+      // Remove leading zeros (except decimals like 0.5)
+      if (/^0\d+/.test(value)) {
+        value = value.replace(/^0+/, "");
+      }
+
+      e.target.value = value;
+    }
+
+    props.onChange?.(e);
+  };
+
   return (
     <div>
       {label && (
@@ -26,6 +47,9 @@ const TextField: React.FC<InputProps> = ({
       <div className="group relative">
         <input
           {...props}
+          onChange={handleChange}
+          onWheel={handleWheel}
+          autoComplete={"off"}
           className={`
             w-full
             border border-inputBorder
@@ -72,9 +96,7 @@ const TextField: React.FC<InputProps> = ({
         )}
       </div>
 
-      {error && (
-        <p className="mt-1 text-xs text-error">{error}</p>
-      )}
+      {error && <p className="mt-1 text-xs text-error">{error}</p>}
     </div>
   );
 };

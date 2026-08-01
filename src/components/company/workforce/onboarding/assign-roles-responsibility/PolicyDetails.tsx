@@ -10,14 +10,17 @@ interface Props {
   formData: IEmployeeFormData;
   errors: any;
   handleChange: (key: keyof IEmployeeFormData, value: any) => void;
+  handlePolicyOpenClose: (policyId: string) => void;
 }
 
 const PolicyDetailsCard: React.FC<Props> = ({
   formData,
   errors,
   handleChange,
+  handlePolicyOpenClose
 }) => {
   const [policies, setPolicies] = useState<IOption[]>([]);
+  
 
   useEffect(() => {
     fetchPolicies();
@@ -71,7 +74,7 @@ const PolicyDetailsCard: React.FC<Props> = ({
 
               <div className="font-normal text-right max-w-[300px] line-clamp-2 break-words">
                 <div className="border-l pl-2">
-                  <i className="fa-solid fa-eye cursor-pointer text-gray-500"></i>
+                  <i className="fa-solid fa-eye cursor-pointer text-gray-500" onClick={() => handlePolicyOpenClose(policy.value)}></i>
                 </div>
               </div>
             </div>
