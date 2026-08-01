@@ -22,8 +22,8 @@ export default function ExpenseSummaryCard({ cards }: ExpenseSummaryCardProps) {
     >
       <div className="flex items-center justify-between pb-2 border-b">
         <div className="flex items-center">
-          <span className="text-[18px] font-semibold">{currency.INR}</span>
-          <span className="px-2 text-md font-semibold border-r mr-2">
+          <span className="text-[18px] font-medium">{currency.INR}</span>
+          <span className="px-2 text-md font-medium border-r mr-2">
             Total Expense
           </span>
           <RightArrow label="View" onClick={() => navigate(total?.id??pathNames.OVERALL_EXPENSE)}/>
@@ -33,12 +33,12 @@ export default function ExpenseSummaryCard({ cards }: ExpenseSummaryCardProps) {
       <div className="flex flex-col gap-3 py-3">
         <div className="flex items-start">
           <div className="h-[45px] w-[45px] rounded-full bg-primaryBlue flex items-center justify-center">
-            <span className="text-[20px] font-semibold leading-none text-white">
+            <span className="text-[20px] font-medium leading-none text-white">
               {currency.INR}
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="px-2 text-2xl font-semibold">{total?.amount}</span>
+            <span className="px-2 text-2xl font-medium">{total?.amount}</span>
             {total?.trendDetails && (
               <div className="flex items-center gap-2 mt-1">
                 <span
@@ -58,7 +58,7 @@ export default function ExpenseSummaryCard({ cards }: ExpenseSummaryCardProps) {
                 </span>
 
                 <span
-                  className={`text-[16px] font-semibold ${
+                  className={`text-[16px] font-medium ${
                     total?.trendDetails.type === "high"
                       ? "text-success"
                       : total?.trendDetails.type === "low"

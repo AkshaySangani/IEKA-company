@@ -24,7 +24,7 @@ const ColorPopover: React.FC<ColorPopoverProps> = ({
 
   return (
     <div className="absolute top-0 left-0 z-50 mt-2 w-48 rounded-2xl border border-gray-200 bg-white p-3 shadow-xl">
-      <h3 className="mb-5 text-sm font-semibold uppercase tracking-wide text-gray-500">
+      <h3 className="mb-5 text-sm font-medium uppercase tracking-wide text-gray-500">
         {title}
       </h3>
 

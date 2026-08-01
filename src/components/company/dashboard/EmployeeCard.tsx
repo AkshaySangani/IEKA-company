@@ -28,7 +28,7 @@ const EmployeeCard = ({ role, employee }: EmployeeCardProps) => {
 
       <div className="flex-1">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-semibold text-slate-800">
+          <h2 className="text-xl font-medium text-slate-800">
             {employee.name}
           </h2>
 
@@ -44,7 +44,7 @@ const EmployeeCard = ({ role, employee }: EmployeeCardProps) => {
             <div className="mt-3 flex items-center gap-2">
               <Settings size={16} className="text-blue-600" />
 
-              <span className="text-sm font-semibold text-blue-600">
+              <span className="text-sm font-medium text-blue-600">
                 {employee.shift}
               </span>
 

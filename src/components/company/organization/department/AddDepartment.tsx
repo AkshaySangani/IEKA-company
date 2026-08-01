@@ -384,7 +384,7 @@ const AddDepartment: React.FC = () => {
                         />
 
                         <div className="flex-1">
-                          <h4 className="font-semibold text-secondary text-sm">
+                          <h4 className="font-medium text-secondary text-sm">
                             {branch.name}{" "}
                             {branch.branchType === branchEnum.HEAD_OFFICE
                               ? "(HO)"

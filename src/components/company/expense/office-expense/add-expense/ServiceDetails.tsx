@@ -41,7 +41,7 @@ export default function ServiceDetails({
   return (
     <div className="content-card p-4">
       <div className="border-b border-inputBorder pb-3 mb-2">
-        <span className="text-lg text-primary font-semibold">
+        <span className="text-lg text-primary font-medium">
           Service Details
         </span>
       </div>

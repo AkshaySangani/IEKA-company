@@ -91,7 +91,7 @@ const OTPForm = () => {
 
   return (
   <div className="flex w-full flex-col">
-    <h2 className="mb-2.5 text-center text-xl font-semibold leading-[30px] text-secondary sm:text-2xl">
+    <h2 className="mb-2.5 text-center text-xl font-medium leading-[30px] text-secondary sm:text-2xl">
       OTP Verification
     </h2>
 

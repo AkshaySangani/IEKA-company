@@ -8,6 +8,7 @@ import {
   maritalStatusOptions,
   yesNoOption,
 } from "../../../../../constants/constants";
+import { getDobDisabledDate } from "../../../../../utils/date-format";
 
 interface PersonalDetailsProps {
   formData: any;
@@ -26,7 +27,7 @@ const PersonalDetails = ({
 }: PersonalDetailsProps) => {
   return (
     <div className="bg-transparent p-4">
-      <h2 className="text-xl text-white font-semibold mb-6 border-b pb-3">
+      <h2 className="text-xl text-white font-medium mb-6 border-b pb-3">
         Personal Details
       </h2>
 
@@ -74,6 +75,7 @@ const PersonalDetails = ({
           value={formData.dob}
           onChange={handleChange}
           error={errors.dob}
+          max={getDobDisabledDate()}
           required
         />
 
@@ -110,7 +112,6 @@ const PersonalDetails = ({
           onChange={handleChange}
           error={errors.alternatePhone}
           placeholder="Enter Alternate Phone No."
-          required
         />
 
         {/* Gender */}
@@ -131,7 +132,6 @@ const PersonalDetails = ({
               target: { name: "gender", value: option?.value },
             } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
           }
-          required
         />
 
         {/* Blood Group */}
@@ -153,7 +153,6 @@ const PersonalDetails = ({
               target: { name: "bloodGroup", value: option?.value },
             } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
           }
-          required
         />
 
         {/* Marital Status */}

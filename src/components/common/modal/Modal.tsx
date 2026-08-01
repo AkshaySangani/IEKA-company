@@ -60,7 +60,7 @@ const Modal = ({
         >
           {/* Header */}
           <div className="bg-[#212837] px-4 py-3 flex items-center justify-between">
-            <h5 className="text-white text-base font-semibold">{title}</h5>
+            <h5 className="text-white text-base font-medium">{title}</h5>
 
             <Button
               type="button"

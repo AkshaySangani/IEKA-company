@@ -47,7 +47,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
       <div className="z-10 flex items-center justify-between gap-2">
         <div className="flex gap-2">
         <span
-          className={`text-[18px] font-semibold ${
+          className={`text-[18px] font-medium ${
             active ? "text-white" : "text-[#222]"
           }`}
         >
@@ -71,7 +71,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
           ₹
         </div>
 
-        <span className="text-lg font-semibold text-[#333]">
+        <span className="text-lg font-medium text-[#333]">
           {amount}
         </span>
       </div>

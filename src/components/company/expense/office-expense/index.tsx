@@ -290,7 +290,7 @@ const OfficeExpense: React.FC = () => {
         actionButtons={
           <div className="flex gap-2">
             <div className="flex items-center gap-2 w-[150px]">
-              <label className="font-semibold">Month</label>
+              <label className="font-medium">Month</label>
               <MonthPicker
                 placeholder="Select Month"
                 value={month}

@@ -71,7 +71,7 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = ({ data, setData }) => {
 
   return (
     <div className="content-card p-4">
-      <h2 className="text-md font-semibold text-slate-800">
+      <h2 className="text-md font-medium text-slate-800">
         Candidate Details
       </h2>
 

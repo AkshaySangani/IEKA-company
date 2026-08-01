@@ -92,7 +92,7 @@ const IncomeTaxDeductionDetails = ({
   return (
     <div className="bg-transparent">
       <div className="flex items-center justify-between border-b border-secondary pb-3 mb-2">
-        <h2 className="text-md  font-semibold">Income Tax Deduction Details</h2>
+        <h2 className="text-md  font-medium">Income Tax Deduction Details</h2>
 
         <Button
           type="button"

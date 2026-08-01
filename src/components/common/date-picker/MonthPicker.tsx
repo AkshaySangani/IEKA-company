@@ -211,7 +211,7 @@ const handleClickOnInput = () => {
               <button
                 type="button"
                 onClick={() => setShowYears((prev) => !prev)}
-                className="text-[18px] font-semibold"
+                className="text-[18px] font-medium"
               >
                 {showYears
                   ? `${startYear}-${startYear + 9}`
@@ -254,7 +254,7 @@ const handleClickOnInput = () => {
                         rounded-md p-2 text-lg transition
                         ${
                           selectedYear === year
-                            ? "bg-primary text-white font-semibold"
+                            ? "bg-primary text-white font-medium"
                             : "hover:bg-primaryBlur"
                         }
                         ${
@@ -289,7 +289,7 @@ const handleClickOnInput = () => {
                       ${
                         value?.month === index &&
                         value?.year === selectedYear
-                          ? "bg-primary text-white font-semibold"
+                          ? "bg-primary text-white font-medium"
                           : "hover:bg-primaryBlur"
                       }
                     `}

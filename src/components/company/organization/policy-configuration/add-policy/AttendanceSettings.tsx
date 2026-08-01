@@ -40,7 +40,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
 
       <div className="border-b pb-4 border-inputBorder">
         <div className="mb-5 border-l-4 border-primary bg-primaryBlur px-2 py-2">
-          <h3 className="text-md font-semibold text-secondary-color">
+          <h3 className="text-md font-medium text-secondary-color">
             Attendance Setting
           </h3>
         </div>
@@ -85,7 +85,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
           />
         </div>
         <div className="space-y-3 mt-3">
-          <h3 className="text-md font-semibold text-primary">
+          <h3 className="text-md font-medium text-primary">
             Weekly Off Settings
           </h3>
 
@@ -142,7 +142,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
       {/* Late Mark */}
 
       <div className="border-b pb-4 border-inputBorder">
-        <h3 className="mb-3 text-md font-semibold text-primary">
+        <h3 className="mb-3 text-md font-medium text-primary">
           Late Mark Setting
         </h3>
 
@@ -287,7 +287,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
       {/* Manual Punch */}
 
       <div className="border-b pb-4 border-inputBorder">
-        <h3 className="mb-5 text-md font-semibold text-primary">
+        <h3 className="mb-5 text-md font-medium text-primary">
           Manual Punch Request
         </h3>
 

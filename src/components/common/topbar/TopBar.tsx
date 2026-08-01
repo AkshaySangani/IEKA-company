@@ -47,7 +47,7 @@ const TopBar = ({
     <div className="sticky border-b border-borderPrimary px-[25px]">
       <div className="flex min-h-[50px] items-center justify-between">
         <div>
-          <h1 className="text-[18px] leading-7 font-semibold ">{title}</h1>
+          <h1 className="text-[18px] leading-7 font-medium ">{title}</h1>
         </div>
 
         <div>

@@ -64,8 +64,8 @@ export default function StatusUpdate({
         />
         {/* <div className="flex justify-center bg-primaryBlur p-2">
           <div className="flex items-center gap-2">
-            <div className="font-semibold">Total People Managed</div>
-            <div className="bg-primary px-3 py-1 text-white font-semibold text-center">
+            <div className="font-medium">Total People Managed</div>
+            <div className="bg-primary px-3 py-1 text-white font-medium text-center">
               5
             </div>
           </div>

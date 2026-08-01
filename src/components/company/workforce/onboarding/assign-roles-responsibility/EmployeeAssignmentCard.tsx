@@ -40,18 +40,18 @@ const EmployeeAssignmentCard = ({
 
             <div className="h-8 w-px bg-gray-300" />
 
-            <span className="text-md font-semibold text-gray-500">
+            <span className="text-md font-medium text-gray-500">
               Total Employee : {data.count}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold text-gray-600">
+          <span className="text-xs font-medium text-gray-600">
             Selected Employee :
           </span>
 
-          <div className="flex py-1 px-2.5 items-center justify-center bg-primary text-white font-semibold">
+          <div className="flex py-1 px-2.5 items-center justify-center bg-primary text-white font-medium">
             {formData.assignments.filter(ele => ele?.branchId === data._id)?.length}
           </div>
         </div>
@@ -83,7 +83,7 @@ const EmployeeAssignmentCard = ({
               <div className="mx-6 w-px bg-gray-300" />
 
               <div className="pr-6">
-                <p className="mt-7 text-xs font-semibold">{getDateDifference({from:shift.startTime, to: shift.endTime,unit: "hours"})} hours</p>
+                <p className="mt-7 text-xs font-medium">{getDateDifference({from:shift.startTime, to: shift.endTime,unit: "hours"})} hours</p>
               </div>
 
               <div className="mx-6 w-px bg-gray-300" />
@@ -91,7 +91,7 @@ const EmployeeAssignmentCard = ({
               <div>
                 <p className="mt-7 text-xs text-gray-600">
                   Total Employee{" "}
-                  <span className="text-xs font-semibold">{shift.count}</span>
+                  <span className="text-xs font-medium">{shift.count}</span>
                 </p>
               </div>
             </div>

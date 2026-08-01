@@ -122,7 +122,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
                 <ChevronLeft size={18} />
               </button>
 
-              <span className="font-semibold">
+              <span className="font-medium">
                 {startYear}-{startYear + 9}
               </span>
 

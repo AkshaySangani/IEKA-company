@@ -24,7 +24,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
       </div>
 
       {/* Title */}
-      <h3 className="text-xl font-semibold text-gray-800 mb-2">
+      <h3 className="text-xl font-medium text-gray-800 mb-2">
         {title}
       </h3>
 

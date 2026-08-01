@@ -60,7 +60,7 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
     <>
       <div className="content-card bg-white border border-gray-200 p-5">
         <div className="flex items-center justify-between border-b-2 pb-2 mb-2">
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             {data.firstName}{" "}{data.lastName}
           </h3>
 
@@ -89,7 +89,7 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
             label="Status"
             value={
               <div className="flex items-center gap-2">
-                <span className="text-green-600 font-semibold">
+                <span className="text-green-600 font-medium">
                   {statusMessage[data.status]}
                 </span>
                 <button 
@@ -150,7 +150,7 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
         <div className="flex flex-col">
           <div className="flex flex-col justify-center items-center">
             <Image src={data.profileImage} width={80} />
-            <div className="text-lg font-semibold">
+            <div className="text-lg font-medium">
               Are u sure want to change status of this person ?
             </div>
           </div>
@@ -194,7 +194,7 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
         <div className="flex flex-col">
           <div className="flex flex-col justify-center items-center border-b-2">
             <Image src={""} width={80} />
-            <div className="text-lg font-semibold">
+            <div className="text-lg font-medium">
               Are u sure want to send mail for this person ?
             </div>
           </div>
@@ -206,7 +206,7 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
 
               <p className="">
                 We are pleased to welcome you to{" "}
-                <span className="font-semibold text-gray-700">
+                <span className="font-medium text-gray-700">
                   Ieka Digital
                 </span>
                 . We are excited to have you onboard and look forward to
@@ -221,21 +221,21 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
               <div className="space-y-3">
                 <p>
                   Portal URL:{" "}
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-medium text-gray-700">
                     [Portal Link]
                   </span>
                 </p>
 
                 <p>
                   User ID:{" "}
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-medium text-gray-700">
                     [Your User ID]
                   </span>
                 </p>
 
                 <p>
                   Password:{" "}
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-medium text-gray-700">
                     [Your Temporary Password]
                   </span>
                 </p>
@@ -249,14 +249,14 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
               <div className="space-y-3">
                 <p>
                   Android:{" "}
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-medium text-gray-700">
                     [Google Play Store Link]
                   </span>
                 </p>
 
                 <p>
                   iOS:{" "}
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-medium text-gray-700">
                     [Apple App Store Link]
                   </span>
                 </p>
@@ -282,7 +282,7 @@ const OwnerDetailCard: React.FC<Props> = ({ data, moduleAccess, handleOwnerOpen 
               <div className="mt-8">
                 <p className="">Regards,</p>
 
-                <p className="font-semibold text-gray-700">Sunny Sangani</p>
+                <p className="font-medium text-gray-700">Sunny Sangani</p>
 
                 <p className="mt-2">Ieka Digital</p>
               </div>

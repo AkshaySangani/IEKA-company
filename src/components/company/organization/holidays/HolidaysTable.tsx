@@ -47,7 +47,7 @@ export default function HolidaysTable({
       render: (row) => (
         <div className="flex flex-col">
           <div
-            className="text-primary cursor-pointer text-sm font-semibold"
+            className="text-primary cursor-pointer text-sm font-medium"
             onClick={() => handleEditHolidayDetails(row)}
           >
             {row.name}
@@ -86,7 +86,7 @@ export default function HolidaysTable({
               ></i>
             )}
             <span
-              className={`font-semibold text-sm ${statusColor[row.status]}`}
+              className={`font-medium text-sm ${statusColor[row.status]}`}
             >
               {statusMessage[row.status]}
             </span>

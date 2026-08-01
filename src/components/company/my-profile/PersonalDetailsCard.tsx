@@ -160,7 +160,7 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
                 <div className="label">Status</div>
                 <div className="labelvalue curruntmultidiv">
                   <div className="curruntvalue">
-                    <span className={`status font-semibold ${statusColor[profile?.status]}`}>{statusMessage[profile?.status]}</span>
+                    <span className={`status font-medium ${statusColor[profile?.status]}`}>{statusMessage[profile?.status]}</span>
                   </div>
                 </div>
               </div>

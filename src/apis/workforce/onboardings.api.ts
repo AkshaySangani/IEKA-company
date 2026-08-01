@@ -13,9 +13,9 @@ export const getOnboardings = (payload: {
   );
 };
 
-export const inviteEmployee = (payload: any) =>
+export const inviteEmployee = (payload: any, showSuccessToast: boolean = true) =>
   apiRequest.post(`/workforce/onboard`, payload, {
-    showSuccessToast: true,
+    showSuccessToast: showSuccessToast,
   });
 
 export const getOnboardingById = (onboardingId: string) => {

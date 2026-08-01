@@ -74,7 +74,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
           />
         </div>
 
-        <h2 className="text-lg text-white font-semibold">
+        <h2 className="text-lg text-white font-medium">
           {data.firstName} {data.lastName}
         </h2>
       </div>
@@ -82,7 +82,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
       <div className="p-5">
         <div className="flex items-center gap-2 border-b pb-3 mb-4">
           <i className="fa-solid fa-user-clock px-2 py-1.5 text-base bg-[#212936] text-white h-7.5 w-7.5 flex items-center justify-center"></i>
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             Employment Details
           </h3>
         </div>

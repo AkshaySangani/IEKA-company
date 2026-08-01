@@ -111,7 +111,7 @@ const SalaryDetailsCard: React.FC<Props> = ({
             {" "}
             <Building />
           </div>
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             Policy Details
           </h3>
         </div>

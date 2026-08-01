@@ -12,10 +12,10 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
         {/* Header */}
         <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-1 text-white">
           <div className="flex items-center gap-2">
-            <h2 className="text-md font-semibold">{department?.name}</h2>
+            <h2 className="text-md font-medium">{department?.name}</h2>
           </div>
 
-          <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-white text-[20px] font-semibold text-[#505050] shadow">
+          <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-white text-[20px] font-medium text-[#505050] shadow">
             {department.count}
           </div>
         </div>

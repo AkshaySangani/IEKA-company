@@ -133,8 +133,8 @@ export default function PeopleHierarchy() {
               onChange={(option) => handleSelectFilter("shiftId", option.value)}
             />
             <div className="flex items-center gap-3">
-              <span className="font-semibold">Total Employee</span>
-              <div className="bg-black py-1.5 px-2.5 text-white font-semibold">
+              <span className="font-medium">Total Employee</span>
+              <div className="bg-black py-1.5 px-2.5 text-white font-medium">
                 {employeeCount}
               </div>
             </div>

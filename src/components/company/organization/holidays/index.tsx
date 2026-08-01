@@ -222,7 +222,7 @@ const Holiday = () => {
         actionButtons={
           <div className="flex gap-2">
             <div className="flex items-center gap-2 w-[150px]">
-              <label className="font-semibold">Year</label>
+              <label className="font-medium">Year</label>
               <YearPicker
                 placeholder="Select Year"
                 value={year}

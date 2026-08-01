@@ -144,7 +144,7 @@ const AdminMenu = () => {
             <i className="fas fa-sign-out-alt text-2xl text-red-500" />
           </div>
 
-          <h4 className="mb-2 text-lg font-semibold text-gray-800">
+          <h4 className="mb-2 text-lg font-medium text-gray-800">
             Are you sure you want to logout?
           </h4>
 

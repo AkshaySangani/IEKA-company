@@ -85,7 +85,7 @@ export default function OnboardingsTable({
             {/* Info SVG icon asset matching your design layout */}
             <InfoIcon onClick={() => handleShowHistory(row)} />
             <span
-              className={`font-semibold text-sm ${statusColor[row.status]}`}
+              className={`font-medium text-sm ${statusColor[row.status]}`}
             >
               {statusMessage[row.status]}
             </span>

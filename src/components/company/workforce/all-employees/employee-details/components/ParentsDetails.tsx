@@ -147,7 +147,7 @@ const ParentsDetails = ({parents, loading, handleSubmit}: PatentsDetailsProps) =
               className="fa-solid fa-pen-to-square text-gray-400"
               onClick={handleClickOnEdit}
             ></i>
-            <h3 className="text-md text-gray-600 font-semibold">
+            <h3 className="text-md text-gray-600 font-medium">
               Parents Details
             </h3>
           </div>

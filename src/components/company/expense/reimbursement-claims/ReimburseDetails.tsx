@@ -122,12 +122,12 @@ const ReimbursementDetails: React.FC = () => {
         <PageLoader loading={loading} />
           <div className="grid grid-cols-[180px_1fr] gap-4">
             <div className="text-gray-500 text-sm">Expense Name</div>
-            <div className="font-semibold text-gray-900 text-sm">
+            <div className="font-medium text-gray-900 text-sm">
               {reimbursementDetails.name}
             </div>
 
             <div className="text-gray-500 text-sm">Branch Name</div>
-            <div className="font-semibold text-gray-900 text-sm">
+            <div className="font-medium text-gray-900 text-sm">
               {reimbursementDetails.branchId.name}
             </div>
 
@@ -144,13 +144,13 @@ const ReimbursementDetails: React.FC = () => {
             </div>
 
             <div className="text-gray-500 text-sm">Expense Date</div>
-            <div className="font-semibold text-gray-900 text-sm">
+            <div className="font-medium text-gray-900 text-sm">
               {formatDate(reimbursementDetails.date)}
             </div>
 
             <div className="text-gray-500 text-sm">Request Date</div>
             <div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                 {formatDate(reimbursementDetails.createdAt)}
               </div>
 
@@ -164,7 +164,7 @@ const ReimbursementDetails: React.FC = () => {
 
             <div className="text-gray-500 text-sm">Amount</div>
             <div>
-              <span className="inline-flex items-center rounded-full bg-indigo-500 px-5 py-2 text-white font-semibold">
+              <span className="inline-flex items-center rounded-full bg-indigo-500 px-5 py-2 text-white font-medium">
                 {currency.INR} {reimbursementDetails.amount}
               </span>
             </div>
@@ -173,7 +173,7 @@ const ReimbursementDetails: React.FC = () => {
               <>
                 <div className="text-gray-500 text-sm">Comment</div>
 
-                <div className="font-semibold text-gray-900 text-sm">
+                <div className="font-medium text-gray-900 text-sm">
                   {reimbursementDetails.description}
                 </div>
               </>

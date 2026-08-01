@@ -32,7 +32,7 @@ const DocumentDetails = ({
   return (
     <div className="bg-transparent p-4">
       <div className="flex items-center justify-between border-b pb-3 mb-6">
-        <h2 className="text-xl text-white font-semibold">Document Details</h2>
+        <h2 className="text-xl text-white font-medium">Document Details</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 bg-white p-4">
         {documents.map((ele: EmployeeDocument, index: number) => {

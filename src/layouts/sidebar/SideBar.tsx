@@ -112,7 +112,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
               px-[10px]
               py-[15px]
               text-sm
-              font-semibold
+              font-medium
               uppercase
               text-sidebarText
             "
@@ -138,7 +138,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                 className="
                   mt-[6px]
                   text-[13px]
-                  font-semibold
+                  font-medium
                   leading-[22px]
                   text-white
                 "

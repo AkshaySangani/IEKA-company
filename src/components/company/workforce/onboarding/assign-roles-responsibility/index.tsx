@@ -222,12 +222,8 @@ const AssignRolesResponsibility = () => {
     if (formData.probationPeriod !== 0 && !formData.probationPeriod) {
       newErrors.probationPeriod = "Probation Period type is required";
     }
-
-    // Employee assignment
-    if (formData.role === RoleEnum.EMPLOYEE) {
-      if (!employeeAssignment?.departmentId) {
-        newErrors.employee_departmentId = "Department is required";
-      }
+    if(formData.policyId === "") {
+      newErrors.policyId = "Policy is required";
     }
     // Common fields
 
@@ -238,6 +234,14 @@ const AssignRolesResponsibility = () => {
     if (!formData.salary) {
       newErrors.salary = "Salary is required";
     }
+
+    // Employee assignment
+    if (formData.role === RoleEnum.EMPLOYEE) {
+      if (!employeeAssignment?.departmentId) {
+        newErrors.employee_departmentId = "Department is required";
+      }
+    }
+    
 
     setErrors(newErrors);
 
@@ -308,7 +312,7 @@ const AssignRolesResponsibility = () => {
       scrollToFirstError(newErrors);
       return;
     }
-    setLoading(true);
+    // setLoading(true);
 
     const payload = {
       userId: employeeId,
@@ -336,11 +340,13 @@ const AssignRolesResponsibility = () => {
       remarks: "", //pass when edit only
     };
 
+
     const response = await assignRolesAndResponsibility(payload);
     if (response.success) {
       navigate(pathNames.ALL_EMPLOYEES);
       setFormData(initialEmployeeFormData);
     }
+    setLoading(false);
   };
 
   const handleClose = () => {

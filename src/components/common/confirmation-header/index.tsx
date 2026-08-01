@@ -19,7 +19,7 @@ export default function ConfirmationHeader({
             width={50}
           />
 
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-lg font-medium">
             {title}
           </h3>
         </div>

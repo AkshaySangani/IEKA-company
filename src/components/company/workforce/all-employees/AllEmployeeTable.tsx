@@ -91,7 +91,7 @@ export default function AllEmployeeTable({
               ></i>
             )}
             <span
-              className={`font-semibold text-sm ${statusColor[row.status]}`}
+              className={`font-medium text-sm ${statusColor[row.status]}`}
             >
               {statusMessage[row.status]}
             </span>

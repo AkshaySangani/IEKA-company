@@ -20,10 +20,10 @@ export default function BranchCard({ branch }: BranchCardProps) {
         <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-3 text-white">
           <div className="flex items-center gap-2">
             <i className="fa-regular fa-building"></i>
-            <h2 className="text-md font-semibold">{branch?.name}</h2>
+            <h2 className="text-md font-medium">{branch?.name}</h2>
           </div>
 
-          <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-white text-[20px] font-semibold text-[#505050] shadow">
+          <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-white text-[20px] font-medium text-[#505050] shadow">
             {branch.count}
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function BranchCard({ branch }: BranchCardProps) {
               <div>
                 <div className="flex items-center gap-2 text-primary">
                   <i className="fa-solid fa-sun"></i>
-                  <span className="text-sm font-semibold">{shift?.name}</span>
+                  <span className="text-sm font-medium">{shift?.name}</span>
                 </div>
 
                 <p className=" text-xs text-gray-500">
@@ -52,7 +52,7 @@ export default function BranchCard({ branch }: BranchCardProps) {
                 </p>
               </div>
 
-              <span className="text-md font-semibold text-gray-700">
+              <span className="text-md font-medium text-gray-700">
                 {shift.count}
               </span>
             </div>
@@ -88,12 +88,12 @@ const Department = ({
             : ""
         }`}
       >
-        <span className="text-sm font-semibold text-[#727272]">
+        <span className="text-sm font-medium text-[#727272]">
           {item.name}
         </span>
 
         <span
-          className="text-sm font-semibold cursor-pointer text-[#727272]"
+          className="text-sm font-medium cursor-pointer text-[#727272]"
           onClick={() => setEmployees(item.employee)}
         >
           {item.count}
@@ -109,10 +109,10 @@ const Department = ({
         <div className="flex flex-col gap-3">
           <div className="flex justify-center bg-[#dde9f5] p-2">
             <div className="flex items-center gap-2">
-              <div className="font-semibold">
+              <div className="font-medium">
                 {shift.name} | {item.name}
               </div>
-              <div className="bg-primary px-3 py-1 text-white font-semibold text-center">
+              <div className="bg-primary px-3 py-1 text-white font-medium text-center">
                 {item.count}
               </div>
             </div>

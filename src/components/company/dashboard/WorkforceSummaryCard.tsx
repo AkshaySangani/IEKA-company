@@ -21,7 +21,7 @@ export default function WorkforceSummaryCard({
     <div className="content-card p-[15px]">
       <div className="flex items-center pb-3 border-b">
         <i className="fa-solid fa-users"></i>
-        <span className="px-2 text-md font-semibold border-r mr-2">
+        <span className="px-2 text-md font-medium border-r mr-2">
           Workforce
         </span>
         <RightArrow

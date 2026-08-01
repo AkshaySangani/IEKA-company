@@ -110,7 +110,7 @@ const EducationDetails = ({
   return (
     <div className="bg-transparent p-4">
       <div className="flex items-center justify-between border-b pb-3 mb-6">
-        <h2 className="text-xl text-white font-semibold">Education Details</h2>
+        <h2 className="text-xl text-white font-medium">Education Details</h2>
 
         <Button
           name="Add Education"

@@ -8,24 +8,31 @@ import AddressDetails from "./AddressDetails";
 import BankDetails from "./BankDetails";
 import Image from "../../../../common/image";
 import Button from "../../../../common/button/Button";
-import { getOnboardingCompanyInfo, inviteEmployee } from "../../../../../apis/workforce/onboardings.api";
+import {
+  getOnboardingCompanyInfo,
+  inviteEmployee,
+} from "../../../../../apis/workforce/onboardings.api";
 import { useParams } from "react-router-dom";
 import { regex } from "../../../../../constants/validation-regex";
 import { documentValidationRules } from "../../../../../utils/document-validation-rules";
-import { documentEnum, employeeDocuments } from "../../../../../types/common-types";
+import {
+  documentEnum,
+  employeeDocuments,
+} from "../../../../../types/common-types";
 import PageLoader from "../../../../common/loader/PageLoader";
+import { toastMessage } from "../../../../../utils/toast-message";
 
 interface ICompanyInfo {
-    _id: string;
-    companyName: string;
-    companyEmail: string;
-    companyAddress: string;
-    companyLogo: string;
+  _id: string;
+  companyName: string;
+  companyEmail: string;
+  companyAddress: string;
+  companyLogo: string;
 }
 
 const InviteEmployeeForm = () => {
   const params = useParams();
-  const companyId = params?.id as string
+  const companyId = params?.id as string;
   const formRef = useRef<HTMLFormElement>(null);
 
   const initialCompanyInfo: ICompanyInfo = {
@@ -34,8 +41,9 @@ const InviteEmployeeForm = () => {
     companyEmail: "",
     companyAddress: "",
     companyLogo: "",
-}
-  const [companyInfo, setCompanyInfo] = useState<ICompanyInfo>(initialCompanyInfo)
+  };
+  const [companyInfo, setCompanyInfo] =
+    useState<ICompanyInfo>(initialCompanyInfo);
 
   const [loading, setLoading] = useState<boolean>(false);
   // initial state
@@ -133,19 +141,19 @@ const InviteEmployeeForm = () => {
   const [documents, setDocuments] =
     useState<EmployeeDocument[]>(initialDocuments);
 
-    useEffect(() => {
-      if(companyId){
-        fetchCompanyInfo()
-      }
-      // eslint-disable-next-line
-    },[companyId]);
-
-    const fetchCompanyInfo = async () => {
-      const response = await getOnboardingCompanyInfo(companyId);
-      if(response?.success){
-        setCompanyInfo(response?.data)
-      } else setCompanyInfo(initialCompanyInfo);
+  useEffect(() => {
+    if (companyId) {
+      fetchCompanyInfo();
     }
+    // eslint-disable-next-line
+  }, [companyId]);
+
+  const fetchCompanyInfo = async () => {
+    const response = await getOnboardingCompanyInfo(companyId);
+    if (response?.success) {
+      setCompanyInfo(response?.data);
+    } else setCompanyInfo(initialCompanyInfo);
+  };
 
   // handle change function
   const handleChange = (
@@ -312,10 +320,14 @@ const InviteEmployeeForm = () => {
 
     if (!firstErrorKey) return;
 
-    const field = formRef.current.querySelector(
-      `[name="${firstErrorKey}"]`,
-    ) as HTMLElement | null || formRef.current.querySelector(
-    `[data-field="${firstErrorKey}"]`) as HTMLElement | null || document.getElementById(`field-${firstErrorKey}`) as HTMLElement | null;
+    const field =
+      (formRef.current.querySelector(
+        `[name="${firstErrorKey}"]`,
+      ) as HTMLElement | null) ||
+      (formRef.current.querySelector(
+        `[data-field="${firstErrorKey}"]`,
+      ) as HTMLElement | null) ||
+      (document.getElementById(`field-${firstErrorKey}`) as HTMLElement | null);
 
     if (!field) return;
 
@@ -352,19 +364,13 @@ const InviteEmployeeForm = () => {
     } else if (!regex.phone.test(formData.phone)) {
       newErrors.phone = "Invalid Phone Number";
     }
-    if (!formData.alternatePhone.trim()) {
-      newErrors.alternatePhone = "Alternate Phone Number is required";
-    } else if (formData.alternatePhone && !regex.phone.test(formData.alternatePhone)) {
-      newErrors.alternatePhone = "Invalid Alternate Number";
-    }
 
-    if (!formData.gender) newErrors.gender = "Gender is required";
+    // if (!formData.gender) newErrors.gender = "Gender is required";
 
     if (!formData.dob) newErrors.dob = "Date of Birth is required";
-
-    if (!formData.bloodGroup) newErrors.bloodGroup = "Blood Group is required";
     if (!formData.isMarried) newErrors.isMarried = "Marital Status is required";
-    if (!formData.isPhysicallyDisabled) newErrors.isPhysicallyDisabled = "Physically Disabled is required";
+    if (!formData.isPhysicallyDisabled)
+      newErrors.isPhysicallyDisabled = "Physically Disabled is required";
 
     setErrors((prev: any) => ({
       ...prev,
@@ -438,17 +444,19 @@ const InviteEmployeeForm = () => {
     const personalErrors = validatePersonalDetails();
     const addressErrors = validateAddressDetails();
     const documentErrors = validateDocuments();
-    const docErrors = documentErrors?.filter(ele => ele?.number || ele?.frontPhoto || ele?.backPhoto);
+    const docErrors = documentErrors?.filter(
+      (ele) => ele?.number || ele?.frontPhoto || ele?.backPhoto,
+    );
     const allErrors = {
-        ...personalErrors,
-        ...addressErrors,
-        ...docErrors[0]
+      ...personalErrors,
+      ...addressErrors,
+      ...docErrors[0],
     };
 
     const hasErrors =
       Object.keys(personalErrors).length > 0 ||
       Object.keys(addressErrors).length > 0 ||
-      Object.keys(docErrors[0]??{}).length > 0;
+      Object.keys(docErrors[0] ?? {}).length > 0;
 
     if (hasErrors) {
       scrollToFirstError(allErrors);
@@ -479,7 +487,10 @@ const InviteEmployeeForm = () => {
     payload.append("address", formData.address);
     payload.append("permanentAddress", formData.permanentAddress);
 
-    payload.append("isMarried", formData.isMarried === "single" ? "true" : "false");
+    payload.append(
+      "isMarried",
+      formData.isMarried === "single" ? "true" : "false",
+    );
 
     payload.append(
       "isPhysicallyDisabled",
@@ -523,44 +534,49 @@ const InviteEmployeeForm = () => {
     // Education
     // ===========================
 
-    payload.append(
-      "educations",
-      JSON.stringify(
-        educations.map((item) => ({
-          organization: item.organization,
-          passingYear: Number(item.passingYear),
-          marks: Number(item.marks),
-        })),
-      ),
-    );
+    const education = educations.filter((ele) => ele?.organization);
+    if (education.length > 0) {
+      payload.append(
+        "educations",
+        JSON.stringify(
+          education.map((item) => ({
+            organization: item.organization,
+            passingYear: Number(item.passingYear),
+            marks: Number(item.marks),
+          })),
+        ),
+      );
 
-    educations.forEach((item, index) => {
-      if (item.document) {
-        payload.append(`educations[${index}][document]`, item.document);
-      }
-    });
+      education.forEach((item, index) => {
+        if (item.document) {
+          payload.append(`educations[${index}][document]`, item.document);
+        }
+      });
+    }
 
     // ===========================
     // Experience
     // ===========================
+    const experience = experiences.filter((ele) => ele?.organization);
+    if (experience.length > 0) {
+      payload.append(
+        "experiences",
+        JSON.stringify(
+          experience.map((item) => ({
+            organization: item.organization,
+            designation: item.designation,
+            startDate: item.startDate,
+            endDate: item.endDate,
+          })),
+        ),
+      );
 
-    payload.append(
-      "experiences",
-      JSON.stringify(
-        experiences.map((item) => ({
-          organization: item.organization,
-          designation: item.designation,
-          startDate: item.startDate,
-          endDate: item.endDate,
-        })),
-      ),
-    );
-
-    experiences.forEach((item, index) => {
-      if (item.document) {
-        payload.append(`experiences[${index}][document]`, item.document);
-      }
-    });
+      experience.forEach((item, index) => {
+        if (item.document) {
+          payload.append(`experiences[${index}][document]`, item.document);
+        }
+      });
+    }
 
     // ===========================
     // Documents
@@ -589,38 +605,43 @@ const InviteEmployeeForm = () => {
     // API
     // ===========================
 
-    const response = await inviteEmployee(payload);
+    const response = await inviteEmployee(payload,false);
 
     if (response?.success) {
-      handleResetForm()
+      await toastMessage.success("Employee invited successfully");
+      handleResetForm();
     }
     setLoading(false);
   };
 
   const handleResetForm = () => {
     setFormData(initialFormData);
-      setDocuments(initialDocuments);
-      setEducations(initialEducations);
-      setExperiences(initialExperience);
-      window.location.reload();
-  }
+    setDocuments(initialDocuments);
+    setEducations(initialEducations);
+    setExperiences(initialExperience);
+    window.location.reload();
+  };
   return (
     <div className="bg-[#ededed]">
       <div className="mx-[10%] content-card">
         <div className="flex flex-col justify-center items-center p-4 gap-3 bg-white">
           <div>
-            <Image src={companyInfo?.companyLogo ? companyInfo?.companyLogo : undefined} width={100} height={100} />
+            <Image
+              src={
+                companyInfo?.companyLogo ? companyInfo?.companyLogo : undefined
+              }
+              width={100}
+              height={100}
+            />
           </div>
-          <span>
-            {companyInfo.companyAddress}
-          </span>
+          <span>{companyInfo.companyAddress}</span>
         </div>
         <form
           ref={formRef}
           className="flex flex-col gap-3 bg-formBg p-3 relative"
           onSubmit={handleSubmit}
         >
-            <PageLoader loading={loading}/>
+          <PageLoader loading={loading} />
           {/* Form fields would go here */}
           {/* Personal Details */}
           <PersonalDetails
@@ -674,11 +695,7 @@ const InviteEmployeeForm = () => {
           <div className="bg-transparent p-4">
             <div className="flex border-t p-4 justify-center gap-2">
               <Button name="Save" type="submit" size="sm" />
-              <Button
-                name="Cancel"
-                variant="secondary"
-                size="sm"
-              />
+              <Button name="Cancel" variant="secondary" size="sm" />
             </div>
           </div>
         </form>

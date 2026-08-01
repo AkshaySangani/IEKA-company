@@ -75,12 +75,12 @@ const OfficeExpenseDetails: React.FC = () => {
           <div className="content-card p-4">
             <div className="grid grid-cols-[180px_1fr] gap-4">
               <div className="text-gray-500 text-sm">Expense Name</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                 {officeExpenseDetails.name}
               </div>
 
               <div className="text-gray-500 text-sm">Branch Name</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                 {officeExpenseDetails.branchId.name}
               </div>
 
@@ -97,13 +97,13 @@ const OfficeExpenseDetails: React.FC = () => {
               </div>
 
               <div className="text-gray-500 text-sm">Service Date</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                 {formatDate(officeExpenseDetails.date)}
               </div>
 
               <div className="text-gray-500 text-sm">Request Date</div>
               <div>
-                <div className="font-semibold text-gray-900 text-sm">
+                <div className="font-medium text-gray-900 text-sm">
                   {formatDate(officeExpenseDetails.createdAt)}
                 </div>
 
@@ -119,7 +119,7 @@ const OfficeExpenseDetails: React.FC = () => {
                 <>
                   <div className="text-gray-500 text-sm">Comment</div>
 
-                  <div className="font-semibold text-gray-900 text-sm">
+                  <div className="font-medium text-gray-900 text-sm">
                     {officeExpenseDetails.description}
                   </div>
                 </>
@@ -129,19 +129,19 @@ const OfficeExpenseDetails: React.FC = () => {
           <div className="content-card p-4">
             <div className="grid grid-cols-[180px_1fr] gap-4">
               <div className="text-gray-500 text-sm">Vendor Name</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                 {officeExpenseDetails.vendor.name}
               </div>
 
               <div className="text-gray-500 text-sm">Vendor Description</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                 {officeExpenseDetails.vendor.description}
               </div>
 
               <div className="text-gray-500 text-sm">
                 Guarantee / Warranty ?
               </div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                 {officeExpenseDetails.vendor.isOnWarranty ? "Yes" : "No"}
               </div>
 
@@ -150,7 +150,7 @@ const OfficeExpenseDetails: React.FC = () => {
                 officeExpenseDetails.vendor.endDate && (
                   <>
                     <div className="text-gray-500 text-sm">Warranty Period</div>
-                    <div className="font-semibold text-gray-900 text-sm">
+                    <div className="font-medium text-gray-900 text-sm">
                       {getDateDifferenceBetween(
                         officeExpenseDetails.vendor.startDate,
                         officeExpenseDetails.vendor.endDate,
@@ -162,23 +162,23 @@ const OfficeExpenseDetails: React.FC = () => {
               {officeExpenseDetails.vendor.startDate &&
                 officeExpenseDetails.vendor.endDate && (<><div className="text-gray-500 text-sm">From To Date</div>
               <div>
-                <div className="font-semibold text-gray-900 text-sm">
+                <div className="font-medium text-gray-900 text-sm">
                   {formatDate(officeExpenseDetails.vendor.startDate)}{" - "}{formatDate(officeExpenseDetails.vendor.endDate)}
                 </div>
               </div></>)}
 
               <div className="text-gray-500 text-sm">Purchase Mode</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                   {officeExpenseDetails.paymentMode}
               </div>
 
               <div className="text-gray-500 text-sm">Transaction Id</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                   {officeExpenseDetails.transactionId || "-"}
               </div>
 
               <div className="text-gray-500 text-sm">Purchase Cost</div>
-              <div className="font-semibold text-gray-900 text-sm">
+              <div className="font-medium text-gray-900 text-sm">
                   {currency.INR} {officeExpenseDetails.amount}
               </div>
             </div>

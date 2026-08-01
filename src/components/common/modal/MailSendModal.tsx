@@ -46,7 +46,7 @@ const MailSendModal: React.FC<IMailSendProps> = ({
             width={50}
           />
 
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-lg font-medium">
             {showFullTitle ? title : `Are you sure you want to update status for this ${title}?`}
           </h3>
         </div>

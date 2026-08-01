@@ -17,11 +17,11 @@ export default function BranchDepartmentInfo({
   department,
 }: IBranchDepartmentInfoProps) {
   return (
-    <div className="flex items-start gap-3 rounded-lg bg-white p-1 shadow-sm">
+    <div className="flex items-start gap-3">
       <div className="mt-2 h-2 w-2 rounded-full bg-gray-700" />
 
       <div className="flex-1">
-        <span className="text-sm font-semibold text-primary">{branch?.name}</span>
+        <span className="text-sm font-medium text-primary">{branch?.name}</span>
 
         <p className="text-xs text-gray-500">
           {shift?.name} ({shift?.startTime} to {shift?.endTime})

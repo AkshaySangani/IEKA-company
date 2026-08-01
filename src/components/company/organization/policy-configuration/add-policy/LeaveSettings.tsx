@@ -50,7 +50,7 @@ const LeaveSetting = ({
 
       <div>
         <div className=" border-l-4 border-primary bg-primaryBlur px-2 py-2">
-          <h3 className="text-md font-semibold text-secondary-color">
+          <h3 className="text-md font-medium text-secondary-color">
             Leave Setting
           </h3>
         </div>
@@ -62,7 +62,7 @@ const LeaveSetting = ({
                 key={leave.leaveId}
                 className="grid grid-cols-1 lg:grid-cols-[200px_180px_180px_120px] items-center gap-4"
               >
-                <label className="text-sm  font-semibold">{leave.name}</label>
+                <label className="text-sm  font-medium">{leave.name}</label>
 
                 <TextField
                   type="number"
@@ -99,7 +99,7 @@ const LeaveSetting = ({
       {/* Continuous Leave */}
 
       <div className="border-t pt-3">
-        <h3 className="mb-5 text-md font-semibold text-primary">
+        <h3 className="mb-5 text-md font-medium text-primary">
           Continuous Leave Setting
         </h3>
 
@@ -129,7 +129,7 @@ const LeaveSetting = ({
 
           {data.continuousLeave.enabled && (
             <>
-              <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-[320px_180px] items-center gap-4">
                 <label className="text-sm text-grayText">
                   Maximum leave days allowed in one request ?
                 </label>
@@ -177,7 +177,7 @@ const LeaveSetting = ({
       {/* Carry Forward */}
 
       <div className="border-t pt-3">
-        <h3 className="mb-5 text-md font-semibold text-primary">
+        <h3 className="mb-5 text-md font-medium text-primary">
           Carry Forward Leave Setting
         </h3>
 
@@ -230,7 +230,7 @@ const LeaveSetting = ({
       {/* Leave Encashment */}
 
       <div className="border-t pt-3">
-        <h3 className="mb-5 text-md font-semibold text-primary">
+        <h3 className="mb-5 text-md font-medium text-primary">
           Leave Encashment Setting
         </h3>
 
@@ -302,14 +302,14 @@ const LeaveSetting = ({
       {/* Sandwich Rule Setting */}
 
       <div className="border-t pt-3">
-        <h3 className="mb-5 text-md font-semibold text-primary">
+        <h3 className="mb-5 text-md font-medium text-primary">
           Sandwich Rule Setting
         </h3>
 
         <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
             <label className="text-sm text-grayText">
-              Enable switch rule ?
+              Enable sandwich rule ?
             </label>
 
             <SelectField
@@ -381,7 +381,7 @@ const LeaveSetting = ({
       {/* Overtime Rule Setting */}
 
       <div className="border-t pt-3">
-        <h3 className="mb-5 text-md font-semibold text-primary">
+        <h3 className="mb-5 text-md font-medium text-primary">
           Overtime Rule Setting
         </h3>
 

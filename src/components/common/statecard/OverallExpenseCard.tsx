@@ -41,7 +41,7 @@ const OverallExpenseCard: React.FC<OverallExpenseCardProps> = ({
       `}
     >
       {/* Title */}
-      <div className={`text-md font-semibold text-secondary`}>{title}</div>
+      <div className={`text-md font-medium text-secondary`}>{title}</div>
 
       {/* Amount + Icon */}
       <div className="w-[180px] flex items-center gap-3 rounded-full bg-white px-1.5 py-1 shadow-md">
@@ -51,7 +51,7 @@ const OverallExpenseCard: React.FC<OverallExpenseCardProps> = ({
           {currency.INR}
         </div>
 
-        <span className="text-lg font-semibold text-[#333]">{amount}</span>
+        <span className="text-lg font-medium text-[#333]">{amount}</span>
       </div>
 
       {/* Footer */}
@@ -74,7 +74,7 @@ const OverallExpenseCard: React.FC<OverallExpenseCardProps> = ({
           </span>
 
           <span
-            className={`text-[16px] font-semibold ${
+            className={`text-[16px] font-medium ${
               trendDetails.type === "high"
                 ? "text-success"
                 : trendDetails.type === "low"

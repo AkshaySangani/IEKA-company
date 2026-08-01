@@ -26,14 +26,14 @@ const EmployeeDetailCard: React.FC<Props> = ({
             />
         </div>
 
-        <h2 className="text-lg text-white font-semibold">
+        <h2 className="text-lg text-white font-medium">
           {data.firstName} {data.lastName}
         </h2>
       </div>
 
       <div className="p-5">
         <div className="flex items-center justify-between border-b pb-3 mb-4">
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             Personal Details
           </h3>
         </div>
@@ -69,7 +69,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
       </div>
       <div className="p-5">
         <div className="flex items-center justify-between border-b pb-3 mb-4">
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             Parents Details
           </h3>
         </div>
@@ -108,7 +108,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
       </div>
       <div className="p-5">
         <div className="flex items-center justify-between border-b pb-3 mb-4">
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             Address Details
           </h3>
         </div>

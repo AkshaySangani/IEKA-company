@@ -71,6 +71,7 @@ const ExperienceDetails = ({
             handleExperienceChange(index, "startDate", e.target.value)
           }
           placeholder="Start Date"
+          max={new Date().toISOString().split("T")[0]}
         />
       ),
     },
@@ -87,6 +88,7 @@ const ExperienceDetails = ({
           }
           min={experience.startDate}
           placeholder="End Date"
+          max={new Date().toISOString().split("T")[0]}
         />
       ),
     },
@@ -123,7 +125,7 @@ const ExperienceDetails = ({
   return (
     <div className="bg-transparent p-4">
       <div className="flex items-center justify-between border-b pb-3 mb-6">
-        <h2 className="text-xl text-white font-semibold">Experience Details</h2>
+        <h2 className="text-xl text-white font-medium">Experience Details</h2>
 
         <Button
           name="Add Experience"

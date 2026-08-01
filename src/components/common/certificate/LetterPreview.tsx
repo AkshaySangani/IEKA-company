@@ -102,7 +102,7 @@ const LetterPreview: React.FC<LetterPreviewProps> = ({
             }}
           >
             <div className="text-sm text-slate-700">
-              <span className="font-semibold">Date :</span>{" "}
+              <span className="font-medium">Date :</span>{" "}
               {formatDate(data.terminationDate) || "DD/MM/YYYY"}
             </div>
           </Draggable>

@@ -48,7 +48,7 @@ const PolicyDetailsCard: React.FC<Props> = ({
             {" "}
             <Building />
           </div>
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             Policy Details
           </h3>
         </div>
@@ -76,22 +76,7 @@ const PolicyDetailsCard: React.FC<Props> = ({
               </div>
             </div>
           ))}
-          <div className="flex text-sm justify-between items-center gap-5 border-b border-gray-200 pb-3">
-            <div className="flex items-center gap-2">
-              <TextField
-                className="cursor-pointer"
-                name={"policyId"}
-                checked={formData.policyId === ""}
-                type="radio"
-                onChange={() => handleChange("policyId", "")}
-              />
-              <div className="text-gray-700">{"No Policy"}</div>
-            </div>
-
-            <div className="font-normal text-right max-w-[300px] line-clamp-2 break-words">
-              {"-"}
-            </div>
-          </div>
+          {errors.policyId && (<span className="text-error text-xs">{errors.policyId}</span>)}
         </div>
       </div>
     </div>

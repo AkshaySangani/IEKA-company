@@ -118,7 +118,7 @@ export default function ResignedEmployeeTable({
       header: "Certificate",
       className: "w-[20%]",
       render: (row) =>
-        row.status === statusEnum.REJECTED && (
+        row.status === statusEnum.ACCEPTED && (
           <div className="flex gap-2">
             <Badge
               label="Relieving"
@@ -154,7 +154,7 @@ export default function ResignedEmployeeTable({
               ></i>
             )}
             <span
-              className={`font-semibold text-sm ${statusColor[row.status]}`}
+              className={`font-medium text-sm ${statusColor[row.status]}`}
             >
               {statusMessage[row.status]}
             </span>

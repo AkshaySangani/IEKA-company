@@ -85,7 +85,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col">
-      <h2 className="mb-2.5 text-center text-xl sm:text-2xl leading-[30px] font-semibold text-secondary">
+      <h2 className="mb-2.5 text-center text-xl sm:text-2xl leading-[30px] font-medium text-secondary">
         Login to Your Account
       </h2>
 

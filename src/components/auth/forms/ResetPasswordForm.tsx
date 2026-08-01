@@ -117,7 +117,7 @@ const ResetPasswordForm = () => {
       id="new-password"
       className="w-full flex flex-col"
     >
-      <h2 className="mb-2.5 text-center text-xl sm:text-2xl leading-[30px] font-semibold text-secondary">Create New Password</h2>
+      <h2 className="mb-2.5 text-center text-xl sm:text-2xl leading-[30px] font-medium text-secondary">Create New Password</h2>
 
       <p className="mb-5 border-b border-[#ccc] pb-1.5 text-center text-sm text-gray-500">
         Please enter new password

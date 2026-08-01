@@ -37,7 +37,7 @@ export default function SummaryCard({
         {/* Amount */}
         <div className="bg-white shadow-xl px-2 py-2 inline-flex items-center gap-2 w-full">
           {icon}
-          <span className="text-[18px] font-semibold text-[#1F2937]">
+          <span className="text-[18px] font-medium text-[#1F2937]">
             {amount}
           </span>
         </div>
@@ -67,7 +67,7 @@ export default function SummaryCard({
             </span>
 
             <span
-              className={`text-[16px] font-semibold ${
+              className={`text-[16px] font-medium ${
                 trendDetails.type === "high"
                   ? "text-success"
                   : trendDetails.type === "low"

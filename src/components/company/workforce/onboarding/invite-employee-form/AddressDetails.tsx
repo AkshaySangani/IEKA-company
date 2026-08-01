@@ -16,7 +16,7 @@ const AddressDetails = ({
 }: AddressDetailsProps) => {
   return (
     <div className="bg-transparent p-4">
-      <h2 className="text-xl text-white font-semibold mb-6 border-b pb-3">
+      <h2 className="text-xl text-white font-medium mb-6 border-b pb-3">
         Address Details
       </h2>
 

@@ -10,7 +10,7 @@ interface BankDetailsProps {
 const BankDetails = ({ formData, errors, handleChange }: BankDetailsProps) => {
   return (
     <div className="bg-transparent p-4">
-      <h2 className="text-xl text-white font-semibold mb-6 border-b pb-3">
+      <h2 className="text-xl text-white font-medium mb-6 border-b pb-3">
         Bank Details
       </h2>
 
@@ -102,6 +102,7 @@ const BankDetails = ({ formData, errors, handleChange }: BankDetailsProps) => {
           value={formData.pfJoiningDate}
           onChange={handleChange}
           error={errors.pfJoiningDate}
+          max={new Date().toISOString().split("T")[0]}
         />
 
         <TextField
@@ -111,6 +112,7 @@ const BankDetails = ({ formData, errors, handleChange }: BankDetailsProps) => {
           value={formData.esicJoiningDate}
           onChange={handleChange}
           error={errors.esicJoiningDate}
+          max={new Date().toISOString().split("T")[0]}
         />
       </div>
     </div>

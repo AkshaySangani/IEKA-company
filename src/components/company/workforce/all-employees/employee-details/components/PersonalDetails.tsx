@@ -156,7 +156,7 @@ const PersonDetails = ({
               className="fa-solid fa-pen-to-square text-gray-400"
               onClick={handleClickOnEdit}
             ></i>
-            <h3 className="text-md text-gray-600 font-semibold">
+            <h3 className="text-md text-gray-600 font-medium">
               Personal Details
             </h3>
           </div>

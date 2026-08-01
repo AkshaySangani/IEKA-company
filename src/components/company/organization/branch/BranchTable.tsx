@@ -47,7 +47,7 @@ export default function BranchTable({
       render: (row) => (
         <div className="flex flex-col">
           <div
-            className="text-primary cursor-pointer text-sm font-semibold"
+            className="text-primary cursor-pointer text-sm font-medium"
             onClick={() => handleEditBranchDetails(row._id)}
           >
             {row.name} {row.branchType === branchEnum.HEAD_OFFICE ? "(HO)" : ""}
@@ -69,7 +69,7 @@ export default function BranchTable({
               className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
             <span
-              className={`font-semibold text-sm ${statusColor[row.status]}`}
+              className={`font-medium text-sm ${statusColor[row.status]}`}
             >
               {statusMessage[row.status]}
             </span>

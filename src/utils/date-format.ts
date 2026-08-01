@@ -177,3 +177,10 @@ export const getDateDifferenceBetween = (
 
   return result.length ? result.join(" ") : "0 day";
 };
+
+export function getDobDisabledDate() {
+  const maxDob = new Date();
+  maxDob.setFullYear(maxDob.getFullYear() - 18);
+
+  return maxDob.toISOString().split("T")[0];
+}

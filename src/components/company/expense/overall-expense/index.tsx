@@ -149,7 +149,7 @@ const OverallExpense: React.FC = () => {
         title="Office & Assets Expense"
         actionButtons={
           <div className="flex items-center gap-2 w-[150px]">
-            <label className="font-semibold">Month</label>
+            <label className="font-medium">Month</label>
             <MonthPicker
               placeholder="Select Month"
               value={month}

@@ -4,12 +4,13 @@ import { ColumnDef, CustomTable } from "../../../../../common/table";
 import { Link } from "react-router-dom";
 import { documentType } from "../../../../../../constants/constants";
 import { IDocument } from "../../../onboarding/employee-details";
+import { config } from "../../../../../../utils/config";
 
 interface DocumentDetailsProps {
-    documents: IDocument[];
+  documents: IDocument[];
 }
 
-const DocumentDetails = ({documents}: DocumentDetailsProps) => {
+const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
   const [active, setActive] = useState<boolean>(false);
   const documentColumns: ColumnDef<IDocument>[] = [
     {
@@ -26,16 +27,33 @@ const DocumentDetails = ({documents}: DocumentDetailsProps) => {
       header: "Front Pic",
       className: "w-[15%] pr-2 pl-2",
       render: (document) => (
-        <Link to={document.front} download target="_"><i className="fa-solid fa-image text-primary"></i></Link>
+        <a
+          href={`${config.BACKEND_API_URL}${document.front}`}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i className="fa-solid fa-image text-primary"></i>
+        </a>
       ),
     },
     {
       header: "Back Pic",
       className: "w-[15%] pr-2 pl-2",
-      render: (document) => document.back ? (
-        <Link to={document.front} download target="_"><i className="fa-solid fa-image text-primary"></i></Link>
-      ): "-",
-    }
+      render: (document) =>
+        document.back ? (
+          <a
+            href={`${config.BACKEND_API_URL}${document.back}`}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fa-solid fa-image text-primary"></i>
+          </a>
+        ) : (
+          "-"
+        ),
+    },
   ];
   return (
     <Accordion
@@ -43,7 +61,7 @@ const DocumentDetails = ({documents}: DocumentDetailsProps) => {
       setActive={setActive}
       header={
         <div className="flex items-center gap-2">
-          <h3 className="text-md text-gray-600 font-semibold">
+          <h3 className="text-md text-gray-600 font-medium">
             Personal Document Details
           </h3>
         </div>

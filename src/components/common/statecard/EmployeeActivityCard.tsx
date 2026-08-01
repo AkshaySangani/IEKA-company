@@ -45,10 +45,10 @@ export default function EmployeeActivityCard({
         <div className="flex items-center gap-2 text-[#545454]">
           <div className="text-sm">{icon}</div>
 
-          <span className="text-sm font-semibold">{title}</span>
+          <span className="text-sm font-medium">{title}</span>
         </div>
 
-        <span className="text-md font-semibold text-secondary">
+        <span className="text-md font-medium text-secondary">
           {count}
         </span>
       </div>
@@ -72,7 +72,7 @@ export default function EmployeeActivityCard({
         ))}
 
         {users.length > 4 && (
-          <div className="-ml-2 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-primary text-sm font-semibold text-white">
+          <div className="-ml-2 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-primary text-sm font-medium text-white">
             +{users.length - 4}
           </div>
         )}

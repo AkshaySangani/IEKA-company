@@ -17,7 +17,7 @@ const SuccessPassword: React.FC<ISuccessPasswordProps> = ({
         </div>
 
         {/* Title */}
-        <h2 className="mb-3 text-3xl font-semibold text-gray-900">
+        <h2 className="mb-3 text-3xl font-medium text-gray-900">
           Password Updated!
         </h2>
 
