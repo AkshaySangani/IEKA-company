@@ -623,6 +623,20 @@ const AssignRolesResponsibility = () => {
           </div>
         </>
       </Modal>
+      <Modal
+        isOpen={open}
+        title={`${employee?.firstName} ${employee?.lastName}`}
+        width="max-w-6xl"
+        onClose={handlePolicyOpenClose}
+        showFooter={false}
+      >
+        {open && (
+          <AddPolicy
+            editPolicyId={policyId}
+            handleClosePolicy={handlePolicyOpenClose}
+          />
+        )}
+      </Modal>
     </>
   );
 };
