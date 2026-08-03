@@ -64,14 +64,6 @@ const Onboarding = () => {
         icon: <i className="fa-solid fa-hourglass-end"></i>,
       },
       {
-        id: statusEnum.ACCEPTED,
-        title: "Accepted",
-        count: 0,
-        activeColor: "bg-success",
-        textColor: "text-success",
-        icon: <i className="fa-solid fa-user-check"></i>,
-      },
-      {
         id: statusEnum.REJECTED,
         title: "Rejected",
         count: 0,
@@ -100,9 +92,6 @@ const Onboarding = () => {
           switch (card.id) {
             case "":
               return { ...card, count: stats.total };
-  
-            case statusEnum.ACCEPTED:
-              return { ...card, count: stats.accepted };
   
             case statusEnum.REJECTED:
               return { ...card, count: stats.rejected };

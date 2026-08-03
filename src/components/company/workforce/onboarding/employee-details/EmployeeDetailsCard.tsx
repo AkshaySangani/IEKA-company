@@ -52,9 +52,9 @@ const EmployeeDetailCard: React.FC<Props> = ({
 
           <DetailRow label="Phone No." value={data.phone} />
 
-          <DetailRow label="Alternate Phone No." value={data.alternatePhone} />
+          <DetailRow label="Alternate Phone No." value={data.alternatePhone ? data.alternatePhone : "-"} />
 
-          <DetailRow label="Blood Group" value={data.bloodGroup} />
+          <DetailRow label="Blood Group" value={data.bloodGroup ? data.bloodGroup : "-"} />
 
           <DetailRow
             label="Marital Status"
@@ -77,32 +77,32 @@ const EmployeeDetailCard: React.FC<Props> = ({
         <div className="space-y-4">
           <DetailRow
             label="Father Name"
-            value={employeeDetails.parents.fatherName}
+            value={employeeDetails.parents.fatherName ? employeeDetails.parents.fatherName : "-"}
           />
 
           <DetailRow
             label="Father Phone No."
-            value={employeeDetails.parents.fatherPhone}
+            value={employeeDetails.parents.fatherPhone ? employeeDetails.parents.fatherPhone : "-"}
           />
 
           <DetailRow
             label="Father Occupation"
-            value={employeeDetails.parents.fatherOccupation}
+            value={employeeDetails.parents.fatherOccupation ? employeeDetails.parents.fatherOccupation : "-"}
           />
 
           <DetailRow
             label="Mother Name"
-            value={employeeDetails.parents.motherName}
+            value={employeeDetails.parents.motherName ? employeeDetails.parents.motherName : "-"}
           />
 
           <DetailRow
             label="Mother Phone No."
-            value={employeeDetails.parents.motherPhone}
+            value={employeeDetails.parents.motherPhone ? employeeDetails.parents.motherPhone : "-"}
           />
 
           <DetailRow
             label="Mother Occupation"
-            value={employeeDetails.parents.motherOccupation}
+            value={employeeDetails.parents.motherOccupation ? employeeDetails.parents.motherOccupation : "-"}
           />
         </div>
       </div>

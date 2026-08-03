@@ -3,6 +3,7 @@ import { RoleEnum } from "../../../../../types/common-types";
 import { IAssignment, IBranch, IEmployeeFormData } from ".";
 import { getDateDifference } from "../../../../../utils/date-format";
 import { BranchAssignmentFormData } from "../../all-employees/employee-details/update-modals/BranchAssignmentUpdate";
+import UserImage from "../../../../../assets/images/User-Image.png";
 
 interface IEmployeeAssignmentCardProps {
   data: IBranch;
@@ -158,6 +159,7 @@ const EmployeeAssignmentCard = ({
                         {department?.manager ? <div className="flex items-center gap-2">
                           <Image
                             src={department?.manager?.profileImage}
+                            fallbackSrc={UserImage}
                             className="h-[30px] w-[30px] object-cover"
                           />
 

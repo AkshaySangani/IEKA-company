@@ -30,10 +30,9 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     );
 
     if (activeParent) {
-      setOpenMenus((prev) => ({
-        ...prev,
+      setOpenMenus({
         [activeParent.label]: true,
-      }));
+      });
     }
 
     // eslint-disable-next-line
@@ -41,7 +40,6 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
   const toggleMenu = (menuLabel: string) => {
     setOpenMenus((prev) => ({
-      ...prev,
       [menuLabel]: !prev[menuLabel],
     }));
   };

@@ -11,6 +11,7 @@ import { IBranch, IEmployeeFormData } from ".";
 import { getDesignation } from "../../../../../apis/organization/designation.api";
 import { IDesignation } from "../../../organization/designation";
 import { IOption, RoleEnum, statusEnum } from "../../../../../types/common-types";
+import UserImage from "../../../../../assets/images/User-Image.png";
 
 interface Props {
   data: IEmployee;
@@ -69,6 +70,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
         <div className="w-[100px] bg-white flex items-center justify-center">
           <Image
             src={data.profileImage}
+            fallbackSrc={UserImage}
             alt={data.firstName}
             className="max-h-16 object-contain"
           />

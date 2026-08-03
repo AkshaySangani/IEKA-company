@@ -6,6 +6,7 @@ import RadioButton from "../radio-button";
 import TextAreaField from "../text-area/TextAreaField";
 import excliMinate from "../../../assets/images/excliminate.png";
 import Image from "../image";
+import Note from "../note-area/Note";
 
 interface IStatusUpdateProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ interface IStatusUpdateProps {
   options?: IOption[];
   handleOpenClose: () => void;
   handleSubmit: (value: FormDataPayload) => void;
+  deleteWarning?: string;
 }
 
 interface FormDataPayload {
@@ -37,6 +39,7 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
   status,
   loading,
   options = statusOptions,
+  deleteWarning = "Deleting this item will remove it permanently from the system. Please proceed with caution."
 }) => {
   const [formData, setFormData] = useState<FormDataPayload>(initialFormData);
 
@@ -89,7 +92,9 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
           />
 
           <h3 className="text-lg font-medium">
-            {showFullTitle ? title : `Are you sure you want to update status for this ${title}?`}
+            {showFullTitle
+              ? title
+              : `Are you sure you want to update status for this ${title}?`}
           </h3>
         </div>
         <div className="grid grid-cols-1 gap-4">
@@ -109,6 +114,12 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
             onChange={(e) => handleChange("remarks", e.target.value)}
           />
         </div>
+        {formData.status === statusEnum.DELETED && <Note
+          variant="danger"
+          message={
+            deleteWarning
+          }
+        />}
       </>
     </Modal>
   );

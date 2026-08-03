@@ -65,6 +65,8 @@ const Button: React.FC<ButtonProps> = ({
         transition-all duration-300 ease-in-out
         text-center
         box-border
+        disabled:cursor-not-allowed
+        disabled:opacity-50
         ${fullWidth ? "w-full" : "w-auto"}
         ${variantClasses}
         ${sizeClasses}

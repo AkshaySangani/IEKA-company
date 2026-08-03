@@ -189,10 +189,10 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
 
           <DetailRow
             label="Account No."
-            value={employeeDetails.bank.accountNo}
+            value={employeeDetails.bank.accountNo ? employeeDetails.bank.accountNo : "-"}
           />
 
-          <DetailRow label="IFSC Code" value={employeeDetails.bank.ifscCode} />
+          <DetailRow label="IFSC Code" value={employeeDetails.bank.ifscCode ? employeeDetails.bank.ifscCode : "-"} />
 
           <DetailRow
             label="UAN No."

@@ -190,7 +190,7 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
               label="Policy Applied"
               value={
                 <div className="flex items-center gap-2 mr-1">
-                  <span>{policy.policyId?.name}</span>
+                  <span>{policy?.policyId?.name}</span>
                   <i onClick={() =>
                       setUpdate(EmployeeUpdateModal.POLICY)
                     } className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"></i>

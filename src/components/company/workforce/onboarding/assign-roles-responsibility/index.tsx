@@ -17,6 +17,12 @@ import SalaryDetailsCard from "./SalaryDetails";
 import EmployeeAssignmentCard from "./EmployeeAssignmentCard";
 import Modal from "../../../../common/modal/Modal";
 import AddPolicy from "../../../organization/policy-configuration/add-policy/AddPolicy";
+import Image from "../../../../common/image";
+import UserImage from "../../../../../assets/images/User-Image.png";
+import PersonInfo from "../../../../common/person-info";
+import TextAreaField from "../../../../common/text-area/TextAreaField";
+import Note from "../../../../common/note-area/Note";
+import { useAuthStore } from "../../../../../store/auth-store";
 
 export interface IManager {
   _id: string;
@@ -79,9 +85,22 @@ export interface IBranch {
   count: number;
 }
 
+interface IConfirmationDetails {
+  branch: string;
+  shift: string;
+  department: string;
+  totalManaged: number;
+  managerInfo: {
+    profileImage: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
 const AssignRolesResponsibility = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuthStore();
   const formRef = useRef<HTMLFormElement>(null);
   const employeeId = location?.state?.id;
   const employee: IEmployee = location?.state?.employee;
@@ -109,11 +128,27 @@ const AssignRolesResponsibility = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const [branches, setBranches] = useState<IBranch[]>([]);
 
   const [policyId, setPolicyId] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
+
+  const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false);
+  const initialConfirmationDetails: IConfirmationDetails = {
+    branch: "",
+    shift: "",
+    department: "",
+    managerInfo: {
+      profileImage: "",
+      firstName: "",
+      lastName: "",
+    },
+    totalManaged: 0,
+  };
+  const [confirmationDetails, setConfirmationDetails] =
+    useState<IConfirmationDetails>(initialConfirmationDetails);
 
   useEffect(() => {
     fetchBranchShiftDepartment();
@@ -313,10 +348,11 @@ const AssignRolesResponsibility = () => {
     const newErrors = validate();
     const isValid = Object.keys(newErrors).length === 0;
     if (!isValid) {
+      await handleCancelConfirmation();
       scrollToFirstError(newErrors);
       return;
     }
-    // setLoading(true);
+    setSubmitting(true);
 
     const payload = {
       userId: employeeId,
@@ -346,10 +382,11 @@ const AssignRolesResponsibility = () => {
 
     const response = await assignRolesAndResponsibility(payload);
     if (response.success) {
+      handleCancelConfirmation();
       navigate(pathNames.ALL_EMPLOYEES);
       setFormData(initialEmployeeFormData);
     }
-    setLoading(false);
+    setSubmitting(false);
   };
 
   const handleClose = () => {
@@ -358,21 +395,88 @@ const AssignRolesResponsibility = () => {
     });
   };
 
+  const handleClickOnAction = () => {
+    if (formData.role === RoleEnum.MANAGER) {
+      const branch = branches.find((item) => item._id === formData.branchId);
+      const shift = branch?.shifts.find(
+        (item) => item._id === formData.shiftId,
+      );
+      const department = shift?.departments.find(
+        (item) => item._id === formData.departmentId,
+      );
+      const departments = formData.assignments.map((item) => {
+        const branch = branches.find((branch) => branch._id === item.branchId);
+        const shift = branch?.shifts.find(
+          (shift) => shift._id === item.shiftId,
+        );
+        return shift?.departments?.find(
+          (department) => department._id === item.departmentId,
+        );
+      });
+      const count = departments?.reduce(
+        (acc, curr) => acc + (curr?.count || 0),
+        0,
+      );
+      setConfirmationDetails({
+        branch: branch?.name || "",
+        shift: shift?.name || "",
+        department: department?.name || "",
+        managerInfo: {
+          profileImage:
+            department?.manager?.profileImage || user?.profileImage || "",
+          firstName: department?.manager?.firstName || user?.firstName || "",
+          lastName: department?.manager?.lastName || user?.lastName || "",
+        },
+        totalManaged: count,
+      });
+    } else {
+      const assignment = formData.assignments[0];
+      const branch = branches.find((item) => item._id === assignment.branchId);
+      const shift = branch?.shifts.find(
+        (item) => item._id === assignment.shiftId,
+      );
+      const department = shift?.departments.find(
+        (item) => item._id === assignment.departmentId,
+      );
+      setConfirmationDetails({
+        branch: branch?.name || "",
+        shift: shift?.name || "",
+        department: department?.name || "",
+        managerInfo: {
+          profileImage:
+            department?.manager?.profileImage || user?.profileImage || "",
+          firstName: department?.manager?.firstName || user?.firstName || "",
+          lastName: department?.manager?.lastName || user?.lastName || "",
+        },
+        totalManaged: 0,
+      });
+    }
+    setConfirmationOpen(true);
+  };
+
   const handlePolicyOpenClose = (policyId: string = "") => {
     setPolicyId(policyId);
     setOpen((prev) => !prev);
+  };
+
+  const handleCancelConfirmation = () => {
+    setConfirmationOpen(false);
+    setConfirmationDetails(initialConfirmationDetails);
   };
   return (
     <>
       <TopBar
         title="Employee Details"
         actionButtons={
-          <Button
-            size="sm"
-            variant={"danger"}
-            onClick={handleClose}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
+          <div className="flex gap-2">
+            <Button name="Action" size="sm" onClick={handleClickOnAction} />
+            <Button
+              size="sm"
+              variant={"danger"}
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
+            />
+          </div>
         }
       />
       <div className="content-area flex flex-col gap-4">
@@ -420,10 +524,6 @@ const AssignRolesResponsibility = () => {
                 />
               </div>
             </div>
-            <div className="mt-4 flex justify-center gap-3">
-              <Button type="submit" name="Save" size="sm" />
-              <Button name="Cancel" variant="secondary" size="sm" />
-            </div>
           </form>
         ) : (
           !loading && <EmptyPlaceholder title="Employee Not Found." />
@@ -442,6 +542,86 @@ const AssignRolesResponsibility = () => {
             handleClosePolicy={handlePolicyOpenClose}
           />
         )}
+      </Modal>
+
+      <Modal
+        isOpen={confirmationOpen}
+        title={`${employee?.firstName} ${employee?.lastName}`}
+        onClose={() => setConfirmationOpen(false)}
+        handleOnConfirm={() => formRef.current?.requestSubmit()}
+        loading={submitting}
+      >
+        <>
+          <div className="mb-4 flex flex-col items-center gap-2 text-center">
+            <Image
+              src={employee?.profileImage}
+              fallbackSrc={UserImage}
+              alt="employee"
+              width={80}
+            />
+
+            <h3 className="text-lg font-medium">
+              {`Are u sure want to active this employee ?`}
+            </h3>
+          </div>
+          <div className="flex flex-col gap-3">
+            <div className="space-y-3 text-[14px]">
+              <div className="border border-dashed border-[#c0cbf7] bg-[#fff6f9] px-6 py-3">
+                <h3 className="mb-2 text-center text-[14px] font-semibold text-gray-800">
+                  Reporting To:
+                </h3>
+
+                <div className="flex items-center justify-center">
+                  <div className="px-5 font-medium text-gray-800 border-r border-[#97a7cd]">
+                    {confirmationDetails.branch}
+                  </div>
+
+                  <div className="px-5 font-medium text-gray-800 border-r border-[#97a7cd]">
+                    {confirmationDetails.shift}
+                  </div>
+
+                  <div className="px-5 font-medium text-gray-800 border-r border-[#97a7cd]">
+                    {confirmationDetails.department}
+                  </div>
+
+                  <div className="px-5 flex items-center gap-2 font-medium text-gray-800">
+                    <Image
+                      src={confirmationDetails.managerInfo.profileImage}
+                      fallbackSrc={UserImage}
+                      alt="Manager"
+                      width={40}
+                      height={40}
+                    />
+                    <span>{`${confirmationDetails.managerInfo.firstName} ${confirmationDetails.managerInfo.lastName}`}</span>
+                  </div>
+                </div>
+              </div>
+              {formData?.role === RoleEnum.MANAGER && (
+                <div className="flex items-center justify-center bg-primaryBlur py-2">
+                  <span className="font-semibold text-sm text-gray-800">
+                    Total People Managed
+                  </span>
+
+                  <span className="ml-3 inline-flex h-9 min-w-[40px] text-sm items-center justify-center bg-primary px-3 font-semibold text-white">
+                    {confirmationDetails.totalManaged}
+                  </span>
+                </div>
+              )}
+              <TextAreaField
+                label="Remarks"
+                name={"remarks"}
+                value={formData.remarks}
+                onChange={(e) => handleChange("remarks", e.target.value)}
+              />
+              <Note
+                variant="danger"
+                message={
+                  "After active this employee all rights of this employee are accessible."
+                }
+              />
+            </div>
+          </div>
+        </>
       </Modal>
     </>
   );

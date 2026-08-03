@@ -43,3 +43,7 @@ export const getEmployeeCount = () => {
 export const getManagedEmployee = (branchId: string) => {
   return apiRequest.get<ApiResponse>(`/workforce/employee/my-managed?branchId=${branchId}`);
 };
+
+export const getCompanyDetails = () => {
+  return apiRequest.get<ApiResponse>(`/workforce/company-details`);
+};

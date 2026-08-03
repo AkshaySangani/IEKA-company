@@ -7,6 +7,9 @@ import TopBar from "../topbar/TopBar";
 import { useReactToPrint } from "react-to-print";
 import Button from "../button/Button";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { getCompanyDetails } from "../../../apis/workforce/all-employee.api";
+import { statusEnum } from "../../../types/common-types";
+import { useAuthStore } from "../../../store/auth-store";
 
 export interface LetterData {
   candidateName: string;
@@ -64,9 +67,8 @@ export const initialLetterData: LetterData = {
   logo: "",
 
   authPerson: "",
-  designation: "",
-  address:
-    "",
+  designation: "Co-Founder",
+  address: "",
   contact: "",
   email: "",
   website: "",
@@ -98,9 +100,9 @@ interface CertificateProps {
 }
 
 const Certificate = ({ title, letterData }: CertificateProps) => {
-  
   const location = useLocation();
   const navigate = useNavigate();
+  const {user} = useAuthStore();
   const pathName = location?.pathname;
   const [data, setData] = useState<LetterData>(initialLetterData);
   const [backGround, setBackGround] = useState<string>("1");
@@ -108,17 +110,39 @@ const Certificate = ({ title, letterData }: CertificateProps) => {
   const reactToPrintFn = useReactToPrint({ contentRef });
 
   useEffect(() => {
-    if(letterData){
-      setData((prev => ({
+    (async () => {
+      if (letterData) {
+        await setData((prev) => ({
+          ...prev,
+          ...letterData,
+        }));
+        if(letterData?.candidateName){
+        fetchCompanyData();
+        }
+      }
+    })();
+  }, [letterData]);
+
+  const fetchCompanyData = async () => {
+    const response = await getCompanyDetails();
+    if (response?.success) {
+      setData((prev) => ({
         ...prev,
-        ...letterData
-      })))
+        logo: response?.data?.companyLogo || "",
+        authPerson: `${user?.firstName} ${user?.lastName}` || "",
+        address: response?.data?.companyAddress || "",
+        contact: response?.data?.companyPhone || "",
+        designation:  "Co-Founder",
+        email: response?.data?.companyEmail || "",
+        website: response?.data?.website || "",
+      }));
     }
-  }, [letterData])
+  };
+
   const handleClose = () => {
-    const redirectPath = pathName.split("/").splice(1,2).join("/");
+    const redirectPath = pathName.split("/").splice(1, 2).join("/");
     navigate(`/${redirectPath}`);
-  }
+  };
 
   return (
     <>
@@ -152,7 +176,11 @@ const Certificate = ({ title, letterData }: CertificateProps) => {
           {/* Right Preview */}
           <div className="col-span-12 lg:col-span-8">
             <div className="sticky top-5" ref={contentRef}>
-              <LetterPreview title={title} data={data} backGround={backGround} />
+              <LetterPreview
+                title={title}
+                data={data}
+                backGround={backGround}
+              />
             </div>
           </div>
         </div>

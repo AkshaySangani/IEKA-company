@@ -3,7 +3,10 @@ import { pathNames } from "../../../../../constants/constants";
 import TopBar from "../../../../common/topbar/TopBar";
 import Button from "../../../../common/button/Button";
 import { useEffect, useState } from "react";
-import { getEmployeeDetails, updateOnboardingStatus } from "../../../../../apis/workforce/onboardings.api";
+import {
+  getEmployeeDetails,
+  updateOnboardingStatus,
+} from "../../../../../apis/workforce/onboardings.api";
 import {
   BloodGroupEnum,
   GenderEnum,
@@ -14,6 +17,11 @@ import EmptyPlaceholder from "../../../../common/empty-paceholder";
 import EmployeeDetailCard from "./EmployeeDetailsCard";
 import PageLoader from "../../../../common/loader/PageLoader";
 import EmployeeOtherDetailCard from "./EmployeeOtherDetails";
+import Modal from "../../../../common/modal/Modal";
+import Image from "../../../../common/image";
+import UserImage from "../../../../../assets/images/User-Image.png";
+import Note from "../../../../common/note-area/Note";
+import TextAreaField from "../../../../common/text-area/TextAreaField";
 
 export interface IEmployee {
   _id: string;
@@ -124,32 +132,31 @@ const initialEmployee: IEmployee = {
 };
 
 const initialEmployeeDetails: IEmployeeDetails = {
-    _id: "",
-    userId: "",
-    parents: {
-        fatherName: "",
-        fatherOccupation: "",
-        fatherPhone: 0,
-        motherName: "",
-        motherOccupation: "",
-        motherPhone: 0
-    },
-    bank: {
-        accountNo: 0,
-        ifscCode: "",
-        bankName: "",
-        uanNo: "",
-        esicNo: "",
-        pfJoiningDate: "",
-        esicJoiningDate: ""
-    },
-    educations: [],
-    experiences: [],
-    documents: [],
-    createdAt: "",
-    updatedAt: ""
-}
-
+  _id: "",
+  userId: "",
+  parents: {
+    fatherName: "",
+    fatherOccupation: "",
+    fatherPhone: 0,
+    motherName: "",
+    motherOccupation: "",
+    motherPhone: 0,
+  },
+  bank: {
+    accountNo: 0,
+    ifscCode: "",
+    bankName: "",
+    uanNo: "",
+    esicNo: "",
+    pfJoiningDate: "",
+    esicJoiningDate: "",
+  },
+  educations: [],
+  experiences: [],
+  documents: [],
+  createdAt: "",
+  updatedAt: "",
+};
 
 const EmployeeDetails = () => {
   const navigate = useNavigate();
@@ -157,9 +164,14 @@ const EmployeeDetails = () => {
   const employeeId = location?.state?.id;
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [rejectLoading, setRejectLoading] = useState<boolean>(false);
+  const [rejectOpen, setRejectOpen] = useState<boolean>(false);
+  const [rejectRemarks, setRejectRemarks] = useState<string>("");
 
   const [employee, setEmployee] = useState<IEmployee>(initialEmployee);
-  const [employeeDetails, setEmployeeDetails] = useState<IEmployeeDetails>(initialEmployeeDetails);
+  const [employeeDetails, setEmployeeDetails] = useState<IEmployeeDetails>(
+    initialEmployeeDetails,
+  );
 
   useEffect(() => {
     if (employeeId) {
@@ -176,29 +188,37 @@ const EmployeeDetails = () => {
       setEmployee(data?.user);
       setEmployeeDetails(data?.userDetails);
     } else {
-        setEmployee(initialEmployee);
-        setEmployeeDetails(initialEmployeeDetails);
+      setEmployee(initialEmployee);
+      setEmployeeDetails(initialEmployeeDetails);
     }
     setLoading(false);
   };
 
   const handleClickOnApprove = () => {
     navigate(pathNames.ASSIGN_ROLES_RESPONSIBILITY, {
-      state: {...location?.state,employee},
+      state: { ...location?.state, employee },
     });
   };
 
-  const handleConfirmReject = async () => {
-    setLoading(true);
-    const response = await updateOnboardingStatus({
-      status: statusEnum.REJECTED,
-      remarks: ""
-    }, employeeId);
+  const handleClickOnReject = () => {
+    setRejectOpen(true);
+  };
 
-    if(response.success){
+  const handleConfirmReject = async () => {
+    setRejectLoading(true);
+    const response = await updateOnboardingStatus(
+      {
+        status: statusEnum.REJECTED,
+        remarks: rejectRemarks,
+      },
+      employeeId,
+    );
+
+    if (response.success) {
       navigate(pathNames.ONBOARDING);
     }
-  }
+    setRejectLoading(false);
+  };
 
   const handleClose = () => {
     navigate(pathNames.ONBOARDING);
@@ -209,13 +229,19 @@ const EmployeeDetails = () => {
         title="Employee Details"
         actionButtons={
           <div className="flex gap-2">
-            {employee.status !== statusEnum.REJECTED && <><Button name="Approve" size="sm" onClick={handleClickOnApprove} />
+            <Button
+              name="Approve"
+              disabled={employee?.status === statusEnum.ACTIVE}
+              size="sm"
+              onClick={handleClickOnApprove}
+            />
             <Button
               name="Reject"
               size="sm"
+              disabled={employee?.status === statusEnum.REJECTED}
               variant="secondary"
-              onClick={handleConfirmReject}
-            /></>}
+              onClick={handleClickOnReject}
+            />
             <Button
               size="sm"
               variant={"danger"}
@@ -227,17 +253,56 @@ const EmployeeDetails = () => {
       />
       <div className="content-area flex flex-col gap-4">
         <PageLoader loading={loading} />
-        {(!loading && employeeId) ? <div className="grid grid-cols-1 sm:grid-cols-[3fr_4fr] gap-4">
-          <EmployeeDetailCard
-            data={employee}
-            employeeDetails={employeeDetails}
-          />
-          <EmployeeOtherDetailCard
-            data={employee}
-            employeeDetails={employeeDetails}
-          />
-        </div> : !loading && <EmptyPlaceholder title="Employee Not Found."/>}
+        {!loading && employeeId ? (
+          <div className="grid grid-cols-1 sm:grid-cols-[3fr_4fr] gap-4">
+            <EmployeeDetailCard
+              data={employee}
+              employeeDetails={employeeDetails}
+            />
+            <EmployeeOtherDetailCard
+              data={employee}
+              employeeDetails={employeeDetails}
+            />
+          </div>
+        ) : (
+          !loading && <EmptyPlaceholder title="Employee Not Found." />
+        )}
       </div>
+      <Modal
+        onClose={() => setRejectOpen(false)}
+        isOpen={rejectOpen}
+        title={`${employee?.firstName} ${employee?.lastName}`}
+        handleOnConfirm={handleConfirmReject}
+        loading={rejectLoading}
+      >
+        <>
+          <div className="mb-4 flex flex-col items-center gap-2 text-center">
+            <Image
+              src={employee?.profileImage}
+              fallbackSrc={UserImage}
+              alt="Employee Profile"
+              width={50}
+            />
+
+            <h3 className="text-lg font-medium">
+              {"Are you sure you want to reject invite for this employee ?"}
+            </h3>
+          </div>
+          <TextAreaField
+            label="Remarks"
+            name="rejectRemarks"
+            value={rejectRemarks}
+            onChange={(e) => setRejectRemarks(e.target.value)}
+            placeholder="Enter remarks for rejection..."
+          />
+          <Note
+            variant="danger"
+            message={
+              "After rejecting this employee, they will not be part of the onboarding process."
+            }
+          />
+        </>
+      </Modal>
     </>
   );
 };
