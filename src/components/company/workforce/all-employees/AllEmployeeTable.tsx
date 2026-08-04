@@ -84,12 +84,6 @@ export default function AllEmployeeTable({
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
             <InfoIcon onClick={() => handleShowHistory(row)} />
-            {row.status !== statusEnum.DELETED && (
-              <i
-                onClick={() => handleUpdateStatus(row)}
-                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-              ></i>
-            )}
             <span
               className={`font-medium text-sm ${statusColor[row.status]}`}
             >

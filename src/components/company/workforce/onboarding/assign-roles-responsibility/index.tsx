@@ -11,7 +11,7 @@ import EmptyPlaceholder from "../../../../common/empty-paceholder";
 import EmployeeDetailCard from "./EmployeeDetailsCard";
 import PageLoader from "../../../../common/loader/PageLoader";
 import { IEmployee } from "../employee-details";
-import { RoleEnum } from "../../../../../types/common-types";
+import { BranchTypeEnum, RoleEnum, statusEnum } from "../../../../../types/common-types";
 import PolicyDetailsCard from "./PolicyDetails";
 import SalaryDetailsCard from "./SalaryDetails";
 import EmployeeAssignmentCard from "./EmployeeAssignmentCard";
@@ -30,6 +30,7 @@ export interface IManager {
   lastName: string;
   profileImage: string;
   role: string;
+  status: statusEnum;
 }
 
 export interface IAssignment {
@@ -64,6 +65,7 @@ export interface IDepartment {
   count: number;
   manager?: IManager;
   employee: IManager[];
+  status: statusEnum;
 }
 
 export interface IShift {
@@ -75,6 +77,7 @@ export interface IShift {
   startTime: string;
   breakEndTime: string;
   breakStartTime: string;
+  status: statusEnum;
 }
 
 export interface IBranch {
@@ -83,6 +86,8 @@ export interface IBranch {
   address: string;
   shifts: IShift[];
   count: number;
+  status: statusEnum;
+  branchType: BranchTypeEnum;
 }
 
 interface IConfirmationDetails {

@@ -282,6 +282,20 @@ export const statusColor: { [key: string]: string } = {
   HOLD: "text-warning",
 };
 
+export const statusBgColor: { [key: string]: string } = {
+  ACTIVE: "bg-success",
+  INACTIVE: "bg-warning",
+  DELETED: "bg-danger",
+  ACCEPTED: "bg-success",
+  REJECTED: "bg-danger",
+  PENDING: "bg-pending",
+  APPROVED: "bg-success",
+  CANCEL: "bg-danger",
+  TERMINATE: "bg-success",
+  PROMOTED: "bg-success",
+  HOLD: "bg-warning",
+};
+
 export const moduleEnum: ObjectType = {
   EMPLOYEE: "EMPLOYEE",
   PRODUCTION: "PRODUCTION"

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
-import { getBranchShiftDepartment } from "../../../../apis/workforce/onboardings.api";
 import { IBranch } from "../../workforce/onboarding/assign-roles-responsibility";
 import PageLoader from "../../../common/loader/PageLoader";
 import EmptyPlaceholder from "../../../common/empty-paceholder";
 import BranchCard from "./BranchCard";
+import { getCompanyHierarchy } from "../../../../apis/organization/people-hierarchy.api";
 
 export default function CompanyHierarchy() {
   const [branches, setBranches] = useState<IBranch[]>([]);
@@ -18,7 +18,7 @@ export default function CompanyHierarchy() {
 
   const fetchBranchShiftDepartment = async () => {
     setBranchLoading(true);
-    const response = await getBranchShiftDepartment();
+    const response = await getCompanyHierarchy();
     if (response?.success) {
       setBranches(response?.data);
       const count = response?.data?.reduce((total: number, branch: IBranch) => {

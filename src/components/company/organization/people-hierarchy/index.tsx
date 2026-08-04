@@ -5,7 +5,7 @@ import { IBranch } from "../../workforce/onboarding/assign-roles-responsibility"
 import PageLoader from "../../../common/loader/PageLoader";
 import EmptyPlaceholder from "../../../common/empty-paceholder";
 import SelectField from "../../../common/select/SelectField";
-import { IOption, RoleEnum } from "../../../../types/common-types";
+import { IOption, RoleEnum, statusEnum } from "../../../../types/common-types";
 import { getPeoples } from "../../../../apis/organization/people-hierarchy.api";
 import DepartmentCard from "./DepartmentCard";
 import { useAuthStore } from "../../../../store/auth-store";
@@ -19,6 +19,7 @@ export interface IUser {
   lastName: string;
   profileImage: string;
   role: RoleEnum;
+  status: statusEnum;
 }
 
 export interface IDepartment {
@@ -27,6 +28,7 @@ export interface IDepartment {
   count: number;
   manager?: IUser;
   employee: IUser[];
+  status: statusEnum;
 }
 
 export default function PeopleHierarchy() {
@@ -48,6 +50,8 @@ export default function PeopleHierarchy() {
   useEffect(() => {
     if (branchId && shiftId) {
       fetchEmployees();
+    } else {
+      setDepartments([]);
     }
   }, [branchId, shiftId]);
 
@@ -141,10 +145,7 @@ export default function PeopleHierarchy() {
           </div>
         }
       />
-
-      <div className="content-area bg-accordionBg">
-        <PageLoader loading={branchLoading} />
-        <div className="flex flex-col items-center gap-1 py-2 bg-white mb-2">
+      <div className="flex flex-col items-center gap-1 py-2 bg-white mb-2">
           <PersonInfo
             personInfo={{
               profileImage: user?.profileImage ?? "",
@@ -154,8 +155,12 @@ export default function PeopleHierarchy() {
             }}
             imageClassName="h-[55px] w-[55px]"
             className="flex-col items-center text-center"
+            personClassName="text-secondary text-xs"
           />
         </div>
+      <div className="content-area bg-primaryBlur">
+        <PageLoader loading={branchLoading} />
+        
         {departments?.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             {departments?.map((ele, index) => (
@@ -165,7 +170,7 @@ export default function PeopleHierarchy() {
         ) : (
           <EmptyPlaceholder
             title="No Departments found!"
-            description="It seem there are not any departments in this branch/shift."
+            description="It seem there are not any departments in this branch/shift. please select another branch/shift."
           />
         )}
       </div>

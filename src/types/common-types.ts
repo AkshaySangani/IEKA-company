@@ -57,6 +57,11 @@ export enum employeeDocuments {
 
 export type BranchType = "HEAD_OFFICE" | "BRANCH";
 
+export enum BranchTypeEnum {
+  HEAD_OFFICE = "HEAD_OFFICE",
+  BRANCH = "BRANCH"
+}
+
 export interface ObjectType {
   [key: string]: any;
 }

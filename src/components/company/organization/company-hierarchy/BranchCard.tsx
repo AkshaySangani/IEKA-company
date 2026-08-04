@@ -7,7 +7,8 @@ import {
 } from "../../workforce/onboarding/assign-roles-responsibility";
 import Modal from "../../../common/modal/Modal";
 import PersonInfo from "../../../common/person-info";
-import { roleNames } from "../../../../constants/constants";
+import { roleNames, statusBgColor } from "../../../../constants/constants";
+import { BranchTypeEnum } from "../../../../types/common-types";
 
 interface BranchCardProps {
   branch: IBranch;
@@ -20,7 +21,12 @@ export default function BranchCard({ branch }: BranchCardProps) {
         <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-3 text-white">
           <div className="flex items-center gap-2">
             <i className="fa-regular fa-building"></i>
-            <h2 className="text-md font-medium">{branch?.name}</h2>
+            <div className="flex items-center gap-2 ">
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[branch.status]}`}
+                  ></span>
+                  <span className="text-sm font-medium">{branch?.name}{branch.branchType === BranchTypeEnum.HEAD_OFFICE ? " (HO)":""}</span>
+                </div>
           </div>
 
           <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-white text-[20px] font-medium text-[#505050] shadow">
@@ -30,7 +36,7 @@ export default function BranchCard({ branch }: BranchCardProps) {
 
         {/* Address */}
         <div className="px-5 pt-2 pb-3">
-          <p className="text-[13px] text-[#5c5c5c]">{branch.address} (HO)</p>
+          <p className="text-[13px] text-[#5c5c5c]">{branch.address} {branch.branchType === BranchTypeEnum.HEAD_OFFICE ? "(HO)":""}</p>
         </div>
 
         {/* Shift Card */}
@@ -43,7 +49,9 @@ export default function BranchCard({ branch }: BranchCardProps) {
             <div className="flex items-center justify-between border-b border-gray-200 pb-3">
               <div>
                 <div className="flex items-center gap-2 text-primary">
-                  <i className="fa-solid fa-sun"></i>
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[shift.status]}`}
+                  ></span>
                   <span className="text-sm font-medium">{shift?.name}</span>
                 </div>
 
@@ -82,15 +90,18 @@ const Department = ({
     <>
       <div
         key={item.name}
-        className={`flex items-center justify-between px-2 py-2 ${
+        className={`flex items-center justify-between py-2 ${
           index !== shift.departments.length - 1
             ? "border-b border-gray-200"
             : ""
         }`}
       >
-        <span className="text-sm font-medium text-[#727272]">
-          {item.name}
-        </span>
+        <div className="flex items-center gap-2 text-[#727272]">
+          <span
+            className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[item.status]}`}
+          ></span>
+          <span className="text-sm font-medium">{item?.name}</span>
+        </div>
 
         <span
           className="text-sm font-medium cursor-pointer text-[#727272]"
@@ -125,7 +136,10 @@ const Department = ({
                   firstName: ele.firstName,
                   lastName: ele.lastName,
                   description: roleNames[ele.role],
+                  status: ele.status,
                 }}
+                imageClassName="h-[35px] w-[35px]"
+                personClassName="text-secondary text-xs truncate w-[110px]"
               />
             ))}
           </div>

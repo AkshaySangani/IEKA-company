@@ -19,6 +19,7 @@ body {
 .content-area {
     padding: 15px 25px;
     overflow-y: auto;
+    height: calc(100vh - 60px);
 }
 
 .content-card {

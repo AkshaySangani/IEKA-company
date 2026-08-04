@@ -287,7 +287,7 @@ const handleClickOnInput = () => {
                       mx-auto flex items-center justify-center
                       rounded-md p-2 text-[18px] transition
                       ${
-                        value?.month === index &&
+                        value?.month === Number(month) &&
                         value?.year === selectedYear
                           ? "bg-primary text-white font-medium"
                           : "hover:bg-primaryBlur"

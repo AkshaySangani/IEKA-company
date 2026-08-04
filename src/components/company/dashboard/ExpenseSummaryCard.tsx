@@ -5,14 +5,23 @@ import TextField from "../../common/text-field/TextField";
 import globeBg from "../../../assets/images/globe.png";
 import { ExpenseCardItem } from "../../../types/common-types";
 import { useNavigate } from "react-router-dom";
+import DateRangePicker from "../../common/date-picker/DateRangePicker";
 
 interface ExpenseSummaryCardProps {
   cards: ExpenseCardItem[];
+  selected: { startDate: Date | null; endDate: Date | null };
+  setSelected: React.Dispatch<
+    React.SetStateAction<{ startDate: Date | null; endDate: Date | null }>
+  >;
 }
 
-export default function ExpenseSummaryCard({ cards }: ExpenseSummaryCardProps) {
-    const navigate = useNavigate();
-  const total = cards.find(ele => ele.id === pathNames.OVERALL_EXPENSE)
+export default function ExpenseSummaryCard({
+  cards,
+  selected,
+  setSelected,
+}: ExpenseSummaryCardProps) {
+  const navigate = useNavigate();
+  const total = cards.find((ele) => ele.id === pathNames.OVERALL_EXPENSE);
   return (
     <div
       className="content-card p-[15px] bg-white bg-no-repeat bg-contain bg-[position:95%] shadow-[rgba(50,50,93,0.25)_0px_1px_3px_-5px,rgba(0,0,0,0.3)_0px_7px_15px_-8px]"
@@ -26,9 +35,23 @@ export default function ExpenseSummaryCard({ cards }: ExpenseSummaryCardProps) {
           <span className="px-2 text-md font-medium border-r mr-2">
             Total Expense
           </span>
-          <RightArrow label="View" onClick={() => navigate(total?.id??pathNames.OVERALL_EXPENSE)}/>
+          <RightArrow
+            label="View"
+            onClick={() => navigate(total?.id ?? pathNames.OVERALL_EXPENSE)}
+          />
         </div>
-        <TextField type="date" />
+        <DateRangePicker
+          startDate={selected.startDate}
+          endDate={selected.endDate}
+          onChange={function (dates: [Date | null, Date | null]): void {
+            const [start, end] = dates;
+            setSelected((prev) => ({
+              ...prev,
+              startDate: start,
+              endDate: end,
+            }));
+          }}
+        />
       </div>
       <div className="flex flex-col gap-3 py-3">
         <div className="flex items-start">

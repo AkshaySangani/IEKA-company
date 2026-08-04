@@ -6,3 +6,9 @@ export const getPeoples = (branchId: string, shiftId: string) => {
     `/organization/hierarchy/employee?branchId=${branchId}&shiftId=${shiftId}`,
   );
 };
+
+export const getCompanyHierarchy = () => {
+  return apiRequest.get<ApiResponse>(
+    `/organization/hierarchy/company`,
+  );
+};

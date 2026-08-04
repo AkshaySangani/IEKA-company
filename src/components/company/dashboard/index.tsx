@@ -74,7 +74,13 @@ export const initialDashboardEmployeeOverview: IDashboardEmployeeOverview = {
 };
 
 const Dashboard = () => {
-  const [selected, setSelected] = useState<Date>();
+  const [selected, setSelected] = useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+  });
   const [loading, setLoading] = useState<boolean>(false);
   const [cards, setCards] = useState<ExpenseCardItem[]>([
     {
@@ -138,37 +144,47 @@ const Dashboard = () => {
       activeColor: "bg-warning",
       textColor: "text-warning",
       icon: <i className="fa-solid fa-user-xmark"></i>,
-    }
+    },
   ]);
-  const [workforce, setWorkforce] = useState<IDashboardEmployeeOverview>(initialDashboardEmployeeOverview);
+  const [workforce, setWorkforce] = useState<IDashboardEmployeeOverview>(
+    initialDashboardEmployeeOverview,
+  );
 
   useEffect(() => {
     fetchDashboardData();
   }, []);
 
+  useEffect(() => {
+    fetchExpenseData();
+  }, [selected?.endDate, selected?.startDate]);
+
   const fetchDashboardData = async () => {
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const [expenseResponse, workforceResponse] = await Promise.all([
-      getOverAllExpenseCount({ month: 7, year: 2026 }),
-      getDashboardWorkforce(),
-    ]);
+    try {
+      const [workforceResponse] = await Promise.all([getDashboardWorkforce()]);
 
-    if (expenseResponse?.success) {
-      updateCards(expenseResponse.data);
+      if (workforceResponse?.success) {
+        updateWorkforceCards(workforceResponse.data.employee);
+        setWorkforce(workforceResponse.data);
+      }
+    } catch (error) {
+      console.error("Dashboard API Error:", error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    if (workforceResponse?.success) {
-      updateWorkforceCards(workforceResponse.data.employee);
-      setWorkforce(workforceResponse.data);
+  const fetchExpenseData = async () => {
+    const response = await getOverAllExpenseCount({
+      startDate: selected.startDate?.toISOString() || null,
+      endDate: selected.endDate?.toISOString() || null,
+    });
+
+    if (response?.success) {
+      updateCards(response.data);
     }
-  } catch (error) {
-    console.error("Dashboard API Error:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const updateCards = (stats: OverallExpenseStats) => {
     setCards((prev) =>
@@ -259,11 +275,25 @@ const Dashboard = () => {
               }}
             />
           </div>
-          <ExpenseSummaryCard cards={cards} />
+          <ExpenseSummaryCard
+            cards={cards}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <WorkforceSummaryCard workforce={workforce} cards={workforceCards} />
-          <div className="content-card"></div>
+            <div className="content-card flex flex-col gap-3 rounded-lg justify-center items-center">
+              <div className="text-md text-gray-400">
+                <i className="fa-solid fa-info-circle"></i>
+              </div>
+              <div className="flex justify-center">Under Development</div>
+              <p className="max-w-md text-sm text-gray-500 leading-relaxed">
+                {
+                  "This feature is currently under development and will be available soon."
+                }
+              </p>
+            </div>
         </div>
       </div>
     </>

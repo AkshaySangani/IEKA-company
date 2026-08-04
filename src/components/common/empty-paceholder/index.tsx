@@ -16,15 +16,15 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col h-screen items-center justify-center text-center py-16 px-6 ${className}`}
+      className={`flex flex-col h-screen items-center justify-center text-center py-16 px-6 gap-2 ${className}`}
     >
       {/* Icon */}
-      <div className="mb-4 text-5xl text-gray-400">
+      <div className=" text-5xl text-gray-400">
         {icon || <i className="fa-solid fa-folder-open"></i>}
       </div>
 
       {/* Title */}
-      <h3 className="text-xl font-medium text-gray-800 mb-2">
+      <h3 className="text-xl font-medium text-gray-800 ">
         {title}
       </h3>
 
