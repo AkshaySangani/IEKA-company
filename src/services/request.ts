@@ -64,13 +64,14 @@ export const apiRequest = {
       return response.data;
     } catch (error: any) {
       const apiMessage =
-        error?.response?.data?.message;
+        error?.response?.data?.message??error?.message;
+        console.log("apiMessage",apiMessage)
 
-      toastMessage.error(
-        apiMessage ||
-        options?.errorMessage ||
-        "Update Failed"
-      );
+      // toastMessage.error(
+      //   apiMessage ||
+      //   options?.errorMessage ||
+      //   "Update Failed"
+      // );
 
       return error;
     }
@@ -98,7 +99,7 @@ export const apiRequest = {
       return response.data;
     } catch (error: any) {
       const apiMessage =
-        error?.response?.data?.message;
+        error?.response?.data?.message??error?.message??error?.message;
 
       toastMessage.error(
         apiMessage ||
@@ -129,7 +130,7 @@ export const apiRequest = {
       return response.data;
     } catch (error: any) {
       const apiMessage =
-        error?.response?.data?.message;
+        error?.response?.data?.message??error?.message;
 
       toastMessage.error(
         apiMessage ||
@@ -149,7 +150,6 @@ export const apiRequest = {
     } catch(error: any){
       const apiMessage =
         error?.response?.data?.message || error?.message;
-        console.log("apiMessage", apiMessage)
 
       toastMessage.error(
         apiMessage ||

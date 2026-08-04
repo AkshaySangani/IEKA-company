@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
-import { getBranchShiftDepartment } from "../../../../apis/workforce/onboardings.api";
 import { IBranch } from "../../workforce/onboarding/assign-roles-responsibility";
 import PageLoader from "../../../common/loader/PageLoader";
 import EmptyPlaceholder from "../../../common/empty-paceholder";
 import SelectField from "../../../common/select/SelectField";
 import { IOption, RoleEnum, statusEnum } from "../../../../types/common-types";
-import { getPeoples } from "../../../../apis/organization/people-hierarchy.api";
+import { getCompanyHierarchy, getPeoples } from "../../../../apis/organization/people-hierarchy.api";
 import DepartmentCard from "./DepartmentCard";
 import { useAuthStore } from "../../../../store/auth-store";
 import Image from "../../../common/image";
@@ -74,7 +73,7 @@ export default function PeopleHierarchy() {
 
   const fetchBranchShiftDepartment = async () => {
     setBranchLoading(true);
-    const response = await getBranchShiftDepartment();
+    const response = await getCompanyHierarchy();
     if (response?.success) {
       setBranches(response?.data);
       const branchOption = response?.data?.map((ele: IBranch) => ({
@@ -87,8 +86,8 @@ export default function PeopleHierarchy() {
       setBranches([]);
       setBranchOptions([]);
       setShiftOptions([]);
-      setBranchLoading(false);
     }
+    setBranchLoading(false);
   };
 
   const handleSelectFilter = (

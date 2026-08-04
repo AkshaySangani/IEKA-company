@@ -43,7 +43,6 @@ const AddBranch: React.FC<IAddBranchProps> = ({
     branchType: branchEnum.HEAD_OFFICE,
   };
   const [formData, setFormData] = useState<BranchFormData>(initialFormData);
-  console.log("formData", formData);
 
   useEffect(() => {
     if (branchDetails._id) {
