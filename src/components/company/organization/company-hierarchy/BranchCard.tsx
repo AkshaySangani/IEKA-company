@@ -9,6 +9,8 @@ import Modal from "../../../common/modal/Modal";
 import PersonInfo from "../../../common/person-info";
 import { roleNames, statusBgColor } from "../../../../constants/constants";
 import { BranchTypeEnum } from "../../../../types/common-types";
+import EmptyPlaceholder from "../../../common/empty-paceholder";
+import { Info } from "lucide-react";
 
 interface BranchCardProps {
   branch: IBranch;
@@ -22,11 +24,16 @@ export default function BranchCard({ branch }: BranchCardProps) {
           <div className="flex items-center gap-2">
             <i className="fa-regular fa-building"></i>
             <div className="flex items-center gap-2 ">
-                  <span
-                    className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[branch.status]}`}
-                  ></span>
-                  <span className="text-sm font-medium">{branch?.name}{branch.branchType === BranchTypeEnum.HEAD_OFFICE ? " (HO)":""}</span>
-                </div>
+              <span
+                className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[branch.status]}`}
+              ></span>
+              <span className="text-sm font-medium">
+                {branch?.name}
+                {branch.branchType === BranchTypeEnum.HEAD_OFFICE
+                  ? " (HO)"
+                  : ""}
+              </span>
+            </div>
           </div>
 
           <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-white text-[20px] font-medium text-[#505050] shadow">
@@ -36,11 +43,14 @@ export default function BranchCard({ branch }: BranchCardProps) {
 
         {/* Address */}
         <div className="px-5 pt-2 pb-3">
-          <p className="text-[13px] text-[#5c5c5c]">{branch.address} {branch.branchType === BranchTypeEnum.HEAD_OFFICE ? "(HO)":""}</p>
+          <p className="text-[13px] text-[#5c5c5c]">
+            {branch.address}{" "}
+            {branch.branchType === BranchTypeEnum.HEAD_OFFICE ? "(HO)" : ""}
+          </p>
         </div>
 
         {/* Shift Card */}
-        {branch?.shifts?.map((shift: IShift, index: number) => (
+        {branch?.shifts?.length > 0 ? branch?.shifts?.map((shift: IShift, index: number) => (
           <div
             key={index}
             className="mx-3 mb-5 overflow-hidden border p-3 border-gray-300 bg-white"
@@ -66,11 +76,32 @@ export default function BranchCard({ branch }: BranchCardProps) {
             </div>
 
             {/* Departments */}
-            {shift.departments.map((item, index) => (
-              <Department item={item} shift={shift} index={index} key={index} />
-            ))}
+            {shift.departments?.length > 0 ? (
+              shift.departments.map((item, index) => (
+                <Department
+                  item={item}
+                  shift={shift}
+                  index={index}
+                  key={index}
+                />
+              ))
+            ) : (
+              <EmptyPlaceholder
+                title="No Departments found for this shift."
+                description="It seems there is no any department added in this shift. please add department."
+                icon={<Info size={25} />}
+                className="h-[250px]"
+              />
+            )}
           </div>
-        ))}
+        )): (
+              <EmptyPlaceholder
+              title="No Shifts found for this branch."
+                description="It seems there is no any shift added in this branch. please add shift."
+                icon={<Info size={25} />}
+                className="h-[250px]"
+              />
+            )}
       </div>
     </>
   );
