@@ -65,13 +65,12 @@ export const apiRequest = {
     } catch (error: any) {
       const apiMessage =
         error?.response?.data?.message??error?.message;
-        console.log("apiMessage",apiMessage)
 
-      // toastMessage.error(
-      //   apiMessage ||
-      //   options?.errorMessage ||
-      //   "Update Failed"
-      // );
+      toastMessage.error(
+        apiMessage ||
+        options?.errorMessage ||
+        "Update Failed"
+      );
 
       return error;
     }
