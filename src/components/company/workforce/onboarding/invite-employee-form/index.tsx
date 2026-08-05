@@ -18,6 +18,7 @@ import { documentValidationRules } from "../../../../../utils/document-validatio
 import {
   documentEnum,
   employeeDocuments,
+  GenderEnum,
 } from "../../../../../types/common-types";
 import PageLoader from "../../../../common/loader/PageLoader";
 import { toastMessage } from "../../../../../utils/toast-message";
@@ -57,7 +58,7 @@ const InviteEmployeeForm = () => {
     phone: "",
     alternatePhone: "",
 
-    gender: "",
+    gender: GenderEnum.MALE,
     dob: "",
     bloodGroup: "",
 
@@ -365,7 +366,7 @@ const InviteEmployeeForm = () => {
       newErrors.phone = "Invalid Phone Number";
     }
 
-    // if (!formData.gender) newErrors.gender = "Gender is required";
+    if (!formData.gender) newErrors.gender = "Gender is required";
 
     if (!formData.dob) newErrors.dob = "Date of Birth is required";
     if (!formData.isMarried) newErrors.isMarried = "Marital Status is required";
@@ -481,7 +482,7 @@ const InviteEmployeeForm = () => {
     payload.append("email", formData.email);
     payload.append("phone", formData.phone);
     payload.append("alternatePhone", formData.alternatePhone);
-    payload.append("gender", formData.gender);
+    payload.append("gender", formData.gender ? formData?.gender : GenderEnum.MALE);
     payload.append("dob", formData.dob);
     payload.append("bloodGroup", formData.bloodGroup);
     payload.append("address", formData.address);
