@@ -5,14 +5,18 @@ import TopBar from "../../../common/topbar/TopBar";
 import Button from "../../../common/button/Button";
 import TextField from "../../../common/text-field/TextField";
 
-import {
-  branchEnum,
-  pathNames,
-} from "../../../../constants/constants";
+import { branchEnum, pathNames } from "../../../../constants/constants";
 import PageLoader from "../../../common/loader/PageLoader";
 import Checkbox from "../../../common/checkbox/CheckBox";
-import { addDepartment, DepartmentFormData, getBranchAndShift, getDepartmentById, updateDepartment } from "../../../../apis/organization/department.api";
+import {
+  addDepartment,
+  DepartmentFormData,
+  getBranchAndShift,
+  getDepartmentById,
+  updateDepartment,
+} from "../../../../apis/organization/department.api";
 import { BranchType, statusEnum } from "../../../../types/common-types";
+import ActionModal from "../../../common/modal/ActionModal";
 
 export interface IBranchShift {
   _id: string;
@@ -58,7 +62,6 @@ export interface IDepartmentResponse {
   updatedAt: string;
 }
 
-
 const AddDepartment: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -75,8 +78,9 @@ const AddDepartment: React.FC = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [loading, setLoading] = useState(false);
-  const [branchLoading, setBranchLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const [branchLoading, setBranchLoading] = useState<boolean>(false);
 
   const [branchList, setBranchList] = useState<IBranchWithShifts[]>([]);
 
@@ -106,17 +110,11 @@ const AddDepartment: React.FC = () => {
 
       setFormData({
         name: department.name,
-        assignments:
-          department.assignments.map(
-            (assignment) => ({
-              branchId:
-                assignment.branchId._id,
-              shiftIds:
-                assignment.shiftIds.map(ele => ele._id),
-            }),
-          ),
+        assignments: department.assignments.map((assignment) => ({
+          branchId: assignment.branchId._id,
+          shiftIds: assignment.shiftIds.map((ele) => ele._id),
+        })),
       });
-
     }
     setLoading(false);
   };
@@ -186,10 +184,13 @@ const AddDepartment: React.FC = () => {
       const assignment = assignments.find((x) => x.branchId === branchId);
 
       if (!assignment) {
-        setErrors(preErrors => ({...preErrors,assignments: "Please select branch first."}))
+        setErrors((preErrors) => ({
+          ...preErrors,
+          assignments: "Please select branch first.",
+        }));
         return prev;
       }
-      setErrors(preErrors => ({...preErrors,assignments: ""}))
+      setErrors((preErrors) => ({ ...preErrors, assignments: "" }));
 
       const exists = assignment.shiftIds.includes(shiftId);
 
@@ -290,20 +291,12 @@ const AddDepartment: React.FC = () => {
       assignments: formData.assignments,
     };
 
-    const response =
-      departmentId
-        ? await updateDepartment(
-            payload,
-            departmentId,
-          )
-        : await addDepartment(
-            formData,
-          );
+    const response = departmentId
+      ? await updateDepartment(payload, departmentId)
+      : await addDepartment(formData);
 
     if (response.success) {
-      navigate(
-        pathNames.DEPARTMENT,
-      );
+      navigate(pathNames.DEPARTMENT);
     }
   };
 
@@ -311,17 +304,28 @@ const AddDepartment: React.FC = () => {
     navigate(pathNames.DEPARTMENT);
   };
 
+  const handleAction = () => {
+    if (!validate()) return;
+    setActionOpen((prev) => !prev);
+  };
+
+  const handleOnConfirm = async () => {
+    await formRef.current?.requestSubmit();
+  };
   return (
     <>
       <TopBar
         title="Add Department"
         actionButtons={
-          <Button
-            size="sm"
-            variant={"danger"}
-            onClick={handleClose}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
+          <div className="flex gap-2">
+            <Button name="Action" size="sm" onClick={handleAction} />
+            <Button
+              size="sm"
+              variant={"danger"}
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
+            />
+          </div>
         }
       />
 
@@ -405,7 +409,9 @@ const AddDepartment: React.FC = () => {
                                   label={shift.name}
                                   name={shift.name}
                                   checked={selected}
-                                  onChange={() => handleShiftToggle(branch._id,shift._id)}
+                                  onChange={() =>
+                                    handleShiftToggle(branch._id, shift._id)
+                                  }
                                 />
                               );
                             })}
@@ -424,12 +430,15 @@ const AddDepartment: React.FC = () => {
               )}
             </div>
           </div>
-          <div className="mt-4 flex justify-end gap-3">
-            <Button type="submit" name="Save" size="sm" />
-            <Button name="Cancel" variant="secondary" size="sm" />
-          </div>
         </form>
       </div>
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to ${departmentId ? "edit" : "add"} this department?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
+      />
     </>
   );
 };

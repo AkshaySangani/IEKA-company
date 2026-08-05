@@ -5,10 +5,15 @@ import PageLoader from "../../../common/loader/PageLoader";
 import DeductionDetails from "./DeductionDetails";
 import Button from "../../../common/button/Button";
 import IncomeTaxDeductionDetails from "./IncomeTaxDeductionDetails";
-import { addDeductions, getDeductions, updateDeductions } from "../../../../apis/pay-slip/deductions.api";
+import {
+  addDeductions,
+  getDeductions,
+  updateDeductions,
+} from "../../../../apis/pay-slip/deductions.api";
+import ActionModal from "../../../common/modal/ActionModal";
 
 interface IDeduction {
-    _id: string;
+  _id: string;
 }
 
 export interface IDeductionDetails {
@@ -23,19 +28,18 @@ export interface IIncomeTaxDeductionDetails {
   taxRate: number;
 }
 
-interface DeductionFormData {
+export interface DeductionFormData {
   details: IDeductionDetails[];
   incomeDetails: IIncomeTaxDeductionDetails[];
 }
 
 const PayslipDeductions: React.FC = () => {
-
   const formRef = useRef<HTMLFormElement>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const [deduction, setDeduction] = useState<IDeduction>({
-    _id: ""
+    _id: "",
   });
 
   const initialDeductionDetails: IDeductionDetails = {
@@ -55,34 +59,51 @@ const PayslipDeductions: React.FC = () => {
   };
   const [formData, setFormData] = useState<DeductionFormData>(initialFormData);
 
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+
   const [errors, setErrors] = useState<
     Partial<Record<keyof DeductionFormData, string>>
   >({});
 
-    useEffect(() => {
-      fetchDeductions()
-    }, []);
+  useEffect(() => {
+    fetchDeductions();
+  }, []);
 
   const fetchDeductions = async () => {
     setLoading(true);
     const response = await getDeductions();
 
-    if(response?.success && (response?.data?.details?.length > 0 || response?.data?.incomeDetails?.length > 0)){
-        setDeduction({_id:response?.data?._id})
-        setFormData({
-            details: response?.data?.details,
-            incomeDetails: response?.data?.incomeDetails
-        })
+    if (
+      response?.success &&
+      (response?.data?.details?.length > 0 ||
+        response?.data?.incomeDetails?.length > 0)
+    ) {
+      setDeduction({ _id: response?.data?._id });
+      setFormData({
+        details: response?.data?.details,
+        incomeDetails: response?.data?.incomeDetails,
+      });
     } else {
-        setDeduction({_id:""})
-        setFormData(initialFormData)
+      setDeduction({ _id: "" });
+      setFormData(initialFormData);
     }
     setLoading(false);
-  }
+  };
 
   const validate = () => {
     const newErrors: Partial<Record<keyof DeductionFormData, string>> = {};
+    const details = formData.details.filter((ele) => ele.name && ele.value);
+    if (details?.length === 0) {
+      newErrors.details = "At least one deduction is required.";
+    }
 
+    const incomeDetail = formData.incomeDetails.filter(
+      (ele) => ele.from && ele?.to && ele?.taxRate,
+    );
+    if (incomeDetail?.length === 0) {
+      newErrors.incomeDetails =
+        "At least one income tax deduction is required.";
+    }
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -99,7 +120,9 @@ const PayslipDeductions: React.FC = () => {
 
     const payload = {
       details: formData.details.filter((ele) => ele.name),
-      incomeDetails: formData.incomeDetails.filter((ele) => ele?.to && ele?.taxRate),
+      incomeDetails: formData.incomeDetails.filter(
+        (ele) => ele.from && ele?.to && ele?.taxRate,
+      ),
     };
 
     const response = deduction._id
@@ -119,7 +142,10 @@ const PayslipDeductions: React.FC = () => {
   const handleAddMore = (key: keyof DeductionFormData) => {
     setFormData((prev) => ({
       ...prev,
-      [key]: [...prev[key], key === "details" ? initialDeductionDetails : initialIncomeTaxDetails],
+      [key]: [
+        ...prev[key],
+        key === "details" ? initialDeductionDetails : initialIncomeTaxDetails,
+      ],
     }));
   };
 
@@ -163,32 +189,54 @@ const PayslipDeductions: React.FC = () => {
     });
   };
 
-  const handleRemoveDeduction = (index: number, key: keyof DeductionFormData) => {
-    if(key === "details"){
-        setFormData((prev) => ({
-          ...prev,
-          [key]: prev.details.filter((_, i) => i !== index),
-        }));
+  const handleRemoveDeduction = (
+    index: number,
+    key: keyof DeductionFormData,
+  ) => {
+    if (key === "details") {
+      setFormData((prev) => ({
+        ...prev,
+        [key]: prev.details.filter((_, i) => i !== index),
+      }));
     } else {
-        setFormData((prev) => ({
-          ...prev,
-          [key]: prev.incomeDetails.filter((_, i) => i !== index),
-        }));
+      setFormData((prev) => ({
+        ...prev,
+        [key]: prev.incomeDetails.filter((_, i) => i !== index),
+      }));
     }
+  };
+
+  const handleAction = () => {
+    if (!validate()) return;
+    setActionOpen((prev) => !prev);
+  };
+
+  const handleOnConfirm = async () => {
+    await formRef.current?.requestSubmit();
   };
 
   return (
     <>
-      <TopBar title="Payslip Deductions" />
+      <TopBar
+        title="Payslip Deductions"
+        actionButtons={
+          <Button name="Action" size="sm" onClick={handleAction} />
+        }
+      />
 
       <div className="content-area bg-pageBg">
         <PageLoader loading={loading} />
-        <form ref={formRef} method="POST" className="flex flex-col gap-3" onSubmit={handleSubmit}>
+        <form
+          ref={formRef}
+          method="POST"
+          className="flex flex-col gap-3"
+          onSubmit={handleSubmit}
+        >
           <div className="bg-[#eff1f9] p-4">
             <div className="content-card w-full sm:w-[85%] p-4">
               <DeductionDetails
                 deductions={formData.details}
-                errors={undefined}
+                errors={errors}
                 handleDeductionChange={handleDeductionChange}
                 addMore={handleAddMore}
                 handleRemoveDeduction={handleRemoveDeduction}
@@ -199,26 +247,22 @@ const PayslipDeductions: React.FC = () => {
             <div className="content-card w-full sm:w-[85%] p-4">
               <IncomeTaxDeductionDetails
                 deductions={formData.incomeDetails}
-                errors={undefined}
+                errors={errors}
                 handleIncomeTaxDeductionChange={handleIncomeTaxDeductionChange}
                 addMore={handleAddMore}
                 handleRemoveDeduction={handleRemoveDeduction}
               />
             </div>
           </div>
-          <div className="bg-transparent">
-            <div className="flex border-t p-4 justify-center gap-2">
-              <Button name="Save" type="submit" size="sm" />
-              <Button
-                name="Cancel"
-                variant="secondary"
-                size="sm"
-                onClick={handleClose}
-              />
-            </div>
-          </div>
         </form>
       </div>
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to ${deduction?._id ? "edit" : "add"} this deductions?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
+      />
     </>
   );
 };

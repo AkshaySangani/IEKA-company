@@ -6,9 +6,7 @@ import {
   OfficeExpenseFormData,
   VendorDetailsType,
 } from "../../../../../apis/expense/office-expense.api";
-import {
-  ExpenseCategoryEnum,
-} from "../../../../../types/common-types";
+import { ExpenseCategoryEnum } from "../../../../../types/common-types";
 import { pathNames } from "../../../../../constants/constants";
 import TopBar from "../../../../common/topbar/TopBar";
 import Button from "../../../../common/button/Button";
@@ -18,6 +16,7 @@ import PaymentDetails from "./PaymentDetails";
 import VendorDetails from "./VendorDetails";
 import CategoryCards from "./CategoryCards";
 import { toastMessage } from "../../../../../utils/toast-message";
+import ActionModal from "../../../../common/modal/ActionModal";
 
 const initialFormData: OfficeExpenseFormData = {
   name: "",
@@ -51,7 +50,9 @@ const AddOfficeExpense: React.FC = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
 
   const [formData, setFormData] =
     useState<OfficeExpenseFormData>(initialFormData);
@@ -94,9 +95,9 @@ const AddOfficeExpense: React.FC = () => {
   // handle document change
   const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if(files.length > 4){
-        toastMessage.success("Maximum 4 Attachment allowed.")
-        return;
+    if (files.length > 4) {
+      toastMessage.success("Maximum 4 Attachment allowed.");
+      return;
     }
     setFormData((prev) => {
       const existingNames = new Set(
@@ -209,10 +210,7 @@ const AddOfficeExpense: React.FC = () => {
 
       payload.append("amount", String(formData.amount));
 
-      payload.append(
-        "expenseType",
-        formData.expenseType,
-      );
+      payload.append("expenseType", formData.expenseType);
 
       payload.append("serviceType", formData.serviceType || "");
 
@@ -243,17 +241,29 @@ const AddOfficeExpense: React.FC = () => {
     navigate(pathNames.OFFICE_EXPENSE);
   };
 
+  const handleAction = () => {
+    if (!validate()) return;
+    setActionOpen((prev) => !prev);
+  };
+
+  const handleOnConfirm = async () => {
+    await formRef.current?.requestSubmit();
+  };
+
   return (
     <>
       <TopBar
-        title="Add Reimbursements"
+        title="Add Expense"
         actionButtons={
-          <Button
-            size="sm"
-            variant={"danger"}
-            onClick={handleClose}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
+          <div className="flex gap-2">
+            <Button name="Action" size="sm" onClick={handleAction} />
+            <Button
+              size="sm"
+              variant={"danger"}
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
+            />
+          </div>
         }
       />
 
@@ -286,12 +296,15 @@ const AddOfficeExpense: React.FC = () => {
             handleDocumentChange={handleDocumentChange}
             removeDocument={removeDocument}
           />
-          <div className="mt-4 flex justify-center gap-3 border-t pt-2">
-            <Button type="submit" name="Save" size="sm" />
-            <Button name="Cancel" variant="secondary" size="sm" />
-          </div>
         </form>
       </div>
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to add this expense?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
+      />
     </>
   );
 };

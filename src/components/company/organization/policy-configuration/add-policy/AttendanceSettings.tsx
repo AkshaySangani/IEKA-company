@@ -113,17 +113,17 @@ const AttendanceSettings = ({
 
         <div className="space-y-6 ml-2">
           <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
-            <span>Applicable Late Mark if punch after</span>
+            <span>Applicable Late Mark if punch in is after</span>
 
             <div className="w-28">
               <TextField
                 type="number"
-                value={data.lateRule.graceLoginAfterMinutes}
-                error={errors["lateRule.graceLoginAfterMinutes"]}
+                value={data.lateRule.allowedLateMinutes}
+                error={errors["lateRule.allowedLateMinutes"]}
                 disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
-                    "graceLoginAfterMinutes",
+                    "allowedLateMinutes",
                     Number(e.target.value),
                     "lateRule",
                   )
@@ -131,17 +131,17 @@ const AttendanceSettings = ({
               />
             </div>
 
-            <span>minutes or before punch</span>
+            <span>minutes from shift start or punch out is before</span>
 
             <div className="w-28">
               <TextField
                 type="number"
-                value={data.lateRule.graceLoginBeforeMinutes}
-                error={errors["lateRule.graceLoginBeforeMinutes"]}
+                value={data.lateRule.allowedEarlyMinutes}
+                error={errors["lateRule.allowedEarlyMinutes"]}
                 disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
-                    "graceLoginBeforeMinutes",
+                    "allowedEarlyMinutes",
                     Number(e.target.value),
                     "lateRule",
                   )
@@ -149,21 +149,21 @@ const AttendanceSettings = ({
               />
             </div>
 
-            <span>minutes of shift time.</span>
+            <span> minutes from shift end.</span>
           </div>
 
           <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
-            <span>If</span>
+            <span>After</span>
 
             <div className="w-24">
               <TextField
                 type="number"
-                value={data.lateRule.maxGracePerMonth}
-                error={errors["lateRule.maxGracePerMonth"]}
+                value={data.lateRule.allowedLateCount}
+                error={errors["lateRule.allowedLateCount"]}
                 disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
-                    "maxGracePerMonth",
+                    "allowedLateCount",
                     Number(e.target.value),
                     "lateRule",
                   )
@@ -171,17 +171,17 @@ const AttendanceSettings = ({
               />
             </div>
 
-            <span>times late marks then cut</span>
+            <span>late marks,</span>
 
             <div className="w-24">
               <TextField
                 type="number"
-                value={data.lateRule.deductionValue}
-                error={errors["lateRule.deductionValue"]}
+                value={data.lateRule.onAbsentSlarayDaysCut}
+                error={errors["lateRule.onAbsentSlarayDaysCut"]}
                 disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
-                    "deductionValue",
+                    "onAbsentSlarayDaysCut",
                     Number(e.target.value),
                     "lateRule",
                   )
@@ -189,21 +189,24 @@ const AttendanceSettings = ({
               />
             </div>
 
-            <span>day salary.</span>
+            <span>day(s) salary will be deducted.</span>
           </div>
 
           <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
-            <span>Absent mark if</span>
+            <span>
+              Employee will be marked Absent if total working hours are less
+              than
+            </span>
 
             <div className="w-24">
               <TextField
                 type="number"
-                value={data.lateRule.absentAfterMinutes}
-                error={errors["lateRule.absentAfterMinutes"]}
+                value={data.lateRule.fullDayMinHours}
+                error={errors["lateRule.fullDayMinHours"]}
                 disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
-                    "absentAfterMinutes",
+                    "fullDayMinHours",
                     Number(e.target.value),
                     "lateRule",
                   )
@@ -211,21 +214,23 @@ const AttendanceSettings = ({
               />
             </div>
 
-            <span>hours less work with total working hours.</span>
+            <span>hour(s).</span>
           </div>
 
           <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
-            <span>Half day considered if late</span>
+            <span>
+              Half Day will be considered if total working hours are between
+            </span>
 
             <div className="w-24">
               <TextField
                 type="number"
-                value={data.lateRule.halfDayAfterMinutes}
-                error={errors["lateRule.halfDayAfterMinutes"]}
+                value={data.lateRule.halfDayWorkMinHours}
+                error={errors["lateRule.halfDayWorkMinHours"]}
                 disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
-                    "halfDayAfterMinutes",
+                    "halfDayWorkMinHours",
                     Number(e.target.value),
                     "lateRule",
                   )
@@ -233,17 +238,17 @@ const AttendanceSettings = ({
               />
             </div>
 
-            <span>hours and early out</span>
+            <span>and </span>
 
             <div className="w-24">
               <TextField
                 type="number"
-                value={data.lateRule.halfDayBeforeMinutes}
-                error={errors["lateRule.halfDayBeforeMinutes"]}
+                value={data.lateRule.halfDayWorkMaxHours}
+                error={errors["lateRule.halfDayWorkMaxHours"]}
                 disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
-                    "halfDayBeforeMinutes",
+                    "halfDayWorkMaxHours",
                     Number(e.target.value),
                     "lateRule",
                   )
@@ -251,7 +256,7 @@ const AttendanceSettings = ({
               />
             </div>
 
-            <span>hours.</span>
+            <span>hour(s).</span>
           </div>
         </div>
       </div>

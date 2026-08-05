@@ -5,12 +5,13 @@ import {
   payValueType,
   payValueTypeOptions,
 } from "../../../../../constants/constants";
-import { IEarningDetails } from ".";
+import { EarningFormData, IEarningDetails } from ".";
 import SelectField from "../../../../common/select/SelectField";
 
 interface Props {
   earnings: IEarningDetails[];
-  errors: any;
+  errors: Partial<Record<keyof EarningFormData, string>>;
+
   handleEarningChange: (
     index: number,
     field: keyof IEarningDetails,
@@ -22,6 +23,7 @@ interface Props {
 
 const EarningDetails = ({
   earnings,
+  errors,
   handleEarningChange,
   addMore,
   handleRemoveEarning,
@@ -102,10 +104,10 @@ const EarningDetails = ({
           leftIcon={<i className="fa-solid fa-plus"></i>}
         />
       </div>
-
-      <div className={``}>
-        <CustomTable columns={columns} data={earnings} />
-      </div>
+      <CustomTable columns={columns} data={earnings} />
+      {errors.details && (
+        <p className="mt-1 text-xs text-error">{errors.details}</p>
+      )}
     </div>
   );
 };

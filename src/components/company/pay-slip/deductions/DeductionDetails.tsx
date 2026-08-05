@@ -1,4 +1,4 @@
-import { IDeductionDetails } from ".";
+import { DeductionFormData, IDeductionDetails } from ".";
 import {
   payValueType,
   payValueTypeOptions,
@@ -10,7 +10,7 @@ import TextField from "../../../common/text-field/TextField";
 
 interface Props {
   deductions: IDeductionDetails[];
-  errors: any;
+  errors: Partial<Record<keyof DeductionFormData, string>>;
   handleDeductionChange: (
     index: number,
     field: keyof IDeductionDetails,
@@ -22,6 +22,7 @@ interface Props {
 
 const DeductionDetails = ({
   deductions,
+  errors,
   handleDeductionChange,
   addMore,
   handleRemoveDeduction,
@@ -105,10 +106,10 @@ const DeductionDetails = ({
           leftIcon={<i className="fa-solid fa-plus"></i>}
         />
       </div>
-
-      <div className={``}>
-        <CustomTable columns={columns} data={deductions} />
-      </div>
+      <CustomTable columns={columns} data={deductions} />
+      {errors.details && (
+        <p className="mt-1 text-xs text-error">{errors.details}</p>
+      )}
     </div>
   );
 };

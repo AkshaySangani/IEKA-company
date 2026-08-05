@@ -17,6 +17,7 @@ import PageLoader from "../../../common/loader/PageLoader";
 import Checkbox from "../../../common/checkbox/CheckBox";
 import { IShift } from ".";
 import { statusEnum } from "../../../../types/common-types";
+import ActionModal from "../../../common/modal/ActionModal";
 
 interface ShiftFormData {
   name: string;
@@ -44,8 +45,9 @@ const AddShift: React.FC = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [loading, setLoading] = useState(false);
-  const [branchLoading, setBranchLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const [branchLoading, setBranchLoading] = useState<boolean>(false);
 
   const [branchList, setBranchList] = useState<IBranch[]>([]);
 
@@ -212,7 +214,9 @@ const AddShift: React.FC = () => {
     if (!validate()) return;
     setLoading(true);
 
-    const response = shiftId ? await updateShift(formData, shiftId) : await addShift(formData);
+    const response = shiftId
+      ? await updateShift(formData, shiftId)
+      : await addShift(formData);
 
     if (response?.success) {
       navigate(pathNames.SHIFT);
@@ -224,17 +228,33 @@ const AddShift: React.FC = () => {
     navigate(pathNames.SHIFT);
   };
 
+  const handleAction = () => {
+    if (!validate()) return;
+    setActionOpen(prev => !prev);
+  };
+
+  const handleOnConfirm = async () => {
+      await formRef.current?.requestSubmit();
+  }
+
   return (
     <>
       <TopBar
         title="Add Shift"
         actionButtons={
-          <Button
-            size="sm"
-            variant={"danger"}
-            onClick={handleClose}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
+          <div className="flex gap-2">
+            <Button
+              name="Action"
+              size="sm"
+              onClick={handleAction}
+            />
+            <Button
+              size="sm"
+              variant={"danger"}
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
+            />
+          </div>
         }
       />
 
@@ -338,7 +358,10 @@ const AddShift: React.FC = () => {
 
                         <div className="flex-1">
                           <h4 className="font-medium text-secondary text-sm">
-                            {branch.name}{" "}{branch.branchType === branchEnum.HEAD_OFFICE ? "(HO)" : ""}
+                            {branch.name}{" "}
+                            {branch.branchType === branchEnum.HEAD_OFFICE
+                              ? "(HO)"
+                              : ""}
                           </h4>
 
                           <p className="mt-1 text-xs text-grayText">
@@ -358,12 +381,9 @@ const AddShift: React.FC = () => {
               )}
             </div>
           </div>
-          <div className="mt-4 flex justify-end gap-3">
-            <Button type="submit" name="Save" size="sm" />
-            <Button name="Cancel" variant="secondary" size="sm" />
-          </div>
         </form>
       </div>
+      <ActionModal isOpen={actionOpen} title={`Are you sure you want to ${shiftId ? "edit" : "add"} this shift?`} loading={loading} handleOpenClose={handleAction} handleSubmit={handleOnConfirm} />
     </>
   );
 };

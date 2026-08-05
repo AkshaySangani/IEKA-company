@@ -20,11 +20,11 @@ import { getMyBranchList } from "../../../../apis/organization/branch.api";
 import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
 import { IUser } from ".";
 import { useAuthStore } from "../../../../store/auth-store";
-
+import ActionModal from "../../../common/modal/ActionModal";
 
 const AddReimbursement: React.FC = () => {
   const navigate = useNavigate();
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
 
   const initialFormData: ReimbursementFormData = {
     name: "",
@@ -38,7 +38,9 @@ const AddReimbursement: React.FC = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
 
   const [branchList, setBranchList] = useState<IOption[]>([]);
   const [userOptions, setUserOptions] = useState<IOption[]>([]);
@@ -58,7 +60,12 @@ const AddReimbursement: React.FC = () => {
   const fetchBranchList = async () => {
     const response = await getMyBranchList();
     if (response?.success) {
-      setBranchList(response.data?.map((ele: any) => ({label: ele?.name, value: ele?.branchId})) || []);
+      setBranchList(
+        response.data?.map((ele: any) => ({
+          label: ele?.name,
+          value: ele?.branchId,
+        })) || [],
+      );
     } else {
       setBranchList([]);
     }
@@ -80,15 +87,20 @@ const AddReimbursement: React.FC = () => {
   const handleBranchChange = async (value: string) => {
     handleChange("branchId", value);
     handleChange("userId", "");
-    if(value){
+    if (value) {
       const response = await getManagedEmployee(value);
-      if(response.success){
-        setUserOptions(response?.data?.map((ele: IUser) => ({value: ele?._id, label: `${ele?.firstName} ${ele?.lastName}`})))
+      if (response.success) {
+        setUserOptions(
+          response?.data?.map((ele: IUser) => ({
+            value: ele?._id,
+            label: `${ele?.firstName} ${ele?.lastName}`,
+          })),
+        );
       } else {
         setUserOptions([]);
       }
     }
-  }
+  };
 
   // handle document change
   const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,7 +207,10 @@ const AddReimbursement: React.FC = () => {
       const payload = new FormData();
 
       payload.append("branchId", formData.branchId);
-      payload.append("userId", formData.userId ? formData.userId : (user?._id??""));
+      payload.append(
+        "userId",
+        formData.userId ? formData.userId : (user?._id ?? ""),
+      );
       payload.append("name", formData.name);
       payload.append("date", formData.date);
       payload.append("amount", String(formData.amount));
@@ -222,17 +237,29 @@ const AddReimbursement: React.FC = () => {
     navigate(pathNames.REIMBURSEMENT);
   };
 
+  const handleAction = () => {
+    if (!validate()) return;
+    setActionOpen((prev) => !prev);
+  };
+
+  const handleOnConfirm = async () => {
+    await formRef.current?.requestSubmit();
+  };
+
   return (
     <>
       <TopBar
         title="Add Reimbursements"
         actionButtons={
-          <Button
-            size="sm"
-            variant={"danger"}
-            onClick={handleClose}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
+          <div className="flex gap-2">
+            <Button name="Action" size="sm" onClick={handleAction} />
+            <Button
+              size="sm"
+              variant={"danger"}
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
+            />
+          </div>
         }
       />
 
@@ -243,7 +270,11 @@ const AddReimbursement: React.FC = () => {
             <SelectField
               label="Branch"
               required
-              value={formData.branchId ? branchList?.find(ele => ele?.value === formData.branchId) : ""}
+              value={
+                formData.branchId
+                  ? branchList?.find((ele) => ele?.value === formData.branchId)
+                  : ""
+              }
               name={"branchId"}
               options={branchList}
               error={errors.branchId}
@@ -251,7 +282,11 @@ const AddReimbursement: React.FC = () => {
             />
             <SelectField
               label="Select Employee"
-              value={formData.userId ? userOptions?.find(ele => ele.value === formData.userId) : ""}
+              value={
+                formData.userId
+                  ? userOptions?.find((ele) => ele.value === formData.userId)
+                  : ""
+              }
               name={"userId"}
               options={userOptions}
               error={errors.userId}
@@ -328,12 +363,15 @@ const AddReimbursement: React.FC = () => {
                 </div>
               ))}
           </div>
-          <div className="mt-4 flex justify-center gap-3 border-t pt-2">
-            <Button type="submit" name="Save" size="sm" />
-            <Button name="Cancel" variant="secondary" size="sm" />
-          </div>
         </form>
       </div>
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to add this reimbursements?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
+      />
     </>
   );
 };

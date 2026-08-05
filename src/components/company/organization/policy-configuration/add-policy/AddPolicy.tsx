@@ -18,6 +18,7 @@ import AttendanceSettings from "./AttendanceSettings";
 import LeaveSetting from "./LeaveSettings";
 import { getLeaves } from "../../../../../apis/organization/leave.api";
 import { ILeave } from "../../leave";
+import ActionModal from "../../../../common/modal/ActionModal";
 
 export interface ILeaveData {
   name: string;
@@ -39,13 +40,16 @@ export interface PolicyFormData {
   };
 
   lateRule: {
-    graceLoginAfterMinutes: number;
-    graceLoginBeforeMinutes: number;
-    maxGracePerMonth: number;
-    deductionValue: number;
-    halfDayAfterMinutes: number;
-    halfDayBeforeMinutes: number;
-    absentAfterMinutes: number;
+    allowedLateMinutes: number;
+    allowedEarlyMinutes: number;
+
+    allowedLateCount: number;
+    onAbsentSlarayDaysCut: number;
+
+    fullDayMinHours: number;
+
+    halfDayWorkMinHours: number;
+    halfDayWorkMaxHours: number;
   };
 
   overtime: {
@@ -94,6 +98,9 @@ const AddPolicy: React.FC<{
   const navigate = useNavigate();
   const location = useLocation();
   const policyId = editPolicyId ?? location?.state?.id;
+
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+
   const initialFormData: PolicyFormData = {
     name: "",
 
@@ -107,13 +114,13 @@ const AddPolicy: React.FC<{
     },
 
     lateRule: {
-      graceLoginAfterMinutes: 0,
-      graceLoginBeforeMinutes: 0,
-      maxGracePerMonth: 0,
-      deductionValue: 0,
-      halfDayAfterMinutes: 0,
-      halfDayBeforeMinutes: 0,
-      absentAfterMinutes: 0,
+      allowedLateMinutes: 0,
+      allowedEarlyMinutes: 0,
+      allowedLateCount: 0,
+      onAbsentSlarayDaysCut: 0,
+      fullDayMinHours: 0,
+      halfDayWorkMinHours: 0,
+      halfDayWorkMaxHours: 0,
     },
 
     overtime: {
@@ -331,9 +338,18 @@ const AddPolicy: React.FC<{
 
   const handleClose = () => {
     resetForm();
-    if(editPolicyId) {
+    if (editPolicyId) {
       handleClosePolicy();
     } else navigate(pathNames.POLICY_CONFIGURATION);
+  };
+
+  const handleAction = () => {
+    if (!validate()) return;
+    setActionOpen((prev) => !prev);
+  };
+
+  const handleOnConfirm = async () => {
+    await formRef.current?.requestSubmit();
   };
 
   return (
@@ -342,19 +358,24 @@ const AddPolicy: React.FC<{
         <TopBar
           title="Add Policy"
           actionButtons={
-            <Button
-              size="sm"
-              variant={"danger"}
-              onClick={handleClose}
-              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-            />
+            <div className="flex gap-2">
+              <Button name="Action" size="sm" onClick={handleAction} />
+              <Button
+                size="sm"
+                variant={"danger"}
+                onClick={handleClose}
+                leftIcon={
+                  <i className="fa-solid fa-xmark fa-xl text-danger"></i>
+                }
+              />
+            </div>
           }
         />
       )}
       <div className={!editPolicyId ? "content-area" : ""}>
         <PageLoader loading={loading} />
         <form
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-2 pb-6"
           ref={formRef}
           method="POST"
           onSubmit={handleSubmit}
@@ -385,12 +406,15 @@ const AddPolicy: React.FC<{
             leaveOptions={[]}
             editPolicyId={editPolicyId}
           />
-          {!editPolicyId && <div className="mt-4 flex justify-center gap-3 border-t border-gray-300 pt-3">
-            <Button type="submit" name="Save" size="sm" />
-            <Button name="Cancel" variant="secondary" size="sm" onClick={handleClose} />
-          </div>}
         </form>
       </div>
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to ${policyId ? "edit" : "add"} this policy?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
+      />
     </>
   );
 };

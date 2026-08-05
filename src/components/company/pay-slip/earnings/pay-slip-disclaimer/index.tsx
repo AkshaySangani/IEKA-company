@@ -12,6 +12,7 @@ import {
   addEarnings,
   updateEarning,
 } from "../../../../../apis/pay-slip/earnings.api";
+import ActionModal from "../../../../common/modal/ActionModal";
 
 export interface IEarningDetails {
   name: string;
@@ -19,7 +20,7 @@ export interface IEarningDetails {
   valueType: string;
 }
 
-interface EarningFormData {
+export interface EarningFormData {
   name: string;
   details: IEarningDetails[];
 }
@@ -32,6 +33,7 @@ const PayslipDisclaimer: React.FC = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const [loading, setLoading] = useState(false);
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
 
   const initialEarningDetails: IEarningDetails = {
     name: "",
@@ -77,6 +79,11 @@ const PayslipDisclaimer: React.FC = () => {
 
     if (!formData.name.trim()) {
       newErrors.name = "Earning name is required";
+    }
+
+    const details = formData.details.filter((ele) => ele.name && ele.value);
+    if (details?.length === 0) {
+      newErrors.details = "At least one earning is required.";
     }
 
     setErrors(newErrors);
@@ -147,11 +154,26 @@ const PayslipDisclaimer: React.FC = () => {
     }));
   };
 
+  const handleAction = () => {
+    if (!validate()) return;
+    setActionOpen((prev) => !prev);
+  };
+
+  const handleOnConfirm = async () => {
+    await formRef.current?.requestSubmit();
+  };
+
   return (
     <>
       <TopBar
         title="Payslip Disclaimer"
         actionButtons={
+          <div className="flex gap-2">
+            <Button
+              name="Action"
+              size="sm"
+              onClick={handleAction}
+            />
           <Button
             type="button"
             size="sm"
@@ -159,6 +181,7 @@ const PayslipDisclaimer: React.FC = () => {
             onClick={handleClose}
             leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
           />
+          </div>
         }
       />
 
@@ -180,21 +203,22 @@ const PayslipDisclaimer: React.FC = () => {
             <div className="content-card w-full sm:w-[70%] p-4">
               <EarningDetails
                 earnings={formData.details}
-                errors={undefined}
+                errors={errors}
                 handleEarningChange={handleEarningChange}
                 addMore={handleAddMore}
                 handleRemoveEarning={handleRemoveEarning}
               />
             </div>
           </div>
-          <div className="bg-transparent">
-            <div className="flex border-t p-4 justify-center gap-2">
-              <Button name="Save" type="submit" size="sm" />
-              <Button name="Cancel" variant="secondary" size="sm" onClick={handleClose}/>
-            </div>
-          </div>
         </form>
       </div>
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to ${earningData?._id ? "edit" : "add"} this payslip?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
+      />
     </>
   );
 };

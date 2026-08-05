@@ -1,16 +1,11 @@
-import { IIncomeTaxDeductionDetails } from ".";
-import {
-  payValueType,
-  payValueTypeOptions,
-} from "../../../../constants/constants";
+import { DeductionFormData, IIncomeTaxDeductionDetails } from ".";
 import Button from "../../../common/button/Button";
-import SelectField from "../../../common/select/SelectField";
 import { ColumnDef, CustomTable } from "../../../common/table";
 import TextField from "../../../common/text-field/TextField";
 
 interface Props {
   deductions: IIncomeTaxDeductionDetails[];
-  errors: any;
+  errors: Partial<Record<keyof DeductionFormData, string>>;
   handleIncomeTaxDeductionChange: (
     index: number,
     field: keyof IIncomeTaxDeductionDetails,
@@ -22,6 +17,7 @@ interface Props {
 
 const IncomeTaxDeductionDetails = ({
   deductions,
+  errors,
   handleIncomeTaxDeductionChange,
   addMore,
   handleRemoveDeduction,
@@ -103,9 +99,10 @@ const IncomeTaxDeductionDetails = ({
         />
       </div>
 
-      <div className={``}>
-        <CustomTable columns={columns} data={deductions} />
-      </div>
+      <CustomTable columns={columns} data={deductions} />
+      {errors.incomeDetails && (
+        <p className="mt-1 text-xs text-error">{errors.incomeDetails}</p>
+      )}
     </div>
   );
 };

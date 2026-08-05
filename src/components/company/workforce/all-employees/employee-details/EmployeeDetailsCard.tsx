@@ -4,9 +4,15 @@ import {
   currency,
   employmentType,
   roleNames,
-  statusMessage,
 } from "../../../../../constants/constants";
-import { IAssignment, IEmployee, IPayslip, IPolicy } from ".";
+import {
+  IAssignment,
+  IBaseEntity,
+  IEmployee,
+  IPayslip,
+  IPolicy,
+  IShift,
+} from ".";
 import { formatDate } from "../../../../../utils/date-format";
 import DetailRow from "../../../../common/detail-row";
 import StatusUpdate from "./update-modals/StatusUpdate";
@@ -19,6 +25,7 @@ import { assignRolesAndResponsibility } from "../../../../../apis/workforce/onbo
 import { RoleEnum } from "../../../../../types/common-types";
 import PolicyUpdate from "./update-modals/PolicyUpdate";
 import SalaryUpdate from "./update-modals/SalaryUpdate";
+import BranchDepartmentCards from "./BranchDepartments";
 
 interface Props {
   employeeData: IEmployee;
@@ -37,25 +44,78 @@ export enum EmployeeUpdateModal {
   MANAGE_BRANCH = "MANAGER",
   POLICY = "Policy",
   SALARY = "Salary",
-}  
+}
 
-const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,payslip,refreshData }) => {
+const EmployeeDetailCard: React.FC<Props> = ({
+  employeeData,
+  assignments,
+  policy,
+  payslip,
+  refreshData,
+}) => {
   const isManager = employeeData.role === RoleEnum.MANAGER;
-  const designation = assignments?.length > 0 ? assignments[0]?.designationId: {name: "",_id: ""};
-  const manageBranch = assignments.find(ele => !ele.isReporting);
-  const reportingBranch = isManager ? assignments.find(ele => ele.isReporting) : assignments[0];
+  const designation =
+    assignments?.length > 0
+      ? assignments[0]?.designationId
+      : { name: "", _id: "" };
+  const manageBranches = assignments.filter((ele) => !ele.isReporting);
+  const reportingBranch = isManager
+    ? assignments.find((ele) => ele.isReporting)
+    : assignments[0];
   const [update, setUpdate] = useState<EmployeeUpdateModal | "">("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (payload: any) => {
     setLoading(true);
-    const response = await assignRolesAndResponsibility({userId: employeeData._id,...payload});
-    if(response.success){
+    const response = await assignRolesAndResponsibility({
+      userId: employeeData._id,
+      ...payload,
+    });
+    if (response.success) {
       setUpdate("");
       refreshData();
     }
     setLoading(false);
-  }
+  };
+
+  const getBranches = (branches: IAssignment[]) => {
+    const groupedAssignments = branches.reduce(
+      (acc, assignment) => {
+        const key = `${assignment.branchId._id}-${assignment.shiftId._id}`;
+
+        if (!acc[key]) {
+          acc[key] = {
+            branch: assignment.branchId,
+            shift: assignment.shiftId,
+            departments: [],
+          };
+        }
+
+        // Prevent duplicate departments
+        if (
+          !acc[key].departments.some(
+            (d) => d._id === assignment.departmentId._id,
+          )
+        ) {
+          acc[key].departments.push(assignment.departmentId);
+        }
+
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          branch: IBaseEntity;
+          shift: IShift;
+          departments: IBaseEntity[];
+        }
+      >,
+    );
+    return Object.values(groupedAssignments);
+  };
+
+  const cards = manageBranches?.length > 0 ? getBranches(manageBranches) : [];
+  const reportingCards = reportingBranch ? getBranches([reportingBranch]) : [];
   return (
     <>
       <div className="content-card bg-white border border-gray-200">
@@ -136,22 +196,34 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
               }
             />
 
-            {employeeData.role === RoleEnum.MANAGER && <DetailRow
-              label="Managed Branch & Departments"
-              value={
-                <div className="flex items-center gap-2 mr-1">
-                  <span>{manageBranch?.branchId?.name}</span>
-                  <i onClick={() => setUpdate(EmployeeUpdateModal.MANAGE_BRANCH)} className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"></i>
-                </div>
-              }
-            />}
+            {employeeData.role === RoleEnum.MANAGER && (
+              <DetailRow
+                label="Managed Branch & Departments"
+                value={
+                  <div className="flex items-center gap-2 mr-1">
+                    <BranchDepartmentCards cards={cards} />
+                    <i
+                      onClick={() =>
+                        setUpdate(EmployeeUpdateModal.MANAGE_BRANCH)
+                      }
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                    ></i>
+                  </div>
+                }
+              />
+            )}
 
             <DetailRow
               label="Reporting Branch & Shift"
               value={
                 <div className="flex items-center gap-2 mr-1">
-                  <span>{reportingBranch?.branchId.name}</span>
-                  <i onClick={() => setUpdate(EmployeeUpdateModal.REPORTING_BRANCH)} className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"></i>
+                  <BranchDepartmentCards cards={reportingCards} />
+                  <i
+                    onClick={() =>
+                      setUpdate(EmployeeUpdateModal.REPORTING_BRANCH)
+                    }
+                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                  ></i>
                 </div>
               }
             />
@@ -175,7 +247,10 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
               label="Probational Period"
               value={
                 <div className="flex items-center gap-2 mr-1">
-                  <span>{employeeData.probationPeriod}{` Month${employeeData.probationPeriod>1 ?"s":""}`}</span>
+                  <span>
+                    {employeeData.probationPeriod}
+                    {` Month${employeeData.probationPeriod > 1 ? "s" : ""}`}
+                  </span>
                   <i
                     onClick={() =>
                       setUpdate(EmployeeUpdateModal.PROBATION_PERIOD)
@@ -191,9 +266,10 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <span>{policy?.policyId?.name}</span>
-                  <i onClick={() =>
-                      setUpdate(EmployeeUpdateModal.POLICY)
-                    } className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"></i>
+                  <i
+                    onClick={() => setUpdate(EmployeeUpdateModal.POLICY)}
+                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                  ></i>
                 </div>
               }
             />
@@ -202,10 +278,13 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
               label="Salary Details"
               value={
                 <div className="flex items-center gap-2 mr-1">
-                  <span>{currency.INR}{" "}{payslip.salary}</span>
-                  <i onClick={() =>
-                      setUpdate(EmployeeUpdateModal.SALARY)
-                    } className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"></i>
+                  <span>
+                    {currency.INR} {payslip.salary}
+                  </span>
+                  <i
+                    onClick={() => setUpdate(EmployeeUpdateModal.SALARY)}
+                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                  ></i>
                 </div>
               }
             />
@@ -263,8 +342,11 @@ const EmployeeDetailCard: React.FC<Props> = ({ employeeData,assignments,policy,p
         handleSubmit={handleSubmit}
         loading={loading}
       />
-      <BranchAssignmentUpdate 
-        active={update === EmployeeUpdateModal.REPORTING_BRANCH || update === EmployeeUpdateModal.MANAGE_BRANCH}
+      <BranchAssignmentUpdate
+        active={
+          update === EmployeeUpdateModal.REPORTING_BRANCH ||
+          update === EmployeeUpdateModal.MANAGE_BRANCH
+        }
         role={update}
         employeeData={employeeData}
         assignments={assignments}
