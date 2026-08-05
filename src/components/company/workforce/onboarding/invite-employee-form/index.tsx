@@ -22,6 +22,7 @@ import {
 } from "../../../../../types/common-types";
 import PageLoader from "../../../../common/loader/PageLoader";
 import { toastMessage } from "../../../../../utils/toast-message";
+import SuccessModal from "../../../../common/modal/SuccessModal";
 
 interface ICompanyInfo {
   _id: string;
@@ -47,6 +48,8 @@ const InviteEmployeeForm = () => {
     useState<ICompanyInfo>(initialCompanyInfo);
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [successOpen, setSuccessOpen] = useState<boolean>(false);
   // initial state
   const initialFormData = {
     companyId: companyId,
@@ -614,7 +617,7 @@ const InviteEmployeeForm = () => {
 
     if (response?.success) {
       await toastMessage.success("Employee invited successfully");
-      handleResetForm();
+      setSuccessOpen(true);
     }
     setLoading(false);
   };
@@ -624,6 +627,7 @@ const InviteEmployeeForm = () => {
     setDocuments(initialDocuments);
     setEducations(initialEducations);
     setExperiences(initialExperience);
+    setSuccessOpen(false);
     window.location.reload();
   };
   return (
@@ -705,6 +709,7 @@ const InviteEmployeeForm = () => {
           </div>
         </form>
       </div>
+      <SuccessModal isOpen={successOpen} title={"Invite employee form submitted successfully."} handleOpenClose={handleResetForm} />
     </div>
   );
 };

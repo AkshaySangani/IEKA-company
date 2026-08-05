@@ -1,5 +1,3 @@
-import { IOption, statusEnum } from "../../../types/common-types";
-import { statusOptions } from "../../../constants/constants";
 import Modal from "./Modal";
 import excliMinate from "../../../assets/images/excliminate.png";
 import Image from "../image";
