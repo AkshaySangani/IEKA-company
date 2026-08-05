@@ -13,6 +13,7 @@ import LeaveTable from "./LeaveTable";
 import AddLeave from "./AddLeave";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
+import Pagination from "../../../common/pagination/Pagination";
 
 export interface ILeave {
   _id: string;
@@ -218,6 +219,13 @@ const Leave = () => {
           leaveList={leaveList}
           handleEditLeaveDetails={handleEditLeaveDetails}
           handleUpdateStatus={handleUpdateStatus}
+        />
+        <Pagination
+          totalRecords={total}
+          currentPage={page}
+          pageSize={limit}
+          onPageChange={setPage}
+          onPageSizeChange={setLimit}
         />
       </div>
       <AddLeave

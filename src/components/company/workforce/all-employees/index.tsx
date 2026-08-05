@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { EmployeeStats } from "./StatusCards";
-import { FilterCardItem, RoleEnum, statusEnum } from "../../../../types/common-types";
+import {
+  FilterCardItem,
+  RoleEnum,
+  statusEnum,
+} from "../../../../types/common-types";
 import {
   getEmployeeById,
   getEmployeeCount,
@@ -11,6 +15,7 @@ import {
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
 import AllEmployeeTable from "./AllEmployeeTable";
+import Pagination from "../../../common/pagination/Pagination";
 
 export interface IEmployee {
   _id: string;
@@ -55,32 +60,33 @@ const AllEmployees = () => {
 
   const [allEmployees, setAllEmployees] = useState<IEmployee[]>([]);
   const initialEmployee: IEmployee = {
-  _id: "",
-  firstName: "",
-  lastName: "",
-  profileImage: "",
-  role: RoleEnum.EMPLOYEE,
-
-  branchId: {
     _id: "",
-    name: "",
-  },
+    firstName: "",
+    lastName: "",
+    profileImage: "",
+    role: RoleEnum.EMPLOYEE,
 
-  designationId: null,
-  departmentId: {
-    name: "",
-    _id: ""
-  },
+    branchId: {
+      _id: "",
+      name: "",
+    },
 
-  shiftId: {
-    _id: "",
-    name: "",
-    startTime: "",
-    endTime: "",
-  },
-  status: statusEnum.ACTIVE
-};
-  const [employeeDetails, setEmployeeDetails] = useState<IEmployee>(initialEmployee);
+    designationId: null,
+    departmentId: {
+      name: "",
+      _id: "",
+    },
+
+    shiftId: {
+      _id: "",
+      name: "",
+      startTime: "",
+      endTime: "",
+    },
+    status: statusEnum.ACTIVE,
+  };
+  const [employeeDetails, setEmployeeDetails] =
+    useState<IEmployee>(initialEmployee);
 
   const [cards, setCards] = useState<FilterCardItem[]>([
     {
@@ -106,7 +112,7 @@ const AllEmployees = () => {
       activeColor: "bg-warning",
       textColor: "text-warning",
       icon: <i className="fa-solid fa-user-xmark"></i>,
-    }
+    },
   ]);
 
   useEffect(() => {
@@ -169,7 +175,7 @@ const AllEmployees = () => {
   const handleRefreshData = () => {
     fetchAllEmployeeList(page, limit, search, activeCard);
     getEmployeeCounts();
-  }
+  };
 
   // handle click add new
   const handleOnAddOpenClose = () => {
@@ -243,6 +249,13 @@ const AllEmployees = () => {
           allEmployees={allEmployees}
           handleEditAllEmployeeDetails={handleEditAllEmployeeDetails}
           handleUpdateStatus={handleUpdateStatus}
+        />
+        <Pagination
+          totalRecords={total}
+          currentPage={page}
+          pageSize={limit}
+          onPageChange={setPage}
+          onPageSizeChange={setLimit}
         />
       </div>
       <StatusUpdateModal

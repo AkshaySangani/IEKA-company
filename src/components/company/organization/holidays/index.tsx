@@ -14,6 +14,7 @@ import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
 import AddHoliday from "./AddHoliday";
 import YearPicker from "../../../common/date-picker/YearPicker";
+import Pagination from "../../../common/pagination/Pagination";
 
 export interface IHoliday {
   _id: string;
@@ -238,6 +239,13 @@ const Holiday = () => {
           holidaysList={holidaysList}
           handleEditHolidayDetails={handleEditHolidayDetails}
           handleUpdateStatus={handleUpdateStatus}
+        />
+        <Pagination
+          totalRecords={total}
+          currentPage={page}
+          pageSize={limit}
+          onPageChange={setPage}
+          onPageSizeChange={setLimit}
         />
       </div>
       <AddHoliday
