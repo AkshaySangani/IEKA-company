@@ -27,7 +27,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     <div className={`flex flex-col ${className}`}>
       <label
         className={`inline-flex items-center gap-2 cursor-pointer ${
-          disabled ? "opacity-60 cursor-not-allowed" : ""
+          disabled ? " cursor-not-allowed" : ""
         }`}
       >
         <input
@@ -47,20 +47,14 @@ const Checkbox: React.FC<CheckboxProps> = ({
         />
 
         {label && (
-          <span className="text-sm text-grayText">
+          <span className="text-sm text-secondary">
             {label}
-            {required && (
-              <span className="text-error ml-1">*</span>
-            )}
+            {required && <span className="text-error ml-1">*</span>}
           </span>
         )}
       </label>
 
-      {error && (
-        <span className="mt-1 text-xs text-error">
-          {error}
-        </span>
-      )}
+      {error && <span className="mt-1 text-xs text-error">{error}</span>}
     </div>
   );
 };

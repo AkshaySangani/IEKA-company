@@ -19,7 +19,7 @@ interface Props {
     field: keyof Education,
     value: string | File | null | number,
   ) => void;
-  addEducation: () => void;
+  addEducation: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
   removeEducation: (index: number) => void;
 }
 
@@ -115,6 +115,7 @@ const EducationDetails = ({
         <Button
           name="Add Education"
           size="sm"
+          type="button"
           onClick={addEducation}
           leftIcon={<i className="fa-solid fa-plus"></i>}
         />

@@ -192,7 +192,7 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
       loading={loading}
       handleOnConfirm={handleSubmit}
     >
-      <div className="grid grid-cols-1 w-[75%] gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <YearPicker
           label="Effective Year"
           required

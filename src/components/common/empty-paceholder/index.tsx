@@ -16,7 +16,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col h-screen items-center justify-center text-center py-16 px-6 gap-2 ${className}`}
+      className={`flex flex-col h-[-webkit-fill-available] items-center justify-center text-center py-16 px-6 gap-2 ${className}`}
     >
       {/* Icon */}
       <div className=" text-5xl text-gray-400">

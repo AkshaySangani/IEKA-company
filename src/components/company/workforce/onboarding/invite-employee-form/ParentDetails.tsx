@@ -44,6 +44,7 @@ const ParentDetails = ({
         {/* Father Phone */}
         <TextField
           label="Father Phone"
+          type="number"
           name="fatherPhone"
           value={formData.fatherPhone}
           onChange={handleChange}
@@ -74,6 +75,7 @@ const ParentDetails = ({
         {/* Mother Phone */}
         <TextField
           label="Mother Phone"
+          type="number"
           name="motherPhone"
           value={formData.motherPhone}
           onChange={handleChange}

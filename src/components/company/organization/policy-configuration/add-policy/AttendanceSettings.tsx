@@ -17,9 +17,15 @@ interface Props {
     value: string | number | boolean | string[],
     section?: keyof PolicyFormData,
   ) => void;
+  editPolicyId?: string;
 }
 
-const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
+const AttendanceSettings = ({
+  data,
+  errors,
+  handleChange,
+  editPolicyId,
+}: Props) => {
   const handleWeeklyOffChange = (value: string, checked: boolean) => {
     let updatedWeeklyOffs = [...data.workHours.weeklyOffs];
 
@@ -40,49 +46,9 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
 
       <div className="border-b pb-4 border-inputBorder">
         <div className="mb-5 border-l-4 border-primary bg-primaryBlur px-2 py-2">
-          <h3 className="text-md font-medium text-secondary-color">
+          <h3 className="text-md font-medium text-secondary">
             Attendance Setting
           </h3>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 w-full lg:w-[70%]">
-          <TextField
-            type="number"
-            label="Total Working Hours / Day"
-            value={data.workHours.workingHours}
-            error={errors["workHours.workingHours"]}
-            onChange={(e) =>
-              handleChange("workingHours", Number(e.target.value), "workHours")
-            }
-          />
-
-          <TextField
-            type="number"
-            label="Minimum Working Hours For Full Day"
-            value={data.workHours.minimumHoursForFullDay}
-            error={errors["workHours.minimumHoursForFullDay"]}
-            onChange={(e) =>
-              handleChange(
-                "minimumHoursForFullDay",
-                Number(e.target.value),
-                "workHours",
-              )
-            }
-          />
-
-          <TextField
-            type="number"
-            label="Minimum Working Hours For Half Day"
-            value={data.workHours.minimumHoursForHalfDay}
-            error={errors["workHours.minimumHoursForHalfDay"]}
-            onChange={(e) =>
-              handleChange(
-                "minimumHoursForHalfDay",
-                Number(e.target.value),
-                "workHours",
-              )
-            }
-          />
         </div>
         <div className="space-y-3 mt-3">
           <h3 className="text-md font-medium text-primary">
@@ -97,7 +63,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 <div key={day.label} className="">
                   <div className="flex items-start gap-6">
                     <div className="w-32">
-                      <p className="text-sm text-grayText">{day.label}</p>
+                      <p className="text-sm text-secondary">{day.label}</p>
                     </div>
 
                     {!isSaturday ? (
@@ -108,14 +74,12 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                         onChange={(checked) =>
                           handleWeeklyOffChange(day.value, checked)
                         }
+                        disabled={!!editPolicyId}
                       />
                     ) : (
                       <div className="space-y-1">
                         {day.children?.map((week) => (
-                          <div
-                            key={week.value}
-                            className="flex items-center"
-                          >
+                          <div key={week.value} className="flex items-center">
                             <Checkbox
                               name="weeklyOffs"
                               className="mt-1"
@@ -123,6 +87,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                               checked={data.workHours.weeklyOffs.includes(
                                 week.value,
                               )}
+                              disabled={!!editPolicyId}
                               onChange={(checked) =>
                                 handleWeeklyOffChange(week.value, checked)
                               }
@@ -147,7 +112,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
         </h3>
 
         <div className="space-y-6 ml-2">
-          <div className="flex flex-wrap text-sm text-grayText items-center gap-3">
+          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
             <span>Applicable Late Mark if punch after</span>
 
             <div className="w-28">
@@ -155,6 +120,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 type="number"
                 value={data.lateRule.graceLoginAfterMinutes}
                 error={errors["lateRule.graceLoginAfterMinutes"]}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "graceLoginAfterMinutes",
@@ -172,6 +138,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 type="number"
                 value={data.lateRule.graceLoginBeforeMinutes}
                 error={errors["lateRule.graceLoginBeforeMinutes"]}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "graceLoginBeforeMinutes",
@@ -185,7 +152,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
             <span>minutes of shift time.</span>
           </div>
 
-          <div className="flex flex-wrap text-sm text-grayText items-center gap-3">
+          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
             <span>If</span>
 
             <div className="w-24">
@@ -193,6 +160,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 type="number"
                 value={data.lateRule.maxGracePerMonth}
                 error={errors["lateRule.maxGracePerMonth"]}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "maxGracePerMonth",
@@ -210,6 +178,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 type="number"
                 value={data.lateRule.deductionValue}
                 error={errors["lateRule.deductionValue"]}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "deductionValue",
@@ -223,7 +192,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
             <span>day salary.</span>
           </div>
 
-          <div className="flex flex-wrap text-sm text-grayText items-center gap-3">
+          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
             <span>Absent mark if</span>
 
             <div className="w-24">
@@ -231,6 +200,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 type="number"
                 value={data.lateRule.absentAfterMinutes}
                 error={errors["lateRule.absentAfterMinutes"]}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "absentAfterMinutes",
@@ -244,7 +214,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
             <span>hours less work with total working hours.</span>
           </div>
 
-          <div className="flex flex-wrap text-sm text-grayText items-center gap-3">
+          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
             <span>Half day considered if late</span>
 
             <div className="w-24">
@@ -252,6 +222,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 type="number"
                 value={data.lateRule.halfDayAfterMinutes}
                 error={errors["lateRule.halfDayAfterMinutes"]}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "halfDayAfterMinutes",
@@ -269,6 +240,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 type="number"
                 value={data.lateRule.halfDayBeforeMinutes}
                 error={errors["lateRule.halfDayBeforeMinutes"]}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "halfDayBeforeMinutes",
@@ -292,7 +264,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
         </h3>
 
         <div className="space-y-2 ml-2">
-          <div className="flex items-center text-sm text-grayText gap-4">
+          <div className="flex items-center text-sm text-secondary gap-4">
             <span>Manual Punch Request?</span>
 
             <SelectField
@@ -301,6 +273,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                   ? yesNoOption.find((ele) => ele?.value === "YES")
                   : yesNoOption.find((ele) => ele?.value === "NO")
               }
+              isDisabled={!!editPolicyId}
               name={"enabled"}
               options={yesNoOption}
               onChange={(option) =>
@@ -310,7 +283,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
           </div>
 
           {data.manualPunch.enabled && (
-            <div className="flex flex-wrap text-sm text-grayText items-center gap-3">
+            <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
               <span>
                 How many times employee can request manual punch in a month?
               </span>
@@ -319,6 +292,7 @@ const AttendanceSettings = ({ data, errors, handleChange }: Props) => {
                 <TextField
                   type="number"
                   value={data.manualPunch.limit}
+                  disabled={!!editPolicyId}
                   error={errors["manualPunch.limit"]}
                   onChange={(e) =>
                     handleChange("limit", Number(e.target.value), "manualPunch")

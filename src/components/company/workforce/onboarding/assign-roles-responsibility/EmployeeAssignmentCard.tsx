@@ -1,6 +1,12 @@
 import Image from "../../../../common/image";
 import { RoleEnum } from "../../../../../types/common-types";
-import { IAssignment, IBranch, IEmployeeFormData } from ".";
+import {
+  IAssignment,
+  IBranch,
+  IDepartment,
+  IEmployeeFormData,
+  IShift,
+} from ".";
 import { getDateDifference } from "../../../../../utils/date-format";
 import { BranchAssignmentFormData } from "../../all-employees/employee-details/update-modals/BranchAssignmentUpdate";
 import UserImage from "../../../../../assets/images/User-Image.png";
@@ -16,14 +22,35 @@ const EmployeeAssignmentCard = ({
   formData,
   handleAssignmentChange,
 }: IEmployeeAssignmentCardProps) => {
-
-  const isSelected = (branchId: string,shiftId: string,departmentId: string) => {
+  const isSelected = (
+    branchId: string,
+    shiftId: string,
+    departmentId: string,
+  ) => {
     return formData.assignments.some(
       (item) =>
         item.branchId === branchId &&
         item.shiftId === shiftId &&
         item.departmentId === departmentId,
     );
+  };
+
+  const getEmployeeCounts = (assignments?: IAssignment[]) => {
+    if (!assignments?.length) return 0;
+
+    return assignments.reduce((total, assignment) => {
+      if (data._id === assignment.branchId) {
+        const shift = data?.shifts?.find(
+          (shift) => shift._id === assignment.shiftId,
+        );
+
+        const department = shift?.departments.find(
+          (d) => d._id === assignment.departmentId,
+        );
+
+        return total + (department?.count ?? 0);
+      } else return total;
+    }, 0);
   };
 
   return (
@@ -47,15 +74,17 @@ const EmployeeAssignmentCard = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-medium text-gray-600">
-            Selected Employee :
-          </span>
+        {formData.role === RoleEnum.MANAGER && (
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-medium text-gray-600">
+              Assigned Employee :
+            </span>
 
-          <div className="flex py-1 px-2.5 items-center justify-center bg-primary text-white font-medium">
-            {formData.assignments.filter(ele => ele?.branchId === data._id)?.length}
+            <div className="flex py-1 px-2.5 items-center justify-center bg-primary text-white font-medium">
+              {getEmployeeCounts(formData.assignments)}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Shift Details */}
@@ -84,7 +113,14 @@ const EmployeeAssignmentCard = ({
               <div className="mx-6 w-px bg-gray-300" />
 
               <div className="pr-6">
-                <p className="mt-7 text-xs font-medium">{getDateDifference({from:shift.startTime, to: shift.endTime,unit: "hours"})} hours</p>
+                <p className="mt-7 text-xs font-medium">
+                  {getDateDifference({
+                    from: shift.startTime,
+                    to: shift.endTime,
+                    unit: "hours",
+                  })}{" "}
+                  hours
+                </p>
               </div>
 
               <div className="mx-6 w-px bg-gray-300" />
@@ -98,65 +134,80 @@ const EmployeeAssignmentCard = ({
             </div>
 
             {/* Departments */}
-            {shift.departments?.length > 0 &&
-                <div className="mt-4 space-y-3">
-                  {shift.departments.map((department) => {
-                    const checked = isSelected(data._id, shift._id,department._id);
+            {shift.departments?.length > 0 && (
+              <div className="mt-4 space-y-3">
+                {shift.departments.map((department) => {
+                  const checked = isSelected(
+                    data._id,
+                    shift._id,
+                    department._id,
+                  );
 
-                    const assignment: IAssignment = {
-                      branchId: data._id,
-                      shiftId: shift._id,
-                      departmentId: department._id,
-                      designationId: formData.designationId,
-                      isReporting: true,
-                      remarks: "",
-                    };
+                  const assignment: IAssignment = {
+                    branchId: data._id,
+                    shiftId: shift._id,
+                    departmentId: department._id,
+                    designationId: formData.designationId,
+                    isReporting: true,
+                    remarks: "",
+                  };
 
-                    return (
-                      <div
-                        key={department._id}
-                        className="grid grid-cols-[1fr_6fr_1fr_6fr] items-center gap-2"
-                      >
-                        {/* Checkbox / Radio */}
+                  return (
+                    <div
+                      key={department._id}
+                      className="grid grid-cols-[1fr_6fr_1fr_6fr] items-center gap-2"
+                    >
+                      {/* Checkbox / Radio */}
 
-                        {formData.role === RoleEnum.EMPLOYEE ? (
-                          <input
-                            type="radio"
-                            checked={checked}
-                            onChange={() =>
-                              handleAssignmentChange({
-                                ...assignment,
-                                isReporting: false,
-                              })
-                            }
-                          />
-                        ) : (
-                          <input
-                            type="checkbox"
-                            checked={department?.manager ? (department?.manager?._id === formData?.userId ? checked : true) : checked}
-                            disabled={department?.manager ? department?.manager?._id !== formData?.userId : false}
-                            onChange={() =>
-                              handleAssignmentChange({
-                                ...assignment,
-                                isReporting: false,
-                              })
-                            }
-                          />
-                        )}
+                      {formData.role === RoleEnum.EMPLOYEE ? (
+                        <input
+                          type="radio"
+                          checked={checked}
+                          onChange={() =>
+                            handleAssignmentChange({
+                              ...assignment,
+                              isReporting: false,
+                            })
+                          }
+                        />
+                      ) : (
+                        <input
+                          type="checkbox"
+                          checked={
+                            department?.manager
+                              ? department?.manager?._id === formData?.userId
+                                ? checked
+                                : true
+                              : checked
+                          }
+                          disabled={
+                            department?.manager
+                              ? department?.manager?._id !== formData?.userId
+                              : false
+                          }
+                          onChange={() =>
+                            handleAssignmentChange({
+                              ...assignment,
+                              isReporting: false,
+                            })
+                          }
+                        />
+                      )}
 
-                        {/* Department */}
+                      {/* Department */}
 
-                        <span className="text-sm font-medium">
-                          {department.name}
-                        </span>
+                      <span className="text-sm font-medium">
+                        {department.name}
+                      </span>
 
-                        <div className="border-l pl-4 text-sm">
-                          {department.count}
-                        </div>
+                      <div className="border-l pl-4 text-sm">
+                        {department.count}
+                      </div>
 
-                        {/* Manager */}
+                      {/* Manager */}
 
-                        {department?.manager ? <div className="flex items-center gap-2">
+                      {department?.manager ? (
+                        <div className="flex items-center gap-2">
                           <Image
                             src={department?.manager?.profileImage}
                             fallbackSrc={UserImage}
@@ -165,17 +216,21 @@ const EmployeeAssignmentCard = ({
 
                           <div>
                             <p className="font-medium text-sm text-primary">
-                              {department?.manager?.firstName}{" "}{department?.manager?.lastName}
+                              {department?.manager?.firstName}{" "}
+                              {department?.manager?.lastName}
                             </p>
 
                             {/* <p className="text-gray-500 text-xs">(569845)</p> */}
                           </div>
-                        </div>: <></>}
-                      </div>
-                    );
-                  })}
-                </div>
-}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         ))}
     </div>

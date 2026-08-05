@@ -19,7 +19,7 @@ interface Props {
     field: keyof Experience,
     value: string | File | null,
   ) => void;
-  addExperience: () => void;
+  addExperience: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
   removeExperience: (index: number) => void;
 }
 
@@ -130,6 +130,7 @@ const ExperienceDetails = ({
         <Button
           name="Add Experience"
           size="sm"
+          type="button"
           onClick={addExperience}
           leftIcon={<i className="fa-solid fa-plus"></i>}
         />

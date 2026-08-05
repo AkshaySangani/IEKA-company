@@ -31,7 +31,7 @@ export default function PolicyTable({
     },
     {
       header: "Policy Name",
-      className: "w-[25%]",
+      className: "w-[55%]",
       render: (row) => (
         <div className="flex flex-col">
           <div
@@ -45,18 +45,8 @@ export default function PolicyTable({
       ),
     },
     {
-      header: "Policy Type",
-      className: "w-[20%]",
-      render: (row) => "-",
-    },
-    {
-      header: "Description",
-      className: "w-[30%]",
-      render: (row) => ("-"),
-    },
-    {
       header: "Status",
-      className: "w-[20%]",
+      className: "w-[30%]",
       render: (row) => {
         return (
           <div className="flex items-center gap-1.5">

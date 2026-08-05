@@ -11,7 +11,7 @@ interface DepartmentCardProps {
 export default function DepartmentCard({ department }: DepartmentCardProps) {
   return (
     <>
-      <div className="content-card p-2.5">
+      <div className="content-card p-2.5 max-h-[350px]">
         {/* Header */}
         <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-1 text-white">
           <div className="flex items-center gap-2 ">
@@ -67,7 +67,7 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
             ))}
           </div>
         ) : (
-          <EmptyPlaceholder icon={<Info size={25} />} className="h-[300px]" />
+          <EmptyPlaceholder icon={<Info size={25} />} className="!h-[300px]" />
         )}
       </div>
     </>

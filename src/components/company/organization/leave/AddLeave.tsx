@@ -70,9 +70,9 @@ const AddLeave: React.FC<IAddLeaveProps> = ({
       newErrors.name = "Leave name is required";
     }
 
-    if (!formData.description) {
-      newErrors.name = "Description is required";
-    }
+    // if (!formData.description) {
+    //   newErrors.name = "Description is required";
+    // }
 
     setErrors(newErrors);
 
@@ -114,7 +114,7 @@ const AddLeave: React.FC<IAddLeaveProps> = ({
       loading={loading}
       handleOnConfirm={handleSubmit}
     >
-      <div className="grid grid-cols-1 w-[75%] gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <TextField
           label="Leave Name"
           name="name"
@@ -128,7 +128,6 @@ const AddLeave: React.FC<IAddLeaveProps> = ({
         <RadioButton label="Leave Type" required name={"isPaid"} value={formData.isPaid} options={leaveTypeOptions} onChange={(value) => handleChange("isPaid", value)} />
 
         <TextAreaField
-        required
           label="Description"
           name="description"
           value={formData.description}

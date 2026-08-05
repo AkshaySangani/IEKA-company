@@ -30,6 +30,14 @@ const TextField: React.FC<InputProps> = ({
         value = value.replace(/^0+/, "");
       }
 
+      if (props.name?.toLowerCase().includes("phone")) {
+        // Allow only digits
+        value = value.replace(/\D/g, "");
+
+        // Limit to 10 digits
+        value = value.slice(0, 10);
+      }
+
       e.target.value = value;
     }
 

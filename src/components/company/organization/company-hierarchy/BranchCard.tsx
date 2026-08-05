@@ -18,7 +18,7 @@ interface BranchCardProps {
 export default function BranchCard({ branch }: BranchCardProps) {
   return (
     <>
-      <div className="content-card">
+      <div className="content-card max-h-[350px]">
         {/* Header */}
         <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-3 text-white">
           <div className="flex items-center gap-2">

@@ -46,7 +46,7 @@ export default function CompanyHierarchy() {
 
       <div className="content-area bg-accordionBg">
         <PageLoader loading={branchLoading} />
-        {branches?.length > 0 ? <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        {branches?.length > 0 ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {branches?.map((ele, index) => (
                 <BranchCard
                 key={index}

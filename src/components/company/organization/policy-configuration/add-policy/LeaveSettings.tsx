@@ -1,4 +1,7 @@
-import { leavePeriodOptions, yesNoOption } from "../../../../../constants/constants";
+import {
+  leavePeriodOptions,
+  yesNoOption,
+} from "../../../../../constants/constants";
 import SelectField from "../../../../common/select/SelectField";
 import TextField from "../../../../common/text-field/TextField";
 import { PolicyFormData } from "./AddPolicy";
@@ -19,9 +22,8 @@ interface LeaveSettingProps {
     label: string;
     value: string;
   }[];
+  editPolicyId?: string;
 }
-
-
 
 const overtimeOptions = [
   {
@@ -43,6 +45,7 @@ const LeaveSetting = ({
   handleChange,
   handleLeaveChange,
   leaveOptions,
+  editPolicyId,
 }: LeaveSettingProps) => {
   return (
     <div className="space-y-3">
@@ -67,21 +70,19 @@ const LeaveSetting = ({
                 <TextField
                   type="number"
                   value={leave.limit}
+                  disabled={!!editPolicyId}
                   onChange={(e) =>
-                    handleLeaveChange(
-                      index,
-                      "limit",
-                      Number(e.target.value),
-                    )
+                    handleLeaveChange(index, "limit", Number(e.target.value))
                   }
                 />
 
-                <span className="text-sm text-grayText">
+                <span className="text-sm text-secondary">
                   min hours before apply
                 </span>
                 <TextField
                   type="number"
                   value={leave.hoursBeforeLeave}
+                  disabled={!!editPolicyId}
                   onChange={(e) =>
                     handleLeaveChange(
                       index,
@@ -105,7 +106,7 @@ const LeaveSetting = ({
 
         <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-            <label className="text-sm text-grayText">
+            <label className="text-sm text-secondary">
               Back to back dated leave allowed ?
             </label>
 
@@ -116,6 +117,7 @@ const LeaveSetting = ({
                   : yesNoOption.find((item) => item.value === "NO")
               }
               options={yesNoOption}
+              isDisabled={!!editPolicyId}
               name="enabled"
               onChange={(option) =>
                 handleChange(
@@ -130,13 +132,14 @@ const LeaveSetting = ({
           {data.continuousLeave.enabled && (
             <>
               <div className="grid grid-cols-1 lg:grid-cols-[320px_180px] items-center gap-4">
-                <label className="text-sm text-grayText">
+                <label className="text-sm text-secondary">
                   Maximum leave days allowed in one request ?
                 </label>
 
                 <TextField
                   type="number"
                   value={data.continuousLeave.maxLeaves}
+                  disabled={!!editPolicyId}
                   onChange={(e) =>
                     handleChange(
                       "maxLeaves",
@@ -148,7 +151,7 @@ const LeaveSetting = ({
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-                <label className="text-sm text-grayText">
+                <label className="text-sm text-secondary">
                   Leave allowed during probation ?
                 </label>
 
@@ -160,6 +163,7 @@ const LeaveSetting = ({
                   }
                   options={yesNoOption}
                   name="allowedInProbation"
+                  isDisabled={!!editPolicyId}
                   onChange={(option) =>
                     handleChange(
                       "allowedInProbation",
@@ -183,7 +187,7 @@ const LeaveSetting = ({
 
         <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-            <label className="text-sm text-grayText">
+            <label className="text-sm text-secondary">
               Carry forward leave allowed ?
             </label>
 
@@ -194,6 +198,7 @@ const LeaveSetting = ({
                   : yesNoOption.find((item) => item.value === "NO")
               }
               options={yesNoOption}
+              isDisabled={!!editPolicyId}
               name="enabled"
               onChange={(option) =>
                 handleChange(
@@ -207,13 +212,14 @@ const LeaveSetting = ({
 
           {data.carryForwardLeave.enabled && (
             <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-              <label className="text-sm text-grayText">
+              <label className="text-sm text-secondary">
                 How many leaves should be carry forward ?
               </label>
 
               <TextField
                 type="number"
                 value={data.carryForwardLeave.maxLeaves}
+                disabled={!!editPolicyId}
                 onChange={(e) =>
                   handleChange(
                     "maxLeaves",
@@ -227,78 +233,6 @@ const LeaveSetting = ({
         </div>
       </div>
 
-      {/* Leave Encashment */}
-
-      <div className="border-t pt-3">
-        <h3 className="mb-5 text-md font-medium text-primary">
-          Leave Encashment Setting
-        </h3>
-
-        <div className="space-y-3 ml-2">
-          <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-            <label className="text-sm text-grayText">
-              Leave encashment allowed ?
-            </label>
-
-            <SelectField
-              value={
-                data.leaveEncashment.enabled
-                  ? yesNoOption.find((item) => item.value === "YES")
-                  : yesNoOption.find((item) => item.value === "NO")
-              }
-              options={yesNoOption}
-              name="enabled"
-              onChange={(option) =>
-                handleChange(
-                  "enabled",
-                  option.value === "YES",
-                  "leaveEncashment",
-                )
-              }
-            />
-          </div>
-
-          {data.leaveEncashment.enabled && (
-            <>
-              <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-                <label className="text-sm text-grayText">
-                  Max leaves should be encashment ?
-                </label>
-
-                <TextField
-                  type="number"
-                  value={data.leaveEncashment.maxLeaves}
-                  onChange={(e) =>
-                    handleChange(
-                      "maxLeaves",
-                      Number(e.target.value),
-                      "leaveEncashment",
-                    )
-                  }
-                />
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-                <label className="text-sm text-grayText">
-                  Leave encashment period ?
-                </label>
-
-                <SelectField
-                  value={leavePeriodOptions.find(
-                    (item) => item.value === data.leaveEncashment.period,
-                  )}
-                  options={leavePeriodOptions}
-                  name="period"
-                  onChange={(option) =>
-                    handleChange("period", option.value, "leaveEncashment")
-                  }
-                />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
       {/* Sandwich Rule Setting */}
 
       <div className="border-t pt-3">
@@ -308,7 +242,7 @@ const LeaveSetting = ({
 
         <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-            <label className="text-sm text-grayText">
+            <label className="text-sm text-secondary">
               Enable sandwich rule ?
             </label>
 
@@ -319,6 +253,7 @@ const LeaveSetting = ({
                   : yesNoOption.find((item) => item.value === "NO")
               }
               options={yesNoOption}
+              isDisabled={!!editPolicyId}
               name="enabled"
               onChange={(option) =>
                 handleChange("enabled", option.value === "YES", "sandwichRule")
@@ -329,7 +264,7 @@ const LeaveSetting = ({
           {data.sandwichRule.enabled && (
             <>
               <div className="grid grid-cols-1 lg:grid-cols-[380px_180px] items-center gap-4">
-                <label className="text-sm text-grayText">
+                <label className="text-sm text-secondary">
                   consider also sandwich if leave before and after weekoff ?
                 </label>
 
@@ -340,6 +275,7 @@ const LeaveSetting = ({
                       : yesNoOption.find((item) => item.value === "NO")
                   }
                   options={yesNoOption}
+                  isDisabled={!!editPolicyId}
                   name="beforeAfterWeekOff"
                   onChange={(option) =>
                     handleChange(
@@ -352,7 +288,7 @@ const LeaveSetting = ({
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-[380px_180px] items-center gap-4">
-                <label className="text-sm text-grayText">
+                <label className="text-sm text-secondary">
                   consider also sandwich if leave before and after holiday ?
                 </label>
 
@@ -363,6 +299,7 @@ const LeaveSetting = ({
                       : yesNoOption.find((item) => item.value === "NO")
                   }
                   options={yesNoOption}
+                  isDisabled={!!editPolicyId}
                   name="beforeAfterHoliday"
                   onChange={(option) =>
                     handleChange(
@@ -387,7 +324,7 @@ const LeaveSetting = ({
 
         <div className="space-y-3 ml-2">
           <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-            <label className="text-sm text-grayText">
+            <label className="text-sm text-secondary">
               Overtime applicable ?
             </label>
 
@@ -398,6 +335,7 @@ const LeaveSetting = ({
                   : yesNoOption.find((item) => item.value === "NO")
               }
               options={yesNoOption}
+              isDisabled={!!editPolicyId}
               name="enabled"
               onChange={(option) =>
                 handleChange("enabled", option.value === "YES", "overtime")
@@ -408,14 +346,15 @@ const LeaveSetting = ({
           {data.overtime.enabled && (
             <>
               <div className="grid grid-cols-1 lg:grid-cols-[380px_180px] items-center gap-4">
-                <label className="text-sm text-grayText">
+                <label className="text-sm text-secondary">
                   OT Calculation After how many hours
                 </label>
 
                 <TextField
-                type="number"
+                  type="number"
                   value={data.overtime.minimumMinutes}
                   name="minimumMinutes"
+                  disabled={!!editPolicyId}
                   onChange={(e) =>
                     handleChange(
                       "minimumMinutes",
@@ -427,17 +366,18 @@ const LeaveSetting = ({
               </div>
 
               <div className="flex items-center gap-4">
-                <label className="text-sm text-grayText">
-                  Overtime rate
-                </label>
+                <label className="text-sm text-secondary">Overtime rate</label>
 
                 <SelectField
                   value={
                     data.overtime.overtimeRate
-                      ? overtimeOptions.find((item) => item.value === data.overtime.overtimeRate)??""
+                      ? (overtimeOptions.find(
+                          (item) => item.value === data.overtime.overtimeRate,
+                        ) ?? "")
                       : ""
                   }
                   options={overtimeOptions}
+                  isDisabled={!!editPolicyId}
                   name="overtimeRate"
                   onChange={(option) =>
                     handleChange(
@@ -447,7 +387,7 @@ const LeaveSetting = ({
                     )
                   }
                 />
-                <label className="text-sm text-grayText">
+                <label className="text-sm text-secondary">
                   from current salary hourly rate
                 </label>
               </div>

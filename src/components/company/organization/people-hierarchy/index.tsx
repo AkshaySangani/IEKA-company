@@ -161,7 +161,7 @@ export default function PeopleHierarchy() {
         <PageLoader loading={branchLoading} />
         
         {departments?.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {departments?.map((ele, index) => (
               <DepartmentCard key={index} department={ele} />
             ))}

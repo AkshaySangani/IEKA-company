@@ -193,7 +193,9 @@ const InviteEmployeeForm = () => {
   };
 
   // add education
-  const addEducation = () => {
+  const addEducation = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     setEducations((prev) => [
       ...prev,
       {
@@ -224,7 +226,9 @@ const InviteEmployeeForm = () => {
   };
 
   // add experience
-  const addExperience = () => {
+  const addExperience = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     setExperiences((prev) => [
       ...prev,
       {

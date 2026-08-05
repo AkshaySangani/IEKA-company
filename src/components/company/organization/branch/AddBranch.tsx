@@ -133,12 +133,12 @@ const AddBranch: React.FC<IAddBranchProps> = ({
     <Modal
       isOpen={isOpen}
       title="Add Branch"
-      width="max-w-xl"
+      width="max-w-lg"
       onClose={handleClose}
       loading={loading}
       handleOnConfirm={handleSubmit}
     >
-      <div className="grid grid-cols-1 w-[75%] gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <TextField
           label="Branch Name"
           name="name"

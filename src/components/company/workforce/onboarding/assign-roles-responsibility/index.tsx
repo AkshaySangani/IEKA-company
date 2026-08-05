@@ -401,6 +401,12 @@ const AssignRolesResponsibility = () => {
   };
 
   const handleClickOnAction = () => {
+    const newErrors = validate();
+    const isValid = Object.keys(newErrors).length === 0;
+    if (!isValid) {
+      scrollToFirstError(newErrors);
+      return;
+    }
     if (formData.role === RoleEnum.MANAGER) {
       const branch = branches.find((item) => item._id === formData.branchId);
       const shift = branch?.shifts.find(
@@ -436,12 +442,12 @@ const AssignRolesResponsibility = () => {
       });
     } else {
       const assignment = formData.assignments[0];
-      const branch = branches.find((item) => item._id === assignment.branchId);
+      const branch = branches.find((item) => item._id === assignment?.branchId);
       const shift = branch?.shifts.find(
-        (item) => item._id === assignment.shiftId,
+        (item) => item._id === assignment?.shiftId,
       );
       const department = shift?.departments.find(
-        (item) => item._id === assignment.departmentId,
+        (item) => item._id === assignment?.departmentId,
       );
       setConfirmationDetails({
         branch: branch?.name || "",
@@ -488,7 +494,7 @@ const AssignRolesResponsibility = () => {
         <PageLoader loading={loading} />
         {employeeId ? (
           <form ref={formRef} method="POST" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 sm:grid-cols-[5fr_3.5fr] gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-[5fr_3.5fr] gap-4">
               <div className="flex flex-col gap-3">
                 <EmployeeDetailCard
                   data={employee}
@@ -627,20 +633,6 @@ const AssignRolesResponsibility = () => {
             </div>
           </div>
         </>
-      </Modal>
-      <Modal
-        isOpen={open}
-        title={`${employee?.firstName} ${employee?.lastName}`}
-        width="max-w-6xl"
-        onClose={handlePolicyOpenClose}
-        showFooter={false}
-      >
-        {open && (
-          <AddPolicy
-            editPolicyId={policyId}
-            handleClosePolicy={handlePolicyOpenClose}
-          />
-        )}
       </Modal>
     </>
   );

@@ -376,17 +376,19 @@ const AddPolicy: React.FC<{
             data={formData}
             errors={errors}
             handleChange={handleChange}
+            editPolicyId={editPolicyId}
           />
           <LeaveSetting
             data={formData}
             handleLeaveChange={handleLeaveChange}
             handleChange={handleChange}
             leaveOptions={[]}
+            editPolicyId={editPolicyId}
           />
-          <div className="mt-4 flex justify-center gap-3 border-t border-gray-300 pt-3">
+          {!editPolicyId && <div className="mt-4 flex justify-center gap-3 border-t border-gray-300 pt-3">
             <Button type="submit" name="Save" size="sm" />
             <Button name="Cancel" variant="secondary" size="sm" onClick={handleClose} />
-          </div>
+          </div>}
         </form>
       </div>
     </>
