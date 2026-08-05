@@ -215,7 +215,7 @@ api.interceptors.response.use(
     if (status === 404) {
       return Promise.reject({
         success: false,
-        message: error.response.data?.message || "API Not Found.",
+        message: error.response.data?.message || error?.message || "API Not Found.",
       });
     }
 
@@ -225,14 +225,14 @@ api.interceptors.response.use(
     if (status >= 500) {
       return Promise.reject({
         success: false,
-        message: "Server error. Please try again later.",
+        message: error.response.data?.message || error?.message || "Server error. Please try again later.",
       });
     }
 
     return Promise.reject({
       success: false,
       status,
-      message: error.response.data?.message || "Something went wrong.",
+      message: error.response.data?.message || error?.message || "Something went wrong.",
       errors: error.response.data?.errors,
     });
   },
@@ -243,7 +243,7 @@ api.interceptors.response.use(
 // ======================
 export const getApiErrorMessage = (error: any): string => {
   return (
-    error?.message || error?.response?.data?.message || "Something went wrong"
+    error?.message || error?.response?.data?.message || error?.message || "Something went wrong"
   );
 };
 

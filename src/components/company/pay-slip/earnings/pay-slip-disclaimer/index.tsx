@@ -99,8 +99,8 @@ const PayslipDisclaimer: React.FC = () => {
       details: formData.details.filter((ele) => ele.name),
     };
 
-    const response = earningData._id
-      ? await updateEarning(payload, earningData._id)
+    const response = earningData?._id
+      ? await updateEarning(payload, earningData?._id)
       : await addEarnings(payload);
     if (response.success) {
       handleClose();
