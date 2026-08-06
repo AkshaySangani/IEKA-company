@@ -18,16 +18,10 @@ export interface OfficeExpenseFormData {
   date: string;
   description: string;
   amount: string;
-  userId: string;
   branchId: string;
-
-  expenseType: ExpenseCategoryEnum;
-  serviceType?: string;
 
   paymentMode?: string;
   transactionId?: string;
-
-  vendor: VendorDetailsType;
 
   documents: File[];
 }

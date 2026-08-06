@@ -45,9 +45,9 @@ export default function ServiceDetails({
           Service Details
         </span>
       </div>
-      <div className="grid lg:grid-cols-2 sm:w-[80%] gap-4">
+      <div className="grid md:grid-cols-2 md:w-full lg:w-[80%] gap-4">
         <TextField
-          label="Name"
+          label="Expense Name"
           name="name"
           value={formData.name}
           error={errors.name}
@@ -77,21 +77,6 @@ export default function ServiceDetails({
           placeholder="Enter date"
           required
           onChange={(e) => handleChange("date", e.target.value)}
-        />
-        <SelectField
-          label="Service Type"
-          required
-          value={
-            formData.serviceType
-              ? SERVICE_TYPE_OPTIONS?.find(
-                  (ele) => ele?.value === formData.serviceType,
-                )
-              : ""
-          }
-          name={"serviceType"}
-          options={SERVICE_TYPE_OPTIONS}
-          error={errors.serviceType}
-          onChange={(option) => handleChange("serviceType", option.value)}
         />
         <TextAreaField
           label="Reason"

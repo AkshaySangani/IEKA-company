@@ -25,7 +25,7 @@ export default function VendorDetails({
           Vendor Details
         </span>
       </div>
-      <div className="grid lg:grid-cols-2 sm:w-[80%] gap-4">
+      {/* <div className="grid lg:grid-cols-2 sm:w-[80%] gap-4">
         <TextField
           label="Vendor Company Name"
           name="name"
@@ -96,7 +96,7 @@ export default function VendorDetails({
           placeholder="Enter comments"
           onChange={(e) => handleChange("description", e.target.value)}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

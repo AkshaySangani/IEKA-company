@@ -6,7 +6,7 @@ import Modal from "../../components/common/modal/Modal";
 import Image from "../../components/common/image";
 
 import { removeLocalStorageData } from "../../utils/helper";
-import { storageKeys } from "../../constants/constants";
+import { roleNames, storageKeys } from "../../constants/constants";
 import { useAuthStore } from "../../store/auth-store";
 import { logoutApi } from "../../apis/auth/auth.api";
 
@@ -74,7 +74,7 @@ const AdminMenu = () => {
                 {user?.firstName} {user?.lastName}
               </span>
 
-              <span className="text-xs font-medium text-[#7e7e7e]">Admin</span>
+              <span className="text-xs font-medium text-[#7e7e7e]">{roleNames[user.role]}</span>
             </div>
           </div>
 

@@ -1,15 +1,16 @@
 import { useState } from "react";
 import Accordion from "../../../../../common/accordian";
 import { ColumnDef, CustomTable } from "../../../../../common/table";
-import { Link } from "react-router-dom";
-import { IEducation } from "../../../onboarding/employee-details";
+import { IEducation, IEmployee } from "../../../onboarding/employee-details";
 import { config } from "../../../../../../utils/config";
+import { downloadFile } from "../../../../../../utils/helper";
 
 interface EductionDetailsProps {
+  employee: IEmployee;
   eductions: IEducation[];
 }
 
-const EductionDetails = ({ eductions }: EductionDetailsProps) => {
+const EductionDetails = ({ eductions, employee }: EductionDetailsProps) => {
   const [active, setActive] = useState<boolean>(false);
   const educationColumns: ColumnDef<IEducation>[] = [
     {
@@ -33,14 +34,15 @@ const EductionDetails = ({ eductions }: EductionDetailsProps) => {
       header: "MarkSheet",
       className: "w-[5%] pr-2 pl-2",
       render: (education, index) => (
-        <a
-          href={`${config.BACKEND_API_URL}${education.document}`}
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <i className="fa-solid fa-image text-primary"></i>
-        </a>
+        <i
+          className="fa-solid fa-image text-primary"
+          onClick={() =>
+            downloadFile(
+              `${config.BACKEND_API_URL}${education.document}`,
+              `${employee.firstName}_${employee.lastName}_MarkSheet`,
+            )
+          }
+        ></i>
       ),
     },
   ];

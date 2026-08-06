@@ -1,15 +1,25 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { AuthState } from "../types/auth-types";
+import { AuthState, IUser } from "../types/auth-types";
 import { storageKeys } from "../constants/constants";
+
+const initialUserState: IUser = {
+  company: { _id: "", companyLogo: "" },
+  email: "",
+  firstName: "",
+  lastName: "",
+  profileImage: "",
+  role: "",
+  _id: "",
+}
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       accessToken: null,
       refreshToken: null,
-      user: null,
+      user: initialUserState,
 
       setToken: (token, refreshToken) =>
         set({
@@ -26,7 +36,7 @@ export const useAuthStore = create<AuthState>()(
         set({
           accessToken: null,
           refreshToken: null,
-          user: null,
+          user: initialUserState,
         }),
 
       isAuthenticated: () => {

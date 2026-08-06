@@ -2,6 +2,7 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   currency,
   pathNames,
+  roleNames,
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
@@ -12,6 +13,7 @@ import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import { RoleEnum } from "../../../../types/common-types";
 
 interface IOfficeExpenseListProps {
   officeExpenses: IOfficeExpense[];
@@ -91,7 +93,7 @@ export default function OfficeExpenseTable({
             profileImage: row.assignedBy.profileImage,
             firstName: row.assignedBy.firstName,
             lastName: row.assignedBy.lastName,
-            description: row.assignedBy.role,
+            description: roleNames[row.assignedBy.role],
           }}
         />
       ),

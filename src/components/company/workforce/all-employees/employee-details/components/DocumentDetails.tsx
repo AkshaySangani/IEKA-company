@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Accordion from "../../../../../common/accordian";
 import { ColumnDef, CustomTable } from "../../../../../common/table";
-import { Link } from "react-router-dom";
 import { documentType } from "../../../../../../constants/constants";
 import { IDocument } from "../../../onboarding/employee-details";
 import { config } from "../../../../../../utils/config";
+import Image from "../../../../../common/image";
+import Modal from "../../../../../common/modal/Modal";
 
 interface DocumentDetailsProps {
   documents: IDocument[];
@@ -12,6 +13,7 @@ interface DocumentDetailsProps {
 
 const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
   const [active, setActive] = useState<boolean>(false);
+  const [preview, setPreview] = useState<string>("");
   const documentColumns: ColumnDef<IDocument>[] = [
     {
       header: "Document Name",
@@ -26,49 +28,63 @@ const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
     {
       header: "Front Pic",
       className: "w-[15%] pr-2 pl-2",
-      render: (document) => (
-        <a
-          href={`${config.BACKEND_API_URL}${document.front}`}
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <i className="fa-solid fa-image text-primary"></i>
-        </a>
-      ),
+      render: (document) =>
+        document.front ? (
+          <Image
+            src={`${config.BACKEND_API_URL}${document.front}`}
+            width={20}
+            className="cursor-pointer"
+            onClick={() =>
+              setPreview(`${config.BACKEND_API_URL}${document.front}`)
+            }
+          />
+        ) : (
+          "-"
+        ),
     },
     {
       header: "Back Pic",
       className: "w-[15%] pr-2 pl-2",
       render: (document) =>
         document.back ? (
-          <a
-            href={`${config.BACKEND_API_URL}${document.back}`}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <i className="fa-solid fa-image text-primary"></i>
-          </a>
+          <Image
+            src={`${config.BACKEND_API_URL}${document.front}`}
+            width={20}
+            className="cursor-pointer"
+            onClick={() =>
+              setPreview(`${config.BACKEND_API_URL}${document.front}`)
+            }
+          />
         ) : (
           "-"
         ),
     },
   ];
   return (
-    <Accordion
-      active={active}
-      setActive={setActive}
-      header={
-        <div className="flex items-center gap-2">
-          <h3 className="text-md text-gray-600 font-medium">
-            Personal Document Details
-          </h3>
-        </div>
-      }
-    >
-      <CustomTable columns={documentColumns} data={documents} />
-    </Accordion>
+    <>
+      <Accordion
+        active={active}
+        setActive={setActive}
+        header={
+          <div className="flex items-center gap-2">
+            <h3 className="text-md text-gray-600 font-medium">
+              Personal Document Details
+            </h3>
+          </div>
+        }
+      >
+        <CustomTable columns={documentColumns} data={documents} />
+      </Accordion>
+      <Modal
+        width="max-w-xs"
+        isOpen={preview !== ""}
+        title={"Preview"}
+        onClose={() => setPreview("")}
+        showFooter={false}
+      >
+        <Image src={preview} width={300} height={300} />
+      </Modal>
+    </>
   );
 };
 

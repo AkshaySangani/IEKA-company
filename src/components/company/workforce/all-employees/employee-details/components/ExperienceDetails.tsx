@@ -1,16 +1,20 @@
 import { useState } from "react";
 import Accordion from "../../../../../common/accordian";
 import { ColumnDef, CustomTable } from "../../../../../common/table";
-import { Link } from "react-router-dom";
 import { formatDate } from "../../../../../../utils/date-format";
-import { IExperience } from "../../../onboarding/employee-details";
+import { IEmployee, IExperience } from "../../../onboarding/employee-details";
 import { config } from "../../../../../../utils/config";
+import { downloadFile } from "../../../../../../utils/helper";
 
 interface ExperienceDetailsProps {
+  employee: IEmployee;
   experiences: IExperience[];
 }
 
-const ExperienceDetails = ({ experiences }: ExperienceDetailsProps) => {
+const ExperienceDetails = ({
+  experiences,
+  employee,
+}: ExperienceDetailsProps) => {
   const [active, setActive] = useState<boolean>(false);
   const experienceColumns: ColumnDef<IExperience>[] = [
     {
@@ -38,14 +42,15 @@ const ExperienceDetails = ({ experiences }: ExperienceDetailsProps) => {
       header: "Document",
       className: "w-[5%] pr-2 pl-2",
       render: (experience) => (
-        <a
-          href={`${config.BACKEND_API_URL}${experience.document}`}
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <i className="fa-solid fa-image text-primary"></i>
-        </a>
+        <i
+          className="fa-solid fa-image text-primary"
+          onClick={() =>
+            downloadFile(
+              `${config.BACKEND_API_URL}${experience.document}`,
+              `${employee.firstName}_${employee.lastName}_Experience_Letter`,
+            )
+          }
+        ></i>
       ),
     },
   ];

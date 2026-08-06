@@ -2,6 +2,7 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   currency,
   pathNames,
+  roleNames,
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
@@ -65,7 +66,7 @@ export default function DepartmentTable({
             profileImage: row.userId.profileImage,
             firstName: row.userId.firstName,
             lastName: row.userId.lastName,
-            description: row.userId.role,
+            description: roleNames[row.userId.role],
           }}
         />
       ),

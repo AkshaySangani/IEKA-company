@@ -4,7 +4,6 @@ import { getEmployeeDetails } from "../../../../../apis/workforce/onboardings.ap
 import {
   BloodGroupEnum,
   GenderEnum,
-  IOption,
   RoleEnum,
   statusEnum,
 } from "../../../../../types/common-types";
@@ -18,8 +17,6 @@ import DocumentDetails from "./components/DocumentDetails";
 import EmptyPlaceholder from "../../../../common/empty-paceholder";
 import { IEmployee, IEmployeeDetails } from "../../onboarding/employee-details";
 import { updateEmployee } from "../../../../../apis/workforce/all-employee.api";
-import { getPolicies } from "../../../../../apis/organization/policy.api";
-import { IPolicy } from "../../../organization/policy-configuration";
 
 const initialEmployee: IEmployee = {
   _id: "",
@@ -130,8 +127,8 @@ const EmployeeOtherDetails = () => {
             loading={loading}
             handleSubmit={handleSubmit}
           />
-          <EductionDetails eductions={employeeDetails.educations} />
-          <ExperienceDetails experiences={employeeDetails.experiences} />
+          <EductionDetails eductions={employeeDetails.educations} employee={employee}/>
+          <ExperienceDetails experiences={employeeDetails.experiences} employee={employee}/>
           <BankDetails
             bank={employeeDetails.bank}
             loading={loading}

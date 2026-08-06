@@ -11,7 +11,7 @@ export interface IUser {
 export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
-  user: IUser | null;
+  user: IUser;
 
   setToken: (token: string, refreshToken: string) => void;
   setUser: (user: IUser) => void;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { documentType } from "../../../../../constants/constants";
 import {
   IDocument,
@@ -10,9 +10,10 @@ import {
 import { formatDate } from "../../../../../utils/date-format";
 import DetailRow from "../../../../common/detail-row";
 import { ColumnDef, CustomTable } from "../../../../common/table";
-import { Link } from "react-router-dom";
 import { config } from "../../../../../utils/config";
 import { downloadFile } from "../../../../../utils/helper";
+import Image from "../../../../common/image";
+import Modal from "../../../../common/modal/Modal";
 
 interface Props {
   data: IEmployee;
@@ -23,6 +24,7 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
   data,
   employeeDetails,
 }) => {
+  const [preview, setPreview] = useState<string>("");
   const educationColumns: ColumnDef<IEducation>[] = [
     {
       header: "Board/ University",
@@ -111,19 +113,18 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
     {
       header: "Front Pic",
       className: "w-[15%] pr-2 pl-2",
-      render: (document) => {
-        return (
-          <i
-            className="fa-solid fa-image cursor-pointer text-primary"
+      render: (document) => document.front ? (
+          <Image
+            src={`${config.BACKEND_API_URL}${document.front}`}
+            width={20}
+            className="cursor-pointer"
             onClick={() =>
-              downloadFile(
-                `${config.BACKEND_API_URL}${document.front}`,
-                `${data.firstName}_${data.lastName}_Front_Pic`,
-              )
+              setPreview(`${config.BACKEND_API_URL}${document.front}`)
             }
-          ></i>
-        );
-      },
+          />
+        ) : (
+          "-"
+        ),
     },
     {
       header: "Back Pic",
@@ -241,6 +242,15 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
           />
         </div>
       </div>
+      <Modal
+        width="max-w-xs"
+        isOpen={preview !== ""}
+        title={"Preview"}
+        onClose={() => setPreview("")}
+        showFooter={false}
+      >
+        <Image src={preview} width={300} height={300} />
+      </Modal>
     </div>
   );
 };

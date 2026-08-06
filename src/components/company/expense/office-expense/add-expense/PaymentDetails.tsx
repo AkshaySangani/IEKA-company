@@ -25,7 +25,7 @@ export default function PaymentDetails({
           Payment Details
         </span>
       </div>
-      <div className="grid lg:grid-cols-2 sm:w-[80%] gap-3">
+      <div className="grid md:grid-cols-2 md:w-full lg:w-[80%] gap-4">
         <TextField
           label="Total Amount"
           placeholder="Enter Amount"
@@ -63,6 +63,8 @@ export default function PaymentDetails({
           name="documents"
           type="file"
           multiple
+          required
+          error={errors.documents}
           placeholder="Upload Documents"
           onChange={(e) => handleDocumentChange(e)}
         />
@@ -88,7 +90,7 @@ export default function PaymentDetails({
                   height={300}
                   alt={file.name}
                 />
-                <span>{file.name}</span>
+                <span className="truncate">{file.name}</span>
               </div>
             ))}
         </div>

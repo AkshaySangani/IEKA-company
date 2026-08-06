@@ -13,8 +13,6 @@ import Button from "../../../../common/button/Button";
 import PageLoader from "../../../../common/loader/PageLoader";
 import ServiceDetails from "./ServiceDetails";
 import PaymentDetails from "./PaymentDetails";
-import VendorDetails from "./VendorDetails";
-import CategoryCards from "./CategoryCards";
 import { toastMessage } from "../../../../../utils/toast-message";
 import ActionModal from "../../../../common/modal/ActionModal";
 
@@ -23,24 +21,10 @@ const initialFormData: OfficeExpenseFormData = {
   date: "",
   description: "",
   amount: "",
-  userId: "",
   branchId: "",
-
-  expenseType: ExpenseCategoryEnum.ELECTRONICS_ITEM,
-  serviceType: "",
 
   paymentMode: "",
   transactionId: "",
-
-  vendor: {
-    name: "",
-    company: "",
-    phone: "",
-    isOnWarrenty: false,
-    startDate: "",
-    endDate: "",
-    description: "",
-  },
 
   documents: [],
 };
@@ -74,24 +58,6 @@ const AddOfficeExpense: React.FC = () => {
     }));
   };
 
-  const handleVendorChange = (
-    field: keyof VendorDetailsType,
-    value: string | boolean,
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      vendor: {
-        ...prev.vendor,
-        [field]: value,
-      },
-    }));
-
-    setErrors((prev) => ({
-      ...prev,
-      vendor: "",
-    }));
-  };
-
   // handle document change
   const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -115,6 +81,10 @@ const AddOfficeExpense: React.FC = () => {
     });
 
     e.target.value = "";
+    setErrors((prev) => ({
+      ...prev,
+      ["documents"]: "",
+    }));
   };
 
   // remove document
@@ -141,16 +111,16 @@ const AddOfficeExpense: React.FC = () => {
       newErrors.date = "Service Date is required";
     }
 
-    if (!formData.serviceType) {
-      newErrors.serviceType = "Service type is required";
-    }
-
     if (!formData.amount || Number(formData.amount) <= 0) {
       newErrors.amount = "Amount is required";
     }
 
     if (!formData.paymentMode) {
       newErrors.paymentMode = "Payment mode is required";
+    }
+
+    if (formData.documents?.length === 0) {
+      newErrors.documents = "Attachments are required";
     }
 
     setErrors(newErrors);
@@ -202,17 +172,11 @@ const AddOfficeExpense: React.FC = () => {
 
       payload.append("branchId", formData.branchId);
 
-      payload.append("userId", formData.userId || user?._id || "");
-
       payload.append("name", formData.name);
 
       payload.append("date", formData.date);
 
       payload.append("amount", String(formData.amount));
-
-      payload.append("expenseType", formData.expenseType);
-
-      payload.append("serviceType", formData.serviceType || "");
 
       payload.append("paymentMode", formData.paymentMode || "");
 
@@ -221,11 +185,12 @@ const AddOfficeExpense: React.FC = () => {
       if (formData.description) {
         payload.append("description", formData.description);
       }
-      payload.append("vendor", JSON.stringify(formData.vendor));
 
-      formData.documents.forEach((file) => {
-        payload.append("documents", file);
-      });
+      if (formData.documents?.length > 0) {
+        formData.documents.forEach((file) => {
+          payload.append("documents", file);
+        });
+      }
 
       const response = await addOfficeExpense(payload);
 
@@ -275,19 +240,10 @@ const AddOfficeExpense: React.FC = () => {
           method="POST"
           onSubmit={handleSubmit}
         >
-          <CategoryCards
-            active={formData.expenseType}
-            setActive={(value: any) => handleChange("expenseType", value)}
-          />
           <ServiceDetails
             formData={formData}
             errors={errors}
             handleChange={handleChange}
-          />
-          <VendorDetails
-            formData={formData}
-            errors={errors}
-            handleChange={handleVendorChange}
           />
           <PaymentDetails
             formData={formData}

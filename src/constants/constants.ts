@@ -8,7 +8,7 @@ export const storageKeys = {
 
 
 export const roleNames: any = {
-  [RoleEnum.OWNER]: "Owner",
+  [RoleEnum.OWNER]: "COO",
   [RoleEnum.MANAGER]: "Manager",
   [RoleEnum.EMPLOYEE]: "Employee"
 }
