@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { statusEnum } from "../../../../../../types/common-types";
 import ConfirmationHeader from "../../../../../common/confirmation-header";
 import Modal from "../../../../../common/modal/Modal";
@@ -17,7 +17,7 @@ interface ProbationPeriodUpdateProps {
 }
 
 interface ProbationPeriodFormData {
-  probationPeriod: string;
+  probationPeriod: number;
   remarks: string;
 }
 export default function ProbationPeriodUpdate({
@@ -30,10 +30,18 @@ export default function ProbationPeriodUpdate({
   loading
 }: ProbationPeriodUpdateProps) {
   const initialFormData: ProbationPeriodFormData = {
-    probationPeriod: String(probationPeriod),
+    probationPeriod: probationPeriod,
     remarks: "",
   };
+
+  
   const [formData, setFormData] = useState<ProbationPeriodFormData>(initialFormData);
+
+  // useEffect(() => {
+  //   if(probationPeriod){
+  //     setFormData(prev => ({...prev, probationPeriod: String(probationPeriod)}))
+  //   }
+  // }, [probationPeriod]);
 
   const handleChange = (field: keyof ProbationPeriodFormData, value: string) => {
     setFormData(prev => ({...prev, [field]: value}))

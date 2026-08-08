@@ -12,9 +12,19 @@ import {
 import TextField from "../../../../../common/text-field/TextField";
 import { DateFormat, formatDate } from "../../../../../../utils/date-format";
 import { IEmployee } from "../../../onboarding/employee-details";
-import { updateEmployee } from "../../../../../../apis/workforce/all-employee.api";
 import { regex } from "../../../../../../constants/validation-regex";
+import { GenderEnum } from "../../../../../../types/common-types";
 
+interface IPersonalDetailsForm {
+    firstName: string;
+    lastName: string;
+    dob: string;
+    gender: GenderEnum;
+    email: string;
+    phone: string;
+    bloodGroup: string;
+    isMarried: string;
+  }
 interface PersonalDetailsProps {
   employee: IEmployee;
   loading: boolean;
@@ -32,13 +42,13 @@ const PersonDetails = ({
     firstName: "",
     lastName: "",
     dob: "",
-    gender: "",
+    gender: GenderEnum.MALE,
     email: "",
     phone: "",
     bloodGroup: "",
     isMarried: "",
   };
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<IPersonalDetailsForm>(initialFormData);
   const handleClickOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
@@ -48,7 +58,7 @@ const PersonDetails = ({
           firstName: employee.firstName || "",
           lastName: employee.lastName || "",
           dob: formatDate(employee.dob, DateFormat.ISO_DATE),
-          gender: employee.gender || "",
+          gender: employee.gender || GenderEnum.MALE,
           email: employee.email || "",
           phone: String(employee.phone),
           bloodGroup: employee.bloodGroup || "",
@@ -111,10 +121,6 @@ const PersonDetails = ({
       newErrors.phone = "Phone number is required";
     } else if (!regex.phone.test(formData.phone)) {
       newErrors.phone = "Phone number must be 10 digits";
-    }
-
-    if (!formData.bloodGroup) {
-      newErrors.bloodGroup = "Blood group is required";
     }
 
     setErrors(newErrors);
@@ -291,7 +297,6 @@ const PersonDetails = ({
               } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
             }
             isMenuPortalTarget={false}
-            required
           />
 
           {/* Marital Status */}
@@ -314,7 +319,6 @@ const PersonDetails = ({
               } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>)
             }
             isMenuPortalTarget={false}
-            required
           />
         </div>
       </Modal>

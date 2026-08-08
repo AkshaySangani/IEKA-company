@@ -22,8 +22,7 @@ const Modal = ({
   confirmButtonName = "Save",
   handleOnConfirm = () => {},
   loading = false,
-  showFooter = true
-  
+  showFooter = true,
 }: ModalProps) => {
   return (
     <div
@@ -35,7 +34,7 @@ const Modal = ({
         overflow-y-auto
         bg-black/45
         transition-all duration-300 ease-in-out
-        ${isOpen ? "opacity-100 visible" : "opacity-0 hidden"}
+        ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}
       `}
     >
       <div
@@ -46,55 +45,62 @@ const Modal = ({
           border border-[#8f8f8f]
           transition-all duration-300 ease-in-out
           ${width}
-          ${
-            isOpen
-              ? "translate-y-0 opacity-100"
-              : "-translate-y-10 opacity-0"
-          }
+          ${isOpen ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}
         `}
       >
         {/* Modal */}
-        <div
-          className={`w-full ${width} bg-white shadow-xl`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="bg-[#212837] px-4 py-3 flex items-center justify-between">
-            <h5 className="text-white text-base font-medium">{title}</h5>
+        {isOpen && (
+          <div
+            className={`w-full ${width} bg-white shadow-xl`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-[#212837] px-4 py-3 flex items-center justify-between">
+              <h5 className="text-white text-base font-medium">{title}</h5>
 
-            <Button
-              type="button"
-              size="sm"
-              onClick={onClose}
-              variant="secondary"
-              leftIcon={<i className="fa-solid fa-xmark text-white"></i>}
-            >
-              
-            </Button>
+              <Button
+                type="button"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onClose();
+                }}
+                variant="secondary"
+                leftIcon={<i className="fa-solid fa-xmark text-white"></i>}
+              ></Button>
+            </div>
+
+            {/* Body */}
+            <div className="p-3 sm:p-6">{children}</div>
+
+            {/* Footer */}
+            {showFooter && (
+              <div className="border-t border-gray-300 px-6 py-4 flex justify-center gap-3">
+                <Button
+                  loading={loading}
+                  variant="primary"
+                  disabled={loading}
+                  name={confirmButtonName}
+                  size="sm"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOnConfirm();
+                  }}
+                />
+
+                <Button
+                  name="Close"
+                  size="sm"
+                  variant="secondary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onClose();
+                  }}
+                />
+              </div>
+            )}
           </div>
-
-          {/* Body */}
-          <div className="p-3 sm:p-6">{children}</div>
-
-          {/* Footer */}
-          {showFooter && <div className="border-t border-gray-300 px-6 py-4 flex justify-center gap-3">
-            <Button
-              loading={loading}
-              variant="primary"
-              disabled={loading}
-              name={confirmButtonName}
-              size="sm"
-              onClick={handleOnConfirm}
-            />
-
-            <Button
-              name="Close"
-              size="sm"
-              variant="secondary"
-              onClick={onClose}
-            />
-          </div>}
-        </div>
+        )}
       </div>
     </div>
   );

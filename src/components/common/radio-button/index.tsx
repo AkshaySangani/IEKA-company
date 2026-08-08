@@ -4,7 +4,7 @@ import { IOption } from "../../../types/common-types";
 interface RadioButtonProps {
   name: string;
   label?: string;
-  value: string;
+  value: string | number;
   options: IOption[];
   required?: boolean;
   error?: string;

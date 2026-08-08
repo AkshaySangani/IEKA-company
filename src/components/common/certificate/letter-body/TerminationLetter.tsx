@@ -17,17 +17,17 @@ export default function TerminationLetter({ data }: TerminationLetterProps) {
       className="w-[670px]"
     >
       <div className="space-y-3 text-[15px] leading-8 text-slate-700">
-        <p>
+        {data.showCandidateName && <p>
           To{" "}
           <span className="font-bold">
             {data.candidateName || "Employee Name"},
           </span>
-        </p>
+        </p>}
         <p>
           This is to formally inform you that your employment with our
           organization as
           <b>{" "}{data.jobTitle}{" "}</b> has been terminated with effect from
-          <b>{" "}{data.terminationDate}</b>.
+          <b>{" "}{(data.showTerminationDate && data.terminationDate) ? formatDate(data.terminationDate) : ""}</b> and last working day is<b>{" "}{(data.showLastWorkingDate && data.lastWorkingDate) ? formatDate(data.lastWorkingDate) : ""}</b>.
         </p>
 
         <p>

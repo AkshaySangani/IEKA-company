@@ -82,7 +82,9 @@ const EarningDetails = ({
       render: (_, index) => {
         return (
           <Button
-            onClick={() => handleRemoveEarning(index)}
+            onClick={(e) => {
+              e.preventDefault(); 
+              handleRemoveEarning(index)}}
             variant="danger"
             size="sm"
             leftIcon={<i className="fa-solid text-secondary fa-xmark"></i>}

@@ -8,9 +8,6 @@ import {
 } from "../../../../types/common-types";
 import {
   getEmployeeById,
-  getEmployeeCount,
-  getEmployees,
-  updateEmployeeStatus,
 } from "../../../../apis/workforce/all-employee.api";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";

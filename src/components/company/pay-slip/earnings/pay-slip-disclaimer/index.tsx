@@ -35,6 +35,9 @@ const PayslipDisclaimer: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [actionOpen, setActionOpen] = useState<boolean>(false);
 
+  // show confirmation for delete any row
+  const [show, setShow] = useState<number | null>(null);
+
   const initialEarningDetails: IEarningDetails = {
     name: "",
     value: 0,
@@ -98,6 +101,7 @@ const PayslipDisclaimer: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!validate()) return;
     setLoading(true);
 
@@ -154,6 +158,12 @@ const PayslipDisclaimer: React.FC = () => {
     }));
   };
 
+  const handleRemoveConfirmation = (
+      index: number,
+    ) => {
+      setShow(index);
+    };
+
   const handleAction = () => {
     if (!validate()) return;
     setActionOpen((prev) => !prev);
@@ -169,18 +179,14 @@ const PayslipDisclaimer: React.FC = () => {
         title="Payslip Disclaimer"
         actionButtons={
           <div className="flex gap-2">
+            <Button name="Action" size="sm" onClick={handleAction} />
             <Button
-              name="Action"
+              type="button"
               size="sm"
-              onClick={handleAction}
+              variant={"danger"}
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
             />
-          <Button
-            type="button"
-            size="sm"
-            variant={"danger"}
-            onClick={handleClose}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
           </div>
         }
       />
@@ -206,7 +212,7 @@ const PayslipDisclaimer: React.FC = () => {
                 errors={errors}
                 handleEarningChange={handleEarningChange}
                 addMore={handleAddMore}
-                handleRemoveEarning={handleRemoveEarning}
+                handleRemoveEarning={handleRemoveConfirmation}
               />
             </div>
           </div>
@@ -218,6 +224,16 @@ const PayslipDisclaimer: React.FC = () => {
         loading={loading}
         handleOpenClose={handleAction}
         handleSubmit={handleOnConfirm}
+      />
+      <ActionModal
+        isOpen={show !== null}
+        title={`Are you sure you want remove this earning detail row?`}
+        loading={false}
+        handleOpenClose={() => setShow(null)}
+        handleSubmit={() => {
+          show !== null &&
+            handleRemoveEarning(show);
+        }}
       />
     </>
   );

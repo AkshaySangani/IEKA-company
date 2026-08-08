@@ -19,12 +19,12 @@ export default function ExperienceLetterBody({
       className="w-[670px]"
     >
       <div className="space-y-3 text-[15px] leading-8 text-slate-700">
-        <p>
+        {data.showCandidateName && <p>
           To{" "}
           <span className="font-bold">
-            {data.candidateName || "Employee Name"},
+            {data.candidateName},
           </span>
-        </p>
+        </p>}
         <p>
           This is to certify that <b> {data.candidateName} </b> was employed
           with our organization as
@@ -33,8 +33,8 @@ export default function ExperienceLetterBody({
 
         <p>
           He was associated with the organization from{" "}
-          <b> {data.joiningDate} </b> to
-          <b> {data.lastWorkingDate} </b>.
+          <b> {(data.showJoiningDate && data.joiningDate) ? formatDate(data.joiningDate) : ""} </b> to
+          <b> {(data.showLastWorkingDate && data.lastWorkingDate) ? formatDate(data.lastWorkingDate) : ""} </b>.
         </p>
 
         <p>

@@ -28,6 +28,11 @@ export interface IIncomeTaxDeductionDetails {
   taxRate: number;
 }
 
+interface IAction {
+  index: number | null;
+  key: string;
+}
+
 export interface DeductionFormData {
   details: IDeductionDetails[];
   incomeDetails: IIncomeTaxDeductionDetails[];
@@ -60,6 +65,11 @@ const PayslipDeductions: React.FC = () => {
   const [formData, setFormData] = useState<DeductionFormData>(initialFormData);
 
   const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const initialAction: IAction = {
+    index: null,
+    key: "",
+  };
+  const [show, setShow] = useState<IAction>(initialAction);
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof DeductionFormData, string>>
@@ -97,9 +107,7 @@ const PayslipDeductions: React.FC = () => {
       newErrors.details = "At least one deduction is required.";
     }
 
-    const incomeDetail = formData.incomeDetails.filter(
-      (ele) => ele?.to,
-    );
+    const incomeDetail = formData.incomeDetails.filter((ele) => ele?.to);
     if (incomeDetail?.length === 0) {
       newErrors.incomeDetails =
         "At least one income tax deduction is required.";
@@ -196,7 +204,7 @@ const PayslipDeductions: React.FC = () => {
 
   const handleRemoveDeduction = (
     index: number,
-    key: keyof DeductionFormData,
+    key: keyof DeductionFormData | string,
   ) => {
     if (key === "details") {
       setFormData((prev) => ({
@@ -214,6 +222,16 @@ const PayslipDeductions: React.FC = () => {
   const handleAction = () => {
     if (!validate()) return;
     setActionOpen((prev) => !prev);
+  };
+
+  const handleRemoveConfirmation = (
+    index: number,
+    key: keyof DeductionFormData,
+  ) => {
+    setShow({
+      index,
+      key,
+    });
   };
 
   const handleOnConfirm = async () => {
@@ -244,7 +262,7 @@ const PayslipDeductions: React.FC = () => {
                 errors={errors}
                 handleDeductionChange={handleDeductionChange}
                 addMore={handleAddMore}
-                handleRemoveDeduction={handleRemoveDeduction}
+                handleRemoveDeduction={handleRemoveConfirmation}
               />
             </div>
           </div>
@@ -255,7 +273,7 @@ const PayslipDeductions: React.FC = () => {
                 errors={errors}
                 handleIncomeTaxDeductionChange={handleIncomeTaxDeductionChange}
                 addMore={handleAddMore}
-                handleRemoveDeduction={handleRemoveDeduction}
+                handleRemoveDeduction={handleRemoveConfirmation}
               />
             </div>
           </div>
@@ -267,6 +285,17 @@ const PayslipDeductions: React.FC = () => {
         loading={loading}
         handleOpenClose={handleAction}
         handleSubmit={handleOnConfirm}
+      />
+      <ActionModal
+        isOpen={show.index !== null}
+        title={`Are you sure you want remove this ${show.key === "incomeDetails" ? "income tax" : "deduction"} detail row?`}
+        loading={false}
+        handleOpenClose={() => setShow(initialAction)}
+        handleSubmit={() => {
+          show.index !== null &&
+            show.key !== "" &&
+            handleRemoveDeduction(show.index, show.key);
+        }}
       />
     </>
   );

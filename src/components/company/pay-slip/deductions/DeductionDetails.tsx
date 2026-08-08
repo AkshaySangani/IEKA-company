@@ -84,7 +84,10 @@ const DeductionDetails = ({
         return (
           <Button
             type="button"
-            onClick={() => handleRemoveDeduction(index, "details")}
+            onClick={(e) => {
+              e.preventDefault();
+              handleRemoveDeduction(index, "details");
+            }}
             variant="danger"
             size="sm"
             leftIcon={<i className="fa-solid text-secondary fa-xmark"></i>}

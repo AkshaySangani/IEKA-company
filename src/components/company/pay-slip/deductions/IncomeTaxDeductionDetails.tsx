@@ -76,7 +76,10 @@ const IncomeTaxDeductionDetails = ({
         return (
           <Button
             type="button"
-            onClick={() => handleRemoveDeduction(index, "incomeDetails")}
+            onClick={(e) => {
+              e.preventDefault();
+              handleRemoveDeduction(index, "incomeDetails");
+            }}
             variant="danger"
             size="sm"
             leftIcon={<i className="fa-solid text-secondary fa-xmark"></i>}

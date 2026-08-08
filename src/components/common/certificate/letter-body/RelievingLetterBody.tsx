@@ -19,22 +19,22 @@ export default function RelievingLetterBody({
       className="w-[670px]"
     >
       <div className="space-y-3 text-[15px] leading-8 text-slate-700">
-        <p>
+        {data.showCandidateName && <p>
           To{" "}
           <span className="font-bold">
             {data.candidateName || "Employee Name"},
           </span>
-        </p>
+        </p>}
         <p>
           This is to certify that <b> {data.candidateName} </b> was appointed as
           <b> {data.jobTitle} </b> in our organization, with effect from{" "}
-          <b> {data.joiningDate} </b>.
+          <b> {(data.showJoiningDate && data.joiningDate) ? formatDate(data.joiningDate) : ""} </b>.
         </p>
 
         <p>
           As per the resignation submitted by <b> {data.candidateName} </b>, we
           hereby confirm that the last working day with the organization was
-          <b> {data.lastWorkingDate} </b>. All exit formalities, including the
+          <b> {(data.showLastWorkingDate && data.lastWorkingDate) ? formatDate(data.lastWorkingDate) : ""} </b>. All exit formalities, including the
           handover of duties, return of company assets, and settlement of
           pending obligations, have been duly completed.
         </p>

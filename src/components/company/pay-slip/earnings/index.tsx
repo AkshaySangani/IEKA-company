@@ -91,15 +91,7 @@ const Earnings = () => {
       activeColor: "bg-warning",
       textColor: "text-warning",
       icon: <i className="fa-solid fa-user-xmark"></i>,
-    },
-    {
-      id: "DELETED",
-      title: "Deleted",
-      count: 0,
-      activeColor: "bg-danger",
-      textColor: "text-danger",
-      icon: <i className="fa-solid fa-trash-can"></i>,
-    },
+    }
   ]);
 
   useEffect(() => {
@@ -126,9 +118,6 @@ const Earnings = () => {
 
           case statusEnum.INACTIVE:
             return { ...card, count: stats.inactive };
-
-          case statusEnum.DELETED:
-            return { ...card, count: stats.deleted };
 
           default:
             return card;
