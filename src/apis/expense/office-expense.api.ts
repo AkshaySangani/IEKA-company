@@ -1,7 +1,6 @@
 import { MonthPickerValue } from "../../components/common/date-picker/MonthPicker";
 import { apiRequest } from "../../services/request";
 import { ApiResponse } from "../../types/api.types";
-import { ExpenseCategoryEnum } from "../../types/common-types";
 
 export interface VendorDetailsType {
   name: string;

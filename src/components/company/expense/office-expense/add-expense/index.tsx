@@ -1,12 +1,9 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../../../../store/auth-store";
 import {
   addOfficeExpense,
   OfficeExpenseFormData,
-  VendorDetailsType,
 } from "../../../../../apis/expense/office-expense.api";
-import { ExpenseCategoryEnum } from "../../../../../types/common-types";
 import { pathNames } from "../../../../../constants/constants";
 import TopBar from "../../../../common/topbar/TopBar";
 import Button from "../../../../common/button/Button";
@@ -30,7 +27,6 @@ const initialFormData: OfficeExpenseFormData = {
 };
 const AddOfficeExpense: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -108,7 +104,7 @@ const AddOfficeExpense: React.FC = () => {
     }
 
     if (!formData.date) {
-      newErrors.date = "Service Date is required";
+      newErrors.date = "Date is required";
     }
 
     if (!formData.amount || Number(formData.amount) <= 0) {
@@ -117,10 +113,6 @@ const AddOfficeExpense: React.FC = () => {
 
     if (!formData.paymentMode) {
       newErrors.paymentMode = "Payment mode is required";
-    }
-
-    if (formData.documents?.length === 0) {
-      newErrors.documents = "Attachments are required";
     }
 
     setErrors(newErrors);

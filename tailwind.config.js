@@ -10,7 +10,7 @@ module.exports = {
         /* Brand */
         primary: "#3e7cbe",
         secondary: "#333",
-        primaryPurple: "#437cd3",
+        primaryPurple: "#6f53a7",
         primaryLight: "#5b84c4",
         primaryDark: "#2e466e",
         primaryBlur: "#efefff",

@@ -42,7 +42,7 @@ export default function ServiceDetails({
     <div className="content-card p-4">
       <div className="border-b border-inputBorder pb-3 mb-2">
         <span className="text-lg text-primary font-medium">
-          Service Details
+          Expense Details
         </span>
       </div>
       <div className="grid md:grid-cols-2 md:w-full lg:w-[80%] gap-4">
@@ -69,7 +69,7 @@ export default function ServiceDetails({
           onChange={(option) => handleChange("branchId", option.value)}
         />
         <TextField
-          label="Service Date"
+          label="Date"
           name="date"
           type="date"
           value={formData.date}

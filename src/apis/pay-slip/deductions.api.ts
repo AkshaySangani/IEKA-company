@@ -20,7 +20,7 @@ export const getEarningById = (payslipId: string) => {
 export const updateDeductions = (payload: {
   details: any[];
   incomeDetails: any[];
-}, deductionId: string) =>
+}) =>
   apiRequest.put(`/payslip/deductions`, payload, {
     showSuccessToast: true,
   });

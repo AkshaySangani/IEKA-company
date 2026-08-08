@@ -48,9 +48,9 @@ const Button: React.FC<ButtonProps> = ({
   }[variant];
 
   const sizeClasses = {
-    sm: "py-[5px] px-[15px] text-sm min-h-[34px]",
-    md: "py-3 px-5 text-sm min-h-[42px]",
-    lg: "py-[14px] px-6 text-md min-h-[50px]",
+    sm: "h-[36px] px-[15px] text-sm",
+    md: "h-[44px] px-5 text-sm",
+    lg: "h-[50px] px-6 text-md",
   }[size];
 
   return (
@@ -88,9 +88,7 @@ const Button: React.FC<ButtonProps> = ({
         "
       />
 
-      {loading && (
-        <i className="fa-solid fa-spinner animate-spin mr-2"></i>
-      )}
+      {loading && <i className="fa-solid fa-spinner animate-spin mr-2"></i>}
 
       {leftIcon && <span className={name ? "mr-1" : ""}>{leftIcon}</span>}
 

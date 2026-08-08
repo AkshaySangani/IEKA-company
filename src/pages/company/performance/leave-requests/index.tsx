@@ -1,5 +1,5 @@
-import EmptyPlaceholder from "../../../../components/common/empty-paceholder";
+import LeaveRequest from "../../../../components/company/performance/leave-request";
 
 export default function LeaveRequestsPage(){
-    return <EmptyPlaceholder title="Under Development" description="this page is currently under development."></EmptyPlaceholder>
+    return <LeaveRequest />
 }

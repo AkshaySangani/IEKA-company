@@ -127,3 +127,7 @@ export const downloadFile = async (url: string, filename: string) => {
 
   window.URL.revokeObjectURL(blobUrl);
 };
+
+const getFirstCharacter = (str: string) => {
+  return str.trim().charAt(0).toUpperCase() || "";
+};

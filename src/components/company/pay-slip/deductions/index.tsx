@@ -98,7 +98,7 @@ const PayslipDeductions: React.FC = () => {
     }
 
     const incomeDetail = formData.incomeDetails.filter(
-      (ele) => ele.from && ele?.to && ele?.taxRate,
+      (ele) => ele?.to,
     );
     if (incomeDetail?.length === 0) {
       newErrors.incomeDetails =
@@ -119,15 +119,20 @@ const PayslipDeductions: React.FC = () => {
     setLoading(true);
 
     const payload = {
-      details: formData.details.filter((ele) => ele.name),
-      incomeDetails: formData.incomeDetails.filter(
-        (ele) => ele.from && ele?.to && ele?.taxRate,
-      ),
+      details: formData.details
+        .filter((ele) => ele.name)
+        .map((ele) => ({ ...ele, value: Number(ele.value) })),
+      incomeDetails: formData.incomeDetails
+        .filter((ele) => ele?.to)
+        .map((ele) => ({
+          ...ele,
+          from: Number(ele?.from),
+          to: Number(ele?.to),
+          taxRate: Number(ele?.taxRate),
+        })),
     };
 
-    const response = deduction._id
-      ? await updateDeductions(payload, deduction._id)
-      : await addDeductions(payload);
+    const response = await updateDeductions(payload);
     if (response.success) {
       handleClose();
       fetchDeductions();

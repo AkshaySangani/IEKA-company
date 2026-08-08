@@ -12,6 +12,8 @@ interface Props {
   error?: string;
   startDate: Date | null;
   endDate: Date | null;
+  minDate?: Date;
+  maxDate?: Date;
   onChange: (dates: [Date | null, Date | null]) => void;
 }
 
@@ -23,6 +25,8 @@ export default function DateRangePicker({
   error,
   startDate,
   endDate,
+  minDate,
+  maxDate,
   onChange,
 }: Props) {
   const pickerRef = useRef<DatePicker>(null);
@@ -101,7 +105,7 @@ export default function DateRangePicker({
         placeholder="DD-MM-YYYY - DD-MM-YYYY"
         onChange={handleInputChange}
         onClick={() => pickerRef.current?.setOpen(true)}
-        icon={<i className="fa-regular fa-calendar"></i>}
+        icon={<i className="fa-regular fa-calendar" onClick={() => pickerRef.current?.setOpen(true)}></i>}
       />
 
       <div className="absolute left-[50%] top-6 translate-x-[-50%] z-[999999]">
@@ -114,6 +118,8 @@ export default function DateRangePicker({
           shouldCloseOnSelect={false}
           dateFormat={DATE_FORMAT}
           customInput={<div />}
+          minDate={minDate}
+          maxDate={maxDate}
           onChange={(dates) => {
             const [start, end] = dates;
 

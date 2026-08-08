@@ -63,7 +63,6 @@ export default function PaymentDetails({
           name="documents"
           type="file"
           multiple
-          required
           error={errors.documents}
           placeholder="Upload Documents"
           onChange={(e) => handleDocumentChange(e)}

@@ -27,10 +27,13 @@ export enum statusEnum {
   ACCEPTED = "ACCEPTED",
   PENDING = "PENDING",
   APPROVED = "APPROVED",
+  PRESENT = "PRESENT",
+  ABSENT = "ABSENT",
+  ON_LEAVE = "ON_LEAVE",
   CANCEL = "CANCEL",
   TERMINATE = "TERMINATE",
   PROMOTED = "PROMOTED",
-  HOLD = "HOLD"
+  HOLD = "HOLD",
 }
 
 export enum RoleEnum {
@@ -59,7 +62,7 @@ export type BranchType = "HEAD_OFFICE" | "BRANCH";
 
 export enum BranchTypeEnum {
   HEAD_OFFICE = "HEAD_OFFICE",
-  BRANCH = "BRANCH"
+  BRANCH = "BRANCH",
 }
 
 export interface ObjectType {
@@ -169,4 +172,39 @@ export interface ExpenseCategoryOption {
   icon: React.ReactNode;
   activeColor?: string;
   textColor?: string;
+}
+
+export enum AttendanceStatusEnum {
+  PRESENT = "PRESENT",
+  HALF_DAY = "HALF_DAY",
+  ABSENT = "ABSENT",
+  HOLIDAY = "HOLIDAY",
+  LEAVE = "LEAVE",
+  WEEK_OFF = "WEEK_OFF",
+}
+
+export enum LeaveDuration {
+  FULL_DAY = "FULL_DAY",
+  FIRST_HALF = "FIRST_HALF",
+  SECOND_HALF = "SECOND_HALF",
+}
+
+export enum LeaveDurationNames {
+  FULL_DAY = "Full Day",
+  FIRST_HALF = "First Half",
+  SECOND_HALF = "Second Half",
+}
+
+export enum AttendanceMethodEnum {
+  MOBILE = "MOBILE",
+  WEB = "WEB",
+  BIOMETRIC = "BIOMETRIC",
+  QR = "QR",
+}
+
+export enum AttendanceMethodNames {
+  MOBILE = "Mobile",
+  WEB = "Web",
+  BIOMETRIC = "Biometric",
+  QR = "QR",
 }

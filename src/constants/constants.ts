@@ -56,7 +56,11 @@ export const pathNames = {
   // Performance
   PERFORMANCE: "/performance",
   ATTENDANCE: "/performance/attendance",
+  ATTENDANCE_DETAILS_ID: "/performance/attendance/employee-attendance-details/:id",
+  ATTENDANCE_DETAILS: "/performance/attendance/employee-attendance-details",
   LEAVE_REQUEST: "/performance/leave-request",
+  LEAVE_REQUEST_DETAILS: "/performance/leave-request-details",
+  LEAVE_REQUEST_DETAILS_ID: "/performance/leave-request-details/:id",
   ADD_LEAVE_REQUEST: "/performance/leave-request/add-leave-request",
   ADD_LEAVE_REQUEST_ID: "/performance/leave-request/add-leave-request/:id",
   MANUAL_PUNCH_REQUEST: "/performance/manual-punch-request",
@@ -264,8 +268,11 @@ export const statusMessage: { [key: string]: string } = {
   PROMOTED: "Promoted",
   HOLD: "Hold",
   PRESENT: "Present",
+  HALF_DAY: "Half Day",
   ABSENT: "Absent",
-  ON_LEAVE: "On Leave"
+  HOLIDAY: "Holiday",
+  LEAVE: "Leave",
+  WEEK_OFF: "Week Off",
 };
 
 export const statusColor: { [key: string]: string } = {
