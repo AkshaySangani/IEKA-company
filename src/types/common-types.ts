@@ -208,3 +208,8 @@ export enum AttendanceMethodNames {
   BIOMETRIC = "Biometric",
   QR = "QR",
 }
+
+export enum AttendanceViewEnum {
+    CALENDER_VIEW = "Calender View",
+    TABLE_VIEW = "Table View"
+}

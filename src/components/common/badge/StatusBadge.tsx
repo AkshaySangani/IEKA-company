@@ -79,6 +79,24 @@ const STATUS_CONFIG: Record<
     className: "text-danger",
     icon: <i className="fa-solid fa-circle-xmark"></i>,
   },
+
+  [statusEnum.PRESENT]: {
+    label: "Present",
+    className: "text-success",
+    icon: <i className="fa-solid fa-circle-xmark"></i>,
+  },
+
+  [statusEnum.ON_LEAVE]: {
+    label: "On Leave",
+    className: "text-danger",
+    icon: <i className="fa-solid fa-circle-xmark"></i>,
+  },
+
+  [statusEnum.ABSENT]: {
+    label: "Absent",
+    className: "text-danger",
+    icon: <i className="fa-solid fa-circle-xmark"></i>,
+  },
 };
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({
@@ -104,3 +122,12 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
 };
 
 export default StatusBadge;
+
+{/* <span
+  className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${getStatusClass(
+    leaveDetails.status,
+  )}`}
+>
+  <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-current" />
+  {leaveDetails.status}
+</span>; */}

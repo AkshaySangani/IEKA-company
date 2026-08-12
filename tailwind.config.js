@@ -15,6 +15,7 @@ module.exports = {
         primaryDark: "#2e466e",
         primaryBlur: "#efefff",
         primaryBlue: "#468bdd",
+        blue: "#007bff",
 
         /* Layout */
         dashboardBg: "#eef3f9",

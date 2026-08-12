@@ -18,8 +18,7 @@ const ActionModal: React.FC<IStatusUpdateProps> = ({
   loading,
 }) => {
 
-  const handleConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleConfirm = async () => {
     await handleSubmit();
     handleOpenClose();
   };

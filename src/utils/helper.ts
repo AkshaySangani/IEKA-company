@@ -128,6 +128,11 @@ export const downloadFile = async (url: string, filename: string) => {
   window.URL.revokeObjectURL(blobUrl);
 };
 
-const getFirstCharacter = (str: string) => {
-  return str.trim().charAt(0).toUpperCase() || "";
+// get first character of string like Casual Leave = CL
+export const getFirstCharacter = (str: string) => {
+  return str
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
 };

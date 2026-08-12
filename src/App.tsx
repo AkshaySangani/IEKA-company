@@ -52,8 +52,8 @@ import ManualPunchRequestPage from "./pages/company/performance/manual-punch-req
 import CompanyHierarchyPage from "./pages/company/organization/company-hierarchy";
 import PeopleHierarchyPage from "./pages/company/organization/people-hierarchy";
 import AddLeaveRequestPage from "./pages/company/performance/leave-requests/AddLeaveRequest";
-// import EmployeeAttendanceDetailsPage from "./pages/company/performance/attendance/attendance-details";
 import LeaveRequestDetailsPage from "./pages/company/performance/leave-requests/LeaveRequestDetails";
+import EmployeeAttendanceDetailsPage from "./pages/company/performance/attendance/attendance-details";
 
 function App() {
   return (
@@ -153,7 +153,7 @@ function App() {
 
           <Route path={pathNames.PERFORMANCE}>
             <Route path={pathNames.ATTENDANCE} element={<AttendancesPage />} />
-            {/* <Route path={pathNames.ATTENDANCE_DETAILS_ID} element={<EmployeeAttendanceDetailsPage />} /> */}
+            <Route path={pathNames.ATTENDANCE_DETAILS_ID} element={<EmployeeAttendanceDetailsPage />} />
             <Route path={pathNames.LEAVE_REQUEST} element={<LeaveRequestsPage />} />
             <Route path={pathNames.LEAVE_REQUEST_DETAILS_ID} element={<LeaveRequestDetailsPage />} />
             <Route path={pathNames.ADD_LEAVE_REQUEST_ID} element={<AddLeaveRequestPage />} />
