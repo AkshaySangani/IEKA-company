@@ -1,5 +1,5 @@
 import { ISalaryDetail } from "../components/company/workforce/onboarding/assign-roles-responsibility/SalaryDetails";
-import { salaryType, ValueType } from "../types/common-types";
+import { deductionEnum, salaryType, ValueType } from "../types/common-types";
 
 export function getLocalStorageData(key: string): any | null {
   try {
@@ -53,6 +53,8 @@ export const calculateAmount = (
 export const calculateSalaryBreakdown = (
   salary: number,
   components: ISalaryDetail[],
+  isUan: boolean,
+  isESIC: boolean,
 ) => {
   const earnings = [];
   const deductions = [];
@@ -61,6 +63,24 @@ export const calculateSalaryBreakdown = (
   let totalDeductions = 0;
 
   for (const component of components) {
+    // Handle PF based on UAN
+    if (
+      component.type === salaryType.DEDUCTION &&
+      component.name === deductionEnum.PROVIDENT_FUND &&
+      !isUan
+    ) {
+      continue;
+    }
+
+    // Handle ESIC based on ESIC checkbox
+    if (
+      component.type === salaryType.DEDUCTION &&
+      component.name === deductionEnum.ESIC &&
+      !isESIC
+    ) {
+      continue;
+    }
+
     const amount = calculateAmount(
       salary,
       component.value,
@@ -84,8 +104,8 @@ export const calculateSalaryBreakdown = (
     }
   }
 
-  // Add Other Allowance as remaining amount
-  const otherAmount = salary - totalEarnings;
+  // Add remaining salary as Other Allowance
+  const otherAmount = Math.max(0, salary - totalEarnings);
 
   earnings.push({
     _id: "other",
@@ -96,14 +116,15 @@ export const calculateSalaryBreakdown = (
     amount: otherAmount,
   });
 
-  // Gross salary should always equal entered salary
-  const grossSalary = totalEarnings += otherAmount;
+  const grossSalary = totalEarnings + otherAmount;
+
+  const netSalary = Math.max(0, grossSalary - totalDeductions);
 
   return {
     earnings,
     deductions,
     grossSalary,
-    netSalary: grossSalary - totalDeductions,
+    netSalary,
   };
 };
 

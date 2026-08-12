@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { pathNames } from "../../../../../constants/constants";
 import TopBar from "../../../../common/topbar/TopBar";
 import Button from "../../../../common/button/Button";
@@ -6,11 +6,12 @@ import { useEffect, useRef, useState } from "react";
 import {
   assignRolesAndResponsibility,
   getBranchShiftDepartment,
+  getEmployeeDetails,
 } from "../../../../../apis/workforce/onboardings.api";
 import EmptyPlaceholder from "../../../../common/empty-paceholder";
 import EmployeeDetailCard from "./EmployeeDetailsCard";
 import PageLoader from "../../../../common/loader/PageLoader";
-import { IEmployee } from "../employee-details";
+import { IEmployee, IEmployeeDetails, initialEmployee, initialEmployeeDetails } from "../employee-details";
 import { BranchTypeEnum, RoleEnum, statusEnum } from "../../../../../types/common-types";
 import PolicyDetailsCard from "./PolicyDetails";
 import SalaryDetailsCard from "./SalaryDetails";
@@ -19,7 +20,6 @@ import Modal from "../../../../common/modal/Modal";
 import AddPolicy from "../../../organization/policy-configuration/add-policy/AddPolicy";
 import Image from "../../../../common/image";
 import UserImage from "../../../../../assets/images/User-Image.png";
-import PersonInfo from "../../../../common/person-info";
 import TextAreaField from "../../../../common/text-area/TextAreaField";
 import Note from "../../../../common/note-area/Note";
 import { useAuthStore } from "../../../../../store/auth-store";
@@ -52,6 +52,9 @@ export interface IEmployeeFormData {
   salary: number;
   assignments: IAssignment[];
   remarks: string;
+
+  isUan: boolean;
+  isESIC: boolean;
 
   branchId: string;
   shiftId: string;
@@ -106,9 +109,14 @@ const AssignRolesResponsibility = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuthStore();
+  const params = useParams();
   const formRef = useRef<HTMLFormElement>(null);
-  const employeeId = location?.state?.id;
-  const employee: IEmployee = location?.state?.employee;
+  const employeeId = params?.id ?? "";
+
+  const [employee, setEmployee] = useState<IEmployee>(initialEmployee);
+    const [employeeDetails, setEmployeeDetails] = useState<IEmployeeDetails>(
+      initialEmployeeDetails,
+    );
 
   const initialEmployeeFormData: IEmployeeFormData = {
     userId: "",
@@ -120,6 +128,9 @@ const AssignRolesResponsibility = () => {
     salary: 0,
     assignments: [],
     remarks: "",
+
+    isESIC: false,
+    isUan: false,
 
     branchId: "",
     shiftId: "",
@@ -159,6 +170,27 @@ const AssignRolesResponsibility = () => {
     fetchBranchShiftDepartment();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+      if (employeeId) {
+        fetchEmployeeDetails();
+      }
+      // eslint-disable-next-line
+    }, [employeeId]);
+  
+    const fetchEmployeeDetails = async () => {
+      setLoading(true);
+      const response = await getEmployeeDetails(employeeId);
+      if (response.success) {
+        const data = response?.data;
+        setEmployee(data?.user);
+        setEmployeeDetails(data?.userDetails);
+      } else {
+        setEmployee(initialEmployee);
+        setEmployeeDetails(initialEmployeeDetails);
+      }
+      setLoading(false);
+    };
 
   const fetchBranchShiftDepartment = async () => {
     setLoading(true);
@@ -395,9 +427,7 @@ const AssignRolesResponsibility = () => {
   };
 
   const handleClose = () => {
-    navigate(pathNames.ONBOARDING_DETAILS, {
-      state: location?.state,
-    });
+    navigate(`${pathNames.ONBOARDING_DETAILS}/${employeeId}`);
   };
 
   const handleClickOnAction = () => {
@@ -532,6 +562,7 @@ const AssignRolesResponsibility = () => {
                   formData={formData}
                   errors={errors}
                   handleChange={handleChange}
+                  employeeDetails={employeeDetails}
                 />
               </div>
             </div>

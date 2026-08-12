@@ -26,9 +26,11 @@ import { RoleEnum } from "../../../../../types/common-types";
 import PolicyUpdate from "./update-modals/PolicyUpdate";
 import SalaryUpdate from "./update-modals/SalaryUpdate";
 import BranchDepartmentCards from "./BranchDepartments";
+import { IEmployeeDetails } from "../../onboarding/employee-details";
 
 interface Props {
   employeeData: IEmployee;
+  employeeDetails: IEmployeeDetails;
   assignments: IAssignment[];
   policy: IPolicy;
   payslip: IPayslip;
@@ -48,6 +50,7 @@ export enum EmployeeUpdateModal {
 
 const EmployeeDetailCard: React.FC<Props> = ({
   employeeData,
+  employeeDetails,
   assignments,
   policy,
   payslip,
@@ -337,6 +340,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
       <SalaryUpdate
         active={update === EmployeeUpdateModal.SALARY}
         employeeData={employeeData}
+        employeeDetails={employeeDetails}
         payslip={payslip}
         setActive={() => setUpdate("")}
         handleSubmit={handleSubmit}

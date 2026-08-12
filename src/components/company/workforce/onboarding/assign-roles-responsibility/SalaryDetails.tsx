@@ -13,11 +13,14 @@ import { getEarnings } from "../../../../../apis/pay-slip/earnings.api";
 import { IEarning } from "../../../pay-slip/earnings";
 import { getDeductions } from "../../../../../apis/pay-slip/deductions.api";
 import { calculateSalaryBreakdown } from "../../../../../utils/helper";
+import Checkbox from "../../../../common/checkbox/CheckBox";
+import { IEmployeeDetails } from "../employee-details";
 
 interface Props {
   formData: IEmployeeFormData;
   errors: any;
   handleChange: (key: keyof IEmployeeFormData, value: any) => void;
+  employeeDetails: IEmployeeDetails
 }
 
 export interface ISalaryDetail {
@@ -40,6 +43,7 @@ const SalaryDetailsCard: React.FC<Props> = ({
   formData,
   errors,
   handleChange,
+  employeeDetails
 }) => {
   const [paySlips, setPaySlips] = useState<IEarning[]>([]);
   const [paySlipOptions, setPaySlipOptions] = useState<IOption[]>([]);
@@ -102,7 +106,7 @@ const SalaryDetailsCard: React.FC<Props> = ({
     calculateSalaryBreakdown(formData.salary, [
       ...salaryDetails,
       ...deductionDetails,
-    ]);
+    ],formData.isUan,formData.isESIC);
   return (
     <div className="content-card bg-white border border-gray-200">
       <div className="p-5">
@@ -140,6 +144,38 @@ const SalaryDetailsCard: React.FC<Props> = ({
             onChange={(e) => handleChange("salary", e.target.value)}
             error={errors.salary}
           />
+          <div className="grid lg:grid-cols-2 gap-2">
+            {employeeDetails.bank.uanNo && <div className="flex flex-col gap-2">
+              <Checkbox
+                name={"isUanNo"}
+                label="UAN No."
+                checked={formData.isUan}
+                onChange={() => handleChange("isUan", !formData.isUan)}
+              />
+              <TextField
+                label=""
+                name=""
+                required
+                value={employeeDetails.bank.uanNo}
+                disabled
+              />
+            </div>}
+            {employeeDetails.bank.esicNo && <div className="flex flex-col gap-2">
+              <Checkbox
+                name={"isESICNo"}
+                label="ESIC No."
+                checked={formData.isESIC}
+                onChange={() => handleChange("isESIC", !formData.isESIC)}
+              />
+              <TextField
+                label=""
+                name=""
+                required
+                value={employeeDetails.bank.esicNo}
+                disabled
+              />
+            </div>}
+          </div>
           {formData.payslipId && <div className="grid grid-cols-[3fr_2fr]">
             <div className="border p-2 font-bold">{"Component"}</div>
             <div className="border p-2 font-bold">{"Amount (₹)"}</div>

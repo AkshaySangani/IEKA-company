@@ -1,12 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getEmployeeDetails } from "../../../../../apis/workforce/onboardings.api";
-import {
-  BloodGroupEnum,
-  GenderEnum,
-  RoleEnum,
-  statusEnum,
-} from "../../../../../types/common-types";
+import { useState } from "react";
 import PersonDetails from "./components/PersonalDetails";
 import ParentsDetails from "./components/ParentsDetails";
 import AddressDetails from "./components/AddressDetails";
@@ -15,94 +8,27 @@ import ExperienceDetails from "./components/ExperienceDetails";
 import BankDetails from "./components/BankDetails";
 import DocumentDetails from "./components/DocumentDetails";
 import EmptyPlaceholder from "../../../../common/empty-paceholder";
-import { IEmployee, IEmployeeDetails } from "../../onboarding/employee-details";
+import { IEmployeeDetails } from "../../onboarding/employee-details";
 import { updateEmployee } from "../../../../../apis/workforce/all-employee.api";
+import { IEmployeeResponse } from ".";
 
-const initialEmployee: IEmployee = {
-  _id: "",
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: 0,
-  gender: GenderEnum.MALE,
-  profileImage: "",
-  address: "",
-  status: statusEnum.PENDING,
-  lastLoginAt: null,
-  passwordChangedAt: null,
-  resetPasswordToken: null,
-  resetPasswordExpires: null,
-  role: RoleEnum.EMPLOYEE,
-  companyId: "",
-  dob: "",
-  isMarried: true,
-  alternatePhone: 0,
-  bloodGroup: BloodGroupEnum.AB_NEGATIVE,
-  isPhysicallyDisabled: false,
-  permanentAddress: "",
-  createdAt: "",
-  updatedAt: "",
-};
 
-const initialEmployeeOtherDetails = {
-  _id: "",
-  userId: "",
-  parents: {
-    fatherName: "",
-    fatherOccupation: "",
-    fatherPhone: 0,
-    motherName: "",
-    motherOccupation: "",
-    motherPhone: 0,
-  },
-  bank: {
-    accountNo: 0,
-    ifscCode: "",
-    bankName: "",
-    uanNo: "",
-    esicNo: "",
-    pfJoiningDate: "",
-    esicJoiningDate: "",
-  },
-  educations: [],
-  experiences: [],
-  documents: [],
-  createdAt: "",
-  updatedAt: "",
-};
 
-const EmployeeOtherDetails = () => {
+interface EmployeeOtherDetailsProps {
+  employee: IEmployeeResponse;
+  employeeDetails: IEmployeeDetails;
+  fetchEmployeeOtherDetails: () => void;
+}
+
+const EmployeeOtherDetails = ({employee, employeeDetails, fetchEmployeeOtherDetails}: EmployeeOtherDetailsProps) => {
   const location = useLocation();
   const employeeId = location?.state?.employeeId;
 
-  const [employee, setEmployee] = useState<IEmployee>(initialEmployee);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [employeeDetails, setEmployeeOtherDetails] = useState<IEmployeeDetails>(
-    initialEmployeeOtherDetails,
-  );
-
-  useEffect(() => {
-    if (employeeId) {
-      fetchEmployeeOtherDetails();
-    }
-    // eslint-disable-next-line
-  }, [employeeId]);
-
-  const fetchEmployeeOtherDetails = async () => {
-    const response = await getEmployeeDetails(employeeId);
-    if (response.success) {
-      const data = response?.data;
-      setEmployee(data?.user);
-      setEmployeeOtherDetails(data?.userDetails);
-    } else {
-      setEmployee(initialEmployee);
-      setEmployeeOtherDetails(initialEmployeeOtherDetails);
-    }
-  };
+  const [loading, setLoading] = useState<boolean>(false);  
 
   const handleSubmit = async (formData: FormData) => {
     setLoading(true);
-    const response = await updateEmployee(formData, employee._id);
+    const response = await updateEmployee(formData, employee.user._id);
     if (response?.success) {
       fetchEmployeeOtherDetails();
     }
@@ -113,7 +39,7 @@ const EmployeeOtherDetails = () => {
       {employeeId ? (
         <div className="content-card bg-white border border-gray-200 p-4 space-y-2">
           <PersonDetails
-            employee={employee}
+            employee={employee.user}
             loading={loading}
             handleSubmit={handleSubmit}
           />
@@ -123,12 +49,12 @@ const EmployeeOtherDetails = () => {
             handleSubmit={handleSubmit}
           />
           <AddressDetails
-            employee={employee}
+            employee={employee.user}
             loading={loading}
             handleSubmit={handleSubmit}
           />
-          <EductionDetails eductions={employeeDetails.educations} employee={employee}/>
-          <ExperienceDetails experiences={employeeDetails.experiences} employee={employee}/>
+          <EductionDetails eductions={employeeDetails.educations} employee={employee.user}/>
+          <ExperienceDetails experiences={employeeDetails.experiences} employee={employee.user}/>
           <BankDetails
             bank={employeeDetails.bank}
             loading={loading}

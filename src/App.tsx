@@ -124,8 +124,8 @@ function App() {
 
           <Route path={pathNames.WORKFORCE}>
             <Route path={pathNames.ONBOARDING} element={<OnBoardingPage />} />
-            <Route path={pathNames.ONBOARDING_DETAILS} element={<EmployeeDetailsPage />}/>
-            <Route path={pathNames.ASSIGN_ROLES_RESPONSIBILITY} element={<AssignRolesResponsibilityPage />}/>
+            <Route path={pathNames.ONBOARDING_DETAILS_ID} element={<EmployeeDetailsPage />}/>
+            <Route path={pathNames.ASSIGN_ROLES_RESPONSIBILITY_ID} element={<AssignRolesResponsibilityPage />}/>
 
             <Route path={pathNames.ALL_EMPLOYEES} element={<AllEmployeesPage />}/>
             <Route path={pathNames.EMPLOYEE_DETAILS} element={<EmployeeDetailPage />}/>

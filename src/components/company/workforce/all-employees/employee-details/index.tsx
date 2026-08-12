@@ -10,9 +10,7 @@ import EmployeeDetailCard from "./EmployeeDetailsCard";
 import PageLoader from "../../../../common/loader/PageLoader";
 import EmployeeOtherDetails from "./EmployeeOtherDetails";
 
-import {
-  getEmployeeById,
-} from "../../../../../apis/workforce/all-employee.api";
+import { getEmployeeById } from "../../../../../apis/workforce/all-employee.api";
 
 import {
   BloodGroupEnum,
@@ -21,6 +19,8 @@ import {
   RoleEnum,
   statusEnum,
 } from "../../../../../types/common-types";
+import { getEmployeeDetails } from "../../../../../apis/workforce/onboardings.api";
+import { IEmployeeDetails } from "../../onboarding/employee-details";
 
 /* =========================
    TYPES
@@ -200,7 +200,7 @@ export const initialEmployeeResponse: IEmployeeResponse = {
     userId: "",
     policyId: {
       name: "",
-      _id: ""
+      _id: "",
     },
     remarks: "",
     assignedBy: "",
@@ -220,6 +220,33 @@ export const initialEmployeeResponse: IEmployeeResponse = {
   },
 };
 
+const initialEmployeeOtherDetails: IEmployeeDetails = {
+  _id: "",
+  userId: "",
+  parents: {
+    fatherName: "",
+    fatherOccupation: "",
+    fatherPhone: 0,
+    motherName: "",
+    motherOccupation: "",
+    motherPhone: 0,
+  },
+  bank: {
+    accountNo: 0,
+    ifscCode: "",
+    bankName: "",
+    uanNo: "",
+    esicNo: "",
+    pfJoiningDate: "",
+    esicJoiningDate: "",
+  },
+  educations: [],
+  experiences: [],
+  documents: [],
+  createdAt: "",
+  updatedAt: "",
+};
+
 /* =========================
    COMPONENT
 ========================= */
@@ -232,51 +259,58 @@ const EmployeeDetails = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [employeeData, setEmployeeData] =
-    useState<IEmployeeResponse>(
-      initialEmployeeResponse,
-    );
+  const [employeeData, setEmployeeData] = useState<IEmployeeResponse>(
+    initialEmployeeResponse,
+  );
+
+  const [employeeDetails, setEmployeeOtherDetails] = useState<IEmployeeDetails>(
+    initialEmployeeOtherDetails,
+  );
 
   useEffect(() => {
     if (employeeId) {
       fetchEmployeeDetails();
+      fetchEmployeeOtherDetails();
     }
 
     // eslint-disable-next-line
   }, [employeeId]);
 
+  const fetchEmployeeOtherDetails = async () => {
+    const response = await getEmployeeDetails(employeeId);
+    if (response.success) {
+      const data = response?.data;
+      setEmployeeOtherDetails(data?.userDetails);
+    } else {
+      setEmployeeOtherDetails(initialEmployeeOtherDetails);
+    }
+  };
+
   const fetchEmployeeDetails = async () => {
     try {
       setLoading(true);
 
-      const response = await getEmployeeById(
-        employeeId,
-      );
+      const response = await getEmployeeById(employeeId);
 
       if (response.success) {
         setEmployeeData(response.data);
       } else {
-        setEmployeeData(
-          initialEmployeeResponse,
-        );
+        setEmployeeData(initialEmployeeResponse);
       }
     } catch (error) {
       console.log(error);
 
-      setEmployeeData(
-        initialEmployeeResponse,
-      );
+      setEmployeeData(initialEmployeeResponse);
     } finally {
       setLoading(false);
     }
   };
 
   const handleClose = () => {
-    navigate(pathNames.ALL_EMPLOYEES) ;
+    navigate(pathNames.ALL_EMPLOYEES);
   };
 
-  const currentAssignment =
-    employeeData.assignments.assignments?.[0];
+  const currentAssignment = employeeData.assignments.assignments?.[0];
 
   return (
     <>
@@ -287,9 +321,7 @@ const EmployeeDetails = () => {
             size="sm"
             variant="danger"
             onClick={handleClose}
-            leftIcon={
-              <i className="fa-solid fa-xmark fa-xl text-danger" />
-            }
+            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger" />}
           />
         }
       />
@@ -301,20 +333,21 @@ const EmployeeDetails = () => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-[4fr_3fr]">
             <EmployeeDetailCard
               employeeData={employeeData.user}
+              employeeDetails={employeeDetails}
               assignments={employeeData.assignments.assignments}
-              policy={
-                employeeData.policy
-              }
+              policy={employeeData.policy}
               payslip={employeeData.payslip}
               refreshData={fetchEmployeeDetails}
             />
 
-            <EmployeeOtherDetails />
+            <EmployeeOtherDetails
+              employee={employeeData}
+              employeeDetails={employeeDetails}
+              fetchEmployeeOtherDetails={fetchEmployeeOtherDetails}
+            />
           </div>
         ) : (
-          !loading && (
-            <EmptyPlaceholder title="Employee Not Found." />
-          )
+          !loading && <EmptyPlaceholder title="Employee Not Found." />
         )}
       </div>
     </>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ValueType } from "../../../../types/common-types";
+import { deductionEnum, ValueType } from "../../../../types/common-types";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import DeductionDetails from "./DeductionDetails";
@@ -47,11 +47,23 @@ const PayslipDeductions: React.FC = () => {
     _id: "",
   });
 
-  const initialDeductionDetails: IDeductionDetails = {
-    name: "",
-    value: 0,
-    valueType: ValueType.FIXED,
-  };
+  const initialDeductionDetails: IDeductionDetails[] = [
+    {
+      name: deductionEnum.PROFESSIONAL_TAX,
+      value: 0,
+      valueType: ValueType.FIXED,
+    },
+    {
+      name: deductionEnum.PROVIDENT_FUND,
+      value: 0,
+      valueType: ValueType.PERCENTAGE,
+    },
+    {
+      name: deductionEnum.ESIC,
+      value: 0,
+      valueType: ValueType.PERCENTAGE,
+    },
+  ];
 
   const initialIncomeTaxDetails: IIncomeTaxDeductionDetails = {
     from: 0,
@@ -59,7 +71,7 @@ const PayslipDeductions: React.FC = () => {
     taxRate: 0,
   };
   const initialFormData: DeductionFormData = {
-    details: [initialDeductionDetails],
+    details: initialDeductionDetails,
     incomeDetails: [initialIncomeTaxDetails],
   };
   const [formData, setFormData] = useState<DeductionFormData>(initialFormData);
@@ -157,7 +169,13 @@ const PayslipDeductions: React.FC = () => {
       ...prev,
       [key]: [
         ...prev[key],
-        key === "details" ? initialDeductionDetails : initialIncomeTaxDetails,
+        key === "details"
+          ? {
+              name: "",
+              value: 0,
+              valueType: ValueType.FIXED,
+            }
+          : initialIncomeTaxDetails,
       ],
     }));
   };

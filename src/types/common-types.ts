@@ -213,3 +213,9 @@ export enum AttendanceViewEnum {
     CALENDER_VIEW = "Calender View",
     TABLE_VIEW = "Table View"
 }
+
+export enum deductionEnum {
+  PROFESSIONAL_TAX = "Professional Tax (PT)",
+  PROVIDENT_FUND = "Provident Fund (PF)",
+  ESIC = "ESIC"
+}

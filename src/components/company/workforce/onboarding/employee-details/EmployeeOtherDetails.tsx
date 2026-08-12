@@ -131,15 +131,14 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
       className: "w-[15%] pr-2 pl-2",
       render: (document) =>
         document.back ? (
-          <i
-            className="fa-solid cursor-pointer fa-image text-primary"
+          <Image
+            src={`${config.BACKEND_API_URL}${document.back}`}
+            width={20}
+            className="cursor-pointer"
             onClick={() =>
-              downloadFile(
-                `${config.BACKEND_API_URL}${document.back}`,
-                `${data.firstName}_${data.lastName}_Back_Pic`,
-              )
+              setPreview(`${config.BACKEND_API_URL}${document.back}`)
             }
-          ></i>
+          />
         ) : (
           "-"
         ),

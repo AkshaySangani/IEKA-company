@@ -36,11 +36,7 @@ export default function OnboardingsTable({
   const [onboardingDetails, setOnboardingDetails] = useState<IOnboarding>(initialOnboarding);
 
   const handleRedirectEmployeeDetails = (row: IOnboarding) => {
-    navigate(pathNames.ONBOARDING_DETAILS, {
-      state: {
-        id: row?._id
-      }
-    })
+    navigate(`${pathNames.ONBOARDING_DETAILS}/${row?._id}`)
   }
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IOnboarding>[] = [

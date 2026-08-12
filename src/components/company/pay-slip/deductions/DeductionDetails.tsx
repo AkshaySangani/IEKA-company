@@ -3,6 +3,7 @@ import {
   payValueType,
   payValueTypeOptions,
 } from "../../../../constants/constants";
+import { deductionEnum } from "../../../../types/common-types";
 import Button from "../../../common/button/Button";
 import SelectField from "../../../common/select/SelectField";
 import { ColumnDef, CustomTable } from "../../../common/table";
@@ -19,6 +20,13 @@ interface Props {
   addMore: (key: "details") => void;
   handleRemoveDeduction: (index: number, key: "details") => void;
 }
+
+// define default deduction types
+const deductionTypes: string[] = [
+  deductionEnum.PROFESSIONAL_TAX,
+  deductionEnum.PROVIDENT_FUND,
+  deductionEnum.ESIC,
+];
 
 const DeductionDetails = ({
   deductions,
@@ -37,6 +45,7 @@ const DeductionDetails = ({
           value={deduction.name}
           onChange={(e) => handleDeductionChange(index, "name", e.target.value)}
           placeholder="Deduction"
+          disabled={deductionTypes.includes(deduction.name)}
         />
       ),
     },
@@ -80,8 +89,8 @@ const DeductionDetails = ({
     {
       header: "Action",
       className: "w-[10%] pr-0 pl-0",
-      render: (_, index) => {
-        return (
+      render: (deduction, index) => {
+        return !deductionTypes.includes(deduction.name) ? (
           <Button
             type="button"
             onClick={(e) => {
@@ -92,6 +101,8 @@ const DeductionDetails = ({
             size="sm"
             leftIcon={<i className="fa-solid text-secondary fa-xmark"></i>}
           />
+        ) : (
+          <></>
         );
       },
     },

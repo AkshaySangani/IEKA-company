@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { pathNames } from "../../../../../constants/constants";
 import TopBar from "../../../../common/topbar/TopBar";
 import Button from "../../../../common/button/Button";
@@ -105,7 +105,7 @@ export interface IDocument {
   back: string;
 }
 
-const initialEmployee: IEmployee = {
+export const initialEmployee: IEmployee = {
   _id: "",
   firstName: "",
   lastName: "",
@@ -131,7 +131,7 @@ const initialEmployee: IEmployee = {
   updatedAt: "",
 };
 
-const initialEmployeeDetails: IEmployeeDetails = {
+export const initialEmployeeDetails: IEmployeeDetails = {
   _id: "",
   userId: "",
   parents: {
@@ -160,8 +160,8 @@ const initialEmployeeDetails: IEmployeeDetails = {
 
 const EmployeeDetails = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const employeeId = location?.state?.id;
+  const params = useParams();
+  const employeeId = params?.id ?? "";
 
   const [loading, setLoading] = useState<boolean>(false);
   const [rejectLoading, setRejectLoading] = useState<boolean>(false);
@@ -195,9 +195,7 @@ const EmployeeDetails = () => {
   };
 
   const handleClickOnApprove = () => {
-    navigate(pathNames.ASSIGN_ROLES_RESPONSIBILITY, {
-      state: { ...location?.state, employee },
-    });
+    navigate(`${pathNames.ASSIGN_ROLES_RESPONSIBILITY}/${employeeId}`);
   };
 
   const handleClickOnReject = () => {
