@@ -82,8 +82,8 @@ const Modal = ({
                   disabled={loading}
                   name={confirmButtonName}
                   size="sm"
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={(e: React.MouseEvent) => {
+                    e?.preventDefault && e?.preventDefault();
                     handleOnConfirm();
                   }}
                 />
