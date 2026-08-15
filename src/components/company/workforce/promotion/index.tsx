@@ -119,15 +119,6 @@ const Promotion = () => {
       textColor: "text-warning",
       icon: <i className="fa-solid fa-hourglass-end"></i>,
     },
-
-    {
-      id: statusEnum.CANCEL,
-      title: "Cancel",
-      count: 0,
-      activeColor: "bg-danger",
-      textColor: "text-danger",
-      icon: <i className="fa-solid fa-user-times"></i>,
-    },
   ]);
 
   useEffect(() => {
@@ -189,9 +180,6 @@ const Promotion = () => {
 
           case statusEnum.PROMOTED:
             return { ...card, count: stats.promoted };
-
-          case statusEnum.CANCEL:
-            return { ...card, count: stats.cancel };
 
           case statusEnum.HOLD:
             return { ...card, count: stats.hold };
