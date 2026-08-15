@@ -6,14 +6,18 @@ import {
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
-import { initialOfficeExpense, IOfficeExpense } from ".";
+import { IOfficeExpense } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
-import { RoleEnum } from "../../../../types/common-types";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import { HistoryFieldEnum } from "../../../../types/common-types";
+import HistoryModal from "../../../common/modal/HistoryModal";
 
 interface IOfficeExpenseListProps {
   officeExpenses: IOfficeExpense[];
@@ -25,9 +29,10 @@ export default function OfficeExpenseTable({
   handleUpdateStatus,
 }: IOfficeExpenseListProps) {
   const navigate = useNavigate();
+
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const [departmentDetails, setDepartmentDetails] =
-    useState<IOfficeExpense>(initialOfficeExpense);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleEditDepartmentDetails = (officeExpenseId: string) => {
     navigate(pathNames.OFFICE_EXPENSE_DETAILS, {
@@ -119,9 +124,7 @@ export default function OfficeExpenseTable({
               onClick={() => handleUpdateStatus(row)}
               className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -133,22 +136,27 @@ export default function OfficeExpenseTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    setDepartmentDetails(initialOfficeExpense);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: IOfficeExpense) => {
+  const handleShowHistory = (expense: IOfficeExpense) => {
     handleHistoryOpenClose();
-    setDepartmentDetails(branch);
+    setHistory({
+      field: HistoryFieldEnum.OfficeExpenseStatus,
+      fieldId: expense._id,
+      title: expense.name,
+    });
   };
 
   return (
     <>
       <CustomTable columns={columns} data={officeExpenses} />
-      <StatusHistory
+      <HistoryModal
         isOpen={historyOpen}
         handleOpenClose={handleHistoryOpenClose}
-        shiftDetails={departmentDetails}
+        history={history}
+        isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
       />
     </>
   );

@@ -5,16 +5,21 @@ import {
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
-import { ILeaveRequest, initialLeaveRequest } from ".";
+import { ILeaveRequest } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";
 import {
   formatDate,
   getDateDifferenceInDays,
 } from "../../../../utils/date-format";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import { HistoryFieldEnum } from "../../../../types/common-types";
+import HistoryModal from "../../../common/modal/HistoryModal";
 
 interface ILeaveRequestListProps {
   leaves: ILeaveRequest[];
@@ -26,9 +31,10 @@ export default function LeaveRequestTable({
   handleUpdateStatus,
 }: ILeaveRequestListProps) {
   const navigate = useNavigate();
+
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const [leaveDetails, setLeaveRequestDetails] =
-    useState<ILeaveRequest>(initialLeaveRequest);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<ILeaveRequest>[] = [
@@ -102,22 +108,27 @@ export default function LeaveRequestTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    setLeaveRequestDetails(initialLeaveRequest);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: ILeaveRequest) => {
+  const handleShowHistory = (leaveRequest: ILeaveRequest) => {
     handleHistoryOpenClose();
-    setLeaveRequestDetails(branch);
+    setHistory({
+      field: HistoryFieldEnum.LeaveApplicationStatus,
+      fieldId: leaveRequest._id,
+      title: `${leaveRequest.userId.firstName} ${leaveRequest.userId.lastName}`,
+    });
   };
 
   return (
     <>
       <CustomTable columns={columns} data={leaves} />
-      <StatusHistory
+      <HistoryModal
         isOpen={historyOpen}
         handleOpenClose={handleHistoryOpenClose}
-        shiftDetails={leaveDetails}
+        history={history}
+        isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
       />
     </>
   );

@@ -1,25 +1,15 @@
-import { format } from "date-fns";
 import { ILeaveRequest, initialLeaveRequest } from ".";
-import {
-  LeaveDuration,
-  LeaveDurationNames,
-  statusEnum,
-} from "../../../../types/common-types";
+import { LeaveDurationNames, statusEnum } from "../../../../types/common-types";
 import { getLeaveRequestById } from "../../../../apis/performance/leave-request.api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import PersonInfo from "../../../common/person-info";
-import {
-  pathNames,
-  roleNames,
-  statusMessage,
-} from "../../../../constants/constants";
+import { pathNames, roleNames } from "../../../../constants/constants";
 import TopBar from "../../../common/topbar/TopBar";
 import Button from "../../../common/button/Button";
 import EmptyPlaceholder from "../../../common/empty-paceholder";
 import PageLoader from "../../../common/loader/PageLoader";
-import Badge from "../../../common/badge/Badge";
 import StatusBadge from "../../../common/badge/StatusBadge";
 
 const LeaveRequestDetails = () => {
@@ -67,22 +57,6 @@ const LeaveRequestDetails = () => {
       console.error("Failed to fetch leave request:", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const getStatusClass = (status: statusEnum) => {
-    switch (status) {
-      case statusEnum.APPROVED:
-        return "bg-green-50 text-green-700 ring-green-600/20";
-
-      case statusEnum.PENDING:
-        return "bg-yellow-50 text-yellow-700 ring-yellow-600/20";
-
-      case statusEnum.REJECTED:
-        return "bg-red-50 text-red-700 ring-red-600/20";
-
-      default:
-        return "bg-gray-50 text-gray-700 ring-gray-600/20";
     }
   };
 

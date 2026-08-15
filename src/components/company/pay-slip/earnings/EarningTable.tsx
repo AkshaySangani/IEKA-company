@@ -1,12 +1,14 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import {
-  statusColor,
-  statusMessage,
-} from "../../../../constants/constants";
-import { IEarning, initialEarning } from ".";
+import { statusColor, statusMessage } from "../../../../constants/constants";
+import { IEarning } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
 
 interface IEarningListProps {
   earnings: IEarning[];
@@ -19,8 +21,10 @@ export default function EarningTable({
   handleEditEarningDetails,
   handleUpdateStatus,
 }: IEarningListProps) {
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const [leaveDetails, setEarningDetails] = useState<IEarning>(initialEarning)
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IEarning>[] = [
     {
@@ -37,7 +41,7 @@ export default function EarningTable({
             className="text-primary cursor-pointer text-sm font-medium"
             onClick={() => handleEditEarningDetails(row)}
           >
-            {row.name} 
+            {row.name}
           </div>
           <div className="text-grayText text-xs">{""}</div>
         </div>
@@ -46,9 +50,7 @@ export default function EarningTable({
     {
       header: "Applicable Peoples",
       className: "w-[35%]",
-      render: (row) => (
-        <>View</>
-      ),
+      render: (row) => <>View</>,
     },
     {
       header: "Status",
@@ -57,14 +59,14 @@ export default function EarningTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)}/>
-            {row.status !== statusEnum.DELETED && <i
-              onClick={() => handleUpdateStatus(row)}
-              className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>}
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <InfoIcon onClick={() => handleShowHistory(row)} />
+            {row.status !== statusEnum.DELETED && (
+              <i
+                onClick={() => handleUpdateStatus(row)}
+                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
+              ></i>
+            )}
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -75,19 +77,29 @@ export default function EarningTable({
 
   // handle history open
   const handleHistoryOpenClose = () => {
-    setHistoryOpen(prev => !prev);
-    setEarningDetails(initialEarning);
-  }
+    setHistoryOpen((prev) => !prev);
+    setHistory(initialHistory);
+  };
 
-  // handle show history 
-  const handleShowHistory = (branch: IEarning) => {
+  // handle show history
+  const handleShowHistory = (earning: IEarning) => {
     handleHistoryOpenClose();
-    setEarningDetails(branch);
-  }
+    setHistory({
+      field: HistoryFieldEnum.PayslipStatus,
+      fieldId: earning._id,
+      title: earning.name,
+    });
+  };
 
   return (
-  <><CustomTable columns={columns} data={earnings} />
-  {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+    <>
+      <CustomTable columns={columns} data={earnings} />
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+        isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
+      />
     </>
-);
+  );
 }

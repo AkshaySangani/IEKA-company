@@ -6,13 +6,18 @@ import {
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
-import { initialReimbursement, IReimbursement } from ".";
+import { IReimbursement } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import { HistoryFieldEnum } from "../../../../types/common-types";
 
 interface IReimbursementListProps {
   reimbursements: IReimbursement[];
@@ -24,9 +29,10 @@ export default function DepartmentTable({
   handleUpdateStatus,
 }: IReimbursementListProps) {
   const navigate = useNavigate();
+
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const [departmentDetails, setDepartmentDetails] =
-    useState<IReimbursement>(initialReimbursement);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleEditDepartmentDetails = (reimbursementId: string) => {
     navigate(pathNames.REIMBURSEMENT_DETAILS, {
@@ -112,9 +118,7 @@ export default function DepartmentTable({
               onClick={() => handleUpdateStatus(row)}
               className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -126,22 +130,27 @@ export default function DepartmentTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    setDepartmentDetails(initialReimbursement);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: IReimbursement) => {
+  const handleShowHistory = (reimbursement: IReimbursement) => {
     handleHistoryOpenClose();
-    setDepartmentDetails(branch);
+    setHistory({
+      field: HistoryFieldEnum.ReimbursementStatus,
+      fieldId: reimbursement._id,
+      title: reimbursement.name,
+    });
   };
 
   return (
     <>
       <CustomTable columns={columns} data={reimbursements} />
-      <StatusHistory
+      <HistoryModal
         isOpen={historyOpen}
         handleOpenClose={handleHistoryOpenClose}
-        shiftDetails={departmentDetails}
+        history={history}
+        isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
       />
     </>
   );
