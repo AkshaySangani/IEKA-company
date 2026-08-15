@@ -1,13 +1,14 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import {
-  statusColor,
-  statusMessage,
-} from "../../../../constants/constants";
-import { initialPolicy, IPolicy } from ".";
+import { statusColor, statusMessage } from "../../../../constants/constants";
+import { IPolicy } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import { formatDate, getDateDifferenceInDays } from "../../../../utils/date-format";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
 
 interface IPolicyListProps {
   policyList: IPolicy[];
@@ -20,8 +21,10 @@ export default function PolicyTable({
   handleEditPolicyDetails,
   handleUpdateStatus,
 }: IPolicyListProps) {
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const [policyDetails, setPolicyDetails] = useState<IPolicy>(initialPolicy);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IPolicy>[] = [
     {
@@ -58,9 +61,7 @@ export default function PolicyTable({
                 className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
               ></i>
             )}
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -72,19 +73,27 @@ export default function PolicyTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    setPolicyDetails(initialPolicy);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: IPolicy) => {
+  const handleShowHistory = (policy: IPolicy) => {
     handleHistoryOpenClose();
-    setPolicyDetails(branch);
+    setHistory({
+      field: HistoryFieldEnum.PolicyStatus,
+      fieldId: policy._id,
+      title: policy.name,
+    });
   };
 
   return (
     <>
       <CustomTable columns={columns} data={policyList} />
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
   );
 }

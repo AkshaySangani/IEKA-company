@@ -1,12 +1,14 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import {
-  statusColor,
-  statusMessage,
-} from "../../../../constants/constants";
+import { statusColor, statusMessage } from "../../../../constants/constants";
 import { ILeave } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
 
 interface ILeaveListProps {
   leaveList: ILeave[];
@@ -19,18 +21,10 @@ export default function LeaveTable({
   handleEditLeaveDetails,
   handleUpdateStatus,
 }: ILeaveListProps) {
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const initialLeave: ILeave = {
-    _id: "",
-    companyId: "",
-    name: "",
-    description: "",
-    isPaid: false,
-    status: statusEnum.ACTIVE,
-    createdAt: "",
-    updatedAt: "",
-  };
-  const [leaveDetails, setLeaveDetails] = useState<ILeave>(initialLeave)
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<ILeave>[] = [
     {
@@ -47,7 +41,7 @@ export default function LeaveTable({
             className="text-primary cursor-pointer text-sm font-medium"
             onClick={() => handleEditLeaveDetails(row)}
           >
-            {row.name} 
+            {row.name}
           </div>
           <div className="text-grayText text-xs">{""}</div>
         </div>
@@ -56,12 +50,12 @@ export default function LeaveTable({
     {
       header: "Leave Type",
       className: "w-[20%]",
-      render: (row) => row.isPaid ? "Paid" : "Unpaid",
+      render: (row) => (row.isPaid ? "Paid" : "Unpaid"),
     },
     {
       header: "Description",
       className: "w-[30%]",
-      render: (row) => row.description ? row.description : "-",
+      render: (row) => (row.description ? row.description : "-"),
     },
     {
       header: "Status",
@@ -70,14 +64,14 @@ export default function LeaveTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)}/>
-            {row.status !== statusEnum.DELETED && <i
-              onClick={() => handleUpdateStatus(row)}
-              className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>}
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <InfoIcon onClick={() => handleShowHistory(row)} />
+            {row.status !== statusEnum.DELETED && (
+              <i
+                onClick={() => handleUpdateStatus(row)}
+                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
+              ></i>
+            )}
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -88,19 +82,28 @@ export default function LeaveTable({
 
   // handle history open
   const handleHistoryOpenClose = () => {
-    setHistoryOpen(prev => !prev);
-    setLeaveDetails(initialLeave);
-  }
+    setHistoryOpen((prev) => !prev);
+    setHistory(initialHistory);
+  };
 
-  // handle show history 
-  const handleShowHistory = (branch: ILeave) => {
+  // handle show history
+  const handleShowHistory = (leave: ILeave) => {
     handleHistoryOpenClose();
-    setLeaveDetails(branch);
-  }
+    setHistory({
+      field: HistoryFieldEnum.LeaveStatus,
+      fieldId: leave._id,
+      title: leave.name,
+    });
+  };
 
   return (
-  <><CustomTable columns={columns} data={leaveList} />
-  {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+    <>
+      <CustomTable columns={columns} data={leaveList} />
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
-);
+  );
 }

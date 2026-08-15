@@ -7,12 +7,16 @@ import {
 import { IDepartment } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum } from "../../../../types/common-types";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
 
 interface IDepartmentListProps {
-  departments: IDepartment[]
+  departments: IDepartment[];
   handleUpdateStatus: (value: IDepartment) => void;
 }
 
@@ -21,25 +25,17 @@ export default function DepartmentTable({
   handleUpdateStatus,
 }: IDepartmentListProps) {
   const navigate = useNavigate();
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const initialDepartment: IDepartment = {
-  _id: "",
-  companyId: "",
-  name: "",
-  assignments: [],
-  status: statusEnum.ACTIVE,
-  createdAt: "",
-  updatedAt: "",
-};
-  const [departmentDetails, setDepartmentDetails] = useState<IDepartment>(initialDepartment);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleEditDepartmentDetails = (departmentId: string) => {
     navigate(pathNames.ADD_DEPARTMENT, {
       state: {
-        departmentId
-      }
-    })
-  }
+        departmentId,
+      },
+    });
+  };
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IDepartment>[] = [
     {
@@ -56,7 +52,7 @@ export default function DepartmentTable({
             className="text-primary cursor-pointer text-sm font-medium"
             onClick={() => handleEditDepartmentDetails(row._id)}
           >
-            {row.name} 
+            {row.name}
           </div>
           <div className="text-grayText text-xs">{""}</div>
         </div>
@@ -69,14 +65,12 @@ export default function DepartmentTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)}/>
+            <InfoIcon onClick={() => handleShowHistory(row)} />
             <i
               onClick={() => handleUpdateStatus(row)}
               className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -87,19 +81,28 @@ export default function DepartmentTable({
 
   // handle history open
   const handleHistoryOpenClose = () => {
-    setHistoryOpen(prev => !prev);
-    setDepartmentDetails(initialDepartment);
-  }
+    setHistoryOpen((prev) => !prev);
+    setHistory(initialHistory);
+  };
 
-  // handle show history 
-  const handleShowHistory = (branch: IDepartment) => {
+  // handle show history
+  const handleShowHistory = (department: IDepartment) => {
     handleHistoryOpenClose();
-    setDepartmentDetails(branch);
-  }
+    setHistory({
+      field: HistoryFieldEnum.DepartmentStatus,
+      fieldId: department._id,
+      title: department.name,
+    });
+  };
 
   return (
-  <><CustomTable columns={columns} data={departments} />
-  <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} shiftDetails={departmentDetails} />
+    <>
+      <CustomTable columns={columns} data={departments} />
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
-);
+  );
 }

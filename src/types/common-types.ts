@@ -219,3 +219,25 @@ export enum deductionEnum {
   PROVIDENT_FUND = "Provident Fund (PF)",
   ESIC = "ESIC"
 }
+
+export enum HistoryFieldEnum {
+  BranchStatus = "branchStatus",
+  ShiftStatus = "shiftStatus",
+  DepartmentStatus = "departmentStatus",
+  DesignationStatus = "designationStatus",
+  HolidayStatus = "holidayStatus",
+  LeaveStatus = "leaveStatus",
+  PolicyStatus = "policyStatus",
+  LeaveApplicationStatus = "leaveApplicationStatus",
+  PayslipStatus = "payslipStatus",
+  UserStatus = "userStatus",
+  EmploymentType = "employmentType",
+  ProbationPeriod = "probationPeriod",
+  Role = "role",
+  PromotionMail = "promotionMail",
+  PromotionStatus = "promotionStatus",
+  ResignationStatus = "resignationStatus",
+  ResignationMail = "resignationMail",
+  TerminationMail = "terminationMail",
+  TerminationStatus = "terminationStatus",
+}

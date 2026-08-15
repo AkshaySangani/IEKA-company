@@ -7,9 +7,13 @@ import {
 import { IShift } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import StatusHistory from "./StatusHistory";
 import { useNavigate } from "react-router-dom";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum } from "../../../../types/common-types";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
 
 interface IShiftListProps {
   shiftList: IShift[];
@@ -21,29 +25,17 @@ export default function ShiftTable({
   handleUpdateStatus,
 }: IShiftListProps) {
   const navigate = useNavigate();
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const initialShift: IShift = {
-  _id: "",
-  companyId: "",
-  name: "",
-  startTime: "",
-  endTime: "",
-  breakStartTime: "",
-  breakEndTime: "",
-  branchIds: [],
-  status: statusEnum.INACTIVE,
-  createdAt: "",
-  updatedAt: ""
-};
-  const [shiftDetails, setShiftDetails] = useState<IShift>(initialShift);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleEditShiftDetails = (shiftId: string) => {
     navigate(pathNames.ADD_SHIFT, {
       state: {
-        shiftId
-      }
-    })
-  }
+        shiftId,
+      },
+    });
+  };
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IShift>[] = [
     {
@@ -60,7 +52,7 @@ export default function ShiftTable({
             className="text-primary cursor-pointer text-sm font-medium"
             onClick={() => handleEditShiftDetails(row._id)}
           >
-            {row.name} 
+            {row.name}
           </div>
           <div className="text-grayText text-xs">{""}</div>
         </div>
@@ -83,14 +75,12 @@ export default function ShiftTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)}/>
+            <InfoIcon onClick={() => handleShowHistory(row)} />
             <i
               onClick={() => handleUpdateStatus(row)}
               className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -101,19 +91,28 @@ export default function ShiftTable({
 
   // handle history open
   const handleHistoryOpenClose = () => {
-    setHistoryOpen(prev => !prev);
-    setShiftDetails(initialShift);
-  }
+    setHistoryOpen((prev) => !prev);
+    setHistory(initialHistory);
+  };
 
-  // handle show history 
-  const handleShowHistory = (branch: IShift) => {
+  // handle show history
+  const handleShowHistory = (shift: IShift) => {
     handleHistoryOpenClose();
-    setShiftDetails(branch);
-  }
+    setHistory({
+      field: HistoryFieldEnum.ShiftStatus,
+      fieldId: shift._id,
+      title: shift.name,
+    });
+  };
 
   return (
-  <><CustomTable columns={columns} data={shiftList} />
-  <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} shiftDetails={shiftDetails} />
+    <>
+      <CustomTable columns={columns} data={shiftList} />
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
-);
+  );
 }

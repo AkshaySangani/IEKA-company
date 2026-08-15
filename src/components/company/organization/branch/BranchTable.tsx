@@ -7,8 +7,15 @@ import {
 import { IBranch } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import StatusHistory from "./StatusHistory";
-import { statusEnum } from "../../../../types/common-types";
+import {
+  BranchTypeEnum,
+  HistoryFieldEnum,
+} from "../../../../types/common-types";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
 
 interface IBranchListProps {
   branches: IBranch[];
@@ -21,19 +28,10 @@ export default function BranchTable({
   handleEditBranchDetails,
   handleUpdateStatus,
 }: IBranchListProps) {
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const initialBranch: IBranch = {
-      _id: "",
-      companyId: "",
-      name: "",
-      address: "",
-      shiftApplicable: false,
-      branchType: branchEnum.HEAD_OFFICE,
-      status: statusEnum.ACTIVE,
-      createdAt: "",
-      updatedAt: ""
-  };
-  const [branchDetail, setBranchDetails] = useState<IBranch>(initialBranch)
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IBranch>[] = [
     {
@@ -63,14 +61,12 @@ export default function BranchTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)}/>
+            <InfoIcon onClick={() => handleShowHistory(row)} />
             <i
               onClick={() => handleUpdateStatus(row)}
               className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -81,19 +77,28 @@ export default function BranchTable({
 
   // handle history open
   const handleHistoryOpenClose = () => {
-    setHistoryOpen(prev => !prev);
-    setBranchDetails(initialBranch);
-  }
+    setHistoryOpen((prev) => !prev);
+    setHistory(initialHistory);
+  };
 
-  // handle show history 
+  // handle show history
   const handleShowHistory = (branch: IBranch) => {
     handleHistoryOpenClose();
-    setBranchDetails(branch);
-  }
+    setHistory({
+      field: HistoryFieldEnum.BranchStatus,
+      fieldId: branch._id,
+      title: `${branch.name} ${branch.branchType === BranchTypeEnum.HEAD_OFFICE ? "(HO)" : ""}`,
+    });
+  };
 
   return (
-  <><CustomTable columns={columns} data={branches} />
-  <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} branchDetails={branchDetail} />
+    <>
+      <CustomTable columns={columns} data={branches} />
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
-);
+  );
 }

@@ -1,13 +1,18 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import {
-  statusColor,
-  statusMessage,
-} from "../../../../constants/constants";
+import { statusColor, statusMessage } from "../../../../constants/constants";
 import { IHoliday } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import { formatDate, getDateDifferenceInDays } from "../../../../utils/date-format";
-import { statusEnum } from "../../../../types/common-types";
+import {
+  formatDate,
+  getDateDifferenceInDays,
+} from "../../../../utils/date-format";
+import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
 
 interface IHolidaysListProps {
   holidaysList: IHoliday[];
@@ -20,20 +25,10 @@ export default function HolidaysTable({
   handleEditHolidayDetails,
   handleUpdateStatus,
 }: IHolidaysListProps) {
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const initialHoliday: IHoliday = {
-    _id: "",
-    companyId: "",
-    name: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    effectiveYear: new Date().getFullYear(),
-    status: statusEnum.ACTIVE,
-    createdAt: "",
-    updatedAt: "",
-  };
-  const [holidayDetails, setHolidayDetails] = useState<IHoliday>(initialHoliday);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IHoliday>[] = [
     {
@@ -61,8 +56,13 @@ export default function HolidaysTable({
       className: "w-[20%]",
       render: (row) => (
         <div className="flex flex-col gap-1">
-          {row.startDate === row.endDate ? formatDate(row.startDate) : `${formatDate(row.startDate)} to ${formatDate(row.endDate)}`}
-          <span className="text-grayText text-xs">{"Days: "}{getDateDifferenceInDays(row.startDate, row.endDate)}</span>
+          {row.startDate === row.endDate
+            ? formatDate(row.startDate)
+            : `${formatDate(row.startDate)} to ${formatDate(row.endDate)}`}
+          <span className="text-grayText text-xs">
+            {"Days: "}
+            {getDateDifferenceInDays(row.startDate, row.endDate)}
+          </span>
         </div>
       ),
     },
@@ -85,9 +85,7 @@ export default function HolidaysTable({
                 className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
               ></i>
             )}
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -99,19 +97,27 @@ export default function HolidaysTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    setHolidayDetails(initialHoliday);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: IHoliday) => {
+  const handleShowHistory = (holiday: IHoliday) => {
     handleHistoryOpenClose();
-    setHolidayDetails(branch);
+    setHistory({
+      field: HistoryFieldEnum.HolidayStatus,
+      fieldId: holiday._id,
+      title: holiday.name,
+    });
   };
 
   return (
     <>
       <CustomTable columns={columns} data={holidaysList} />
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
   );
 }
