@@ -9,12 +9,18 @@ import { initialEmployee, ResignationRequest } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
 import MailSendModal from "../../../common/modal/MailSendModal";
 import { sendResignMail } from "../../../../apis/workforce/resigned.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import { useAuthStore } from "../../../../store/auth-store";
 
 interface ResignationRequestListProps {
   resignedEmployees: ResignationRequest[];
@@ -27,10 +33,15 @@ export default function ResignedEmployeeTable({
   handleUpdateStatus,
   refreshData,
 }: ResignationRequestListProps) {
+  const {user} = useAuthStore();
   const navigate = useNavigate();
   const [mailOpen, setMailOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   const [resignDetails, setResignDetails] =
     useState<ResignationRequest>(initialEmployee);
 
@@ -108,7 +119,11 @@ export default function ResignedEmployeeTable({
               onClick={() => handleSendMail(row)}
               className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <InfoIcon onClick={() => handleShowHistory(row)} />
+            <InfoIcon
+              onClick={() =>
+                handleShowHistory(row, HistoryFieldEnum.ResignationMail)
+              }
+            />
           </div>
         ) : (
           <>-</>
@@ -146,16 +161,18 @@ export default function ResignedEmployeeTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
+            <InfoIcon
+              onClick={() =>
+                handleShowHistory(row, HistoryFieldEnum.ResignationStatus)
+              }
+            />
             {row.status !== statusEnum.REJECTED && (
               <i
                 onClick={() => handleUpdateStatus(row)}
                 className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
               ></i>
             )}
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -167,13 +184,20 @@ export default function ResignedEmployeeTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    // setResignDetails(initialResign);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: ResignationRequest) => {
+  const handleShowHistory = (
+    employee: ResignationRequest,
+    field: HistoryFieldEnum,
+  ) => {
     handleHistoryOpenClose();
-    // setResignDetails(branch);
+    setHistory({
+      field,
+      fieldId: employee._id,
+      title: `${employee.userId.firstName} ${employee.userId.lastName}`,
+    });
   };
 
   const handleSubmitMail = async () => {
@@ -239,13 +263,18 @@ export default function ResignedEmployeeTable({
           <p>Regards,</p>
           <p>
             <strong>
-              <span id="actionbyname">Arjunsinh Rathod</span>
+              <span id="actionbyname">{user.firstName}{" "}{user.lastName}</span>
             </strong>
           </p>
-          <p>Manager</p>
+          <p>{"(COO)"}</p>
         </div>
       </MailSendModal>
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+        isMailHistory={history.field === HistoryFieldEnum.ResignationMail}
+      />
     </>
   );
 }

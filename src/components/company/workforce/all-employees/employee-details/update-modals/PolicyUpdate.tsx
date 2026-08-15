@@ -48,6 +48,7 @@ export default function PolicyUpdate({
       fetchPolicies();
       setFormData(prev => ({...prev, policyId: policy?.policyId?._id??""}))
     }
+    // eslint-disable-next-line
   }, [active]);
 
   const fetchPolicies = async () => {

@@ -26,6 +26,7 @@ const ResignCertificates = ({
     if (id) {
       fetchResignDetails();
     }
+    // eslint-disable-next-line
   }, [id]);
 
   const fetchResignDetails = async () => {

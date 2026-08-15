@@ -9,12 +9,15 @@ import { initialTermination, ITermination } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
 import MailSendModal from "../../../common/modal/MailSendModal";
 import { sendTerminationMail } from "../../../../apis/workforce/termination.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import { HistoryPayload, initialHistory } from "../../../../apis/history/history.api";
+import { useAuthStore } from "../../../../store/auth-store";
 
 interface ITerminationListProps {
   terminations: ITermination[];
@@ -29,10 +32,15 @@ export default function TerminationTable({
   handleUpdateStatus,
   refreshData,
 }: ITerminationListProps) {
+  const {user} = useAuthStore();
   const navigate = useNavigate();
   const [mailOpen, setMailOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [historyOpen, setHistoryOpen] = useState<boolean>(false);
+  
+  // history states
+    const [historyOpen, setHistoryOpen] = useState<boolean>(false);
+    const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   const [terminationDetails, setTerminationDetails] =
     useState<ITermination>(initialTermination);
   // Define configuration structures with isolated column custom components
@@ -93,7 +101,7 @@ export default function TerminationTable({
               onClick={() => handleSendMail(row)}
               className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <InfoIcon onClick={() => handleShowHistory(row)} />
+            <InfoIcon onClick={() => handleShowHistory(row, HistoryFieldEnum.TerminationMail)} />
           </div>
         ) : (
           <>-</>
@@ -121,7 +129,7 @@ export default function TerminationTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
+            <InfoIcon onClick={() => handleShowHistory(row, HistoryFieldEnum.TerminationStatus)} />
             {row.status !== statusEnum.CANCEL && (
               <i
                 onClick={() => handleUpdateStatus(row)}
@@ -142,13 +150,17 @@ export default function TerminationTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    // setTerminationDetails(initialLeave);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: ITermination) => {
+  const handleShowHistory = (termination: ITermination, field: HistoryFieldEnum) => {
     handleHistoryOpenClose();
-    // setTerminationDetails(branch);
+    setHistory({
+      field,
+      fieldId: termination._id,
+      title: `${termination.userId.firstName} ${termination.userId.lastName}`
+    });
   };
 
   const handleSubmitMail = async () => {
@@ -209,13 +221,18 @@ export default function TerminationTable({
           <p>Regards,</p>
           <p>
             <strong>
-              <span id="actionbyname">Arjunsinh Rathod</span>
+              <span id="actionbyname">{user.firstName}{" "}{user.lastName}</span>
             </strong>
           </p>
-          <p>Manager</p>
+          <p>{"(COO)"}</p>
         </div>
       </MailSendModal>
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} terminationDetailss={terminationDetails} /> */}
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+        isMailHistory={history.field === HistoryFieldEnum.TerminationMail}
+      />
     </>
   );
 }

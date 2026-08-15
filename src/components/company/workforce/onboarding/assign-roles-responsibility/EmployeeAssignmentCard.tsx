@@ -3,9 +3,7 @@ import { RoleEnum } from "../../../../../types/common-types";
 import {
   IAssignment,
   IBranch,
-  IDepartment,
   IEmployeeFormData,
-  IShift,
 } from ".";
 import { getDateDifference } from "../../../../../utils/date-format";
 import { BranchAssignmentFormData } from "../../all-employees/employee-details/update-modals/BranchAssignmentUpdate";

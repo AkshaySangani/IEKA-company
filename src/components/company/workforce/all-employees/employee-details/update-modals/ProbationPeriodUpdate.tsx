@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { statusEnum } from "../../../../../../types/common-types";
+import { useState } from "react";
 import ConfirmationHeader from "../../../../../common/confirmation-header";
 import Modal from "../../../../../common/modal/Modal";
 import RadioButton from "../../../../../common/radio-button";

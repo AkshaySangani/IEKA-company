@@ -10,6 +10,7 @@ import {
 } from "../../../../apis/workforce/termination.api";
 import SelectField from "../../../common/select/SelectField";
 import { IOption } from "../../../../types/common-types";
+import { DateFormat, formatDate } from "../../../../utils/date-format";
 
 interface IAddTerminationProps {
   isOpen: boolean;
@@ -47,7 +48,7 @@ const AddTermination: React.FC<IAddTerminationProps> = ({
       setFormData({
         userId: termination?.userId._id,
         terminationType: termination?.terminationType,
-        lastWorkingDate: termination?.lastWorkingDate,
+        lastWorkingDate: formatDate(termination?.lastWorkingDate, DateFormat.ISO_DATE),
         reason: termination?.reason,
       });
     } else {

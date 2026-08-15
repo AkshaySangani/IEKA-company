@@ -310,8 +310,6 @@ const EmployeeDetails = () => {
     navigate(pathNames.ALL_EMPLOYEES);
   };
 
-  const currentAssignment = employeeData.assignments.assignments?.[0];
-
   return (
     <>
       <TopBar

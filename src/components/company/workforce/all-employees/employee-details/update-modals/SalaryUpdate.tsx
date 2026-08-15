@@ -77,6 +77,7 @@ export default function SalaryUpdate({
       fetchDeductions();
       //   setFormData(prev => ({...prev, policyId: policy.policyId._id}))
     }
+    // eslint-disable-next-line
   }, [active]);
 
   const fetchPayslips = async () => {

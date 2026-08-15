@@ -18,6 +18,7 @@ export default function TerminationLetter() {
     if (terminationId) {
       fetchTerminationDetails();
     }
+    // eslint-disable-next-line
   }, [terminationId]);
 
   const fetchTerminationDetails = async () => {

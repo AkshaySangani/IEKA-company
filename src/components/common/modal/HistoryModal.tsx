@@ -12,14 +12,15 @@ interface IStatusHistoryProps {
   isOpen: boolean;
   handleOpenClose: () => void;
   history: HistoryPayload;
+  isMailHistory?: boolean;
 }
 
 export interface AssignedBy {
-    firstName: string;
-    lastName: string;
-    profileImage: string;
-    _id: string;
-  }
+  firstName: string;
+  lastName: string;
+  profileImage: string;
+  _id: string;
+}
 
 export interface IHistory {
   _id: string;
@@ -37,6 +38,7 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
   isOpen,
   handleOpenClose,
   history,
+  isMailHistory = false,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [historyList, setHistoryList] = useState<IHistory[]>([]);
@@ -63,42 +65,64 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
     handleOpenClose();
   };
 
-  const columns: ColumnDef<IHistory>[] = [
-    {
-      header: "Status",
-      className: "w-[10%]",
-      render: (row) => (
-        <span
-          className={`font-medium text-sm ${statusColor[row.fieldValue] ?? "text-secondary"}`}
-        >
-          {statusMessage[row.fieldValue] ?? row.fieldValue}
-        </span>
-      ),
-    },
-    {
-      header: "Action Date",
-      className: "w-[20%]",
-      render: (row) => formatDate(row.createdAt, DateFormat.DATE_TIME_24),
-    },
-    {
-      header: "Action By",
-      className: "w-[20%]",
-      render: (row) => `${row.assignedBy.firstName} ${row.assignedBy.lastName}`,
-    },
-    {
-      header: "Remarks",
-      className: "w-[30%]",
-      render: (row) => <div className="line-clamp-2 max-w-full overflow-hidden">
-      {row.remarks || "-"}
-    </div>,
-    },
-  ];
+  const columns: ColumnDef<IHistory>[] = isMailHistory
+    ? [
+        {
+          header: "Mail Sended",
+          className: "w-[20%]",
+          render: (row) => row.fieldValue,
+        },
+        {
+          header: "Action Date",
+          className: "w-[40%]",
+          render: (row) => formatDate(row.createdAt, DateFormat.DATE_TIME_24),
+        },
+        {
+          header: "Action By",
+          className: "w-[40%]",
+          render: (row) =>
+            `${row.assignedBy.firstName} ${row.assignedBy.lastName}`,
+        },
+      ]
+    : [
+        {
+          header: "Status",
+          className: "w-[10%]",
+          render: (row) => (
+            <span
+              className={`font-medium text-sm ${statusColor[row.fieldValue] ?? "text-secondary"}`}
+            >
+              {statusMessage[row.fieldValue] ?? row.fieldValue}
+            </span>
+          ),
+        },
+        {
+          header: "Action Date",
+          className: "w-[20%]",
+          render: (row) => formatDate(row.createdAt, DateFormat.DATE_TIME_24),
+        },
+        {
+          header: "Action By",
+          className: "w-[20%]",
+          render: (row) =>
+            `${row.assignedBy.firstName} ${row.assignedBy.lastName}`,
+        },
+        {
+          header: "Remarks",
+          className: "w-[30%]",
+          render: (row) => (
+            <div className="line-clamp-2 max-w-full overflow-hidden">
+              {row.remarks || "-"}
+            </div>
+          ),
+        },
+      ];
 
   return (
     <Modal
       isOpen={isOpen}
       title={history.title}
-      width="max-w-4xl"
+      width={"max-w-4xl"}
       onClose={handleClose}
       loading={loading}
       showFooter={false}

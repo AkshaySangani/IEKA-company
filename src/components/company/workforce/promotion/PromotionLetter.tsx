@@ -18,6 +18,7 @@ export default function PromotionLetter() {
     if (promotionId) {
       fetchPromotionDetails();
     }
+    // eslint-disable-next-line
   }, [promotionId]);
 
   const fetchPromotionDetails = async () => {

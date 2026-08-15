@@ -1,5 +1,4 @@
-import { IAssignment, IBaseEntity, IShift } from ".";
-import { IBranch } from "../../onboarding/assign-roles-responsibility";
+import { IBaseEntity, IShift } from ".";
 
 interface Props {
   cards: {

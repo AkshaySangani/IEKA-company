@@ -188,7 +188,7 @@ export default function BranchAssignmentUpdate({
           name="remarks"
           value={formData.remarks}
           placeholder="Enter remarks..."
-          onChange={(e) => setFormData(prev => ({...prev,["remarks"]: e.target.value}))}
+          onChange={(e) => setFormData(prev => ({...prev,remarks: e.target.value}))}
         />
       </div>
     </Modal>

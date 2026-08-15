@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { pathNames } from "../../../../../constants/constants";
 import TopBar from "../../../../common/topbar/TopBar";
 import Button from "../../../../common/button/Button";
@@ -107,7 +107,6 @@ interface IConfirmationDetails {
 
 const AssignRolesResponsibility = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { user } = useAuthStore();
   const params = useParams();
   const formRef = useRef<HTMLFormElement>(null);

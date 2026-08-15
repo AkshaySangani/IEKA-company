@@ -7,12 +7,9 @@ import {
   statusEnum,
 } from "../../../../types/common-types";
 import {
-  getEmployeeById,
   getEmployeeCount,
   getEmployees,
-  updateEmployeeStatus,
 } from "../../../../apis/workforce/all-employee.api";
-import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
 import AllEmployeeTable from "./AllEmployeeTable";
 import Pagination from "../../../common/pagination/Pagination";
@@ -49,44 +46,13 @@ export interface IEmployee {
 }
 const AllEmployees = () => {
   const [activeCard, setActiveCard] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [statusLoading, setStatusLoading] = useState<boolean>(false);
 
   const [allEmployees, setAllEmployees] = useState<IEmployee[]>([]);
-  const initialEmployee: IEmployee = {
-    _id: "",
-    firstName: "",
-    lastName: "",
-    profileImage: "",
-    role: RoleEnum.EMPLOYEE,
-
-    branchId: {
-      _id: "",
-      name: "",
-    },
-
-    designationId: null,
-    departmentId: {
-      name: "",
-      _id: "",
-    },
-
-    shiftId: {
-      _id: "",
-      name: "",
-      startTime: "",
-      endTime: "",
-    },
-    status: statusEnum.ACTIVE,
-  };
-  const [employeeDetails, setEmployeeDetails] =
-    useState<IEmployee>(initialEmployee);
 
   const [cards, setCards] = useState<FilterCardItem[]>([
     {
@@ -117,6 +83,7 @@ const AllEmployees = () => {
 
   useEffect(() => {
     getEmployeeCounts();
+    // eslint-disable-next-line
   }, []);
 
   const getEmployeeCounts = async () => {
@@ -150,6 +117,7 @@ const AllEmployees = () => {
   // useEffect for get employeeDetails
   useEffect(() => {
     fetchAllEmployeeList(page, limit, search, activeCard);
+    // eslint-disable-next-line
   }, [page, limit, search, activeCard]);
 
   // get employeeDetails list
@@ -172,63 +140,12 @@ const AllEmployees = () => {
     }
   };
 
-  const handleRefreshData = () => {
-    fetchAllEmployeeList(page, limit, search, activeCard);
-    getEmployeeCounts();
-  };
-
-  // handle click add new
-  const handleOnAddOpenClose = () => {
-    setIsOpen((prev) => !prev);
-    setEmployeeDetails(initialEmployee);
-  };
-
-  // handle edit employeeDetails details
-  const handleEditAllEmployeeDetails = async (employeeDetails: IEmployee) => {
-    setLoading(true);
-    const response = await getEmployeeById(employeeDetails._id);
-    if (response?.success) {
-      handleOnAddOpenClose();
-      setEmployeeDetails(response?.data);
-    }
-    setLoading(false);
-  };
-
-  // handle status open close
-  const handleStatusOpenClose = () => {
-    setStatusOpen((prev) => !prev);
-    setEmployeeDetails(initialEmployee);
-  };
-
-  // handle update status
-  const handleUpdateStatus = (employeeDetails: IEmployee) => {
-    handleStatusOpenClose();
-    setEmployeeDetails(employeeDetails);
-  };
-
-  const handleStatusSubmit = async (formData: {
-    status: statusEnum;
-    remarks: string;
-  }) => {
-    setStatusLoading(true);
-
-    const payload = {
-      status: formData.status.trim(),
-      remarks: formData.remarks,
-    };
-
-    const response = await updateEmployeeStatus(payload, employeeDetails._id);
-    if (response.success) {
-      handleRefreshData();
-    }
-    setStatusLoading(false);
-  };
-
   // handle search employeeDetails
   const handleOnSearch = (value: string) => {
     setSearch(value);
     setPage(1);
   };
+
   return (
     <>
       <TopBar
@@ -245,11 +162,7 @@ const AllEmployees = () => {
           activeCard={activeCard}
           setActiveCard={setActiveCard}
         />
-        <AllEmployeeTable
-          allEmployees={allEmployees}
-          handleEditAllEmployeeDetails={handleEditAllEmployeeDetails}
-          handleUpdateStatus={handleUpdateStatus}
-        />
+        <AllEmployeeTable allEmployees={allEmployees} />
         <Pagination
           totalRecords={total}
           currentPage={page}
@@ -258,14 +171,6 @@ const AllEmployees = () => {
           onPageSizeChange={setLimit}
         />
       </div>
-      <StatusUpdateModal
-        title={`employee ${employeeDetails.firstName} ${employeeDetails.lastName}`}
-        isOpen={statusOpen}
-        status={employeeDetails.status}
-        handleOpenClose={handleStatusOpenClose}
-        handleSubmit={handleStatusSubmit}
-        loading={statusLoading}
-      />
     </>
   );
 };

@@ -112,6 +112,7 @@ const LeaveRequest: React.FC = () => {
   // useEffect for get branch
   useEffect(() => {
     fetchLeaveRequestList({ page, limit, search, status: activeCard });
+    // eslint-disable-next-line
   }, [page, limit, search, activeCard]);
 
   // get branch list
@@ -137,6 +138,7 @@ const LeaveRequest: React.FC = () => {
   //call fetch counts
   useEffect(() => {
     fetchLeaveCounts();
+    // eslint-disable-next-line
   }, []);
 
   // fetch leave counts

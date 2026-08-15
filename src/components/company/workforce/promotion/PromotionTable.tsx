@@ -9,12 +9,18 @@ import { initialPromotion, IPromotion } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
 import MailSendModal from "../../../common/modal/MailSendModal";
 import { sendPromotionMail } from "../../../../apis/workforce/promotion.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import { useAuthStore } from "../../../../store/auth-store";
 
 interface IPromotionListProps {
   promotions: IPromotion[];
@@ -30,9 +36,17 @@ export default function PromotionTable({
   refreshData,
 }: IPromotionListProps) {
   const navigate = useNavigate();
+  const {user} = useAuthStore()
+
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
+  // mail send states
   const [mailOpen, setMailOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  // promotion details
   const [promotionDetails, setPromotionDetails] =
     useState<IPromotion>(initialPromotion);
 
@@ -49,6 +63,8 @@ export default function PromotionTable({
     setMailOpen(false);
     setPromotionDetails(initialPromotion);
   };
+
+  // define columns for Promotions
   const columns: ColumnDef<IPromotion>[] = [
     {
       header: "#",
@@ -92,7 +108,11 @@ export default function PromotionTable({
               onClick={() => handleSendMail(row)}
               className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
             ></i>
-            <InfoIcon onClick={() => handleShowHistory(row)} />
+            <InfoIcon
+              onClick={() =>
+                handleShowHistory(row, HistoryFieldEnum.PromotionMail)
+              }
+            />
           </div>
         ) : (
           <>-</>
@@ -121,16 +141,18 @@ export default function PromotionTable({
         return (
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
+            <InfoIcon
+              onClick={() =>
+                handleShowHistory(row, HistoryFieldEnum.PromotionStatus)
+              }
+            />
             {row.status !== statusEnum.CANCEL && (
               <i
                 onClick={() => handleUpdateStatus(row)}
                 className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
               ></i>
             )}
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -142,13 +164,20 @@ export default function PromotionTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    // setPromotionDetails(initialPromotion);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: IPromotion) => {
+  const handleShowHistory = (
+    promotion: IPromotion,
+    field: HistoryFieldEnum,
+  ) => {
     handleHistoryOpenClose();
-    // setPromotionDetails(branch);
+    setHistory({
+      field: field,
+      fieldId: promotion._id,
+      title: `${promotion.userId.firstName} ${promotion.userId.lastName}`,
+    });
   };
 
   const handleSubmitMail = async () => {
@@ -223,13 +252,18 @@ export default function PromotionTable({
           <p>Regards,</p>
           <p>
             <strong>
-              <span id="actionbyname">Arjunsinh Rathod</span>
+              <span id="actionbyname">{user.firstName}{" "}{user.lastName}</span>
             </strong>
           </p>
-          <p>Manager</p>
+          <p>{"(COO)"}</p>
         </div>
       </MailSendModal>
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+        isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
+      />
     </>
   );
 }

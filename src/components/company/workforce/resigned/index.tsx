@@ -6,9 +6,6 @@ import {
   RoleEnum,
   statusEnum,
 } from "../../../../types/common-types";
-import {
-  getEmployeeById,
-} from "../../../../apis/workforce/all-employee.api";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
 import ResignedEmployeeTable from "./ResignedEmployeeTable";
@@ -70,9 +67,7 @@ export const initialEmployee: ResignationRequest = {
 
 const ResignedEmployees = () => {
   const [activeCard, setActiveCard] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
-  const [resignation, setResignation] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
@@ -124,6 +119,7 @@ const ResignedEmployees = () => {
 
   useEffect(() => {
     getEmployeeCounts();
+    // eslint-disable-next-line
   }, []);
 
   const getEmployeeCounts = async () => {
@@ -160,6 +156,7 @@ const ResignedEmployees = () => {
   // useEffect for get employeeDetails
   useEffect(() => {
     fetchResignedEmployeeList(page, limit, search, activeCard);
+    // eslint-disable-next-line
   }, [page, limit, search, activeCard]);
 
   // get employeeDetails list
@@ -192,25 +189,6 @@ const ResignedEmployees = () => {
     getEmployeeCounts();
   };
 
-  // handle click add new
-  const handleOnAddOpenClose = () => {
-    setIsOpen((prev) => !prev);
-    setEmployeeDetails(initialEmployee);
-  };
-
-  // handle edit employeeDetails details
-  const handleEditResignedEmployeeDetails = async (
-    employeeDetails: ResignationRequest,
-  ) => {
-    setLoading(true);
-    const response = await getEmployeeById(employeeDetails._id);
-    if (response?.success) {
-      handleOnAddOpenClose();
-      setEmployeeDetails(response?.data);
-    }
-    setLoading(false);
-  };
-
   // handle status open close
   const handleStatusOpenClose = () => {
     setStatusOpen((prev) => !prev);
@@ -228,7 +206,6 @@ const ResignedEmployees = () => {
   };
 
   const handleResignation = () => {
-    setResignation((prev) => !prev);
     setEmployeeDetails(initialEmployee);
   }
 

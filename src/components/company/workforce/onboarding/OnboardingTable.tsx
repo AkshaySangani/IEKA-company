@@ -9,9 +9,16 @@ import { IOnboarding } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
-import { RoleEnum, statusEnum } from "../../../../types/common-types";
+import {
+  HistoryFieldEnum,
+} from "../../../../types/common-types";
 import PersonInfo from "../../../common/person-info";
 import { useNavigate } from "react-router-dom";
+import HistoryModal from "../../../common/modal/HistoryModal";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
 
 interface IOnboardingsListProps {
   onboardingsList: IOnboarding[];
@@ -21,23 +28,14 @@ export default function OnboardingsTable({
   onboardingsList,
 }: IOnboardingsListProps) {
   const navigate = useNavigate();
+
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  const initialOnboarding: IOnboarding = {
-    _id: "",
-    profileImage : "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: 0,
-    status: statusEnum.PENDING,
-    role: RoleEnum.EMPLOYEE,
-    createdAt: ""
-  };
-  const [onboardingDetails, setOnboardingDetails] = useState<IOnboarding>(initialOnboarding);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleRedirectEmployeeDetails = (row: IOnboarding) => {
-    navigate(`${pathNames.ONBOARDING_DETAILS}/${row?._id}`)
-  }
+    navigate(`${pathNames.ONBOARDING_DETAILS}/${row?._id}`);
+  };
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IOnboarding>[] = [
     {
@@ -49,12 +47,15 @@ export default function OnboardingsTable({
       header: "Employee Name",
       className: "w-[30%]",
       render: (row) => (
-        <PersonInfo personInfo={{
-          profileImage: row.profileImage,
-          firstName: row.firstName,
-          lastName: row.lastName,
-          description: roleNames[row.role]
-        }} onClick={() => handleRedirectEmployeeDetails(row)}/>
+        <PersonInfo
+          personInfo={{
+            profileImage: row.profileImage,
+            firstName: row.firstName,
+            lastName: row.lastName,
+            description: roleNames[row.role],
+          }}
+          onClick={() => handleRedirectEmployeeDetails(row)}
+        />
       ),
     },
     {
@@ -63,7 +64,9 @@ export default function OnboardingsTable({
       render: (row) => (
         <div className="flex flex-col gap-1">
           {formatDate(row.createdAt)}
-          <span className="text-grayText text-xs">{formatDate(row.createdAt, DateFormat.TIME_24)}</span>
+          <span className="text-grayText text-xs">
+            {formatDate(row.createdAt, DateFormat.TIME_24)}
+          </span>
         </div>
       ),
     },
@@ -80,9 +83,7 @@ export default function OnboardingsTable({
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
             <InfoIcon onClick={() => handleShowHistory(row)} />
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -94,19 +95,27 @@ export default function OnboardingsTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    setOnboardingDetails(initialOnboarding);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: IOnboarding) => {
+  const handleShowHistory = (employee: IOnboarding) => {
     handleHistoryOpenClose();
-    setOnboardingDetails(branch);
+    setHistory({
+      field: HistoryFieldEnum.UserStatus,
+      fieldId: employee._id,
+      title: `${employee.firstName} ${employee.lastName}`,
+    });
   };
 
   return (
     <>
       <CustomTable columns={columns} data={onboardingsList} />
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
   );
 }

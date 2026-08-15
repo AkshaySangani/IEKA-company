@@ -1,45 +1,43 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import { pathNames, roleNames, statusColor, statusMessage } from "../../../../constants/constants";
+import {
+  pathNames,
+  roleNames,
+  statusColor,
+  statusMessage,
+} from "../../../../constants/constants";
 import { IEmployee } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum } from "../../../../types/common-types";
 import BranchDepartmentInfo from "../../../common/branch-department";
 import { useNavigate } from "react-router-dom";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
+import HistoryModal from "../../../common/modal/HistoryModal";
 
 interface IEmployeeListProps {
   allEmployees: IEmployee[];
-  handleEditAllEmployeeDetails: (value: IEmployee) => void;
-  handleUpdateStatus: (value: IEmployee) => void;
 }
 
-export default function AllEmployeeTable({
-  allEmployees,
-  handleEditAllEmployeeDetails,
-  handleUpdateStatus,
-}: IEmployeeListProps) {
+export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
   const navigate = useNavigate();
+  // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  // const initialLeave: IEmployee = {
-  //   _id: "",
-  //   companyId: "",
-  //   name: "",
-  //   description: "",
-  //   isPaid: false,
-  //   status: statusEnum.ACTIVE,
-  //   createdAt: "",
-  //   updatedAt: "",
-  // };
-  // const [leaveDetails, setLeaveDetails] = useState<IEmployee>(initialLeave)
-  // Define configuration structures with isolated column custom components
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
   const handleOnClick = (row: IEmployee) => {
     navigate(pathNames.EMPLOYEE_DETAILS, {
       state: {
-        employeeId: row?._id
-      }
-    })
-  }
+        employeeId: row?._id,
+      },
+    });
+  };
+
+  // Define configuration structures with isolated column custom components
+
   const columns: ColumnDef<IEmployee>[] = [
     {
       header: "#",
@@ -84,9 +82,7 @@ export default function AllEmployeeTable({
           <div className="flex items-center gap-1.5">
             {/* Info SVG icon asset matching your design layout */}
             <InfoIcon onClick={() => handleShowHistory(row)} />
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
+            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
               {statusMessage[row.status]}
             </span>
           </div>
@@ -98,19 +94,27 @@ export default function AllEmployeeTable({
   // handle history open
   const handleHistoryOpenClose = () => {
     setHistoryOpen((prev) => !prev);
-    // setLeaveDetails(initialLeave);
+    setHistory(initialHistory);
   };
 
   // handle show history
-  const handleShowHistory = (branch: IEmployee) => {
+  const handleShowHistory = (employee: IEmployee) => {
     handleHistoryOpenClose();
-    // setLeaveDetails(branch);
+    setHistory({
+      field: HistoryFieldEnum.UserStatus,
+      fieldId: employee._id,
+      title: `${employee.firstName} ${employee.lastName}`,
+    });
   };
 
   return (
     <>
       <CustomTable columns={columns} data={allEmployees} />
-      {/* <StatusHistory isOpen={historyOpen} handleOpenClose={handleHistoryOpenClose} leaveDetailss={leaveDetails} /> */}
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
+      />
     </>
   );
 }
