@@ -79,7 +79,7 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
         </div>
         <div className="message">Are u sure want to download ?</div>
       </div>
-      <div className="passprotected mt_15">
+      {/* <div className="passprotected mt_15">
         <input
           type="checkbox"
           id="passwordToggle"
@@ -88,7 +88,7 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
         <div className="message">
           Do you want the downloaded file to be password protected?
         </div>
-      </div>
+      </div> */}
 
       {isPasswordProtected && <div className="field_items mt_15" id="passwordField">
         <div className="column_two">

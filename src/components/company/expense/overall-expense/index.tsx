@@ -53,7 +53,7 @@ const OverallExpense: React.FC = () => {
       count: 0,
       amount: 0,
       activeColor: "bg-pendingBlur",
-      textColor: "bg-pending",
+      textColor: "bg-pendingLight text-pending",
       trendDetails: null,
     },
     {
@@ -62,7 +62,7 @@ const OverallExpense: React.FC = () => {
       count: 0,
       amount: 0,
       activeColor: "bg-dangerBlur",
-      textColor: "bg-danger",
+      textColor: "bg-dangerLight text-danger",
       trendDetails: null,
     },
     {
@@ -71,7 +71,7 @@ const OverallExpense: React.FC = () => {
       count: 0,
       amount: 0,
       activeColor: "bg-successBlur",
-      textColor: "bg-success",
+      textColor: "bg-successLight text-success",
       trendDetails: null,
     },
     // {

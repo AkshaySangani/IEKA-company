@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { EarningStats } from "./StatusCards";
-import { FilterCardItem, statusEnum, ValueType } from "../../../../types/common-types";
+import {
+  FilterCardItem,
+  statusEnum,
+  ValueType,
+} from "../../../../types/common-types";
 import {
   getEarningById,
   getEarningCount,
@@ -15,8 +19,6 @@ import PageLoader from "../../../common/loader/PageLoader";
 import EarningTable from "./EarningTable";
 import Pagination from "../../../common/pagination/Pagination";
 import { useNavigate } from "react-router-dom";
-
-
 
 export interface PayslipDetail {
   _id: string;
@@ -91,7 +93,7 @@ const Earnings = () => {
       activeColor: "bg-warning",
       textColor: "text-warning",
       icon: <i className="fa-solid fa-user-xmark"></i>,
-    }
+    },
   ]);
 
   useEffect(() => {
@@ -154,11 +156,11 @@ const Earnings = () => {
   const handleRefreshData = () => {
     fetchEarningList(page, limit, search, activeCard);
     getEarningCounts();
-  }
+  };
 
   // handle click add new
   const handleOnAddOpenClose = () => {
-    navigate(pathNames.PAY_SLIP_DISCLAIMER)
+    navigate(pathNames.PAY_SLIP_DISCLAIMER);
   };
 
   // handle edit earning details
@@ -166,8 +168,11 @@ const Earnings = () => {
     setLoading(true);
     const response = await getEarningById(earning._id);
     if (response?.success) {
-      navigate(pathNames.PAY_SLIP_DISCLAIMER,{state: {
-        data: response?.data}});
+      navigate(pathNames.PAY_SLIP_DISCLAIMER, {
+        state: {
+          data: response?.data,
+        },
+      });
     }
     setLoading(false);
   };
@@ -207,6 +212,18 @@ const Earnings = () => {
     setSearch(value);
     setPage(1);
   };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getEarnings({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -223,6 +240,7 @@ const Earnings = () => {
         searchPlaceholder="Search earning..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />
@@ -236,7 +254,13 @@ const Earnings = () => {
           handleEditEarningDetails={handleEditEarningDetails}
           handleUpdateStatus={handleUpdateStatus}
         />
-        <Pagination totalRecords={total} currentPage={page} pageSize={limit} onPageChange={setPage} onPageSizeChange={setLimit} />
+        <Pagination
+          totalRecords={total}
+          currentPage={page}
+          pageSize={limit}
+          onPageChange={setPage}
+          onPageSizeChange={setLimit}
+        />
       </div>
       <StatusUpdateModal
         title={`earning ${earning.name}`}
