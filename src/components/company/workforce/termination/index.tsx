@@ -51,27 +51,27 @@ export interface Department {
 }
 
 export const initialTermination: ITermination = {
+  _id: "",
+  companyId: "",
+  userId: {
     _id: "",
-    companyId: "",
-    userId: {
+    firstName: "",
+    lastName: "",
+    profileImage: "",
+    role: RoleEnum.EMPLOYEE,
+    departmentId: {
       _id: "",
-      firstName: "",
-      lastName: "",
-      profileImage: "",
-      role: RoleEnum.EMPLOYEE,
-      departmentId: {
-        _id: "",
-        name: "",
-      },
+      name: "",
     },
-    terminationType: "",
-    lastWorkingDate: "",
-    mailSent: false,
-    reason: "",
-    status: statusEnum.REJECTED,
-    createdAt: "",
-    updatedAt: "",
-  };
+  },
+  terminationType: "",
+  lastWorkingDate: "",
+  mailSent: false,
+  reason: "",
+  status: statusEnum.REJECTED,
+  createdAt: "",
+  updatedAt: "",
+};
 
 const Termination = () => {
   const [activeCard, setActiveCard] = useState<string>("");
@@ -86,7 +86,7 @@ const Termination = () => {
 
   const [terminations, setTerminations] = useState<ITermination[]>([]);
   const [employees, setEmployees] = useState<IOption[]>([]);
-  
+
   const [terminationDetails, setTerminationDetails] =
     useState<ITermination>(initialTermination);
 
@@ -255,6 +255,17 @@ const Termination = () => {
     setSearch(value);
     setPage(1);
   };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getTerminations({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
   return (
     <>
       <TopBar
@@ -271,6 +282,7 @@ const Termination = () => {
         searchPlaceholder="Search employees..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />
@@ -304,7 +316,7 @@ const Termination = () => {
         employees={employees}
       />
       <StatusUpdateModal
-      showFullTitle
+        showFullTitle
         title={`Are you sure you want to do termination of this employee ${terminationDetails.userId.firstName} ${terminationDetails.userId.lastName} ?`}
         isOpen={statusOpen}
         status={terminationDetails.status}

@@ -1,17 +1,25 @@
-import { documentEnum, employeeDocuments, EmploymentTypeEnum, IOption, leaveEncashmentType, ObjectType, RoleEnum, statusEnum, ValueType } from "../types/common-types";
+import {
+  documentEnum,
+  employeeDocuments,
+  EmploymentTypeEnum,
+  IOption,
+  leaveEncashmentType,
+  ObjectType,
+  RoleEnum,
+  statusEnum,
+  ValueType,
+} from "../types/common-types";
 import { MenuItem } from "../types/sidebar-types";
 
 export const storageKeys = {
   authStorage: "authStorage",
 };
 
-
-
 export const roleNames: any = {
   [RoleEnum.OWNER]: "COO",
   [RoleEnum.MANAGER]: "Manager",
-  [RoleEnum.EMPLOYEE]: "Employee"
-}
+  [RoleEnum.EMPLOYEE]: "Employee",
+};
 
 export const pathNames = {
   DASHBOARD: "/",
@@ -38,8 +46,10 @@ export const pathNames = {
   ONBOARDING: "/workforce/onboarding",
   ONBOARDING_DETAILS: "/workforce/onboarding/employee-details",
   ONBOARDING_DETAILS_ID: "/workforce/onboarding/employee-details/:id",
-  ASSIGN_ROLES_RESPONSIBILITY: "/workforce/onboarding/assign-roles-responsibility",
-  ASSIGN_ROLES_RESPONSIBILITY_ID: "/workforce/onboarding/assign-roles-responsibility/:id",
+  ASSIGN_ROLES_RESPONSIBILITY:
+    "/workforce/onboarding/assign-roles-responsibility",
+  ASSIGN_ROLES_RESPONSIBILITY_ID:
+    "/workforce/onboarding/assign-roles-responsibility/:id",
   INVITE_EMPLOYEE_FORM: "/invite_employee_form",
   RESIGNED: "/workforce/resigned",
   RELIEVING_LETTER: "/workforce/resigned/relieving-letter",
@@ -58,7 +68,8 @@ export const pathNames = {
   // Performance
   PERFORMANCE: "/performance",
   ATTENDANCE: "/performance/attendance",
-  ATTENDANCE_DETAILS_ID: "/performance/attendance/employee-attendance-details/:id",
+  ATTENDANCE_DETAILS_ID:
+    "/performance/attendance/employee-attendance-details/:id",
   ATTENDANCE_DETAILS: "/performance/attendance/employee-attendance-details",
   LEAVE_REQUEST: "/performance/leave-request",
   LEAVE_REQUEST_DETAILS: "/performance/leave-request-details",
@@ -112,7 +123,7 @@ export const roleBasePaths: ObjectType = {
     pathNames.ALL_EMPLOYEE_PAY_SLIP,
   ],
 
-  [RoleEnum.OWNER]: Object.values(pathNames)
+  [RoleEnum.OWNER]: Object.values(pathNames),
 };
 export const menuItems: MenuItem[] = [
   {
@@ -307,8 +318,8 @@ export const statusBgColor: { [key: string]: string } = {
 
 export const moduleEnum: ObjectType = {
   EMPLOYEE: "EMPLOYEE",
-  PRODUCTION: "PRODUCTION"
-} 
+  PRODUCTION: "PRODUCTION",
+};
 
 export const companyModules: ObjectType = {
   employee: moduleEnum.EMPLOYEE,
@@ -336,8 +347,8 @@ export const branchEnum: {
   BRANCH: "BRANCH";
 } = {
   HEAD_OFFICE: "HEAD_OFFICE",
-  BRANCH: "BRANCH"
-}
+  BRANCH: "BRANCH",
+};
 
 export const leaveTypeEnum: {
   PAID: "PAID";
@@ -345,12 +356,12 @@ export const leaveTypeEnum: {
 } = {
   PAID: "PAID",
   UNPAID: "UNPAID",
-}
+};
 
 export const branch: ObjectType = {
   HEAD_OFFICE: "Head Office",
-  BRANCH: "Branch Office"
-}
+  BRANCH: "Branch Office",
+};
 
 export const genderOptions: IOption[] = [
   {
@@ -368,8 +379,8 @@ export const genderOptions: IOption[] = [
 ];
 export const roles = {
   [RoleEnum.MANAGER]: "Manager",
-  [RoleEnum.EMPLOYEE]: "Employee"
-}
+  [RoleEnum.EMPLOYEE]: "Employee",
+};
 export const roleOptions: IOption[] = [
   {
     label: roles.MANAGER,
@@ -453,7 +464,6 @@ export const leaveTypeOptions: IOption[] = [
   },
 ];
 
-
 export const accountStatusOptions: IOption[] = [
   {
     label: statusMessage.ACTIVE,
@@ -477,17 +487,17 @@ export const leavePeriodOptions = [
 ];
 
 export const yesNoEnum: {
-  YES: "YES",
-  NO: "NO"
+  YES: "YES";
+  NO: "NO";
 } = {
-  "YES": "YES",
-  "NO": "NO"
-}
+  YES: "YES",
+  NO: "NO",
+};
 
 export const yesNo: ObjectType = {
-  "YES": "Yes",
-  "NO": "No"
-}
+  YES: "Yes",
+  NO: "No",
+};
 export const yesNoOption: IOption[] = [
   {
     label: yesNo.YES,
@@ -587,51 +597,51 @@ export const promotionStatusOptions: IOption[] = [
 
 export const payValueType = {
   [ValueType.FIXED]: "₹",
-  [ValueType.PERCENTAGE]: "%"
-}
+  [ValueType.PERCENTAGE]: "%",
+};
 
 export const documentType: any = {
   [documentEnum.adhar]: employeeDocuments.aadhaarCard,
   [documentEnum.drivingId]: employeeDocuments.drivingLicense,
   [documentEnum.pan]: employeeDocuments.panCard,
   [documentEnum.passport]: employeeDocuments.passport,
-  [documentEnum.voterId]: employeeDocuments.voterId
-}
+  [documentEnum.voterId]: employeeDocuments.voterId,
+};
 
 export const payValueTypeOptions = [
   {
     label: payValueType[ValueType.FIXED],
-    value: ValueType.FIXED
+    value: ValueType.FIXED,
   },
   {
     label: payValueType[ValueType.PERCENTAGE],
-    value: ValueType.PERCENTAGE
-  }
-]
+    value: ValueType.PERCENTAGE,
+  },
+];
 
 export const employmentType = {
   [EmploymentTypeEnum.PERMANENT]: "Permanent",
   [EmploymentTypeEnum.CONTRACT]: "Contract",
   [EmploymentTypeEnum.INTERN]: "Intern",
   [EmploymentTypeEnum.CONSULTANT]: "Consultant",
-}
+};
 
 export const employmentTypeOptions = [
   {
     label: employmentType[EmploymentTypeEnum.PERMANENT],
-    value: EmploymentTypeEnum.PERMANENT
+    value: EmploymentTypeEnum.PERMANENT,
   },
   {
     label: employmentType[EmploymentTypeEnum.CONTRACT],
-    value: EmploymentTypeEnum.CONTRACT
+    value: EmploymentTypeEnum.CONTRACT,
   },
   {
     label: employmentType[EmploymentTypeEnum.INTERN],
-    value: EmploymentTypeEnum.INTERN
+    value: EmploymentTypeEnum.INTERN,
   },
   {
     label: employmentType[EmploymentTypeEnum.CONSULTANT],
-    value: EmploymentTypeEnum.CONSULTANT
+    value: EmploymentTypeEnum.CONSULTANT,
   },
 ];
 
@@ -641,5 +651,5 @@ export const probationPeriodOptions = Array.from({ length: 7 }, (_, index) => ({
 }));
 
 export const currency = {
- INR: "₹" 
-}
+  INR: "₹",
+};

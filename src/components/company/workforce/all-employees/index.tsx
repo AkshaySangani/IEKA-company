@@ -146,6 +146,17 @@ const AllEmployees = () => {
     setPage(1);
   };
 
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getEmployees({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -154,6 +165,7 @@ const AllEmployees = () => {
         searchPlaceholder="Search employees..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />

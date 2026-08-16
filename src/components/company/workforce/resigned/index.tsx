@@ -235,6 +235,17 @@ const ResignedEmployees = () => {
     setSearch(value);
     setPage(1);
   };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getResignedEmployees({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
   return (
     <>
       <TopBar
@@ -243,6 +254,7 @@ const ResignedEmployees = () => {
         searchPlaceholder="Search employees..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />

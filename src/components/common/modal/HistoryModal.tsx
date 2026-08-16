@@ -26,12 +26,50 @@ export interface IHistory {
   _id: string;
   userId: string;
   field: HistoryFieldEnum;
-  fieldValue: string;
+  fieldValue: string | number;
   fieldId: string;
   remarks: string;
   assignedBy: AssignedBy;
   createdAt: string;
   updatedAt: string;
+}
+
+const firstColumnNames: {[key in HistoryFieldEnum]: string} = {
+  [HistoryFieldEnum.BranchStatus]: "Status",
+  [HistoryFieldEnum.ShiftStatus]: "Status",
+  [HistoryFieldEnum.DepartmentStatus]: "Status",
+  [HistoryFieldEnum.DesignationStatus]: "Status",
+  [HistoryFieldEnum.HolidayStatus]: "Status",
+  [HistoryFieldEnum.LeaveStatus]: "Status",
+  [HistoryFieldEnum.PolicyStatus]: "Status",
+  [HistoryFieldEnum.LeaveApplicationStatus]: "Status",
+  [HistoryFieldEnum.PayslipStatus]: "Status",
+  [HistoryFieldEnum.UserStatus]: "Status",
+  [HistoryFieldEnum.EmploymentType]: "Employment Type",
+  [HistoryFieldEnum.ProbationPeriod]: "Probation Period",
+  [HistoryFieldEnum.Role]: "Role",
+  [HistoryFieldEnum.PromotionMail]: "Mail Sended",
+  [HistoryFieldEnum.PromotionStatus]: "Status",
+  [HistoryFieldEnum.ResignationStatus]: "Status",
+  [HistoryFieldEnum.ResignationMail]: "Mail Sended",
+  [HistoryFieldEnum.TerminationMail]: "Mail Sended",
+  [HistoryFieldEnum.TerminationStatus]: "Status",
+  [HistoryFieldEnum.OfficeExpenseStatus]: "Status",
+  [HistoryFieldEnum.ReimbursementStatus]: "Status",
+}
+
+const historyFieldValues: {[key: string | number]: string} = {
+  PERMANENT: "Permanent",
+  CONTRACT: "Contract",
+  INTERN: "Intern",
+  CONSULTANT: "Consultant",
+  0: "0 Month",
+  1: "1 Month",
+  2: "2 Months",
+  3: "3 Months",
+  4: "4 Months",
+  5: "5 Months",
+  6: "6 Months"
 }
 
 const HistoryModal: React.FC<IStatusHistoryProps> = ({
@@ -47,6 +85,7 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
     if (history.fieldId) {
       fetchHistory();
     }
+    // eslint-disable-next-line
   }, [history.fieldId]);
 
   // fetch history
@@ -68,7 +107,7 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
   const columns: ColumnDef<IHistory>[] = isMailHistory
     ? [
         {
-          header: "Mail Sended",
+          header: firstColumnNames[history.field],
           className: "w-[20%]",
           render: (row) => row.fieldValue,
         },
@@ -86,24 +125,24 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
       ]
     : [
         {
-          header: "Status",
-          className: "w-[10%]",
+          header: firstColumnNames[history.field],
+          className: "w-[20%]",
           render: (row) => (
             <span
               className={`font-medium text-sm ${statusColor[row.fieldValue] ?? "text-secondary"}`}
             >
-              {statusMessage[row.fieldValue] ?? row.fieldValue}
+              {statusMessage[row.fieldValue] ?? historyFieldValues[row.fieldValue] ?? row.fieldValue}
             </span>
           ),
         },
         {
           header: "Action Date",
-          className: "w-[20%]",
+          className: "w-[15%]",
           render: (row) => formatDate(row.createdAt, DateFormat.DATE_TIME_24),
         },
         {
           header: "Action By",
-          className: "w-[20%]",
+          className: "w-[15%]",
           render: (row) =>
             `${row.assignedBy.firstName} ${row.assignedBy.lastName}`,
         },

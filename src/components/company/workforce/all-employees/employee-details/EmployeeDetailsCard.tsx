@@ -22,11 +22,14 @@ import EmploymentTypeUpdate from "./update-modals/EmploymentTypeUpdate";
 import ProbationPeriodUpdate from "./update-modals/ProbationPeriodUpdate";
 import BranchAssignmentUpdate from "./update-modals/BranchAssignmentUpdate";
 import { assignRolesAndResponsibility } from "../../../../../apis/workforce/onboardings.api";
-import { RoleEnum } from "../../../../../types/common-types";
+import { HistoryFieldEnum, RoleEnum } from "../../../../../types/common-types";
 import PolicyUpdate from "./update-modals/PolicyUpdate";
 import SalaryUpdate from "./update-modals/SalaryUpdate";
 import BranchDepartmentCards from "./BranchDepartments";
 import { IEmployeeDetails } from "../../onboarding/employee-details";
+import HistoryModal from "../../../../common/modal/HistoryModal";
+import { HistoryPayload, initialHistory } from "../../../../../apis/history/history.api";
+import InfoIcon from "../../../../../assets/icons/Info";
 
 interface Props {
   employeeData: IEmployee;
@@ -65,8 +68,13 @@ const EmployeeDetailCard: React.FC<Props> = ({
   const reportingBranch = isManager
     ? assignments.find((ele) => ele.isReporting)
     : assignments[0];
+
   const [update, setUpdate] = useState<EmployeeUpdateModal | "">("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  // history states
+    const [historyOpen, setHistoryOpen] = useState<boolean>(false);
+    const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleSubmit = async (payload: any) => {
     setLoading(true);
@@ -117,6 +125,22 @@ const EmployeeDetailCard: React.FC<Props> = ({
     return Object.values(groupedAssignments);
   };
 
+  // handle history open
+    const handleHistoryOpenClose = () => {
+      setHistoryOpen((prev) => !prev);
+      setHistory(initialHistory);
+    };
+  
+    // handle show history
+    const handleShowHistory = (employee: IEmployee, field: HistoryFieldEnum) => {
+      handleHistoryOpenClose();
+      setHistory({
+        field,
+        fieldId: employee._id,
+        title: `${employee.firstName} ${employee.lastName}`,
+      });
+    };
+
   const cards = manageBranches?.length > 0 ? getBranches(manageBranches) : [];
   const reportingCards = reportingBranch ? getBranches([reportingBranch]) : [];
   return (
@@ -163,6 +187,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <StatusBadge status={employeeData.status} />
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.UserStatus)} />
                   <i
                     className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
                     onClick={() => setUpdate(EmployeeUpdateModal.STATUS)}
@@ -183,7 +208,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
           <div className="space-y-4">
             <DetailRow
               label="Organizational Role"
-              value={roleNames[employeeData.role]}
+              value={
+                <div className="flex items-center gap-2 mr-1">
+                  <span>{roleNames[employeeData.role]}</span>
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.Role)} />
+                </div>
+              }
             />
 
             <DetailRow
@@ -191,6 +221,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <span>{designation.name}</span>
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.DesignationStatus)} />
                   <i
                     onClick={() => setUpdate(EmployeeUpdateModal.DESIGNATION)}
                     className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
@@ -205,6 +236,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                 value={
                   <div className="flex items-center gap-2 mr-1">
                     <BranchDepartmentCards cards={cards} />
+                    <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.EmploymentType)} />
                     <i
                       onClick={() =>
                         setUpdate(EmployeeUpdateModal.MANAGE_BRANCH)
@@ -221,6 +253,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <BranchDepartmentCards cards={reportingCards} />
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.EmploymentType)} />
                   <i
                     onClick={() =>
                       setUpdate(EmployeeUpdateModal.REPORTING_BRANCH)
@@ -236,6 +269,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <span>{employmentType[employeeData.employmentType]}</span>
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.EmploymentType)} />
                   <i
                     onClick={() =>
                       setUpdate(EmployeeUpdateModal.EMPLOYMENT_TYPE)
@@ -254,6 +288,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                     {employeeData.probationPeriod}
                     {` Month${employeeData.probationPeriod > 1 ? "s" : ""}`}
                   </span>
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.ProbationPeriod)} />
                   <i
                     onClick={() =>
                       setUpdate(EmployeeUpdateModal.PROBATION_PERIOD)
@@ -269,6 +304,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <span>{policy?.policyId?.name}</span>
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.EmploymentType)} />
                   <i
                     onClick={() => setUpdate(EmployeeUpdateModal.POLICY)}
                     className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
@@ -284,6 +320,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                   <span>
                     {currency.INR} {payslip.salary}
                   </span>
+                  <InfoIcon onClick={() => handleShowHistory(employeeData, HistoryFieldEnum.EmploymentType)} />
                   <i
                     onClick={() => setUpdate(EmployeeUpdateModal.SALARY)}
                     className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
@@ -357,6 +394,11 @@ const EmployeeDetailCard: React.FC<Props> = ({
         setActive={() => setUpdate("")}
         handleSubmit={handleSubmit}
         loading={loading}
+      />
+      <HistoryModal
+        isOpen={historyOpen}
+        handleOpenClose={handleHistoryOpenClose}
+        history={history}
       />
     </>
   );

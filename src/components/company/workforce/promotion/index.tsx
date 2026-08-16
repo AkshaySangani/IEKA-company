@@ -55,26 +55,26 @@ export interface Department {
 }
 
 export const initialPromotion: IPromotion = {
+  _id: "",
+  companyId: "",
+  userId: {
     _id: "",
-    companyId: "",
-    userId: {
-      _id: "",
-      firstName: "",
-      lastName: "",
-      profileImage: "",
-      role: RoleEnum.EMPLOYEE,
-    },
-    designationId: {
-      _id: "",
-      name: "",
-    },
-    effectiveDate: "",
-    mailSent: false,
-    reason: "",
-    status: statusEnum.HOLD,
-    createdAt: "",
-    updatedAt: "",
-  };
+    firstName: "",
+    lastName: "",
+    profileImage: "",
+    role: RoleEnum.EMPLOYEE,
+  },
+  designationId: {
+    _id: "",
+    name: "",
+  },
+  effectiveDate: "",
+  mailSent: false,
+  reason: "",
+  status: statusEnum.HOLD,
+  createdAt: "",
+  updatedAt: "",
+};
 
 const Promotion = () => {
   const [activeCard, setActiveCard] = useState<string>("");
@@ -90,7 +90,7 @@ const Promotion = () => {
   const [promotions, setPromotions] = useState<IPromotion[]>([]);
   const [employees, setEmployees] = useState<IOption[]>([]);
   const [designations, setDesignations] = useState<any[]>([]);
-  
+
   const [promotionDetails, setPromotionDetails] =
     useState<IPromotion>(initialPromotion);
 
@@ -261,10 +261,7 @@ const Promotion = () => {
       remarks: formData.remarks,
     };
 
-    const response = await updatePromotionStatus(
-      payload,
-      promotionDetails._id,
-    );
+    const response = await updatePromotionStatus(payload, promotionDetails._id);
     if (response.success) {
       handleRefreshData();
     }
@@ -276,6 +273,18 @@ const Promotion = () => {
     setSearch(value);
     setPage(1);
   };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getPromotions({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -292,6 +301,7 @@ const Promotion = () => {
         searchPlaceholder="Search employees..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />

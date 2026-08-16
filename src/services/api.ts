@@ -273,12 +273,21 @@ api.interceptors.response.use(
     // SERVER ERROR
     // ======================
     if (status >= 500) {
+      let errorMessage =
+        error.response.data?.message ||
+        error.message ||
+        "Something went wrong.";
+      // CSV/BLOB request returned JSON error
+      if (error.response.data instanceof Blob) {
+        const blobMessage = await getBlobErrorMessage(error.response.data);
+
+        if (blobMessage) {
+          errorMessage = blobMessage;
+        }
+      }
       return Promise.reject({
         success: false,
-        message:
-          error.response.data?.message ||
-          error?.message ||
-          "Server error. Please try again later.",
+        message: errorMessage,
       });
     }
 
@@ -304,6 +313,22 @@ export const getApiErrorMessage = (error: any): string => {
     error?.message ||
     "Something went wrong"
   );
+};
+
+const getBlobErrorMessage = async (data: unknown) => {
+  if (!(data instanceof Blob)) {
+    return undefined;
+  }
+
+  try {
+    const text = await data.text();
+
+    const json = JSON.parse(text);
+
+    return json?.message;
+  } catch {
+    return undefined;
+  }
 };
 
 export default api;
