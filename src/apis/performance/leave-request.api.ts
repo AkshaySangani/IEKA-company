@@ -22,10 +22,11 @@ export const getLeaveRequestList = (payload: {
   status?: statusEnum | string;
   page: number;
   limit: number;
+  isDownload?: boolean;
 }) => {
-  const { page, limit, search, status } = payload;
+  const { page, limit, search, status, isDownload = false } = payload;
   return apiRequest.get<ApiResponse>(
-    `/performance/leave-request?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}`,
+    `/performance/leave-request?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
   );
 };
 

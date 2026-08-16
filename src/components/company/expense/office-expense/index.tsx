@@ -3,8 +3,15 @@ import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
-import { FilterCardItem, RoleEnum, statusEnum } from "../../../../types/common-types";
-import { expenseStatusOptions, pathNames } from "../../../../constants/constants";
+import {
+  FilterCardItem,
+  RoleEnum,
+  statusEnum,
+} from "../../../../types/common-types";
+import {
+  expenseStatusOptions,
+  pathNames,
+} from "../../../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import {
@@ -14,7 +21,9 @@ import {
 } from "../../../../apis/expense/office-expense.api";
 import OfficeExpenseTable from "./OfficeExpenseTable";
 import StatusCards, { OfficeExpenseStats } from "./StatusCards";
-import MonthPicker, { MonthPickerValue } from "../../../common/date-picker/MonthPicker";
+import MonthPicker, {
+  MonthPickerValue,
+} from "../../../common/date-picker/MonthPicker";
 
 export interface IUser {
   _id: string;
@@ -122,93 +131,106 @@ const OfficeExpense: React.FC = () => {
   const [statusLoading, setStatusLoading] = useState<boolean>(false);
 
   const [officeExpenses, setOfficeExpenseList] = useState<IOfficeExpense[]>([]);
-  
-  const [officeExpense, setOfficeExpense] = useState<IOfficeExpense>(initialOfficeExpense);
 
-  const [activeCard, setActiveCard] = useState<string>(""); 
+  const [officeExpense, setOfficeExpense] =
+    useState<IOfficeExpense>(initialOfficeExpense);
+
+  const [activeCard, setActiveCard] = useState<string>("");
   const initialMonth: MonthPickerValue = {
     month: new Date().getMonth() + 1,
-    year: new Date().getFullYear()
-  }
+    year: new Date().getFullYear(),
+  };
   const [month, setMonth] = useState<MonthPickerValue>(initialMonth);
   const [cards, setCards] = useState<FilterCardItem[]>([
-      {
-        id: "",
-        title: "Total",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-info",
-        textColor: "text-info",
-        icon: <i className="fa-solid fa-users"></i>,
-      },
-      {
-        id: statusEnum.PENDING,
-        title: "Pending",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-pending",
-        textColor: "text-pending",
-        icon: <i className="fa-solid fa-mug-hot"></i>,
-      },
-      {
-        id: statusEnum.APPROVED,
-        title: "Approved",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-success",
-        textColor: "text-success",
-        icon: <i className="fa-solid fa-user-plus"></i>,
-      },
-      {
-        id: statusEnum.REJECTED,
-        title: "Rejected",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-danger",
-        textColor: "text-danger",
-        icon: <i className="fa-solid fa-user-minus"></i>,
-      },
-    ]);
+    {
+      id: "",
+      title: "Total",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-info",
+      textColor: "text-info",
+      icon: <i className="fa-solid fa-users"></i>,
+    },
+    {
+      id: statusEnum.PENDING,
+      title: "Pending",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-pending",
+      textColor: "text-pending",
+      icon: <i className="fa-solid fa-mug-hot"></i>,
+    },
+    {
+      id: statusEnum.APPROVED,
+      title: "Approved",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-success",
+      textColor: "text-success",
+      icon: <i className="fa-solid fa-user-plus"></i>,
+    },
+    {
+      id: statusEnum.REJECTED,
+      title: "Rejected",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-danger",
+      textColor: "text-danger",
+      icon: <i className="fa-solid fa-user-minus"></i>,
+    },
+  ]);
 
   // useEffect for get branch
   useEffect(() => {
-    fetchOfficeExpenseList({ page, limit, search, status: activeCard,month });
-  }, [page, limit, search, activeCard,month]);
+    fetchOfficeExpenseList({ page, limit, search, status: activeCard, month });
+  }, [page, limit, search, activeCard, month]);
 
   useEffect(() => {
-      fetchOfficeExpenseCount();
-    }, [month]);
-  
-    const fetchOfficeExpenseCount = async () => {
-      const response = await getOfficeExpenseCount(month);
-      if (response?.success) {
-        updateCards(response?.data);
-      }
-    };
-  
-    // update cards
-    const updateCards = (stats: OfficeExpenseStats) => {
-      setCards((prev) =>
-        prev.map((card) => {
-          switch (card.id) {
-            case "":
-              return { ...card, count: stats.total, amount: stats.amount.total };
-  
-            case statusEnum.APPROVED:
-              return { ...card, count: stats.approved, amount: stats.amount.approved };
-  
-            case statusEnum.PENDING:
-              return { ...card, count: stats.pending, amount: stats.amount.pending };
-  
-            case statusEnum.REJECTED:
-              return { ...card, count: stats.rejected, amount: stats.amount.rejected };
-  
-            default:
-              return card;
-          }
-        }),
-      );
-    };
+    fetchOfficeExpenseCount();
+  }, [month]);
+
+  const fetchOfficeExpenseCount = async () => {
+    const response = await getOfficeExpenseCount(month);
+    if (response?.success) {
+      updateCards(response?.data);
+    }
+  };
+
+  // update cards
+  const updateCards = (stats: OfficeExpenseStats) => {
+    setCards((prev) =>
+      prev.map((card) => {
+        switch (card.id) {
+          case "":
+            return { ...card, count: stats.total, amount: stats.amount.total };
+
+          case statusEnum.APPROVED:
+            return {
+              ...card,
+              count: stats.approved,
+              amount: stats.amount.approved,
+            };
+
+          case statusEnum.PENDING:
+            return {
+              ...card,
+              count: stats.pending,
+              amount: stats.amount.pending,
+            };
+
+          case statusEnum.REJECTED:
+            return {
+              ...card,
+              count: stats.rejected,
+              amount: stats.amount.rejected,
+            };
+
+          default:
+            return card;
+        }
+      }),
+    );
+  };
 
   // get branch list
   const fetchOfficeExpenseList = async (payload: {
@@ -260,10 +282,19 @@ const OfficeExpense: React.FC = () => {
       remarks: formData.remarks,
     };
 
-    const response = await updateOfficeExpenseStatus(payload, officeExpense._id);
+    const response = await updateOfficeExpenseStatus(
+      payload,
+      officeExpense._id,
+    );
     if (response.success) {
-      fetchOfficeExpenseList({ page, limit, search, month, status: activeCard });
-      fetchOfficeExpenseCount()
+      fetchOfficeExpenseList({
+        page,
+        limit,
+        search,
+        month,
+        status: activeCard,
+      });
+      fetchOfficeExpenseCount();
     }
     setStatusLoading(false);
   };
@@ -281,7 +312,19 @@ const OfficeExpense: React.FC = () => {
 
   const handleMonthChange = (value: MonthPickerValue) => {
     setMonth(value);
-  }
+  };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getOfficeExpenseList({
+      page,
+      limit,
+      search,
+      status: "",
+      month,
+      isDownload: true,
+    });
+  };
 
   return (
     <>
@@ -297,18 +340,19 @@ const OfficeExpense: React.FC = () => {
                 onChange={handleMonthChange}
               />
             </div>
-          <Button
-            name="Add New"
-            size="sm"
-            onClick={handleOnAdd}
-            leftIcon={<i className="fa-solid fa-plus"></i>}
-          />
+            <Button
+              name="Add New"
+              size="sm"
+              onClick={handleOnAdd}
+              leftIcon={<i className="fa-solid fa-plus"></i>}
+            />
           </div>
         }
         isSearch
         searchPlaceholder="Search officeExpense..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />

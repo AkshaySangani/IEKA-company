@@ -19,10 +19,11 @@ export const getReimbursementList = (payload: {
   limit: number;
   year?: string;
   month?: string;
+  isDownload?: boolean;
 }) => {
-  const { page, limit, search, status, year, month } = payload;
+  const { page, limit, search, status, year, month, isDownload = false } = payload;
   return apiRequest.get<ApiResponse>(
-    `/expense/reimbursements?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${year ? `&year=${year}` : ""}${month ? `&month=${month}` : ""}`,
+    `/expense/reimbursements?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${year ? `&year=${year}` : ""}${month ? `&month=${month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
   );
 };
 

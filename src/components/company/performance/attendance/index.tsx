@@ -62,7 +62,9 @@ const Attendance: React.FC = () => {
   const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
   const [activeCard, setActiveCard] = useState<string>("");
-  const [date, setDate] = useState<string>(formatDate(new Date(), DateFormat.ISO_DATE));
+  const [date, setDate] = useState<string>(
+    formatDate(new Date(), DateFormat.ISO_DATE),
+  );
   // new Date().toISOString().split("T")[0],
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
@@ -239,6 +241,18 @@ const Attendance: React.FC = () => {
     setPage(1);
   };
 
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getAttendanceList({
+      page,
+      limit,
+      search,
+      status: "",
+      date,
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -265,6 +279,7 @@ const Attendance: React.FC = () => {
         searchPlaceholder="Search attendance..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area gap-2 flex flex-col">
         <PageLoader loading={loading} />
@@ -273,9 +288,7 @@ const Attendance: React.FC = () => {
           activeCard={activeCard}
           setActiveCard={setActiveCard}
         />
-        <AttendanceTable
-          attendance={attendanceList}
-        />
+        <AttendanceTable attendance={attendanceList} />
         <Pagination
           totalRecords={total}
           currentPage={page}

@@ -3,8 +3,15 @@ import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
-import { FilterCardItem, RoleEnum, statusEnum } from "../../../../types/common-types";
-import { expenseStatusOptions, pathNames } from "../../../../constants/constants";
+import {
+  FilterCardItem,
+  RoleEnum,
+  statusEnum,
+} from "../../../../types/common-types";
+import {
+  expenseStatusOptions,
+  pathNames,
+} from "../../../../constants/constants";
 import ReimbursementTable from "./ReimbursementTable";
 import { useNavigate } from "react-router-dom";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
@@ -76,49 +83,52 @@ const Reimbursement: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [statusLoading, setStatusLoading] = useState<boolean>(false);
 
-  const [reimbursementList, setReimbursementList] = useState<IReimbursement[]>([]);
-  
-  const [reimbursement, setReimbursement] = useState<IReimbursement>(initialReimbursement);
+  const [reimbursementList, setReimbursementList] = useState<IReimbursement[]>(
+    [],
+  );
 
-  const [activeCard, setActiveCard] = useState<string>(""); 
+  const [reimbursement, setReimbursement] =
+    useState<IReimbursement>(initialReimbursement);
+
+  const [activeCard, setActiveCard] = useState<string>("");
   const [cards, setCards] = useState<FilterCardItem[]>([
-      {
-        id: "",
-        title: "Total",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-info",
-        textColor: "text-info",
-        icon: <i className="fa-solid fa-users"></i>,
-      },
-      {
-        id: statusEnum.PENDING,
-        title: "Pending",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-pending",
-        textColor: "text-pending",
-        icon: <i className="fa-solid fa-mug-hot"></i>,
-      },
-      {
-        id: statusEnum.APPROVED,
-        title: "Approved",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-success",
-        textColor: "text-success",
-        icon: <i className="fa-solid fa-user-plus"></i>,
-      },
-      {
-        id: statusEnum.REJECTED,
-        title: "Rejected",
-        count: 0,
-        amount: 0,
-        activeColor: "bg-danger",
-        textColor: "text-danger",
-        icon: <i className="fa-solid fa-user-minus"></i>,
-      },
-    ]);
+    {
+      id: "",
+      title: "Total",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-info",
+      textColor: "text-info",
+      icon: <i className="fa-solid fa-users"></i>,
+    },
+    {
+      id: statusEnum.PENDING,
+      title: "Pending",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-pending",
+      textColor: "text-pending",
+      icon: <i className="fa-solid fa-mug-hot"></i>,
+    },
+    {
+      id: statusEnum.APPROVED,
+      title: "Approved",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-success",
+      textColor: "text-success",
+      icon: <i className="fa-solid fa-user-plus"></i>,
+    },
+    {
+      id: statusEnum.REJECTED,
+      title: "Rejected",
+      count: 0,
+      amount: 0,
+      activeColor: "bg-danger",
+      textColor: "text-danger",
+      icon: <i className="fa-solid fa-user-minus"></i>,
+    },
+  ]);
 
   // useEffect for get branch
   useEffect(() => {
@@ -126,39 +136,51 @@ const Reimbursement: React.FC = () => {
   }, [page, limit, search, activeCard]);
 
   useEffect(() => {
-      fetchReimbursementCount();
-    }, []);
-  
-    const fetchReimbursementCount = async () => {
-      const response = await getReimbursementCount({});
-      if (response?.success) {
-        updateCards(response?.data);
-      }
-    };
-  
-    // update cards
-    const updateCards = (stats: ReimbursementStats) => {
-      setCards((prev) =>
-        prev.map((card) => {
-          switch (card.id) {
-            case "":
-              return { ...card, count: stats.total, amount: stats.amount.total };
-  
-            case statusEnum.APPROVED:
-              return { ...card, count: stats.approved, amount: stats.amount.approved };
-  
-            case statusEnum.PENDING:
-              return { ...card, count: stats.pending, amount: stats.amount.pending };
-  
-            case statusEnum.REJECTED:
-              return { ...card, count: stats.rejected, amount: stats.amount.rejected };
-  
-            default:
-              return card;
-          }
-        }),
-      );
-    };
+    fetchReimbursementCount();
+  }, []);
+
+  const fetchReimbursementCount = async () => {
+    const response = await getReimbursementCount({});
+    if (response?.success) {
+      updateCards(response?.data);
+    }
+  };
+
+  // update cards
+  const updateCards = (stats: ReimbursementStats) => {
+    setCards((prev) =>
+      prev.map((card) => {
+        switch (card.id) {
+          case "":
+            return { ...card, count: stats.total, amount: stats.amount.total };
+
+          case statusEnum.APPROVED:
+            return {
+              ...card,
+              count: stats.approved,
+              amount: stats.amount.approved,
+            };
+
+          case statusEnum.PENDING:
+            return {
+              ...card,
+              count: stats.pending,
+              amount: stats.amount.pending,
+            };
+
+          case statusEnum.REJECTED:
+            return {
+              ...card,
+              count: stats.rejected,
+              amount: stats.amount.rejected,
+            };
+
+          default:
+            return card;
+        }
+      }),
+    );
+  };
 
   // get branch list
   const fetchReimbursementList = async (payload: {
@@ -209,10 +231,13 @@ const Reimbursement: React.FC = () => {
       remarks: formData.remarks,
     };
 
-    const response = await updateReimbursementStatus(payload, reimbursement._id);
+    const response = await updateReimbursementStatus(
+      payload,
+      reimbursement._id,
+    );
     if (response.success) {
       fetchReimbursementList({ page, limit, search });
-      fetchReimbursementCount()
+      fetchReimbursementCount();
     }
     setStatusLoading(false);
   };
@@ -226,6 +251,17 @@ const Reimbursement: React.FC = () => {
   const handlePageSizeChange = (value: number) => {
     setLimit(value);
     setPage(1);
+  };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getReimbursementList({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
   };
 
   return (
@@ -244,6 +280,7 @@ const Reimbursement: React.FC = () => {
         searchPlaceholder="Search reimbursement..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />

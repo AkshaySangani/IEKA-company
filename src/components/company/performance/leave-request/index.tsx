@@ -219,6 +219,17 @@ const LeaveRequest: React.FC = () => {
     setPage(1);
   };
 
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getLeaveRequestList({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -235,6 +246,7 @@ const LeaveRequest: React.FC = () => {
         searchPlaceholder="Search leave..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />
