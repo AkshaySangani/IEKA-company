@@ -7,10 +7,11 @@ export const getHolidays = (payload: {
   page: number;
   limit?: number;
   effectiveYear?: number;
+  isDownload?: boolean;
 }) => {
-  const { page, limit, search, status, effectiveYear } = payload;
+  const { page, limit, search, status, effectiveYear, isDownload = false } = payload;
   return apiRequest.get<ApiResponse>(
-    `/organization/holidays?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${effectiveYear ? `&effectiveYear=${effectiveYear}` : ""}`,
+    `/organization/holidays?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${effectiveYear ? `&effectiveYear=${effectiveYear}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
   );
 };
 

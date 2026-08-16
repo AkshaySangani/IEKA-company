@@ -121,7 +121,12 @@ const Shift: React.FC = () => {
   const handleOnSearch = (value: string) => {
     setSearch(value);
     setPage(1);
-  }
+  };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getShiftList({ page, limit, search, status: "", isDownload: true });
+  };
 
   return (
     <>
@@ -139,6 +144,7 @@ const Shift: React.FC = () => {
         searchPlaceholder="Search shift..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area gap-2 flex flex-col">
         <PageLoader loading={loading} />

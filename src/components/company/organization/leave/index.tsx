@@ -79,6 +79,7 @@ const Leave = () => {
 
   useEffect(() => {
     getLeaveCounts();
+    // eslint-disable-next-line
   }, []);
 
   const getLeaveCounts = async () => {
@@ -112,6 +113,7 @@ const Leave = () => {
   // useEffect for get leave
   useEffect(() => {
     fetchLeaveList(page, limit, search, activeCard);
+    // eslint-disable-next-line
   }, [page, limit, search, activeCard]);
 
   // get leave list
@@ -137,7 +139,7 @@ const Leave = () => {
   const handleRefreshData = () => {
     fetchLeaveList(page, limit, search, activeCard);
     getLeaveCounts();
-  }
+  };
 
   // handle click add new
   const handleOnAddOpenClose = () => {
@@ -191,6 +193,18 @@ const Leave = () => {
     setSearch(value);
     setPage(1);
   };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getLeaves({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -207,6 +221,7 @@ const Leave = () => {
         searchPlaceholder="Search leave..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />

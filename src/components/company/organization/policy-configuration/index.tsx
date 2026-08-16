@@ -4,7 +4,6 @@ import TopBar from "../../../common/topbar/TopBar";
 import StatusCards, { CompanyStats } from "./StatusCards";
 import { FilterCardItem, statusEnum } from "../../../../types/common-types";
 import {
-  getPolicyById,
   getPolicyCount,
   getPolicies,
   updatePolicyStatus,
@@ -12,7 +11,6 @@ import {
 import { pathNames } from "../../../../constants/constants";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
-import YearPicker from "../../../common/date-picker/YearPicker";
 import PolicyTable from "./PolicyTable";
 import Pagination from "../../../common/pagination/Pagination";
 import { useNavigate } from "react-router-dom";
@@ -38,8 +36,6 @@ export const initialPolicy: IPolicy = {
 const Policy = () => {
   const navigate = useNavigate();
   const [activeCard, setActiveCard] = useState<string>("");
-  const [year, setYear] = useState<number>(new Date().getFullYear());
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
@@ -81,6 +77,7 @@ const Policy = () => {
   
     useEffect(() => {
       getPolicyCounts();
+      // eslint-disable-next-line
     }, []);
   
     const getPolicyCounts = async () => {
@@ -114,6 +111,7 @@ const Policy = () => {
   // useEffect for get holiday
   useEffect(() => {
     fetchPolicyList(page, limit, search, activeCard);
+    // eslint-disable-next-line
   }, [page, limit, search, activeCard]);
 
   // get holiday list

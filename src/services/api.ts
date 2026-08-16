@@ -22,7 +22,7 @@ declare module "axios" {
 const logoutUser = async () => {
   try {
     removeLocalStorageData(storageKeys.authStorage);
-    window.location.href = "/login"
+    window.location.href = "/login";
   } catch (error) {
     console.error("Logout Error:", error);
   }
@@ -46,7 +46,7 @@ const refreshAccessToken = async () => {
       refreshToken,
     },
   );
-  if(response?.status === 401){
+  if (response?.status === 401) {
     logoutUser();
   }
   return response.data;
@@ -89,6 +89,40 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 // ======================
+// DOWNLOAD FILE
+// ======================
+const downloadFile = (blob: Blob, fileName: string) => {
+  const url = window.URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = fileName;
+
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+
+  window.URL.revokeObjectURL(url);
+};
+
+// ======================
+// GET FILE NAME
+// ======================
+const getFileName = (contentDisposition?: string) => {
+  if (!contentDisposition) {
+    return "download.csv";
+  }
+
+  const match = contentDisposition.match(
+    /filename\*?=(?:UTF-8'')?["']?([^;"']+)["']?/i,
+  );
+
+  return match?.[1] ? decodeURIComponent(match[1]) : "download.csv";
+};
+
+// ======================
 // REQUEST INTERCEPTOR
 // ======================
 api.interceptors.request.use(
@@ -115,7 +149,22 @@ api.interceptors.request.use(
 // RESPONSE INTERCEPTOR
 // ======================
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // ======================
+    // FILE DOWNLOAD
+    // ======================
+    if (response.config.responseType === "blob") {
+      const contentDisposition = response.headers["content-disposition"];
+
+      const fileName = getFileName(contentDisposition);
+
+      downloadFile(response.data, fileName);
+
+      return response;
+    }
+
+    return response;
+  },
 
   async (error: AxiosError<any>) => {
     const originalRequest = error.config as InternalAxiosRequestConfig;
@@ -215,7 +264,8 @@ api.interceptors.response.use(
     if (status === 404) {
       return Promise.reject({
         success: false,
-        message: error.response.data?.message || error?.message || "API Not Found.",
+        message:
+          error.response.data?.message || error?.message || "API Not Found.",
       });
     }
 
@@ -225,14 +275,20 @@ api.interceptors.response.use(
     if (status >= 500) {
       return Promise.reject({
         success: false,
-        message: error.response.data?.message || error?.message || "Server error. Please try again later.",
+        message:
+          error.response.data?.message ||
+          error?.message ||
+          "Server error. Please try again later.",
       });
     }
 
     return Promise.reject({
       success: false,
       status,
-      message: error.response.data?.message || error?.message || "Something went wrong.",
+      message:
+        error.response.data?.message ||
+        error?.message ||
+        "Something went wrong.",
       errors: error.response.data?.errors,
     });
   },
@@ -243,7 +299,10 @@ api.interceptors.response.use(
 // ======================
 export const getApiErrorMessage = (error: any): string => {
   return (
-    error?.message || error?.response?.data?.message || error?.message || "Something went wrong"
+    error?.message ||
+    error?.response?.data?.message ||
+    error?.message ||
+    "Something went wrong"
   );
 };
 

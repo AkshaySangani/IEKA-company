@@ -7,10 +7,11 @@ export const getBranches = (payload: {
   status: string;
   page: number;
   limit?: number;
+  isDownload?: boolean;
 }) => {
-  const { page, limit, search, status } = payload;
+  const { page, limit, search, status,isDownload = false } = payload;
   return apiRequest.get<ApiResponse>(
-    `/organization/branches?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}`,
+    `/organization/branches?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
   );
 };
 

@@ -7,7 +7,10 @@ import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
 import { statusEnum } from "../../../../types/common-types";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
-import { getDesignation, updateDesignationStatus } from "../../../../apis/organization/designation.api";
+import {
+  getDesignation,
+  updateDesignationStatus,
+} from "../../../../apis/organization/designation.api";
 
 export interface IDesignation {
   _id: string;
@@ -39,7 +42,8 @@ const Designation: React.FC = () => {
     createdAt: "",
     updatedAt: "",
   };
-  const [designation, setDesignation] = useState<IDesignation>(initialDesignation);
+  const [designation, setDesignation] =
+    useState<IDesignation>(initialDesignation);
   // useEffect for get designation
   useEffect(() => {
     fetchDesignationList(page, limit, search);
@@ -74,7 +78,7 @@ const Designation: React.FC = () => {
   // handle edit designation details
   const handleEditDesignationDetails = async (designation: IDesignation) => {
     setLoading(true);
-    
+
     if (designation._id) {
       handleOnAddOpenClose();
       setDesignation(designation);
@@ -116,7 +120,19 @@ const Designation: React.FC = () => {
   const handleOnSearch = (value: string) => {
     setSearch(value);
     setPage(1);
-  }
+  };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getDesignation({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -133,6 +149,7 @@ const Designation: React.FC = () => {
         searchPlaceholder="Search designation..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area gap-2 flex flex-col">
         <PageLoader loading={loading} />

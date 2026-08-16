@@ -57,68 +57,70 @@ const Holiday = () => {
   const [holiday, setHoliday] = useState<IHoliday>(initialHoliday);
 
   const [cards, setCards] = useState<FilterCardItem[]>([
-      {
-        id: "",
-        title: "Total",
-        count: 0,
-        activeColor: "bg-info",
-        textColor: "text-info",
-        icon: <i className="fa-solid fa-align-justify"></i>,
-      },
-      {
-        id: "ACTIVE",
-        title: "Active",
-        count: 0,
-        activeColor: "bg-success",
-        textColor: "text-success",
-        icon: <i className="fa-solid fa-user-check"></i>,
-      },
-      {
-        id: "INACTIVE",
-        title: "Inactive",
-        count: 0,
-        activeColor: "bg-warning",
-        textColor: "text-warning",
-        icon: <i className="fa-solid fa-user-xmark"></i>,
-      }
-    ]);
-  
-    useEffect(() => {
-      getHolidayCounts();
-    }, [year]);
-  
-    const getHolidayCounts = async () => {
-      const response = await getHolidayCount(year);
-      if (response?.success) {
-        updateCards(response?.data);
-      }
-    };
-  
-    // update cards
-    const updateCards = (stats: CompanyStats) => {
-      setCards((prev) =>
-        prev.map((card) => {
-          switch (card.id) {
-            case "":
-              return { ...card, count: stats.total };
-  
-            case statusEnum.ACTIVE:
-              return { ...card, count: stats.active };
-  
-            case statusEnum.INACTIVE:
-              return { ...card, count: stats.inactive };
-  
-            default:
-              return card;
-          }
-        }),
-      );
-    };
+    {
+      id: "",
+      title: "Total",
+      count: 0,
+      activeColor: "bg-info",
+      textColor: "text-info",
+      icon: <i className="fa-solid fa-align-justify"></i>,
+    },
+    {
+      id: "ACTIVE",
+      title: "Active",
+      count: 0,
+      activeColor: "bg-success",
+      textColor: "text-success",
+      icon: <i className="fa-solid fa-user-check"></i>,
+    },
+    {
+      id: "INACTIVE",
+      title: "Inactive",
+      count: 0,
+      activeColor: "bg-warning",
+      textColor: "text-warning",
+      icon: <i className="fa-solid fa-user-xmark"></i>,
+    },
+  ]);
+
+  useEffect(() => {
+    getHolidayCounts();
+    // eslint-disable-next-line
+  }, [year]);
+
+  const getHolidayCounts = async () => {
+    const response = await getHolidayCount(year);
+    if (response?.success) {
+      updateCards(response?.data);
+    }
+  };
+
+  // update cards
+  const updateCards = (stats: CompanyStats) => {
+    setCards((prev) =>
+      prev.map((card) => {
+        switch (card.id) {
+          case "":
+            return { ...card, count: stats.total };
+
+          case statusEnum.ACTIVE:
+            return { ...card, count: stats.active };
+
+          case statusEnum.INACTIVE:
+            return { ...card, count: stats.inactive };
+
+          default:
+            return card;
+        }
+      }),
+    );
+  };
 
   // useEffect for get holiday
   useEffect(() => {
     fetchHolidayList(page, limit, search, activeCard, year);
-  }, [page, limit, search, activeCard,year]);
+    // eslint-disable-next-line
+  }, [page, limit, search, activeCard, year]);
 
   // get holiday list
   const fetchHolidayList = async (
@@ -126,10 +128,16 @@ const Holiday = () => {
     limit: number,
     search: string = "",
     status: string = "",
-    effectiveYear: number = new Date().getFullYear()
+    effectiveYear: number = new Date().getFullYear(),
   ) => {
     setLoading(true);
-    const response = await getHolidays({ page, limit, search, status, effectiveYear });
+    const response = await getHolidays({
+      page,
+      limit,
+      search,
+      status,
+      effectiveYear,
+    });
     if (response.success && response.data?.holidays?.length > 0) {
       setHolidays(response.data?.holidays);
       setTotal(response.data?.total);
@@ -188,11 +196,11 @@ const Holiday = () => {
     setStatusLoading(false);
   };
 
-  // handle refresh data 
+  // handle refresh data
   const handleRefreshData = () => {
     fetchHolidayList(page, limit, search, activeCard, year);
     getHolidayCounts();
-  }
+  };
 
   // handle search holiday
   const handleOnSearch = (value: string) => {
@@ -204,7 +212,19 @@ const Holiday = () => {
     setSearch("");
     setPage(1);
     setYear(Number(year));
-  }
+  };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getHolidays({
+      page,
+      limit,
+      search,
+      status: "",
+      effectiveYear: year,
+      isDownload: true,
+    });
+  };
   return (
     <>
       <TopBar
@@ -219,22 +239,27 @@ const Holiday = () => {
                 onChange={handleYearChange}
               />
             </div>
-          <Button
-            name="Add New"
-            size="sm"
-            onClick={handleOnAddOpenClose}
-            leftIcon={<i className="fa-solid fa-plus"></i>}
-          />
+            <Button
+              name="Add New"
+              size="sm"
+              onClick={handleOnAddOpenClose}
+              leftIcon={<i className="fa-solid fa-plus"></i>}
+            />
           </div>
         }
         isSearch
         searchPlaceholder="Search holidays..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />
-        <StatusCards cards={cards} activeCard={activeCard} setActiveCard={setActiveCard} />
+        <StatusCards
+          cards={cards}
+          activeCard={activeCard}
+          setActiveCard={setActiveCard}
+        />
         <HolidaysTable
           holidaysList={holidaysList}
           handleEditHolidayDetails={handleEditHolidayDetails}

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import "./DownloadModal.css";
-import * as XLSX from "xlsx";
-// import { jsPDF } from "jspdf";
 import TextField from "../text-field/TextField";
 import Note from "../note-area/Note";
 import DownloadExcelIcon from "../../../assets/images/downloadexcell.png"
@@ -11,22 +9,20 @@ import { FileType } from "../../../types/common-types";
 interface DownloadModalProps {
   isOpen: boolean;
   onClose: () => void;
-  dataToExport: any[]; // The data you want to put inside the file
-  fileName?: string;
   type?: FileType;
+  handleDownLoad: (password: string) => void;
 }
 
 const DownloadModal: React.FC<DownloadModalProps> = ({
   isOpen,
   type = "xlsx",
   onClose,
-  dataToExport,
-  fileName = "exported_data",
+  handleDownLoad
 }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [isPasswordProtected, setIsPasswordProtected] =
     useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,25 +32,10 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
     }
   };
 
-  const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-
-    if (isPasswordProtected && password) {
-      // NOTE: Standard sheet protection in xlsx locks editing, it doesn't encrypt the file opening.
-      // Full workbook encryption requires xlsx-populate or a backend service.
-      worksheet["!protect"] = {
-        password: password,
-        selectLockedCells: true,
-        selectUnlockedCells: true,
-      };
-      setPassword("");
-    } else {
-      setError("Password is required.")
-    }
-
-    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  const downloadExcel = async () => {
+    setLoading(true);
+    await handleDownLoad(password);
+    setLoading(false);
   };
 
   const downloadPDF = () => {
@@ -89,13 +70,14 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
         onClose={onClose}
         confirmButtonName={"Download"}
         handleOnConfirm={handleOnConfirm}
+        loading={loading}
       >
     <>
       <div className="popcontent">
         <div className="downloadicon">
           <img src={DownloadExcelIcon} alt="download"/>
         </div>
-        <div className="message">Are u sure want to Download ?</div>
+        <div className="message">Are u sure want to download ?</div>
       </div>
       <div className="passprotected mt_15">
         <input
@@ -118,7 +100,6 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
             placeholder="Enter your Password"
             value={password}
             onChange={(e) => setPassword(e?.target?.value)}
-            error={error}
             icon={
               <span
                 className="fieldicon"

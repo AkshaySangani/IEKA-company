@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import XLSX from "../../../assets/images/xls.png";
 import PDF from "../../../assets/images/pdf_icon.png";
 import TextField from "../text-field/TextField";
+import DownloadModal from "../download-modal/DownloadModal";
 
 interface TopBarProps {
   title?: string;
   actionButtons?: React.ReactNode;
-  handleDownloadExcelClick?: () => void;
+  handleDownloadExcel?: (password: string) => void;
   handleDownloadPdfClick?: () => void;
   isSearch?: boolean;
   onSearch?: (value: string) => void;
@@ -23,10 +24,11 @@ const TopBar = ({
   isPdf = false,
   onSearch = () => {},
   searchPlaceholder = "Search...",
-  handleDownloadExcelClick = () => {},
+  handleDownloadExcel = () => {},
   handleDownloadPdfClick = () => {},
 }: TopBarProps) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [downloadOpen, setDownloadOpen] = useState<boolean>(false);
   const searchTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const [search, setSearch] = useState("");
@@ -43,7 +45,13 @@ const TopBar = ({
     }, 500);
   };
 
+  // download confirmation popup
+  const handleDownLoadOpenClose = () => {
+    setDownloadOpen(prev => !prev);
+  }
+
   return (
+    <>
     <div className="sticky border-b border-borderPrimary px-[25px]">
       <div className="flex min-h-[50px] items-center justify-between">
         <div>
@@ -103,7 +111,7 @@ const TopBar = ({
             {isExcel && (
               <button
                 type="button"
-                onClick={handleDownloadExcelClick}
+                onClick={handleDownLoadOpenClose}
                 className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center"
               >
                 <img
@@ -118,6 +126,8 @@ const TopBar = ({
         </div>
       </div>
     </div>
+    <DownloadModal isOpen={downloadOpen} onClose={handleDownLoadOpenClose} handleDownLoad={handleDownloadExcel} />
+    </>
   );
 };
 

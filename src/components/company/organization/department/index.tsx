@@ -122,6 +122,17 @@ const Department: React.FC = () => {
     setPage(1);
   };
 
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getDepartmentList({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+    });
+  };
+
   return (
     <>
       <TopBar
@@ -138,6 +149,7 @@ const Department: React.FC = () => {
         searchPlaceholder="Search department..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area gap-2 flex flex-col">
         <PageLoader loading={loading} />

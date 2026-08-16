@@ -126,6 +126,11 @@ const Branch: React.FC = () => {
     setSearch(value);
     setPage(1);
   }
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getBranches({ page, limit, search, status: "",isDownload: true });
+  }
   return (
     <>
       <TopBar
@@ -141,6 +146,7 @@ const Branch: React.FC = () => {
         isSearch
         searchPlaceholder="Search branch..."
         onSearch={handleOnSearch}
+        handleDownloadExcel={handleDownloadExcel}
         isExcel
       />
       <div className="content-area gap-2 flex flex-col">

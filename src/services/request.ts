@@ -143,7 +143,7 @@ export const apiRequest = {
 
   get: async <T>(url: string) => {
     try {
-      const response = await api.get<T>(url);
+      const response = await api.get<T>(url, url.includes("isDownload=true") ? {responseType: "blob"}:{});
   
       return response.data;
     } catch(error: any){
