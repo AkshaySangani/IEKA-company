@@ -65,7 +65,7 @@ const OTPForm = () => {
     if (seconds > 0) return;
 
     const response = await forgotPasswordApi({
-      email: "formData.emailId",
+      email: email,
     });
 
     if (response?.success) {
