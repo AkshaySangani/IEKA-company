@@ -18,8 +18,8 @@ export const forgotPasswordApi = (payload: ForgotPasswordPayload) =>
     showSuccessToast: true,
   });
 
-export const verifyOtp = (payload: { otp: string }) =>
-  apiRequest.post("/auth/verify-otp", payload, {
+export const verifyOtp = (payload: { otp: string; email: string }) =>
+  apiRequest.post("/auth/forgot-password/otp/verify", payload, {
     successMessage: "OTP verified successfully.",
     showSuccessToast: true,
   });

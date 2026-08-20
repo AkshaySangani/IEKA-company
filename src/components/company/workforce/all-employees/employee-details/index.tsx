@@ -126,6 +126,8 @@ export interface IPayslip {
   assignedBy: string;
   createdAt: string;
   updatedAt: string;
+  allowESICDeduction: boolean;  
+  allowPFDeduction: boolean;
 }
 
 export interface IEmployeeResponse {
@@ -217,6 +219,8 @@ export const initialEmployeeResponse: IEmployeeResponse = {
     assignedBy: "",
     createdAt: "",
     updatedAt: "",
+    allowESICDeduction: false,
+    allowPFDeduction: false
   },
 };
 

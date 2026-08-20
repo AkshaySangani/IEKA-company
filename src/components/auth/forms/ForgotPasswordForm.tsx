@@ -1,18 +1,20 @@
 import { useState } from "react";
 import Button from "../../common/button/Button";
 import TextField from "../../common/text-field/TextField";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { forgotPasswordApi } from "../../../apis/auth/auth.api";
 import { regex } from "../../../constants/validation-regex";
 import { maskEmail } from "../../../utils/helper";
 
 const ForgotPasswordForm = () => {
   const navigate = useNavigate();
+  const {state} = useLocation();
+  const email = state?.email;
   const [loading, setLoading] = useState<boolean>(false);
   const [isMailSent, setIsMailSent] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
-    emailId: "",
+    emailId: email??"",
   });
 
   const [errors, setErrors] = useState({
@@ -63,9 +65,7 @@ const ForgotPasswordForm = () => {
     setLoading(false);
 
     if (response?.success) {
-      setIsMailSent(true);     
-    } else {
-      setIsMailSent(false);
+      navigate(`/otp-verify?email=${formData.emailId}`)
     }
   };
 

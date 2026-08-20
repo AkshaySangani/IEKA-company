@@ -35,6 +35,8 @@ interface SalaryFormData {
   salary: number;
   month: number;
   year: number;
+  allowESICDeduction: boolean;
+  allowPFDeduction: boolean;
 }
 export default function SalaryUpdate({
   active,
@@ -52,6 +54,8 @@ export default function SalaryUpdate({
     remarks: "",
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
+    allowESICDeduction: payslip.allowESICDeduction,
+    allowPFDeduction: payslip.allowPFDeduction,
   };
   const [formData, setFormData] = useState<SalaryFormData>(initialFormData);
 
@@ -62,9 +66,6 @@ export default function SalaryUpdate({
   }
 
   const [errors, setErrors] = useState<SalaryFormErrors>({});
-
-  const [isUan, setIsUan] = useState<boolean>(false);
-  const [isESIC, setIsESIC] = useState<boolean>(false);
 
   const [salaryDetails, setSalaryDetails] = useState<ISalaryDetail[]>([]);
   const [deductionDetails, setDeductionDetails] = useState<IDeductionDetail[]>(
@@ -115,7 +116,7 @@ export default function SalaryUpdate({
     }
   };
 
-  const handleChange = (field: keyof SalaryFormData, value: string) => {
+  const handleChange = (field: keyof SalaryFormData, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field as keyof SalaryFormErrors]) {
       setErrors((prev) => ({
@@ -160,8 +161,8 @@ export default function SalaryUpdate({
     calculateSalaryBreakdown(
       formData.salary,
       [...salaryDetails, ...deductionDetails],
-      isUan,
-      isESIC,
+      formData.allowPFDeduction,
+      formData.allowESICDeduction,
     );
 
   return (
@@ -191,10 +192,10 @@ export default function SalaryUpdate({
             {employeeDetails.bank.uanNo && (
               <div className="flex flex-col gap-2">
                 <Checkbox
-                  name={"isUanNo"}
+                  name={"allowPFDeduction"}
                   label="UAN No."
-                  checked={isUan}
-                  onChange={() => setIsUan((prev) => !prev)}
+                  checked={formData.allowPFDeduction}
+                  onChange={() => handleChange("allowPFDeduction",!formData.allowPFDeduction)}
                 />
                 <TextField
                   label=""
@@ -208,10 +209,10 @@ export default function SalaryUpdate({
             {employeeDetails.bank.esicNo && (
               <div className="flex flex-col gap-2">
                 <Checkbox
-                  name={"isESICNo"}
+                  name={"allowESICDeduction"}
                   label="ESIC No."
-                  checked={isESIC}
-                  onChange={() => setIsESIC((prev) => !prev)}
+                  checked={formData.allowESICDeduction}
+                  onChange={() => handleChange("allowESICDeduction", !formData.allowESICDeduction)}
                 />
                 <TextField
                   label=""

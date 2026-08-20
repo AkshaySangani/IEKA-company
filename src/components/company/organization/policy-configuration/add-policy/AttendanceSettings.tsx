@@ -2,6 +2,7 @@
 
 import { yesNoOption } from "../../../../../constants/constants";
 import { WEEKLY_OFF_OPTIONS } from "../../../../../constants/options";
+import { IOption } from "../../../../../types/common-types";
 import Checkbox from "../../../../common/checkbox/CheckBox";
 import SelectField from "../../../../common/select/SelectField";
 import TextField from "../../../../common/text-field/TextField";
@@ -40,6 +41,11 @@ const AttendanceSettings = ({
     handleChange("weeklyOffs", updatedWeeklyOffs, "workHours");
   };
 
+  const percentageOption: IOption[] = [
+    { label: "10 %", value: 10 },
+    { label: "25 %", value: 25 },
+    { label: "50 %", value: 50 },
+  ];
   return (
     <div className="space-y-3 rounded-lg bg-white shadow-sm">
       {/* Attendance Setting */}
@@ -193,70 +199,59 @@ const AttendanceSettings = ({
           </div>
 
           <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
-            <span>
-              Employee will be marked Absent if total working hours are less
-              than
-            </span>
+            <span>Marked absent if total working shift hours are less than</span>
 
-            <div className="w-24">
-              <TextField
-                type="number"
-                value={data.lateRule.fullDayMinHours}
-                error={errors["lateRule.fullDayMinHours"]}
-                disabled={!!editPolicyId}
-                onChange={(e) =>
+            <div className="w-36">
+              <SelectField
+                value={
+                  data.lateRule.minFullDayPercentage
+                    ? percentageOption.find(
+                        (ele) =>
+                          ele.value === data.lateRule.minFullDayPercentage,
+                      )
+                    : ""
+                }
+                name={"minFullDayPercentage"}
+                options={percentageOption}
+                onChange={(option) =>
                   handleChange(
-                    "fullDayMinHours",
-                    Number(e.target.value),
+                    "minFullDayPercentage",
+                    Number(option.value),
                     "lateRule",
                   )
                 }
+                placeholder="Percentage.."
               />
             </div>
-
-            <span>hour(s).</span>
           </div>
 
           <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
             <span>
-              Half Day will be considered if total working hours are between
+              Marked half day if total working shift hours are less than
             </span>
 
-            <div className="w-24">
-              <TextField
-                type="number"
-                value={data.lateRule.halfDayWorkMinHours}
-                error={errors["lateRule.halfDayWorkMinHours"]}
-                disabled={!!editPolicyId}
-                onChange={(e) =>
+            <div className="w-36">
+              <SelectField
+                value={
+                  data.lateRule.minHalfDayPercentage
+                    ? percentageOption.find(
+                        (ele) =>
+                          ele.value === data.lateRule.minHalfDayPercentage,
+                      )
+                    : ""
+                }
+                name={"minHalfDayPercentage"}
+                options={percentageOption}
+                onChange={(option) =>
                   handleChange(
-                    "halfDayWorkMinHours",
-                    Number(e.target.value),
+                    "minHalfDayPercentage",
+                    Number(option.value),
                     "lateRule",
                   )
                 }
+                placeholder="Percentage.."
               />
             </div>
-
-            <span>and </span>
-
-            <div className="w-24">
-              <TextField
-                type="number"
-                value={data.lateRule.halfDayWorkMaxHours}
-                error={errors["lateRule.halfDayWorkMaxHours"]}
-                disabled={!!editPolicyId}
-                onChange={(e) =>
-                  handleChange(
-                    "halfDayWorkMaxHours",
-                    Number(e.target.value),
-                    "lateRule",
-                  )
-                }
-              />
-            </div>
-
-            <span>hour(s).</span>
           </div>
         </div>
       </div>

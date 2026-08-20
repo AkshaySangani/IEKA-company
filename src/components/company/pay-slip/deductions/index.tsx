@@ -6,7 +6,6 @@ import DeductionDetails from "./DeductionDetails";
 import Button from "../../../common/button/Button";
 import IncomeTaxDeductionDetails from "./IncomeTaxDeductionDetails";
 import {
-  addDeductions,
   getDeductions,
   updateDeductions,
 } from "../../../../apis/pay-slip/deductions.api";
@@ -47,23 +46,7 @@ const PayslipDeductions: React.FC = () => {
     _id: "",
   });
 
-  const initialDeductionDetails: IDeductionDetails[] = [
-    {
-      name: deductionEnum.PROFESSIONAL_TAX,
-      value: 0,
-      valueType: ValueType.FIXED,
-    },
-    {
-      name: deductionEnum.PROVIDENT_FUND,
-      value: 0,
-      valueType: ValueType.PERCENTAGE,
-    },
-    {
-      name: deductionEnum.ESIC,
-      value: 0,
-      valueType: ValueType.PERCENTAGE,
-    },
-  ];
+  const initialDeductionDetails: IDeductionDetails[] = [];
 
   const initialIncomeTaxDetails: IIncomeTaxDeductionDetails = {
     from: 0,

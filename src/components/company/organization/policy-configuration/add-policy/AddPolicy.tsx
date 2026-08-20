@@ -46,10 +46,8 @@ export interface PolicyFormData {
     allowedLateCount: number;
     onAbsentSlarayDaysCut: number;
 
-    fullDayMinHours: number;
-
-    halfDayWorkMinHours: number;
-    halfDayWorkMaxHours: number;
+    minFullDayPercentage: number;
+    minHalfDayPercentage: number;
   };
 
   overtime: {
@@ -118,9 +116,8 @@ const AddPolicy: React.FC<{
       allowedEarlyMinutes: 0,
       allowedLateCount: 0,
       onAbsentSlarayDaysCut: 0,
-      fullDayMinHours: 0,
-      halfDayWorkMinHours: 0,
-      halfDayWorkMaxHours: 0,
+      minFullDayPercentage: 0,
+      minHalfDayPercentage: 0,
     },
 
     overtime: {

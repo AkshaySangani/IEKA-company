@@ -53,8 +53,8 @@ export interface IEmployeeFormData {
   assignments: IAssignment[];
   remarks: string;
 
-  isUan: boolean;
-  isESIC: boolean;
+  allowESICDeduction: boolean;
+  allowPFDeduction: boolean;
 
   branchId: string;
   shiftId: string;
@@ -128,8 +128,8 @@ const AssignRolesResponsibility = () => {
     assignments: [],
     remarks: "",
 
-    isESIC: false,
-    isUan: false,
+    allowESICDeduction: false,
+    allowPFDeduction: false,
 
     branchId: "",
     shiftId: "",
@@ -398,6 +398,8 @@ const AssignRolesResponsibility = () => {
       policyId: formData.policyId,
       payslipId: formData.payslipId,
       salary: Number(formData.salary),
+      allowESICDeduction: formData.allowESICDeduction,
+      allowPFDeduction: formData.allowPFDeduction,
       assignments: [
         ...(formData.role === RoleEnum.MANAGER
           ? [

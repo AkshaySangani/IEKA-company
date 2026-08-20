@@ -106,7 +106,7 @@ const SalaryDetailsCard: React.FC<Props> = ({
     calculateSalaryBreakdown(formData.salary, [
       ...salaryDetails,
       ...deductionDetails,
-    ],formData.isUan,formData.isESIC);
+    ],formData.allowPFDeduction,formData.allowESICDeduction);
   return (
     <div className="content-card bg-white border border-gray-200">
       <div className="p-5">
@@ -147,10 +147,10 @@ const SalaryDetailsCard: React.FC<Props> = ({
           <div className="grid lg:grid-cols-2 gap-2">
             {employeeDetails.bank.uanNo && <div className="flex flex-col gap-2">
               <Checkbox
-                name={"isUanNo"}
+                name={"allowPFDeduction"}
                 label="UAN No."
-                checked={formData.isUan}
-                onChange={() => handleChange("isUan", !formData.isUan)}
+                checked={formData.allowPFDeduction}
+                onChange={() => handleChange("allowPFDeduction", !formData.allowPFDeduction)}
               />
               <TextField
                 label=""
@@ -162,10 +162,10 @@ const SalaryDetailsCard: React.FC<Props> = ({
             </div>}
             {employeeDetails.bank.esicNo && <div className="flex flex-col gap-2">
               <Checkbox
-                name={"isESICNo"}
+                name={"allowESICDeduction"}
                 label="ESIC No."
-                checked={formData.isESIC}
-                onChange={() => handleChange("isESIC", !formData.isESIC)}
+                checked={formData.allowESICDeduction}
+                onChange={() => handleChange("allowESICDeduction", !formData.allowESICDeduction)}
               />
               <TextField
                 label=""
