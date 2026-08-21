@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  AttendanceStatusEnum,
   ExpenseCardItem,
   FilterCardItem,
   RoleEnum,
@@ -14,8 +15,15 @@ import { OverallExpenseStats } from "../expense/overall-expense/StatusCards";
 import { getTrend } from "../expense/overall-expense";
 import WorkforceSummaryCard from "./WorkforceSummaryCard";
 import { EmployeeStats } from "../workforce/all-employees/StatusCards";
-import { getDashboardWorkforce } from "../../../apis/dashboard/dashboard.api";
+import {
+  getDashboardAttendance,
+  getDashboardWorkforce,
+} from "../../../apis/dashboard/dashboard.api";
 import PageLoader from "../../common/loader/PageLoader";
+import AttendanceSummaryCard from "./AttendanceSummaryCard";
+import { DateFormat, formatDate } from "../../../utils/date-format";
+import { DateRangeValue } from "../../common/date-picker/DateRangePicker";
+import { toastMessage } from "../../../utils/toast-message";
 
 export interface IUserSummary {
   _id: string;
@@ -42,6 +50,26 @@ export interface IDashboardEmployeeOverview {
   resignation: IUserListStats;
   termination: IUserListStats;
   promotion: IUserListStats;
+}
+
+export interface IAttendanceListItem {
+  _id: string;
+  userId: IUserSummary;
+  attendanceStatus: AttendanceStatusEnum;
+}
+
+export interface ILeaveListItem {
+  _id: string;
+  userId: IUserSummary;
+}
+
+export interface IAttendanceSummary {
+  totalEmployee: number;
+  totalLeaves: number;
+  totalAbsent: number;
+  totalPresent: number;
+  attendanceList: IAttendanceListItem[];
+  leavesList: ILeaveListItem[];
 }
 
 export const initialDashboardEmployeeOverview: IDashboardEmployeeOverview = {
@@ -73,7 +101,25 @@ export const initialDashboardEmployeeOverview: IDashboardEmployeeOverview = {
   },
 };
 
+// attendance summary
+export const initialAttendanceSummary: IAttendanceSummary = {
+  totalEmployee: 0,
+  totalLeaves: 0,
+  totalAbsent: 0,
+  totalPresent: 0,
+
+  attendanceList: [],
+
+  leavesList: [],
+};
+
 const Dashboard = () => {
+  // page loading
+
+  const [attendanceLoading, setAttendanceLoading] = useState<boolean>(false);
+  const [expenseLoading, setExpenseLoading] = useState<boolean>(false);
+
+  // start and end date for expense data
   const [selected, setSelected] = useState<{
     startDate: Date | null;
     endDate: Date | null;
@@ -81,7 +127,12 @@ const Dashboard = () => {
     startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
   });
+
+  const [date, setDate] = useState<string>(
+    formatDate(new Date(), DateFormat.ISO_DATE),
+  );
   const [loading, setLoading] = useState<boolean>(false);
+
   const [cards, setCards] = useState<ExpenseCardItem[]>([
     {
       id: pathNames.OVERALL_EXPENSE,
@@ -120,6 +171,7 @@ const Dashboard = () => {
       trendDetails: null,
     },
   ]);
+
   const [workforceCards, setWorkforceCards] = useState<FilterCardItem[]>([
     {
       id: "",
@@ -146,27 +198,51 @@ const Dashboard = () => {
       icon: <i className="fa-solid fa-user-xmark"></i>,
     },
   ]);
+
   const [workforce, setWorkforce] = useState<IDashboardEmployeeOverview>(
     initialDashboardEmployeeOverview,
   );
 
+  // attendance summary state
+  const [attendanceSummary, setAttendanceSummary] =
+    useState<IAttendanceSummary>(initialAttendanceSummary);
+
   useEffect(() => {
     fetchDashboardData();
+    // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    fetchExpenseData();
-  }, [selected?.endDate, selected?.startDate]);
-
+  // fetch all dashboard data
   const fetchDashboardData = async () => {
     setLoading(true);
 
     try {
-      const [workforceResponse] = await Promise.all([getDashboardWorkforce()]);
+      const [workforceResponse, expenseResponse, attendanceResponse] =
+        await Promise.all([
+          getDashboardWorkforce(),
+          getOverAllExpenseCount({
+            startDate: formatDate(selected.startDate, DateFormat.ISO_DATE),
+            endDate: formatDate(selected.endDate, DateFormat.ISO_DATE),
+          }),
+          getDashboardAttendance(date),
+        ]);
 
+      // workforce
       if (workforceResponse?.success) {
         updateWorkforceCards(workforceResponse.data.employee);
         setWorkforce(workforceResponse.data);
+      }
+
+      // expense
+      if (expenseResponse?.success) {
+        updateCards(expenseResponse.data);
+      }
+
+      // attendance
+      if (attendanceResponse?.success) {
+        setAttendanceSummary(attendanceResponse.data);
+      } else {
+        setAttendanceSummary(initialAttendanceSummary);
       }
     } catch (error) {
       console.error("Dashboard API Error:", error);
@@ -175,15 +251,40 @@ const Dashboard = () => {
     }
   };
 
-  const fetchExpenseData = async () => {
+  // fetch expense data by start date and end date
+  const fetchExpenseData = async (selected: DateRangeValue) => {
+    if (!selected.startDate || !selected.endDate) {
+      toastMessage.error("Please select date range");
+      return;
+    }
+    setExpenseLoading(true);
     const response = await getOverAllExpenseCount({
-      startDate: selected.startDate?.toISOString() || null,
-      endDate: selected.endDate?.toISOString() || null,
+      startDate: formatDate(selected.startDate, DateFormat.ISO_DATE),
+      endDate: formatDate(selected.endDate, DateFormat.ISO_DATE),
     });
 
     if (response?.success) {
       updateCards(response.data);
     }
+
+    setExpenseLoading(false);
+  };
+
+  // fetch attendance data by date
+  const fetchAttendanceData = async (date: string) => {
+    if (!date) {
+      toastMessage.error("Please select date");
+      return;
+    }
+    setAttendanceLoading(true);
+    const response = await getDashboardAttendance(date);
+
+    if (response?.success) {
+      setAttendanceSummary(response.data);
+    } else {
+      setAttendanceSummary(initialAttendanceSummary);
+    }
+    setAttendanceLoading(false);
   };
 
   const updateCards = (stats: OverallExpenseStats) => {
@@ -250,6 +351,18 @@ const Dashboard = () => {
     );
   };
 
+  // handle select date range for expense
+  const handleSelectDateRange = (value: DateRangeValue) => {
+    setSelected(value);
+    fetchExpenseData(value);
+  };
+
+  // handle change date for attendance
+  const handleDateChange = (value: string) => {
+    setDate(value);
+    fetchAttendanceData(value);
+  };
+
   return (
     <>
       <TopBar title="Dashboard" />
@@ -278,22 +391,18 @@ const Dashboard = () => {
           <ExpenseSummaryCard
             cards={cards}
             selected={selected}
-            setSelected={setSelected}
+            setSelected={handleSelectDateRange}
+            loading={expenseLoading}
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <WorkforceSummaryCard workforce={workforce} cards={workforceCards} />
-            <div className="content-card flex flex-col gap-3 rounded-lg justify-center items-center">
-              <div className="text-md text-gray-400">
-                <i className="fa-solid fa-info-circle"></i>
-              </div>
-              <div className="flex justify-center">Under Development</div>
-              <p className="max-w-md text-sm text-gray-500 leading-relaxed">
-                {
-                  "This feature is currently under development and will be available soon."
-                }
-              </p>
-            </div>
+          <AttendanceSummaryCard
+            attendanceSummary={attendanceSummary}
+            date={date}
+            handleDateChange={handleDateChange}
+            loading={attendanceLoading}
+          />
         </div>
       </div>
     </>

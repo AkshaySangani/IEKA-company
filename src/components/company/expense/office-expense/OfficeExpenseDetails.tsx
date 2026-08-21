@@ -6,16 +6,13 @@ import Button from "../../../common/button/Button";
 
 import { currency, pathNames } from "../../../../constants/constants";
 import PageLoader from "../../../common/loader/PageLoader";
-
-import { RoleEnum, statusEnum } from "../../../../types/common-types";
 import Image from "../../../common/image";
 import { getOfficeExpenseById } from "../../../../apis/expense/office-expense.api";
-import { initialOfficeExpense, IOfficeExpense, IUser } from ".";
+import { initialOfficeExpense, IOfficeExpense } from ".";
 import PersonInfo from "../../../common/person-info";
 import {
   DateFormat,
   formatDate,
-  getDateDifference,
   getDateDifferenceBetween,
 } from "../../../../utils/date-format";
 import { getFileNameByUrl } from "../../../../utils/helper";
@@ -38,6 +35,7 @@ const OfficeExpenseDetails: React.FC = () => {
     if (officeExpenseId) {
       fetchOfficeExpenseById(officeExpenseId);
     }
+    // eslint-disable-next-line
   }, [officeExpenseId]);
 
   // get reimbursement by id

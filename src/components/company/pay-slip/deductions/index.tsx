@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { deductionEnum, ValueType } from "../../../../types/common-types";
+import { ValueType } from "../../../../types/common-types";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import DeductionDetails from "./DeductionDetails";
@@ -72,6 +72,7 @@ const PayslipDeductions: React.FC = () => {
 
   useEffect(() => {
     fetchDeductions();
+    // eslint-disable-next-line
   }, []);
 
   const fetchDeductions = async () => {

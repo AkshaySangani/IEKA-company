@@ -111,7 +111,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
     return `${MONTHS[value.month]} ${value.year}`;
   }, [value]);
 
-  const DROPDOWN_WIDTH = 235;
+  // const DROPDOWN_WIDTH = 235;
 const DROPDOWN_HEIGHT = 285;
 const GAP = 20;
 

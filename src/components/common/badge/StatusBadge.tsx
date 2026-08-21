@@ -122,12 +122,3 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
 };
 
 export default StatusBadge;
-
-{/* <span
-  className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset ${getStatusClass(
-    leaveDetails.status,
-  )}`}
->
-  <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-current" />
-  {leaveDetails.status}
-</span>; */}

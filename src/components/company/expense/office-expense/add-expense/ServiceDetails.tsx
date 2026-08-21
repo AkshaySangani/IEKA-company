@@ -5,7 +5,6 @@ import TextAreaField from "../../../../common/text-area/TextAreaField";
 import TextField from "../../../../common/text-field/TextField";
 import { getMyBranchList } from "../../../../../apis/organization/branch.api";
 import { IOption } from "../../../../../types/common-types";
-import { SERVICE_TYPE_OPTIONS } from "../../../../../constants/options";
 
 interface IServiceDetailsProps {
   formData: OfficeExpenseFormData;

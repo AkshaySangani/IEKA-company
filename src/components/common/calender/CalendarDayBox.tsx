@@ -1,10 +1,5 @@
 // CalendarDayBox.tsx
 
-import React from "react";
-import {
-  AttendanceDay,
-  CalendarStatus,
-} from "../../../types/attendance-calendar.types";
 import { IUserAttendance } from "../../company/performance/attendance/attendance-details";
 import { getFirstCharacter } from "../../../utils/helper";
 import {
@@ -17,8 +12,7 @@ import Holiday from "../../../assets/images/holidays.png";
 import Image from "../image";
 import {
   DateFormat,
-  formatDate,
-  formatMinutes,
+  formatDate
 } from "../../../utils/date-format";
 
 interface CalendarDayBoxProps {
@@ -26,57 +20,6 @@ interface CalendarDayBoxProps {
   data?: IUserAttendance;
   //   onClick?: (date: Date) => void;
 }
-
-const statusClasses: Record<
-  CalendarStatus,
-  {
-    border: string;
-    text: string;
-    bg: string;
-  }
-> = {
-  primary: {
-    border: "border-primary",
-    text: "text-primary",
-    bg: "bg-primary/10",
-  },
-
-  secondary: {
-    border: "border-secondary",
-    text: "text-secondary",
-    bg: "bg-secondary/10",
-  },
-
-  success: {
-    border: "border-success",
-    text: "text-success",
-    bg: "bg-success/10",
-  },
-
-  warning: {
-    border: "border-warning",
-    text: "text-warning",
-    bg: "bg-warning/10",
-  },
-
-  pending: {
-    border: "border-pending",
-    text: "text-pending",
-    bg: "bg-pending/10",
-  },
-
-  danger: {
-    border: "border-danger",
-    text: "text-danger",
-    bg: "bg-danger/10",
-  },
-
-  info: {
-    border: "border-info",
-    text: "text-info",
-    bg: "bg-info/10",
-  },
-};
 
 const getDayBackground = (status?: AttendanceStatusEnum) => {
   switch (status) {

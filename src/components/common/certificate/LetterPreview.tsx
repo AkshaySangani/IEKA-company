@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { LetterData } from ".";
 import Draggable from "../draggable";
 import Image from "../image";

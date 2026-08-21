@@ -112,12 +112,14 @@ const EmployeeAttendanceDetails = () => {
     if (userId) {
       fetchUserAttendance();
     }
+    // eslint-disable-next-line
   }, [userId, selectedMonth.month]);
 
   useEffect(() => {
     if(userId){
       fetchEmployeeDetails();
     }
+    // eslint-disable-next-line
   }, [userId])
 
   const fetchUserAttendance = async () => {

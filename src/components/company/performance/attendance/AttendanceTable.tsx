@@ -2,18 +2,12 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   pathNames,
   roleNames,
-  statusColor,
-  statusMessage,
 } from "../../../../constants/constants";
 import { IUserAttendance } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  AttendanceMethodEnum,
   AttendanceMethodNames,
   AttendanceStatusEnum,
-  statusEnum,
 } from "../../../../types/common-types";
 import PersonInfo from "../../../common/person-info";
 import AttendanceStatusBadge from "../../../common/badge/AttendanceBadge";
@@ -32,17 +26,7 @@ export default function AttendanceTable({
   attendance
 }: IUserAttendanceListProps) {
   const navigate = useNavigate();
-  const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-  // const [departmentDetails, setAttendanceDetails] =
-  //   useState<IUserAttendance>(initialAttendance);
 
-  const handleEditAttendanceDetails = (departmentId: string) => {
-    navigate(pathNames.ADD_DEPARTMENT, {
-      state: {
-        departmentId,
-      },
-    });
-  };
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IUserAttendance>[] = [
     {
@@ -177,18 +161,6 @@ export default function AttendanceTable({
       render: (row) => <div className="flex justify-center">{row.totalWorkedMinutes ? formatMinutes(row.totalWorkedMinutes) : "-"}</div>,
     },
   ];
-
-  // handle history open
-  const handleHistoryOpenClose = () => {
-    setHistoryOpen((prev) => !prev);
-    // setAttendanceDetails(initialAttendance);
-  };
-
-  // handle show history
-  const handleShowHistory = (branch: IUserAttendance) => {
-    handleHistoryOpenClose();
-    // setAttendanceDetails(branch);
-  };
 
   return (
     <>

@@ -133,6 +133,7 @@ const EmployeePayroll: React.FC = () => {
   // useEffect for get branch
   useEffect(() => {
     fetchEmployeePayrollList({ page, limit, search, ...month });
+    // eslint-disable-next-line
   }, [page, limit, search, month.month]);
 
   // update cards

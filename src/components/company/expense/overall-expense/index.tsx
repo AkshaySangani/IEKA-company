@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import {
-  ExpenseCardItem,
-  FilterCardItem,
-  RoleEnum,
-  statusEnum,
+  ExpenseCardItem
 } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import StatusCards, { OverallExpenseStats } from "./StatusCards";
@@ -88,6 +85,7 @@ const OverallExpense: React.FC = () => {
 
   useEffect(() => {
     fetchOverallExpenseCount();
+    // eslint-disable-next-line
   }, [month]);
 
   const fetchOverallExpenseCount = async () => {

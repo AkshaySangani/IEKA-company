@@ -1,5 +1,4 @@
 import {
-  leavePeriodOptions,
   yesNoOption,
 } from "../../../../../constants/constants";
 import SelectField from "../../../../common/select/SelectField";

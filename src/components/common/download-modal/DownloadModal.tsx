@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./DownloadModal.css";
-import TextField from "../text-field/TextField";
-import Note from "../note-area/Note";
+// import TextField from "../text-field/TextField";
+// import Note from "../note-area/Note";
 import DownloadExcelIcon from "../../../assets/images/downloadexcell.png"
 import Modal from "../modal/Modal";
 import { FileType } from "../../../types/common-types";
@@ -20,21 +20,21 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
   handleDownLoad
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [isPasswordProtected, setIsPasswordProtected] =
-    useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  // const [isPasswordProtected, setIsPasswordProtected] =
+  //   useState<boolean>(false);
+  // const [password, setPassword] = useState<string>("");
+  // const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsPasswordProtected(e.target.checked);
-    if (!e.target.checked) {
-      setPassword(""); // Reset password if unchecked
-    }
-  };
+  // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setIsPasswordProtected(e.target.checked);
+  //   if (!e.target.checked) {
+  //     setPassword(""); // Reset password if unchecked
+  //   }
+  // };
 
   const downloadExcel = async () => {
     setLoading(true);
-    await handleDownLoad(password);
+    await handleDownLoad("");
     setLoading(false);
   };
 
@@ -90,7 +90,7 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
         </div>
       </div> */}
 
-      {isPasswordProtected && <div className="field_items mt_15" id="passwordField">
+      {/* {isPasswordProtected && <div className="field_items mt_15" id="passwordField">
         <div className="column_two">
           <TextField
             label="Create Password"
@@ -112,11 +112,11 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
             }
           />
         </div>
-      </div>}
-      {isPasswordProtected && <Note
+      </div>} */}
+      {/* {isPasswordProtected && <Note
         variant="danger"
         message="This file is password protected and can only be accessed by entering the above-mentioned password."
-      />}
+      />} */}
     </>
     </Modal>
   );

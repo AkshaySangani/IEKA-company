@@ -45,6 +45,7 @@ const AddLeave: React.FC<IAddLeaveProps> = ({
           isPaid: leave.isPaid ? leaveTypeEnum.PAID : leaveTypeEnum.UNPAID
       })
     }
+    // eslint-disable-next-line
   }, [leave._id]);
 
   const [errors, setErrors] = useState<

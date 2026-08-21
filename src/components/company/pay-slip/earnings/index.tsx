@@ -57,7 +57,6 @@ export const initialEarning: IEarning = {
 const Earnings = () => {
   const navigate = useNavigate();
   const [activeCard, setActiveCard] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
@@ -98,6 +97,7 @@ const Earnings = () => {
 
   useEffect(() => {
     getEarningCounts();
+    // eslint-disable-next-line
   }, []);
 
   const getEarningCounts = async () => {

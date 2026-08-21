@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
-import { format, parse, isValid } from "date-fns";
+import { format } from "date-fns";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 import TextField from "../text-field/TextField";
+
+export interface DateRangeValue {
+  startDate: Date | null;
+  endDate: Date | null;
+}
 
 interface Props {
   label?: string;
@@ -105,7 +110,12 @@ export default function DateRangePicker({
         placeholder="DD-MM-YYYY - DD-MM-YYYY"
         onChange={handleInputChange}
         onClick={() => pickerRef.current?.setOpen(true)}
-        icon={<i className="fa-regular fa-calendar" onClick={() => pickerRef.current?.setOpen(true)}></i>}
+        icon={
+          <i
+            className="fa-regular fa-calendar"
+            onClick={() => pickerRef.current?.setOpen(true)}
+          ></i>
+        }
       />
 
       <div className="absolute left-[50%] top-6 translate-x-[-50%] z-[999999]">

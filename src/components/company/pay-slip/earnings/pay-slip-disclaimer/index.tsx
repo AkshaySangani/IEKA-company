@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import TextField from "../../../../common/text-field/TextField";
 import { pathNames } from "../../../../../constants/constants";
-import { IEarning } from "..";
 import TopBar from "../../../../common/topbar/TopBar";
 import PageLoader from "../../../../common/loader/PageLoader";
 import Button from "../../../../common/button/Button";
@@ -60,6 +59,7 @@ const PayslipDisclaimer: React.FC = () => {
         details: earningData?.details,
       });
     }
+    // eslint-disable-next-line
   }, [earningData?._id]);
 
   const handleChange = (

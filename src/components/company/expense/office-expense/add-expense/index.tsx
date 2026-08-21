@@ -79,7 +79,7 @@ const AddOfficeExpense: React.FC = () => {
     e.target.value = "";
     setErrors((prev) => ({
       ...prev,
-      ["documents"]: "",
+      documents: "",
     }));
   };
 

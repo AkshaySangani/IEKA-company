@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import {
   getAttendanceCount,
   getAttendanceList,
-  updateAttendanceStatus,
 } from "../../../../apis/performance/attendance.api";
 import StatusCards, { AttendanceStats } from "./StatusCards";
 import TextField from "../../../common/text-field/TextField";
@@ -45,19 +44,8 @@ export interface IUser {
   role: RoleEnum;
 }
 
-const getApiDate = (date: string) => {
-  const now = new Date();
-
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-  const seconds = String(now.getSeconds()).padStart(2, "0");
-
-  return `${date}T${hours}:${minutes}:${seconds}`;
-};
-
 const Attendance: React.FC = () => {
   const navigate = useNavigate();
-  const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
@@ -68,31 +56,9 @@ const Attendance: React.FC = () => {
   // new Date().toISOString().split("T")[0],
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [statusLoading, setStatusLoading] = useState<boolean>(false);
 
   const [attendanceList, setAttendanceList] = useState<IUserAttendance[]>([]);
-  const initialAttendance: IUserAttendance = {
-    _id: "",
-    userId: {
-      _id: "",
-      firstName: "",
-      lastName: "",
-      profileImage: "",
-      status: statusEnum.ACTIVE,
-      role: RoleEnum.EMPLOYEE,
-    },
-    inTime: null,
-    outTime: null,
-    inMethod: AttendanceMethodEnum.WEB,
-    outMethod: AttendanceMethodEnum.WEB,
-    totalWorkedMinutes: 0,
-    lateMinutes: 0,
-    isHalfDay: false,
-    earlyExitMinutes: 0,
-    attendanceStatus: AttendanceStatusEnum.ABSENT,
-  };
-  const [attendance, setAttendance] =
-    useState<IUserAttendance>(initialAttendance);
+
   const [cards, setCards] = useState<FilterCardItem[]>([
     {
       id: "",
@@ -136,10 +102,12 @@ const Attendance: React.FC = () => {
       status: activeCard,
       date: date,
     });
+    
   }, [page, limit, search, activeCard, date]);
 
   useEffect(() => {
     fetchAttendanceCount();
+    // eslint-disable-next-line
   }, [date]);
 
   const fetchAttendanceCount = async () => {
@@ -198,36 +166,6 @@ const Attendance: React.FC = () => {
   // handle click add new
   const handleOnAdd = () => {
     navigate(pathNames.ADD_DEPARTMENT);
-  };
-
-  // handle status open close
-  const handleStatusOpenClose = () => {
-    setStatusOpen((prev) => !prev);
-    setAttendance(initialAttendance);
-  };
-
-  // handle update status
-  const handleUpdateStatus = (attendance: IUserAttendance) => {
-    handleStatusOpenClose();
-    setAttendance(attendance);
-  };
-
-  const handleStatusSubmit = async (formData: {
-    status: AttendanceStatusEnum;
-    remarks: string;
-  }) => {
-    setStatusLoading(true);
-
-    const payload = {
-      status: formData.status.trim(),
-      remarks: formData.remarks,
-    };
-
-    const response = await updateAttendanceStatus(payload, attendance._id);
-    if (response.success) {
-      fetchAttendanceList({ page, limit, search, date });
-    }
-    setStatusLoading(false);
   };
 
   // handle search branch
@@ -297,15 +235,6 @@ const Attendance: React.FC = () => {
           onPageSizeChange={handlePageSizeChange}
         />
       </div>
-
-      {/* <StatusUpdateModal
-        title={`attendance`}
-        isOpen={statusOpen}
-        status={attendance.attendanceStatus}
-        handleOpenClose={handleStatusOpenClose}
-        handleSubmit={handleStatusSubmit}
-        loading={statusLoading}
-      /> */}
     </>
   );
 };

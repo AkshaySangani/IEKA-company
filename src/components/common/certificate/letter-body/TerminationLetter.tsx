@@ -1,5 +1,5 @@
 import { LetterData } from "..";
-import { DateFormat, formatDate } from "../../../../utils/date-format";
+import { formatDate } from "../../../../utils/date-format";
 import Draggable from "../../draggable";
 
 interface TerminationLetterProps {

@@ -1,5 +1,4 @@
 import React from "react";
-import { ArrowRight, ArrowUp } from "lucide-react";
 import RightArrow from "../right-arrow";
 
 export interface SummaryCardProps {

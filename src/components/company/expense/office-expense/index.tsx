@@ -187,6 +187,7 @@ const OfficeExpense: React.FC = () => {
 
   useEffect(() => {
     fetchOfficeExpenseCount();
+    // eslint-disable-next-line
   }, [month]);
 
   const fetchOfficeExpenseCount = async () => {

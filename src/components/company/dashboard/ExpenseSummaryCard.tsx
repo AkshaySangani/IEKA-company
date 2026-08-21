@@ -1,34 +1,38 @@
 import { currency, pathNames } from "../../../constants/constants";
 import RightArrow from "../../common/right-arrow";
 import SummaryCard from "../../common/statecard/SummaryCard";
-import TextField from "../../common/text-field/TextField";
 import globeBg from "../../../assets/images/globe.png";
 import { ExpenseCardItem } from "../../../types/common-types";
 import { useNavigate } from "react-router-dom";
-import DateRangePicker from "../../common/date-picker/DateRangePicker";
+import DateRangePicker, {
+  DateRangeValue,
+} from "../../common/date-picker/DateRangePicker";
+import PageLoader from "../../common/loader/PageLoader";
+import { getFloatValue } from "../../../utils/helper";
 
 interface ExpenseSummaryCardProps {
   cards: ExpenseCardItem[];
-  selected: { startDate: Date | null; endDate: Date | null };
-  setSelected: React.Dispatch<
-    React.SetStateAction<{ startDate: Date | null; endDate: Date | null }>
-  >;
+  selected: DateRangeValue;
+  setSelected: (value: DateRangeValue) => void;
+  loading: boolean;
 }
 
 export default function ExpenseSummaryCard({
   cards,
   selected,
   setSelected,
+  loading,
 }: ExpenseSummaryCardProps) {
   const navigate = useNavigate();
   const total = cards.find((ele) => ele.id === pathNames.OVERALL_EXPENSE);
   return (
     <div
-      className="content-card p-[15px] bg-white bg-no-repeat bg-contain bg-[position:95%] shadow-[rgba(50,50,93,0.25)_0px_1px_3px_-5px,rgba(0,0,0,0.3)_0px_7px_15px_-8px]"
+      className="content-card p-[15px] relative bg-white bg-no-repeat bg-contain bg-[position:95%] shadow-[rgba(50,50,93,0.25)_0px_1px_3px_-5px,rgba(0,0,0,0.3)_0px_7px_15px_-8px]"
       style={{
         backgroundImage: `url(${globeBg})`,
       }}
     >
+      <PageLoader loading={loading}/>
       <div className="flex items-center justify-between pb-2 border-b">
         <div className="flex items-center">
           <span className="text-[18px] font-medium">{currency.INR}</span>
@@ -45,11 +49,10 @@ export default function ExpenseSummaryCard({
           endDate={selected.endDate}
           onChange={function (dates: [Date | null, Date | null]): void {
             const [start, end] = dates;
-            setSelected((prev) => ({
-              ...prev,
+            setSelected({
               startDate: start,
               endDate: end,
-            }));
+            });
           }}
         />
       </div>
@@ -61,7 +64,7 @@ export default function ExpenseSummaryCard({
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="px-2 text-2xl font-medium">{total?.amount}</span>
+            <span className="px-2 text-2xl font-medium">{total?.amount && getFloatValue(total?.amount)}</span>
             {total?.trendDetails && (
               <div className="flex items-center gap-2 mt-1">
                 <span
@@ -104,7 +107,7 @@ export default function ExpenseSummaryCard({
             .map((ele, index) => (
               <SummaryCard
                 title={ele.title}
-                amount={`${currency.INR} ${ele.amount}`}
+                amount={`${currency.INR} ${ele.amount && getFloatValue(ele.amount)}`}
                 trendDetails={ele.trendDetails}
                 bgColor={ele.activeColor}
                 onClick={() => navigate(ele.id)}

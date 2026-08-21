@@ -171,6 +171,7 @@ const AddPolicy: React.FC<{
       }
       setLoading(false);
     })();
+    // eslint-disable-next-line
   }, [policyId]);
 
   const fetchPolicy = async () => {

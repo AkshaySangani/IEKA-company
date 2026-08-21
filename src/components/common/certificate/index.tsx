@@ -6,9 +6,8 @@ import LetterPreview from "./LetterPreview";
 import TopBar from "../topbar/TopBar";
 import { useReactToPrint } from "react-to-print";
 import Button from "../button/Button";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getCompanyDetails } from "../../../apis/workforce/all-employee.api";
-import { statusEnum } from "../../../types/common-types";
 import { useAuthStore } from "../../../store/auth-store";
 
 export interface LetterData {
@@ -121,6 +120,7 @@ const Certificate = ({ title, letterData }: CertificateProps) => {
         }
       }
     })();
+    // eslint-disable-next-line
   }, [letterData]);
 
   const fetchCompanyData = async () => {

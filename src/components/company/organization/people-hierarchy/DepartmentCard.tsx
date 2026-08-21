@@ -1,7 +1,6 @@
 import { Info } from "lucide-react";
 import { IDepartment } from ".";
 import { roleNames, statusBgColor } from "../../../../constants/constants";
-import { statusEnum } from "../../../../types/common-types";
 import EmptyPlaceholder from "../../../common/empty-paceholder";
 import PersonInfo from "../../../common/person-info";
 

@@ -1,4 +1,4 @@
-import { currency, pathNames } from "../../../constants/constants";
+import { pathNames } from "../../../constants/constants";
 import RightArrow from "../../common/right-arrow";
 import { useNavigate } from "react-router-dom";
 import { FilterCardItem } from "../../../types/common-types";
@@ -16,7 +16,6 @@ export default function WorkforceSummaryCard({
   workforce,
 }: WorkforceSummaryCardProps) {
   const navigate = useNavigate();
-  const total = cards.find((ele) => ele.id === pathNames.OVERALL_EXPENSE);
   return (
     <div className="content-card p-[15px]">
       <div className="flex items-center pb-3 border-b">

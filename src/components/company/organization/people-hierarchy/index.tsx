@@ -8,8 +8,6 @@ import { IOption, RoleEnum, statusEnum } from "../../../../types/common-types";
 import { getCompanyHierarchy, getPeoples } from "../../../../apis/organization/people-hierarchy.api";
 import DepartmentCard from "./DepartmentCard";
 import { useAuthStore } from "../../../../store/auth-store";
-import Image from "../../../common/image";
-import NoImage from "../../../../assets/images/User-Image.png";
 import PersonInfo from "../../../common/person-info";
 
 export interface IUser {
@@ -52,6 +50,7 @@ export default function PeopleHierarchy() {
     } else {
       setDepartments([]);
     }
+    // eslint-disable-next-line
   }, [branchId, shiftId]);
 
   const fetchEmployees = async () => {
