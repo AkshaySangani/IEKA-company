@@ -14,6 +14,7 @@ import MonthPicker, {
   MonthPickerValue,
 } from "../../../common/date-picker/MonthPicker";
 import { pathNames } from "../../../../constants/constants";
+import { getFloatValue } from "../../../../utils/helper";
 
 export type TrendType = "high" | "low" | "same";
 
@@ -105,13 +106,13 @@ const OverallExpense: React.FC = () => {
         switch (card.id) {
           case pathNames.OVERALL_EXPENSE:
             const total = getTrend(stats.total, stats.past.total);
-            return { ...card, amount: stats.total,trendDetails: total };
+            return { ...card, amount: getFloatValue(stats.total),trendDetails: total };
 
           case pathNames.REIMBURSEMENT:
             const reimbursement = getTrend(stats.reimbursement, stats.past.reimbursement);
             return {
               ...card,
-              amount: stats.reimbursement,
+              amount: getFloatValue(stats.reimbursement),
               trendDetails: reimbursement
             };
 
@@ -120,7 +121,7 @@ const OverallExpense: React.FC = () => {
             return {
               ...card,
               trendDetails: officeExpense,
-              amount: stats.officeExpense,
+              amount: getFloatValue(stats.officeExpense),
             };
 
           // case pathNames.EMPLOYEE_PAYROLL:

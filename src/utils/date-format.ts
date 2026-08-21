@@ -262,3 +262,8 @@ export const getMonthDays = (selectedMonth: MonthPickerValue) => {
 
   return days;
 };
+
+
+export const getDaysInMonth = (selectedMonth: MonthPickerValue): number => {
+  return new Date(selectedMonth.year, selectedMonth.month, 0).getDate();
+};

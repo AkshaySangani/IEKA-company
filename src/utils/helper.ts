@@ -164,3 +164,38 @@ export const getFirstCharacter = (
 
   return characters.slice(0, count).join("");
 };
+
+
+// format float vales like 
+// 1234.00234 => 1234.00
+export function getFloatValue(value: number | string, fractionDigits: number = 2,fallbackOnNull: string = "") {
+  // Handle null/undefined
+  if (value == null) {
+    return fallbackOnNull;
+  }
+
+  // Handle strings: trim and detect blank
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (trimmed === '') {
+      return fallbackOnNull;
+    }
+    // Reassign to trimmed for parsing
+    value = trimmed;
+  }
+
+  // Try to parse as float
+  const num = typeof value === 'number' ? value : parseFloat(value);
+
+  // If parsing failed or value is not a finite number, use fallback
+  if (!Number.isFinite(num)) {
+    return fallbackOnNull;
+  }
+
+  // Return integer as number; decimal as string with two places
+  if (Number.isInteger(num)) {
+    return num; // e.g., 2
+  } else {
+    return num.toFixed(fractionDigits); // e.g., "2.50"
+  }
+}

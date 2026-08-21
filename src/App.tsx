@@ -54,6 +54,7 @@ import PeopleHierarchyPage from "./pages/company/organization/people-hierarchy";
 import AddLeaveRequestPage from "./pages/company/performance/leave-requests/AddLeaveRequest";
 import LeaveRequestDetailsPage from "./pages/company/performance/leave-requests/LeaveRequestDetails";
 import EmployeeAttendanceDetailsPage from "./pages/company/performance/attendance/attendance-details";
+import EmployeePayrollPage from "./pages/company/expense/employee-payroll";
 
 function App() {
   return (
@@ -149,6 +150,7 @@ function App() {
             <Route path={pathNames.ADD_OFFICE_EXPENSE} element={<AddOfficeExpensePage />} />
             <Route path={pathNames.OFFICE_EXPENSE_DETAILS} element={<OfficeExpenseDetailsPage />} />
             <Route path={pathNames.OVERALL_EXPENSE} element={<OverallExpensePage />} />
+            <Route path={pathNames.EMPLOYEE_PAYROLL} element={<EmployeePayrollPage />} />
           </Route>
 
           <Route path={pathNames.PERFORMANCE}>

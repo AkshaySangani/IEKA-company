@@ -15,6 +15,7 @@ const OTPForm = () => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const [seconds, setSeconds] = useState(60);
 
@@ -61,6 +62,7 @@ const OTPForm = () => {
 
   const handleResendOTP = async (e: React.MouseEvent) => {
     e.preventDefault();
+    setSending(true);
 
     if (seconds > 0) return;
 
@@ -73,6 +75,7 @@ const OTPForm = () => {
       setError("");
       setSeconds(60);
     }
+    setSending(false)
   };
 
   return (
@@ -117,14 +120,14 @@ const OTPForm = () => {
           <button
             type="button"
             onClick={handleResendOTP}
-            disabled={seconds > 0}
+            disabled={seconds > 0 || sending}
             className={`transition-colors ${
               seconds > 0
                 ? "cursor-not-allowed text-gray-400"
                 : "text-primary hover:text-primary/80"
             }`}
           >
-            Resend OTP
+            {sending ? "Sending..." : "Resend OTP"}
           </button>
         </div>
 

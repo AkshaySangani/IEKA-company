@@ -138,14 +138,14 @@ const handleClickOnInput = () => {
 
     case "left":
       top = rect.bottom + window.scrollY - GAP + 20;
-      left = rect.left + window.scrollX - DROPDOWN_WIDTH;
+      left = rect.left + window.scrollX - 140;
       break;
 
     case "right":
       top = rect.top + window.scrollY;
       left = rect.right + window.scrollX + GAP;
       break;
-
+    
     default:
       top = rect.bottom + window.scrollY + GAP;
       left = rect.left + window.scrollX;
