@@ -35,12 +35,16 @@ export const getAttendanceById = (departmentId: string) => {
   return apiRequest.get<ApiResponse>(`organization/departments/${departmentId}`);
 };
 
-export const getUserAttendanceByUserId = (month: number,year: number,userId: string) => {
-  return apiRequest.get<ApiResponse>(`/performance/attendance/my/monthly?month=${month}&year=${year}&userId=${userId}`);
+export const getUserAttendanceByUserId = (month: number,year: number,userId: string, status: string = "") => {
+  return apiRequest.get<ApiResponse>(`/performance/attendance/my/monthly?month=${month}&year=${year}&userId=${userId}${status ? `&status=${status}` : ""}`);
 };
 
 export const getAttendanceCount = (date: string) => {
   return apiRequest.get<ApiResponse>(`/performance/attendance/daily/count?date=${date}`);
+};
+
+export const getMyAttendanceCount = (month: number,year: number,userId: string) => {
+  return apiRequest.get<ApiResponse>(`/performance/attendance/my/monthly/count?month=${month}&year=${year}&userId=${userId}`);
 };
 
 export const getBranchAndShift = () => {

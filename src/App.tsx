@@ -55,6 +55,7 @@ import AddLeaveRequestPage from "./pages/company/performance/leave-requests/AddL
 import LeaveRequestDetailsPage from "./pages/company/performance/leave-requests/LeaveRequestDetails";
 import EmployeeAttendanceDetailsPage from "./pages/company/performance/attendance/attendance-details";
 import EmployeePayrollPage from "./pages/company/expense/employee-payroll";
+import EmployeePayrollPerformancePage from "./pages/company/expense/employee-payroll/EmployeePayrollPerformance";
 
 function App() {
   return (
@@ -151,6 +152,7 @@ function App() {
             <Route path={pathNames.OFFICE_EXPENSE_DETAILS} element={<OfficeExpenseDetailsPage />} />
             <Route path={pathNames.OVERALL_EXPENSE} element={<OverallExpensePage />} />
             <Route path={pathNames.EMPLOYEE_PAYROLL} element={<EmployeePayrollPage />} />
+            <Route path={pathNames.EMPLOYEE_PAYROLL_PERFORMANCE_ID} element={<EmployeePayrollPerformancePage />} />
           </Route>
 
           <Route path={pathNames.PERFORMANCE}>

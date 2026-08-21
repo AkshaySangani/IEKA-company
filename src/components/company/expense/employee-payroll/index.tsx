@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
-import { RoleEnum } from "../../../../types/common-types";
+import { RoleEnum, statusEnum } from "../../../../types/common-types";
 import EmployeePayrollTable from "./EmployeePayrollTable";
 import { getEmployeePayrollList } from "../../../../apis/expense/employee-payroll.api";
 import StatusCards, {
@@ -20,6 +20,7 @@ export interface IUser {
   lastName: string;
   profileImage: string;
   role: RoleEnum;
+  status?: statusEnum;
 }
 
 export interface IReimbursement {

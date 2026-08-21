@@ -1,6 +1,7 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   currency,
+  pathNames,
   roleNames,
 } from "../../../../constants/constants";
 import { IEmployeePayroll, IReimbursement } from ".";
@@ -13,6 +14,7 @@ import { getFloatValue } from "../../../../utils/helper";
 import { MonthPickerValue } from "../../../common/date-picker/MonthPicker";
 import ReimbursementDetails from "./ReimburseDetails";
 import InfoIcon from "../../../../assets/icons/Info";
+import { useNavigate } from "react-router-dom";
 
 interface IEmployeePayrollListProps {
   employeePayrolls: IEmployeePayroll[];
@@ -23,6 +25,7 @@ export default function EmployeePayrollTable({
   employeePayrolls,
   month,
 }: IEmployeePayrollListProps) {
+  const navigate = useNavigate();
   const monthDays = getDaysInMonth(month);
 
   // reimbursements
@@ -49,6 +52,7 @@ export default function EmployeePayrollTable({
             lastName: row.userId.lastName,
             description: roleNames[row.userId.role],
           }}
+          onClick={() => navigate(`${pathNames.EMPLOYEE_PAYROLL_PERFORMANCE}/${row.userId._id}`)}
         />
       ),
     },

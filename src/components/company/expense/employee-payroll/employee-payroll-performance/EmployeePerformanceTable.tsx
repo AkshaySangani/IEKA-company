@@ -33,7 +33,7 @@ export default function EmployeeAttendanceTable({
       render: (row) => {
         return (
           <>
-            {row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? <div className="bg-yellowBlur p-0.5">
+            {row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? <div className="bg-yellowBlur p-1">
                 <span className="text-md font-semibold text-warning">Week Off</span>
             </div> : <div className="flex justify-center"><AttendanceStatusBadge status={row.attendanceStatus} /></div>}
           </>

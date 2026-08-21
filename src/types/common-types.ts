@@ -176,7 +176,6 @@ export interface ExpenseCategoryOption {
 
 export enum AttendanceStatusEnum {
   PRESENT = "PRESENT",
-  HALF_DAY = "HALF_DAY",
   ABSENT = "ABSENT",
   HOLIDAY = "HOLIDAY",
   LEAVE = "LEAVE",

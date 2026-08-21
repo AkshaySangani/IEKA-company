@@ -88,6 +88,8 @@ export const pathNames = {
   ADD_OFFICE_EXPENSE: "/expense/office-expense/add-expense",
   OFFICE_EXPENSE_DETAILS: "/expense/office-expense/expense-details",
   EMPLOYEE_PAYROLL: "/expense/payroll",
+  EMPLOYEE_PAYROLL_PERFORMANCE_ID: "/expense/payroll/employee-payroll-performance/:id",
+  EMPLOYEE_PAYROLL_PERFORMANCE: "/expense/payroll/employee-payroll-performance",
 
   // Pay Slip
   PAY_SLIP: "/pay-slip",
