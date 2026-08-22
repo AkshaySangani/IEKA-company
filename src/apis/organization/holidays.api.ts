@@ -8,10 +8,11 @@ export const getHolidays = (payload: {
   limit?: number;
   effectiveYear?: number;
   isDownload?: boolean;
+  password?: string;
 }) => {
-  const { page, limit, search, status, effectiveYear, isDownload = false } = payload;
+  const { page, limit, search, status, effectiveYear, isDownload = false, password = "" } = payload;
   return apiRequest.get<ApiResponse>(
-    `/organization/holidays?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${effectiveYear ? `&effectiveYear=${effectiveYear}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
+    `/organization/holidays?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${effectiveYear ? `&effectiveYear=${effectiveYear}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 

@@ -19,10 +19,11 @@ export const getAttendanceList = (payload: {
   date: string;
   status?: string;
   isDownload?: boolean;
+  password?: string;
 }) => {
-  const { page, limit, search, date, status, isDownload = false } = payload;
+  const { page, limit, search, date, status, isDownload = false, password = "" } = payload;
   return apiRequest.get<ApiResponse>(
-    `/performance/attendance/daily?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${date ? `&date=${date}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
+    `/performance/attendance/daily?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${date ? `&date=${date}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 

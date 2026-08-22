@@ -223,6 +223,7 @@ const Holiday = () => {
       status: "",
       effectiveYear: year,
       isDownload: true,
+      password
     });
   };
   return (

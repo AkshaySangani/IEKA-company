@@ -7,10 +7,11 @@ export const getDesignation = (payload: {
   page: number;
   limit?: number;
   isDownload?: boolean;
+  password?: string;
 }) => {
-  const { page, limit, search, status, isDownload = false } = payload;
+  const { page, limit, search, status, isDownload = false, password = "" } = payload;
   return apiRequest.get<ApiResponse>(
-    `/organization/designations?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
+    `/organization/designations?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 

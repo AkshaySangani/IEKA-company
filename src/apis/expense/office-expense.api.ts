@@ -34,10 +34,11 @@ export const getOfficeExpenseList = (payload: {
   year?: string;
   month?: MonthPickerValue;
   isDownload?: boolean;
+  password?: string;
 }) => {
-  const { page, limit, search, status, month, isDownload = false } = payload;
+  const { page, limit, search, status, month, isDownload = false, password = "" } = payload;
   return apiRequest.get<ApiResponse>(
-    `/expense/officeExpense?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${month?.year ? `&year=${month.year}` : ""}${month?.month ? `&month=${month.month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
+    `/expense/officeExpense?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${month?.year ? `&year=${month.year}` : ""}${month?.month ? `&month=${month.month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 

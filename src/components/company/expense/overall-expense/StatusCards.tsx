@@ -42,7 +42,7 @@ const StatusCards = ({
             {/* Amount + Icon */}
 
             <div
-              className={`flex h-9 w-9 items-center justify-center rounded-full ${card.textColor} font-semibold`}
+              className={`flex h-12 w-12 text-2xl items-center justify-center rounded-full ${card.textColor} font-semibold`}
             >
               {currency.INR}
             </div>

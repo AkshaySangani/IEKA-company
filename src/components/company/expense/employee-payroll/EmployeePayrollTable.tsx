@@ -93,7 +93,7 @@ export default function EmployeePayrollTable({
       render: (row) => {
         return (
           <div>
-            <div className="font-medium text-gray-900 text-sm">
+            <div className="font-bold text-success text-sm">
               {currency.INR} {getFloatValue(row.totals.netPayAmount)}
             </div>
           </div>

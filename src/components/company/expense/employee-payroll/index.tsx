@@ -212,6 +212,7 @@ const EmployeePayroll: React.FC = () => {
       search,
       ...month,
       isDownload: true,
+      password
     });
   };
 

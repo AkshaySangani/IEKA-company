@@ -78,7 +78,7 @@ export default function OfficeExpenseTable({
       className: "w-[11%]",
       render: (row) => (
         <div>
-          <div className="font-medium text-gray-900 text-sm">
+          <div className="text-gray-600 text-sm">
             {formatDate(row.createdAt)}
           </div>
 

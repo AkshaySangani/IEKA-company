@@ -262,6 +262,7 @@ const Reimbursement: React.FC = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

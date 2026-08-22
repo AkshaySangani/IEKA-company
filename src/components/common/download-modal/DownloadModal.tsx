@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import "./DownloadModal.css";
-// import TextField from "../text-field/TextField";
-// import Note from "../note-area/Note";
-import DownloadExcelIcon from "../../../assets/images/downloadexcell.png"
+import TextField from "../text-field/TextField";
+import Note from "../note-area/Note";
+import DownloadExcelIcon from "../../../assets/images/downloadexcell.png";
 import Modal from "../modal/Modal";
 import { FileType } from "../../../types/common-types";
+import Checkbox from "../checkbox/CheckBox";
+import Image from "../image";
+import Button from "../button/Button";
 
 interface DownloadModalProps {
   isOpen: boolean;
@@ -17,108 +19,151 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
   isOpen,
   type = "xlsx",
   onClose,
-  handleDownLoad
+  handleDownLoad,
 }) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  // const [isPasswordProtected, setIsPasswordProtected] =
-  //   useState<boolean>(false);
-  // const [password, setPassword] = useState<string>("");
-  // const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setIsPasswordProtected(e.target.checked);
-  //   if (!e.target.checked) {
-  //     setPassword(""); // Reset password if unchecked
-  //   }
-  // };
+  const handleCheckboxChange = (checked: boolean) => {
+    setIsPasswordProtected(checked);
 
-  const downloadExcel = async () => {
-    setLoading(true);
-    await handleDownLoad("");
-    setLoading(false);
+    if (!checked) {
+      setPassword("");
+      setShowPassword(false);
+    }
   };
 
-  const downloadPDF = () => {
-    // const doc = new jsPDF();
-    // // Simple data rendering for the PDF
-    // doc.text("Exported Document Data", 10, 10);
-    // dataToExport.forEach((item, index) => {
-    //   const rowText = Object.entries(item).map(([key, val]) => `${key}: ${val}`).join(', ');
-    //   doc.text(rowText, 10, 20 + (index * 10));
-    // });
-    // if (isPasswordProtected && password) {
-    //   // jsPDF supports native document open encryption
-    //   doc.encrypt(password, password, {
-    //     userPermissions: ['print', 'modify', 'copy', 'annot-modify']
-    //   });
-    // }
-    // doc.save(`${fileName}.pdf`);
+  const handleDownload = async () => {
+    try {
+      setLoading(true);
+
+      await handleDownLoad(isPasswordProtected ? password : "");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOnConfirm = () => {
-    if(type === "pdf"){
-      downloadPDF();
-    } else {
-      downloadExcel();
+    if (type === "pdf") {
+      // PDF download logic
+      handleDownload();
+      return;
     }
-  }
+
+    handleDownload();
+  };
 
   return (
     <Modal
-        isOpen={isOpen}
-        title="Download"
-        onClose={onClose}
-        confirmButtonName={"Download"}
-        handleOnConfirm={handleOnConfirm}
-        loading={loading}
-        width="max-w-2xl"
-      >
-    <>
-      <div className="popcontent">
-        <div className="downloadicon">
-          <img src={DownloadExcelIcon} alt="download"/>
-        </div>
-        <div className="message">Are u sure want to download ?</div>
-      </div>
-      {/* <div className="passprotected mt_15">
-        <input
-          type="checkbox"
-          id="passwordToggle"
-          onChange={handleCheckboxChange}
-        />
-        <div className="message">
-          Do you want the downloaded file to be password protected?
-        </div>
-      </div> */}
+      isOpen={isOpen}
+      title="Download"
+      onClose={onClose}
+      width="max-w-2xl"
+      showFooter={false}
+    >
+      <div className="space-y-5">
+        {/* Download Message */}
+        <div className="flex flex-col items-center justify-center gap-3 py-4">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+            <Image
+              src={DownloadExcelIcon}
+              fallbackSrc={DownloadExcelIcon}
+              alt="Download"
+            />
+          </div>
 
-      {/* {isPasswordProtected && <div className="field_items mt_15" id="passwordField">
-        <div className="column_two">
-          <TextField
-            label="Create Password"
-            id="password"
-            name="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter your Password"
-            value={password}
-            onChange={(e) => setPassword(e?.target?.value)}
-            icon={
-              <span
-                className="fieldicon"
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
-                <i
-                  className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}
-                ></i>
-              </span>
-            }
+          <p className="text-center text-lg font-medium text-secondary">
+            Are you sure you want to download?
+          </p>
+        </div>
+
+        {/* Password Protection */}
+        <Checkbox
+          label="Do you want the downloaded file to be password protected?"
+          name={"isPasswordProtected"}
+          checked={isPasswordProtected}
+          onChange={(checked: boolean, name: string) =>
+            handleCheckboxChange(checked)
+          }
+        />
+
+        {/* Password Field */}
+        {isPasswordProtected && (
+          <div className="space-y-3">
+            <TextField
+              label="Create Password"
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              icon={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="
+                    flex
+                    h-full
+                    cursor-pointer
+                    items-center
+                    justify-center
+                    px-2
+                    text-secondary/60
+                    transition
+                    hover:text-secondary
+                  "
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  <i
+                    className={`fa-solid ${
+                      showPassword ? "fa-eye" : "fa-eye-slash"
+                    }`}
+                  />
+                </button>
+              }
+            />
+
+            {/* Password Note */}
+            <Note
+              variant="danger"
+              message="This file is password protected and can only be accessed by entering the above-mentioned password."
+            />
+          </div>
+        )}
+        <div
+          className="
+              shrink-0
+              border-t
+              border-gray-300
+              px-4
+              pt-3
+              sm:px-6
+              sm:pt-4
+              flex
+              justify-center
+              gap-3
+            "
+        >
+          <Button
+            loading={loading}
+            variant="primary"
+            disabled={((isPasswordProtected && password === "") || loading)}
+            name={"Download"}
+            size="sm"
+            onClick={handleOnConfirm}
+          />
+
+          <Button
+            name="Close"
+            size="sm"
+            variant="secondary"
+            onClick={onClose}
           />
         </div>
-      </div>} */}
-      {/* {isPasswordProtected && <Note
-        variant="danger"
-        message="This file is password protected and can only be accessed by entering the above-mentioned password."
-      />} */}
-    </>
+      </div>
     </Modal>
   );
 };

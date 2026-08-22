@@ -221,6 +221,7 @@ const Earnings = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

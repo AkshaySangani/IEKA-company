@@ -324,6 +324,7 @@ const OfficeExpense: React.FC = () => {
       status: "",
       month,
       isDownload: true,
+      password
     });
   };
 

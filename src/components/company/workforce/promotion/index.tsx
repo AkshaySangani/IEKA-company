@@ -282,6 +282,7 @@ const Promotion = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

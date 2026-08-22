@@ -202,6 +202,7 @@ const Leave = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

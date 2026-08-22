@@ -144,6 +144,7 @@ const Onboarding = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

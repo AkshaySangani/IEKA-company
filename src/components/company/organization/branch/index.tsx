@@ -129,7 +129,7 @@ const Branch: React.FC = () => {
 
   // handle Download Excel
   const handleDownloadExcel = async (password: string) => {
-    await getBranches({ page, limit, search, status: "",isDownload: true });
+    await getBranches({ page, limit, search, status: "",isDownload: true,password });
   }
   return (
     <>

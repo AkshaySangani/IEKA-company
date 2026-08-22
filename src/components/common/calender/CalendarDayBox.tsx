@@ -8,7 +8,6 @@ import {
 } from "../../../types/common-types";
 import Present from "../../../assets/images/present.png";
 import Absent from "../../../assets/images/absent.png";
-import Holiday from "../../../assets/images/holidays.png";
 import Image from "../image";
 import {
   DateFormat,
@@ -22,21 +21,23 @@ interface CalendarDayBoxProps {
   //   onClick?: (date: Date) => void;
 }
 
-const getDayBackground = (status?: AttendanceStatusEnum) => {
-  switch (status) {
-    case AttendanceStatusEnum.WEEK_OFF:
-    case AttendanceStatusEnum.HOLIDAY:
-      return "bg-warning/15";
+const dayBackground: Partial<Record<AttendanceStatusEnum, string>> = {
+  [AttendanceStatusEnum.WEEK_OFF]: "bg-warningLight",
+  [AttendanceStatusEnum.HOLIDAY]: "bg-pendingLight",
+  [AttendanceStatusEnum.ABSENT]: "bg-dangerLight",
+  [AttendanceStatusEnum.LEAVE]: "bg-successLight",
+};
 
-    case AttendanceStatusEnum.ABSENT:
-      return "bg-danger/15";
+const dayText: Partial<Record<AttendanceStatusEnum, string>> = {
+  [AttendanceStatusEnum.WEEK_OFF]: "text-warning",
+  [AttendanceStatusEnum.HOLIDAY]: "text-pending",
+  [AttendanceStatusEnum.ABSENT]: "text-danger",
+};
 
-    // case "info":
-    //   return "bg-info/15";
-
-    default:
-      return "bg-white";
-  }
+const dayNames: Partial<Record<AttendanceStatusEnum, string>> = {
+  [AttendanceStatusEnum.WEEK_OFF]: "Week off",
+  [AttendanceStatusEnum.HOLIDAY]: "Holiday",
+  [AttendanceStatusEnum.ABSENT]: "Absent",
 };
 
 const CalendarDayBox = ({
@@ -52,7 +53,7 @@ const CalendarDayBox = ({
   const today = new Date().getDate();
   const isToday = day === today;
 
-  const background = getDayBackground(data?.attendanceStatus);
+  const background = data?.attendanceStatus ? dayBackground[data.attendanceStatus] : "bg-white";
 
   return (
     <div
@@ -63,7 +64,6 @@ const CalendarDayBox = ({
         ${background}
         cursor-pointer
         transition
-        hover:bg-slate-50
         overflow-hidden
       `}
     >
@@ -79,14 +79,8 @@ const CalendarDayBox = ({
       {/* Empty / Holiday */}
       {data?.leaveRequestId &&
         data?.leaveRequestId.duration === LeaveDuration.FULL_DAY && (
-          <div className="flex min-h-[115px] flex-col items-center justify-center px-2">
-            <Image
-              src={Holiday}
-              alt="Holiday"
-              className="h-10 w-10 object-contain"
-            />
-
-            <span className="text-center text-md font-semibold text-warning">
+          <div className="flex min-h-[80px] flex-col items-center justify-center px-2">
+            <span className="text-center text-md font-semibold text-success line-clamp-1">
               {data.leaveRequestId?.leaveId?.name}
             </span>
           </div>
@@ -159,7 +153,7 @@ const CalendarDayBox = ({
         )}
 
       {data?.isHalfDay && data.leaveRequestId && (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center gap-1">
           {/* Attendance image */}
 
           <Image
@@ -168,7 +162,7 @@ const CalendarDayBox = ({
             className="h-10 w-10 object-contain"
           />
           <div
-            className={`flex min-h-[105px] items-center justify-center gap-3 ${data.leaveRequestId.duration === LeaveDuration.FIRST_HALF ? "flex-row" : "flex-row-reverse"}`}
+            className={`flex items-center justify-center gap-3 ${data.leaveRequestId.duration === LeaveDuration.FIRST_HALF ? "flex-row" : "flex-row-reverse"}`}
           >
             <span
               className={`
@@ -240,13 +234,11 @@ const CalendarDayBox = ({
       {/* Week Off */}
       {(data?.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
         data?.attendanceStatus === AttendanceStatusEnum.HOLIDAY) && (
-        <div className="flex justify-center mt-4 px-2">
-          <Image
-            src={Holiday}
-            alt="Holiday"
-            className="h-[60px] w-[60px] object-contain bg-white p-1"
-          />
-        </div>
+        <div className="flex min-h-[80px] flex-col items-center justify-center px-2">
+            <span className={`text-center text-md font-semibold ${dayText[data?.attendanceStatus]}`}>
+              {dayNames[data?.attendanceStatus]}
+            </span>
+          </div>
       )}
 
       {/* Absent */}

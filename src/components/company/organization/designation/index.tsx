@@ -130,6 +130,7 @@ const Designation: React.FC = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

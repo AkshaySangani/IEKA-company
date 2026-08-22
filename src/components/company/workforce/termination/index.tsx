@@ -264,6 +264,7 @@ const Termination = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
   return (

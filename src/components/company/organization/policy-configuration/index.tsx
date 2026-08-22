@@ -49,64 +49,64 @@ const Policy = () => {
   const [holiday, setPolicy] = useState<IPolicy>(initialPolicy);
 
   const [cards, setCards] = useState<FilterCardItem[]>([
-      {
-        id: "",
-        title: "Total",
-        count: 0,
-        activeColor: "bg-info",
-        textColor: "text-info",
-        icon: <i className="fa-solid fa-align-justify"></i>,
-      },
-      {
-        id: "ACTIVE",
-        title: "Active",
-        count: 0,
-        activeColor: "bg-success",
-        textColor: "text-success",
-        icon: <i className="fa-solid fa-user-check"></i>,
-      },
-      {
-        id: "INACTIVE",
-        title: "Inactive",
-        count: 0,
-        activeColor: "bg-warning",
-        textColor: "text-warning",
-        icon: <i className="fa-solid fa-user-xmark"></i>,
-      }
-    ]);
-  
-    useEffect(() => {
-      getPolicyCounts();
-      // eslint-disable-next-line
-    }, []);
-  
-    const getPolicyCounts = async () => {
-      const response = await getPolicyCount();
-      if (response?.success) {
-        updateCards(response?.data);
-      }
-    };
-  
-    // update cards
-    const updateCards = (stats: CompanyStats) => {
-      setCards((prev) =>
-        prev.map((card) => {
-          switch (card.id) {
-            case "":
-              return { ...card, count: stats.total };
-  
-            case statusEnum.ACTIVE:
-              return { ...card, count: stats.active };
-  
-            case statusEnum.INACTIVE:
-              return { ...card, count: stats.inactive };
-  
-            default:
-              return card;
-          }
-        }),
-      );
-    };
+    {
+      id: "",
+      title: "Total",
+      count: 0,
+      activeColor: "bg-info",
+      textColor: "text-info",
+      icon: <i className="fa-solid fa-align-justify"></i>,
+    },
+    {
+      id: "ACTIVE",
+      title: "Active",
+      count: 0,
+      activeColor: "bg-success",
+      textColor: "text-success",
+      icon: <i className="fa-solid fa-user-check"></i>,
+    },
+    {
+      id: "INACTIVE",
+      title: "Inactive",
+      count: 0,
+      activeColor: "bg-warning",
+      textColor: "text-warning",
+      icon: <i className="fa-solid fa-user-xmark"></i>,
+    },
+  ]);
+
+  useEffect(() => {
+    getPolicyCounts();
+    // eslint-disable-next-line
+  }, []);
+
+  const getPolicyCounts = async () => {
+    const response = await getPolicyCount();
+    if (response?.success) {
+      updateCards(response?.data);
+    }
+  };
+
+  // update cards
+  const updateCards = (stats: CompanyStats) => {
+    setCards((prev) =>
+      prev.map((card) => {
+        switch (card.id) {
+          case "":
+            return { ...card, count: stats.total };
+
+          case statusEnum.ACTIVE:
+            return { ...card, count: stats.active };
+
+          case statusEnum.INACTIVE:
+            return { ...card, count: stats.inactive };
+
+          default:
+            return card;
+        }
+      }),
+    );
+  };
 
   // useEffect for get holiday
   useEffect(() => {
@@ -119,7 +119,7 @@ const Policy = () => {
     page: number,
     limit: number,
     search: string = "",
-    status: string = ""
+    status: string = "",
   ) => {
     setLoading(true);
     const response = await getPolicies({ page, limit, search, status });
@@ -136,7 +136,7 @@ const Policy = () => {
 
   // handle click add new
   const handleOnAddOpenClose = () => {
-    navigate(pathNames.ADD_POLICY)
+    navigate(pathNames.ADD_POLICY);
     setPolicy(initialPolicy);
   };
 
@@ -144,9 +144,9 @@ const Policy = () => {
   const handleEditPolicyDetails = async (policy: IPolicy) => {
     navigate(pathNames.ADD_POLICY, {
       state: {
-        id: policy._id
-      }
-    })
+        id: policy._id,
+      },
+    });
   };
 
   // handle status open close
@@ -179,15 +179,27 @@ const Policy = () => {
     setStatusLoading(false);
   };
 
-  // handle refresh data 
+  // handle refresh data
   const handleRefreshData = () => {
     fetchPolicyList(page, limit, search, activeCard);
-  }
+  };
 
   // handle search holiday
   const handleOnSearch = (value: string) => {
     setSearch(value);
     setPage(1);
+  };
+
+  // handle Download Excel
+  const handleDownloadExcel = async (password: string) => {
+    await getPolicies({
+      page,
+      limit,
+      search,
+      status: "",
+      isDownload: true,
+      password,
+    });
   };
 
   return (
@@ -206,16 +218,27 @@ const Policy = () => {
         searchPlaceholder="Search policies..."
         onSearch={handleOnSearch}
         isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />
-        <StatusCards cards={cards} activeCard={activeCard} setActiveCard={setActiveCard} />
+        <StatusCards
+          cards={cards}
+          activeCard={activeCard}
+          setActiveCard={setActiveCard}
+        />
         <PolicyTable
           policyList={policyList}
           handleEditPolicyDetails={handleEditPolicyDetails}
           handleUpdateStatus={handleUpdateStatus}
         />
-        <Pagination totalRecords={total} currentPage={page} pageSize={limit} onPageChange={setPage} onPageSizeChange={setLimit} />
+        <Pagination
+          totalRecords={total}
+          currentPage={page}
+          pageSize={limit}
+          onPageChange={setPage}
+          onPageSizeChange={setLimit}
+        />
       </div>
       <StatusUpdateModal
         title={`holiday ${holiday.name}`}

@@ -244,6 +244,7 @@ const ResignedEmployees = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
   return (

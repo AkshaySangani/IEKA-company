@@ -130,6 +130,7 @@ const Department: React.FC = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

@@ -24,7 +24,7 @@ const TableStatusRow = ({
 }: TableStatusRowProps) => {
   return (
     <div
-      className={`p-3 text-md font-semibold ${variantClasses[variant]}`}
+      className={`px-3 py-1 text-md font-semibold ${variantClasses[variant]}`}
     >
       {title}
     </div>

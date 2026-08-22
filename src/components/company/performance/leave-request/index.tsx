@@ -227,6 +227,7 @@ const LeaveRequest: React.FC = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

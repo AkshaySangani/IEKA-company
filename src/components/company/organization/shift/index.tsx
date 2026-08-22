@@ -125,7 +125,7 @@ const Shift: React.FC = () => {
 
   // handle Download Excel
   const handleDownloadExcel = async (password: string) => {
-    await getShiftList({ page, limit, search, status: "", isDownload: true });
+    await getShiftList({ page, limit, search, status: "", isDownload: true, password });
   };
 
   return (

@@ -20,10 +20,11 @@ export const getReimbursementList = (payload: {
   year?: string;
   month?: string;
   isDownload?: boolean;
+  password?: string;
 }) => {
-  const { page, limit, search, status, year, month, isDownload = false } = payload;
+  const { page, limit, search, status, year, month, isDownload = false, password = "" } = payload;
   return apiRequest.get<ApiResponse>(
-    `/expense/reimbursements?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${year ? `&year=${year}` : ""}${month ? `&month=${month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
+    `/expense/reimbursements?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${year ? `&year=${year}` : ""}${month ? `&month=${month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 

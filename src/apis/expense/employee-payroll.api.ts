@@ -19,10 +19,11 @@ export const getEmployeePayrollList = (payload: {
   year?: number;
   month?: number;
   isDownload?: boolean;
+  password?: string;
 }) => {
-  const { page, limit, search, year, month, isDownload = false } = payload;
+  const { page, limit, search, year, month, isDownload = false, password = "" } = payload;
   return apiRequest.get<ApiResponse>(
-    `/expense/payroll?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${year ? `&year=${year}` : ""}${month ? `&month=${month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}`,
+    `/expense/payroll?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${year ? `&year=${year}` : ""}${month ? `&month=${month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 

@@ -154,6 +154,7 @@ const AllEmployees = () => {
       search,
       status: "",
       isDownload: true,
+      password
     });
   };
 

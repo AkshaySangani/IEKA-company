@@ -198,6 +198,7 @@ const Attendance: React.FC = () => {
       status: "",
       date,
       isDownload: true,
+      password
     });
   };
 
