@@ -7,8 +7,7 @@ import {
   AttendanceMethodEnum,
   AttendanceStatusEnum,
   FilterCardItem,
-  RoleEnum,
-  statusEnum,
+  LeaveDuration
 } from "../../../../types/common-types";
 import { pathNames, statusMessage } from "../../../../constants/constants";
 import AttendanceTable from "./AttendanceTable";
@@ -20,28 +19,40 @@ import {
 import StatusCards, { AttendanceStats } from "./StatusCards";
 import TextField from "../../../common/text-field/TextField";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import { IUser } from "../../../../types/user.types";
+
+export interface ILeaveRequest {
+  _id: string;
+  leaveId: {
+    _id: string;
+    name: string;
+  };
+  duration: LeaveDuration;
+}
 
 export interface IUserAttendance {
   _id: string;
   userId: IUser;
-  inTime: string | null;
-  outTime: string | null;
-  inMethod: AttendanceMethodEnum | null;
-  outMethod: AttendanceMethodEnum | null;
+  inTime: string;
+  outTime: string;
+  inMethod: AttendanceMethodEnum;
+  outMethod: AttendanceMethodEnum;
   totalWorkedMinutes: number;
   lateMinutes: number;
   isHalfDay: boolean;
   earlyExitMinutes: number;
   attendanceStatus: AttendanceStatusEnum;
+  leaveRequestId: ILeaveRequest | null;
+  isLate: boolean;
+  inLocation?: ILocation;
+  outLocation?: ILocation;
+  attendanceDate?: string;
 }
 
-export interface IUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  profileImage: string;
-  status: statusEnum;
-  role: RoleEnum;
+export interface ILocation {
+  latitude: number;
+  longitude: number;
+  address: string;
 }
 
 const Attendance: React.FC = () => {
@@ -102,7 +113,6 @@ const Attendance: React.FC = () => {
       status: activeCard,
       date: date,
     });
-    
   }, [page, limit, search, activeCard, date]);
 
   useEffect(() => {

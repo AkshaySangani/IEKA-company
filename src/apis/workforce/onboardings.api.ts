@@ -31,11 +31,11 @@ export const assignRolesAndResponsibility = (payload: {
   policyId?: string;
   payslipId?: string;
   salary?: number;
+  designationId: string;
   assignments?: {
     branchId: string;
     shiftId: string;
     departmentId: string;
-    designationId: string;
     isReporting: boolean;
     remarks: string;
   }[];

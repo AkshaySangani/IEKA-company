@@ -32,11 +32,13 @@ export interface AttendanceCellData {
 interface AttendanceCellProps {
   data?: AttendanceCellData;
   className?: string;
+  onClick?: (value: "inLocation" | "outLocation") => void;
 }
 
 const AttendanceCell: React.FC<AttendanceCellProps> = ({
   data,
   className = "",
+  onClick = () => {}
 }) => {
   if (!data) {
     return (
@@ -61,15 +63,15 @@ const AttendanceCell: React.FC<AttendanceCellProps> = ({
       <div className="flex flex-col items-center justify-center gap-1 min-w-[120px]">
         {data.inLeave && <LeaveBadge leave={data.inLeave} />}
 
-        {!data.inLeave && data.inPunch && <PunchInfo punch={data.inPunch} />}
-        {data.outLeave && data.outPunch && <PunchInfo punch={data.outPunch} />}
+        {!data.inLeave && data.inPunch && <PunchInfo onClick={() => onClick("inLocation")} punch={data.inPunch} />}
+        {data.outLeave && data.outPunch && <PunchInfo onClick={() => onClick("outLocation")} punch={data.outPunch} />}
       </div>
 
       <span className="font-medium text-gray-600">-</span>
 
       <div className="flex flex-col items-center justify-center gap-1 min-w-[120px]">
-        {data.inLeave && data.inPunch && <PunchInfo punch={data.inPunch} />}
-        {!data.outLeave && data.outPunch && <PunchInfo punch={data.outPunch} />}
+        {data.inLeave && data.inPunch && <PunchInfo onClick={() => onClick("inLocation")} punch={data.inPunch} />}
+        {!data.outLeave && data.outPunch && <PunchInfo onClick={() => onClick("outLocation")} punch={data.outPunch} />}
 
         {data.outLeave && <LeaveBadge leave={data.outLeave} />}
       </div>
@@ -81,9 +83,10 @@ export default AttendanceCell;
 
 interface PunchInfoProps {
   punch: PunchData;
+  onClick: () => void;
 }
 
-const PunchInfo: React.FC<PunchInfoProps> = ({ punch }) => {
+const PunchInfo: React.FC<PunchInfoProps> = ({ punch, onClick }) => {
   return (
     <div className="text-center flex items-center gap-2">
       <div className="font-medium text-sm leading-none border-r border-secondary/50 pr-2">
@@ -93,7 +96,7 @@ const PunchInfo: React.FC<PunchInfoProps> = ({ punch }) => {
       <div className="flex items-center justify-center gap-1 text-[10px] text-gray-500">
         <span className="capitalize">{punch.source}</span>
 
-        <LocateFixed size={15} className="text-indigo-500" strokeWidth={2} />
+        <LocateFixed size={15} className="text-indigo-500 cursor-pointer" onClick={onClick} strokeWidth={2} />
       </div>
     </div>
   );

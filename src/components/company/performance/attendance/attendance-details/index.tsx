@@ -9,55 +9,17 @@ import Tabs, { TabOption } from "../../../../common/tabs/Tabs";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserAttendanceByUserId } from "../../../../../apis/performance/attendance.api";
 import {
-  AttendanceMethodEnum,
-  AttendanceStatusEnum,
   AttendanceViewEnum,
-  LeaveDuration,
   RoleEnum,
   statusEnum,
 } from "../../../../../types/common-types";
 import EmployeeAttendanceTable from "./EmploeeAttendanceTable";
 import PageLoader from "../../../../common/loader/PageLoader";
 import { getEmployeeDetails } from "../../../../../apis/workforce/onboardings.api";
-import { IUser } from "..";
+import { IUserAttendance } from "..";
 import { pathNames, roleNames } from "../../../../../constants/constants";
+import { IUser } from "../../../../../types/user.types";
 
-export interface ILeaveRequest {
-  _id: string;
-  leaveId: {
-    _id: string;
-    name: string;
-  };
-  duration: LeaveDuration;
-}
-
-export interface IUserAttendance {
-  _id: string;
-  userId: string;
-  companyId: string;
-  attendanceDate: string;
-
-  inTime: string | null;
-  outTime: string | null;
-
-  inMethod: AttendanceMethodEnum | null;
-  outMethod: AttendanceMethodEnum | null;
-
-  totalWorkedMinutes: number;
-  overtimeMinutes: number;
-  overtimeApproved: boolean;
-
-  lateMinutes: number;
-  isLate: boolean;
-  isHalfDay: boolean;
-  earlyExitMinutes: number;
-
-  attendanceStatus: AttendanceStatusEnum;
-
-  leaveRequestId: ILeaveRequest | null;
-
-  autoClosed: boolean;
-}
 
 const EmployeeAttendanceDetails = () => {
   const navigate = useNavigate();

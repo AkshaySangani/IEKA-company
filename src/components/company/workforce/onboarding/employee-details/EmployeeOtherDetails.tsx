@@ -25,6 +25,8 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
   employeeDetails,
 }) => {
   const [preview, setPreview] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
+
   const educationColumns: ColumnDef<IEducation>[] = [
     {
       header: "Board/ University",
@@ -118,9 +120,10 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
             src={`${config.BACKEND_API_URL}${document.front}`}
             width={20}
             className="cursor-pointer"
-            onClick={() =>
-              setPreview(`${config.BACKEND_API_URL}${document.front}`)
-            }
+            onClick={() =>{
+              setPreview(`${config.BACKEND_API_URL}${document.front}`);
+              setFileName(`${documentType[document.card]}_front`);
+            }}
           />
         ) : (
           "-"
@@ -135,15 +138,20 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
             src={`${config.BACKEND_API_URL}${document.back}`}
             width={20}
             className="cursor-pointer"
-            onClick={() =>
-              setPreview(`${config.BACKEND_API_URL}${document.back}`)
-            }
+            onClick={() =>{
+              setPreview(`${config.BACKEND_API_URL}${document.back}`);
+              setFileName(`${documentType[document.card]}_back`);
+            }}
           />
         ) : (
           "-"
         ),
     },
   ];
+
+  const handleDownloadFile = () => {
+    downloadFile(preview,fileName);
+  }
   return (
     <div className="content-card bg-white border border-gray-200">
       <div className="p-5">
@@ -247,6 +255,8 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
         title={"Preview"}
         onClose={() => setPreview("")}
         showFooter={false}
+        isDownload
+        onDownload={handleDownloadFile}
       >
         <Image src={preview} width={300} height={300} />
       </Modal>

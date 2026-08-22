@@ -102,7 +102,7 @@ export default function PolicyUpdate({
             options={policies}
             onChange={(value) => handleChange("policyId", value)}
           />
-          <MonthPicker value={{month: formData.month, year: formData.year}} label="Effective From month" onChange={(value: MonthPickerValue) => {
+          <MonthPicker value={{month: formData.month, year: formData.year}} disabled={policies.length < 2} label="Effective From month" onChange={(value: MonthPickerValue) => {
             setFormData(prev => ({...prev, ...value}))
           }} />
           <TextAreaField

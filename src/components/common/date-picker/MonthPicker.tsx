@@ -14,27 +14,26 @@ interface MonthPickerProps {
   value?: MonthPickerValue;
   placeholder?: string;
   disabled?: boolean;
-   position?: PickerPosition;
+  position?: PickerPosition;
   onChange: (value: MonthPickerValue) => void;
 }
 
-const MONTHS: {[key: number]: string;} = {
-  1:"Jan",
-  2:"Feb",
-  3:"Mar",
-  4:"Apr",
-  5:"May",
-  6:"Jun",
-  7:"Jul",
-  8:"Aug",
-  9:"Sep",
-  10:"Oct",
-  11:"Nov",
-  12:"Dec",
+const MONTHS: { [key: number]: string } = {
+  1: "Jan",
+  2: "Feb",
+  3: "Mar",
+  4: "Apr",
+  5: "May",
+  6: "Jun",
+  7: "Jul",
+  8: "Aug",
+  9: "Sep",
+  10: "Oct",
+  11: "Nov",
+  12: "Dec",
 };
 
 type PickerPosition = "top" | "bottom" | "left" | "right";
-
 
 const MonthPicker: React.FC<MonthPickerProps> = ({
   label,
@@ -78,11 +77,9 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node;
 
-      const clickedInsideInput =
-        wrapperRef.current?.contains(target);
+      const clickedInsideInput = wrapperRef.current?.contains(target);
 
-      const clickedInsideDropdown =
-        dropdownRef.current?.contains(target);
+      const clickedInsideDropdown = dropdownRef.current?.contains(target);
 
       if (!clickedInsideInput && !clickedInsideDropdown) {
         setOpen(false);
@@ -93,10 +90,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-      );
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -112,49 +106,49 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
   }, [value]);
 
   // const DROPDOWN_WIDTH = 235;
-const DROPDOWN_HEIGHT = 285;
-const GAP = 20;
+  const DROPDOWN_HEIGHT = 285;
+  const GAP = 20;
 
-const handleClickOnInput = () => {
-  if (disabled) return;
+  const handleClickOnInput = () => {
+    if (disabled) return;
 
-  const rect = inputRef.current?.getBoundingClientRect();
+    const rect = inputRef.current?.getBoundingClientRect();
 
-  if (!rect) return;
+    if (!rect) return;
 
-  let top = 0;
-  let left = 0;
+    let top = 0;
+    let left = 0;
 
-  switch (position) {
-    case "top":
-      top = rect.top + window.scrollY - DROPDOWN_HEIGHT + GAP;
-      left = rect.left + window.scrollX;
-      break;
+    switch (position) {
+      case "top":
+        top = rect.top + window.scrollY - DROPDOWN_HEIGHT + GAP;
+        left = rect.left + window.scrollX;
+        break;
 
-    case "bottom":
-      top = rect.bottom + window.scrollY - GAP + 20;
-      left = rect.left + window.scrollX;
-      break;
+      case "bottom":
+        top = rect.bottom + window.scrollY - GAP + 20;
+        left = rect.left + window.scrollX;
+        break;
 
-    case "left":
-      top = rect.bottom + window.scrollY - GAP + 20;
-      left = rect.left + window.scrollX - 140;
-      break;
+      case "left":
+        top = rect.bottom + window.scrollY - GAP + 20;
+        left = rect.left + window.scrollX - 140;
+        break;
 
-    case "right":
-      top = rect.top + window.scrollY;
-      left = rect.right + window.scrollX + GAP;
-      break;
-    
-    default:
-      top = rect.bottom + window.scrollY + GAP;
-      left = rect.left + window.scrollX;
-  }
+      case "right":
+        top = rect.top + window.scrollY;
+        left = rect.right + window.scrollX + GAP;
+        break;
 
-  setPosition({ top, left });
+      default:
+        top = rect.bottom + window.scrollY + GAP;
+        left = rect.left + window.scrollX;
+    }
 
-  setOpen((prev) => !prev);
-};
+    setPosition({ top, left });
+
+    setOpen((prev) => !prev);
+  };
 
   return (
     <div className="relative" ref={wrapperRef}>
@@ -177,7 +171,10 @@ const handleClickOnInput = () => {
           px-[15px] py-[5px] text-sm font-medium leading-[25px]
           outline-none focus:border-inputFocus
           placeholder:text-sm placeholder:font-normal
-          ${disabled ? "cursor-not-allowed bg-disabledBg" : ""}
+          disabled:bg-disabledBg
+            disabled:text-disabledText
+            disabled:placeholder:text-disabledText
+            disabled:cursor-not-allowed
           ${error ? "border-error" : ""}
         `}
       />
@@ -213,9 +210,7 @@ const handleClickOnInput = () => {
                 onClick={() => setShowYears((prev) => !prev)}
                 className="text-[18px] font-medium"
               >
-                {showYears
-                  ? `${startYear}-${startYear + 9}`
-                  : selectedYear}
+                {showYears ? `${startYear}-${startYear + 9}` : selectedYear}
               </button>
 
               <button
@@ -238,8 +233,7 @@ const handleClickOnInput = () => {
               <div className="grid grid-cols-3 gap-1 p-2">
                 {years.map((year) => {
                   const disabledYear =
-                    year === startYear - 1 ||
-                    year === startYear + 10;
+                    year === startYear - 1 || year === startYear + 10;
 
                   return (
                     <button
@@ -303,11 +297,7 @@ const handleClickOnInput = () => {
           document.body,
         )}
 
-      {error && (
-        <p className="mt-1 text-xs text-error">
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-1 text-xs text-error">{error}</p>}
     </div>
   );
 };

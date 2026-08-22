@@ -72,12 +72,13 @@ export interface IParents {
 
 export interface IBank {
   accountNo: number;
+  confirmAccountNo?: number;
   ifscCode: string;
   bankName: string;
   uanNo: string;
   esicNo: string;
-  pfJoiningDate: string | null;
-  esicJoiningDate: string | null;
+  pfJoiningDate: string;
+  esicJoiningDate: string;
 }
 
 export interface IEducation {

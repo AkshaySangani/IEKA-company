@@ -20,3 +20,7 @@ export const getHistory = ({
 }: HistoryPayload) => {
   return apiRequest.get<ApiResponse>(`/history?field=${field}&fieldId=${fieldId}`);
 };
+
+export const getAssignmentHistory = (userId: string) => {
+  return apiRequest.get<ApiResponse>(`/history/assignments?userId=${userId}`);
+};

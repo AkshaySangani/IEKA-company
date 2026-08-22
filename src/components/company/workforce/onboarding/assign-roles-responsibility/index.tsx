@@ -37,7 +37,6 @@ export interface IAssignment {
   branchId: string;
   shiftId: string;
   departmentId: string;
-  designationId: string;
   isReporting: boolean;
   remarks: string;
 }
@@ -240,8 +239,7 @@ const AssignRolesResponsibility = () => {
         (item) =>
           item.branchId === assignment.branchId &&
           item.shiftId === assignment.shiftId &&
-          item.departmentId === assignment.departmentId &&
-          item.designationId === assignment.designationId,
+          item.departmentId === assignment.departmentId
       );
 
       return {
@@ -252,8 +250,7 @@ const AssignRolesResponsibility = () => {
                 !(
                   item.branchId === assignment.branchId &&
                   item.shiftId === assignment.shiftId &&
-                  item.departmentId === assignment.departmentId &&
-                  item.designationId === assignment.designationId
+                  item.departmentId === assignment.departmentId
                 ),
             )
           : [...prev.assignments, assignment],
@@ -400,6 +397,7 @@ const AssignRolesResponsibility = () => {
       salary: Number(formData.salary),
       allowESICDeduction: formData.allowESICDeduction,
       allowPFDeduction: formData.allowPFDeduction,
+      designationId: formData.designationId,
       assignments: [
         ...(formData.role === RoleEnum.MANAGER
           ? [

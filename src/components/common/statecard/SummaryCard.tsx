@@ -48,9 +48,9 @@ export default function SummaryCard({
 
         {/* Trend */}
         {trendDetails && (
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-1 mt-2">
             <span
-              className={`text-[18px] font-bold ${
+              className={`text-md font-bold ${
                 trendDetails.type === "high"
                   ? "text-success"
                   : trendDetails.type === "low"
@@ -66,7 +66,7 @@ export default function SummaryCard({
             </span>
 
             <span
-              className={`text-[16px] font-medium ${
+              className={`text-sm font-medium ${
                 trendDetails.type === "high"
                   ? "text-success"
                   : trendDetails.type === "low"
@@ -83,7 +83,7 @@ export default function SummaryCard({
         )}
 
         {/* Arrow */}
-        <button className="absolute bottom-0 right-0 h-11 w-11 rounded-tl-full bg-white shadow-md flex items-center justify-center">
+        <button className="absolute -bottom-1 -right-1 h-11 w-11 rounded-tl-full bg-white shadow-md flex items-center justify-center">
           <RightArrow label="" onClick={onClick} />
         </button>
       </div>

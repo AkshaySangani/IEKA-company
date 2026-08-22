@@ -29,9 +29,9 @@ import TextAreaField from "../../../common/text-area/TextAreaField";
 import { getLeaves } from "../../../../apis/organization/leave.api";
 import { ILeave } from "../../organization/leave";
 import ActionModal from "../../../common/modal/ActionModal";
-import { IUser } from "../attendance";
 import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import { IUser } from "../../../../types/user.types";
 
 /* -------------------------------------------------------------------------- */
 /*                             INITIAL FORM DATA                              */

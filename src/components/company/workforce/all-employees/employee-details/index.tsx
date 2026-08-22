@@ -21,6 +21,7 @@ import {
 } from "../../../../../types/common-types";
 import { getEmployeeDetails } from "../../../../../apis/workforce/onboardings.api";
 import { IEmployeeDetails } from "../../onboarding/employee-details";
+import { IUser } from "../../../../../types/user.types";
 
 /* =========================
    TYPES
@@ -63,7 +64,10 @@ export interface IEmployee {
   companyId: string;
   branchId: string;
   departmentId: string;
-  designationId: string;
+  designationId: {
+    _id: string;
+    name: string;
+  } | null;
   shiftId: string;
 
   dob: string;
@@ -83,13 +87,12 @@ export interface IAssignment {
   branchId: IBaseEntity;
   shiftId: IShift;
   departmentId: IBaseEntity;
-  designationId: IBaseEntity;
 
   reportingManagerId: string | null;
 
   isReporting: boolean;
   joinedAt: string;
-  assignedBy: string;
+  assignedBy: string | IUser;
   remarks: string;
 }
 
@@ -167,7 +170,10 @@ export const initialEmployee: IEmployee = {
   companyId: "",
   branchId: "",
   departmentId: "",
-  designationId: "",
+  designationId: {
+    _id: "",
+    name: ""
+  },
   shiftId: "",
 
   dob: "",

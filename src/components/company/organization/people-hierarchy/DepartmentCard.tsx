@@ -66,7 +66,7 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
             ))}
           </div>
         ) : (
-          <EmptyPlaceholder icon={<Info size={25} />} className="!h-[300px]" />
+          <EmptyPlaceholder icon={<Info size={25} />} title="No employee(s) found." description="It seems employee assigned for this manager/shift." className="!h-[100px]" />
         )}
       </div>
     </>

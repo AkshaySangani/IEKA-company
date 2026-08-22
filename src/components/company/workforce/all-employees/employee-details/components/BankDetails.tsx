@@ -16,11 +16,15 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
   const [active, setActive] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [errors, setErrors] = useState<any>({});
-  const initialFormData = {
+  const initialFormData: IBank = {
     bankName: "",
-    accountNo: "",
-    confirmAccountNo: "",
+    accountNo: 0,
+    confirmAccountNo: 0,
     ifscCode: "",
+    uanNo: "",
+    esicNo: "",
+    pfJoiningDate: "",
+    esicJoiningDate: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -31,9 +35,13 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
       if (!prev) {
         setFormData({
           bankName: bank.bankName || "",
-          accountNo: String(bank.accountNo) || "",
-          confirmAccountNo: String(bank.accountNo) || "",
+          accountNo: bank.accountNo || 0,
+          confirmAccountNo: bank.accountNo || 0,
           ifscCode: bank.ifscCode || "",
+          uanNo: bank.uanNo,
+          esicNo: bank.esicNo,
+          pfJoiningDate: bank.pfJoiningDate,
+          esicJoiningDate: bank.esicJoiningDate,
         });
 
         setErrors({});
@@ -69,11 +77,11 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
       newErrors.bankName = "Bank name is required";
     }
 
-    if (!formData.accountNo.trim()) {
+    if (!formData.accountNo) {
       newErrors.accountNo = "Account number is required";
     }
 
-    if (!formData.confirmAccountNo.trim()) {
+    if (!formData.confirmAccountNo) {
       newErrors.confirmAccountNo = "Confirm account number is required";
     }
 
@@ -100,8 +108,14 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
     const form = new FormData();
 
     form.append("bankName", formData.bankName);
-    form.append("accountNo", formData.accountNo);
+    form.append("accountNo", String(formData.accountNo));
     form.append("ifscCode", formData.ifscCode);
+    formData.uanNo && form.append("uanNo", formData.uanNo);
+    formData.esicNo && form.append("esicNo", formData.esicNo);
+    formData.pfJoiningDate &&
+      form.append("pfJoiningDate", formData.pfJoiningDate);
+    formData.esicJoiningDate &&
+      form.append("esicJoiningDate", formData.esicJoiningDate);
 
     try {
       await handleSubmit(form);
@@ -122,26 +136,35 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
               className="fa-solid fa-pen-to-square text-gray-400"
               onClick={handleClickOnEdit}
             ></i>
-            <h3 className="text-md text-gray-600 font-medium">
-              Bank Details
-            </h3>
+            <h3 className="text-md text-gray-600 font-medium">Bank Details</h3>
           </div>
         }
       >
         <div className="space-y-2">
-          <DetailRow label="Bank Name" value={bank.bankName?bank.bankName:"-"} />
+          <DetailRow
+            label="Bank Name"
+            value={bank.bankName ? bank.bankName : "-"}
+          />
 
           <DetailRow label="Account No." value={bank.accountNo} />
 
           <DetailRow label="IFSC Code" value={bank.ifscCode} />
 
-          <DetailRow label="UAN No." value={bank.uanNo?bank.uanNo:"-"} />
+          <DetailRow label="UAN No." value={bank.uanNo ? bank.uanNo : "-"} />
 
-          <DetailRow label="ESIC No." value={bank.esicNo?bank.esicNo:"-"} />
+          <DetailRow label="ESIC No." value={bank.esicNo ? bank.esicNo : "-"} />
 
-          <DetailRow label="PF Joining Date" value={bank.pfJoiningDate? formatDate(bank.pfJoiningDate):"-"} />
+          <DetailRow
+            label="PF Joining Date"
+            value={bank.pfJoiningDate ? formatDate(bank.pfJoiningDate) : "-"}
+          />
 
-          <DetailRow label="ESIC Joining Date" value={bank.esicJoiningDate? formatDate(bank.esicJoiningDate):"-"} />
+          <DetailRow
+            label="ESIC Joining Date"
+            value={
+              bank.esicJoiningDate ? formatDate(bank.esicJoiningDate) : "-"
+            }
+          />
         </div>
       </Accordion>
       <Modal
@@ -194,6 +217,44 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
             required
             placeholder="Enter IFSC Code"
           />
+
+          <TextField
+          label="UAN No. (if Applicable)"
+          name="uanNo"
+          value={formData.uanNo}
+          onChange={handleChange}
+          error={errors.uanNo}
+          placeholder="Enter UAN No."
+        />
+
+        <TextField
+          label="ESIC No (if Applicable)"
+          name="esicNo"
+          value={formData.esicNo}
+          onChange={handleChange}
+          error={errors.esicNo}
+          placeholder="Enter ESIC No."
+        />
+
+        <TextField
+          type="date"
+          label="PF Joining Date"
+          name="pfJoiningDate"
+          value={formData.pfJoiningDate}
+          onChange={handleChange}
+          error={errors.pfJoiningDate}
+          max={new Date().toISOString().split("T")[0]}
+        />
+
+        <TextField
+          type="date"
+          label="ESIC Joining Date"
+          name="esicJoiningDate"
+          value={formData.esicJoiningDate}
+          onChange={handleChange}
+          error={errors.esicJoiningDate}
+          max={new Date().toISOString().split("T")[0]}
+        />
         </div>
       </Modal>
     </>

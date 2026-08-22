@@ -16,7 +16,7 @@ interface CustomTableProps<T> {
 
 export function CustomTable<T>({ columns, data }: CustomTableProps<T>) {
   return (
-    <div className="w-full overflow-x-auto bg-white min-h-[200px]">
+    <div className={`w-full overflow-x-auto bg-white max-h-[calc(100vh-160px)]`}>
       <table className="w-full border-collapse text-left text-sm">
         {/* Table Header */}
         <thead className="sticky top-0 bg-tableHeader text-gray-700 font-medium border-b border-gray-300">

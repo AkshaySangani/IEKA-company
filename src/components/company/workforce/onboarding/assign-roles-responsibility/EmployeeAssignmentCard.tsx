@@ -52,7 +52,7 @@ const EmployeeAssignmentCard = ({
   };
 
   return (
-    <div className="content-card border p-3">
+    <div className="bg-white border p-3">
       {/* Header */}
 
       <div className="flex items-center justify-between border-b pb-4">
@@ -145,7 +145,6 @@ const EmployeeAssignmentCard = ({
                     branchId: data._id,
                     shiftId: shift._id,
                     departmentId: department._id,
-                    designationId: formData.designationId,
                     isReporting: true,
                     remarks: "",
                   };
@@ -153,7 +152,7 @@ const EmployeeAssignmentCard = ({
                   return (
                     <div
                       key={department._id}
-                      className="grid grid-cols-[1fr_6fr_1fr_6fr] items-center gap-2"
+                      className="grid grid-cols-[1fr_3fr_1fr_6fr] items-center gap-2"
                     >
                       {/* Checkbox / Radio */}
 
@@ -194,7 +193,7 @@ const EmployeeAssignmentCard = ({
 
                       {/* Department */}
 
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium line-clamp-1">
                         {department.name}
                       </span>
 

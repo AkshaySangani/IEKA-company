@@ -18,7 +18,6 @@ export const getBranches = (payload: {
 export const addBranch = (payload: {
   name: string;
   address: string;
-  shiftApplicable: boolean;
   branchType: BranchType;
 }) =>
   apiRequest.post(`/organization/branches`, payload, {
@@ -33,7 +32,6 @@ export const updateBranch = (
   payload: {
     name: string;
     address: string;
-    shiftApplicable: boolean;
     branchType: BranchType;
   },
   branchId: string = "",

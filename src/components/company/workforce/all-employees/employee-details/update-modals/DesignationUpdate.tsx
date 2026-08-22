@@ -6,14 +6,13 @@ import RadioButton from "../../../../../common/radio-button";
 import TextAreaField from "../../../../../common/text-area/TextAreaField";
 import { IDesignation } from "../../../../organization/designation";
 import { getDesignation } from "../../../../../../apis/organization/designation.api";
-import { IAssignment, IEmployee } from "..";
+import { IEmployee } from "..";
 import PageLoader from "../../../../../common/loader/PageLoader";
 
 interface DesignationUpdateProps {
   active: boolean;
   loading: boolean;
   employeeData: IEmployee;
-  assignments: IAssignment[];
   setActive: (value: boolean) => void;
   designationId: string;
   handleSubmit: (payload: any) => void;
@@ -27,7 +26,6 @@ export default function DesignationUpdate({
   active,
   loading,
   employeeData,
-  assignments,
   setActive,
   designationId,
   handleSubmit,
@@ -80,14 +78,7 @@ export default function DesignationUpdate({
   const handleOnSubmit = async () => {
     const payload = {
       remarks: formData.remarks,
-      assignments: assignments.map(ele => ({
-            branchId: ele.branchId._id,
-            shiftId: ele.shiftId._id,
-            departmentId: ele.departmentId._id,
-            designationId: formData.designationId,
-            isReporting: ele.isReporting,
-            remarks: ele.remarks,
-        })) 
+      designationId: formData.designationId,
     }
     await handleSubmit(payload);
   }

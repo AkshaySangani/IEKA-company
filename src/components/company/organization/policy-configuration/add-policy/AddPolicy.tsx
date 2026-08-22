@@ -68,11 +68,6 @@ export interface PolicyFormData {
     period: leaveEncashmentType;
   };
 
-  carryForwardLeave: {
-    enabled: boolean;
-    maxLeaves: number;
-  };
-
   continuousLeave: {
     enabled: boolean;
     maxLeaves: number;
@@ -138,14 +133,9 @@ const AddPolicy: React.FC<{
       period: leaveEncashmentType.YEARLY,
     },
 
-    carryForwardLeave: {
-      enabled: false,
-      maxLeaves: 0,
-    },
-
     continuousLeave: {
-      enabled: false,
-      maxLeaves: 0,
+      enabled: true,
+      maxLeaves: 2,
       allowedInProbation: false,
     },
 
@@ -235,6 +225,29 @@ const AddPolicy: React.FC<{
           [field]: value,
         },
       }));
+      if (
+        field === "minFullDayPercentage" ||
+        field === "minHalfDayPercentage"
+      ) {
+        const fullDayPercentage =
+          field === "minFullDayPercentage"
+            ? Number(value)
+            : Number(formData.lateRule.minFullDayPercentage);
+
+        const halfDayPercentage =
+          field === "minHalfDayPercentage"
+            ? Number(value)
+            : Number(formData.lateRule.minHalfDayPercentage);
+
+        if (halfDayPercentage > fullDayPercentage) {
+          setErrors((prev) => ({
+            ...prev,
+            "lateRule.minHalfDayPercentage":
+              "Half day percentage should be less than full day percentage.",
+          }));
+          return;
+        }
+      }
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -257,6 +270,14 @@ const AddPolicy: React.FC<{
 
     if (formData.workHours.weeklyOffs.length === 0) {
       newErrors["workHours.weeklyOffs"] = "Select at least one weekly off";
+    }
+
+    if (
+      formData.lateRule.minHalfDayPercentage >
+      formData.lateRule.minFullDayPercentage
+    ) {
+      newErrors["lateRule.minHalfDayPercentage"] =
+        "Half day percentage should be less than full day percentage.";
     }
 
     setErrors(newErrors);
@@ -342,7 +363,12 @@ const AddPolicy: React.FC<{
   };
 
   const handleAction = () => {
-    if (!validate()) return;
+    const newErrors = validate();
+    const isValid = Object.keys(newErrors).length === 0;
+    if (!isValid) {
+      scrollToFirstError(newErrors);
+      return;
+    }
     setActionOpen((prev) => !prev);
   };
 
@@ -401,7 +427,6 @@ const AddPolicy: React.FC<{
             data={formData}
             handleLeaveChange={handleLeaveChange}
             handleChange={handleChange}
-            leaveOptions={[]}
             editPolicyId={editPolicyId}
           />
         </form>

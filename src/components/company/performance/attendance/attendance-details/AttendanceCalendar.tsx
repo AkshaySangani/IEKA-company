@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { MonthPickerValue } from "../../../../common/date-picker/MonthPicker";
 import { formatDate, getMonthDays } from "../../../../../utils/date-format";
 import CalendarDayBox from "../../../../common/calender/CalendarDayBox";
-import { IUserAttendance } from ".";
+import { IUserAttendance } from "..";
 
 interface AttendanceCalendarProps {
   selectedMonth: MonthPickerValue;

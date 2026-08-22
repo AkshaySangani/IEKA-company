@@ -6,6 +6,9 @@ interface EmptyPlaceholderProps {
   description?: string;
   icon?: React.ReactNode;
   className?: string;
+  titleClassName?: string;
+  showDescription?: boolean;
+  descriptionClassName?: string;
 }
 
 const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
@@ -13,6 +16,9 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   description = "There is currently no data available to display.",
   icon = <Info size={50}/>,
   className = "",
+  titleClassName = "",
+  showDescription = true,
+  descriptionClassName = ""
 }) => {
   return (
     <div
@@ -24,14 +30,14 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
       </div>
 
       {/* Title */}
-      <h3 className="text-xl font-medium text-gray-800 ">
+      <h3 className={`text-xl font-medium text-gray-800 ${titleClassName}`}>
         {title}
       </h3>
 
       {/* Description */}
-      <p className="max-w-md text-sm text-gray-500 leading-relaxed">
+      {showDescription && <p className={`max-w-md text-sm text-gray-500 leading-relaxed ${descriptionClassName}`}>
         {description}
-      </p>
+      </p>}
     </div>
   );
 };

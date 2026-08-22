@@ -5,7 +5,10 @@ import PageLoader from "../../../common/loader/PageLoader";
 import EmptyPlaceholder from "../../../common/empty-paceholder";
 import SelectField from "../../../common/select/SelectField";
 import { IOption, RoleEnum, statusEnum } from "../../../../types/common-types";
-import { getCompanyHierarchy, getPeoples } from "../../../../apis/organization/people-hierarchy.api";
+import {
+  getCompanyHierarchy,
+  getPeoples,
+} from "../../../../apis/organization/people-hierarchy.api";
 import DepartmentCard from "./DepartmentCard";
 import { useAuthStore } from "../../../../store/auth-store";
 import PersonInfo from "../../../common/person-info";
@@ -31,7 +34,8 @@ export interface IDepartment {
 export default function PeopleHierarchy() {
   const { user } = useAuthStore();
   const [branches, setBranches] = useState<IBranch[]>([]);
-  const [employeeCount, setEmployeeCount] = useState<number>(0);
+   const [employeeCount, setEmployeeCount] = useState<number>(0);
+  const [managerCount, setManagerCount] = useState<number>(0);
   const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [branchOptions, setBranchOptions] = useState<IOption[]>([]);
   const [shiftOptions, setShiftOptions] = useState<IOption[]>([]);
@@ -57,14 +61,9 @@ export default function PeopleHierarchy() {
     setBranchLoading(true);
     const response = await getPeoples(branchId, shiftId);
     if (response?.success) {
-      setDepartments(response?.data);
-      const count = response?.data?.reduce(
-        (total: number, department: IDepartment) => {
-          return total + department.count;
-        },
-        0,
-      );
-      setEmployeeCount(count);
+      setDepartments(response?.data?.list);
+      setEmployeeCount(response?.data?.employeeCount);
+      setManagerCount(response?.data?.managerCount);
     } else setDepartments([]);
 
     setBranchLoading(false);
@@ -74,13 +73,13 @@ export default function PeopleHierarchy() {
     setBranchLoading(true);
     const response = await getCompanyHierarchy();
     if (response?.success) {
-      setBranches(response?.data);
-      const branchOption = response?.data?.map((ele: IBranch) => ({
+      setBranches(response?.data?.list);
+      const branchOption = response?.data?.list?.map((ele: IBranch) => ({
         label: ele?.name,
         value: ele?._id,
       }));
       setBranchOptions(branchOption);
-      handleSelectFilter("branchId", branchOption[0]?.value, response?.data);
+      handleSelectFilter("branchId", branchOption[0]?.value, response?.data?.list);
     } else {
       setBranches([]);
       setBranchOptions([]);
@@ -135,30 +134,38 @@ export default function PeopleHierarchy() {
               onChange={(option) => handleSelectFilter("shiftId", option.value)}
             />
             <div className="flex items-center gap-3">
-              <span className="font-medium">Total Employee</span>
-              <div className="bg-black py-1.5 px-2.5 text-white font-medium">
-                {employeeCount}
+              <div className="flex items-center gap-3">
+                <span className="font-medium">Total Manager</span>
+                <div className="flex px-[5px] min-h-[35px] min-w-[35px] items-center justify-center bg-black text-[20px] font-medium text-white shadow">
+                  {managerCount}
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="font-medium">Total Employee</span>
+                <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-black text-[20px] font-medium text-white shadow">
+                  {employeeCount}
+                </div>
               </div>
             </div>
           </div>
         }
       />
       <div className="flex flex-col items-center gap-1 py-2 bg-white mb-2">
-          <PersonInfo
-            personInfo={{
-              profileImage: user?.profileImage ?? "",
-              firstName: user?.firstName ?? "",
-              lastName: user?.lastName ?? "",
-              description: "(COO)",
-            }}
-            imageClassName="h-[55px] w-[55px]"
-            className="flex-col items-center text-center"
-            personClassName="text-secondary text-xs"
-          />
-        </div>
+        <PersonInfo
+          personInfo={{
+            profileImage: user?.profileImage ?? "",
+            firstName: user?.firstName ?? "",
+            lastName: user?.lastName ?? "",
+            description: "(COO)",
+          }}
+          imageClassName="h-[55px] w-[55px]"
+          className="flex-col items-center text-center"
+          personClassName="text-secondary text-xs"
+        />
+      </div>
       <div className="content-area bg-primaryBlur">
         <PageLoader loading={branchLoading} />
-        
+
         {departments?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {departments?.map((ele, index) => (

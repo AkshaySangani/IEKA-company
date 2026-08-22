@@ -55,21 +55,19 @@ export default function BranchAssignmentUpdate({
 
   useEffect(() => {
     if(assignments?.length > 0 && role === "MANAGER"){
-        setFormData(prev => ({...prev,designationId: employeeData.designationId,userId: employeeData?._id, role: role === "MANAGER" ? RoleEnum.MANAGER : RoleEnum.EMPLOYEE,assignments: assignments.filter(ele => !ele?.isReporting).map(ele => ({
+        setFormData(prev => ({...prev,userId: employeeData?._id, role: role === "MANAGER" ? RoleEnum.MANAGER : RoleEnum.EMPLOYEE,assignments: assignments.filter(ele => !ele?.isReporting).map(ele => ({
             branchId: ele.branchId._id,
             shiftId: ele.shiftId._id,
             departmentId: ele.departmentId._id,
-            designationId: employeeData.designationId,
             isReporting: ele.isReporting,
             remarks: ele.remarks,
         }))}))
     } else {
         const data = employeeData?.role === RoleEnum.MANAGER ? assignments.find(ele => ele?.isReporting)??assignments[0] : assignments[0];
-        setFormData(prev => ({...prev,designationId: employeeData.designationId,userId: employeeData?._id, role: role === "MANAGER" ? RoleEnum.MANAGER : RoleEnum.EMPLOYEE,assignments: [{
+        setFormData(prev => ({...prev,userId: employeeData?._id, role: role === "MANAGER" ? RoleEnum.MANAGER : RoleEnum.EMPLOYEE,assignments: [{
             branchId: data.branchId._id,
             shiftId: data.shiftId._id,
             departmentId: data.departmentId._id,
-            designationId: employeeData.designationId,
             isReporting: data.isReporting,
             remarks: data.remarks,
         }]}))
@@ -108,8 +106,7 @@ export default function BranchAssignmentUpdate({
         (item) =>
           item.branchId === assignment.branchId &&
           item.shiftId === assignment.shiftId &&
-          item.departmentId === assignment.departmentId &&
-          item.designationId === employeeData.designationId,
+          item.departmentId === assignment.departmentId
       );
 
       return {
@@ -120,8 +117,7 @@ export default function BranchAssignmentUpdate({
                 !(
                   item.branchId === assignment.branchId &&
                   item.shiftId === assignment.shiftId &&
-                  item.departmentId === assignment.departmentId &&
-                  item.designationId === employeeData.designationId
+                  item.departmentId === assignment.departmentId
                 ),
             )
           : [...prev.assignments, assignment],

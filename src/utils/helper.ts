@@ -1,3 +1,4 @@
+import { IAssignment, IBaseEntity, IShift } from "../components/company/workforce/all-employees/employee-details";
 import { ISalaryDetail } from "../components/company/workforce/onboarding/assign-roles-responsibility/SalaryDetails";
 import { deductionEnum, salaryType, ValueType } from "../types/common-types";
 
@@ -199,3 +200,39 @@ export function getFloatValue(value: number | string, fractionDigits: number = 2
     return num.toFixed(fractionDigits); // e.g., "2.50"
   }
 }
+
+export const getBranches = (branches: IAssignment[]) => {
+    const groupedAssignments = branches.reduce(
+      (acc, assignment) => {
+        const key = `${assignment.branchId._id}-${assignment.shiftId._id}`;
+
+        if (!acc[key]) {
+          acc[key] = {
+            branch: assignment.branchId,
+            shift: assignment.shiftId,
+            departments: [],
+          };
+        }
+
+        // Prevent duplicate departments
+        if (
+          !acc[key].departments.some(
+            (d) => d._id === assignment.departmentId._id,
+          )
+        ) {
+          acc[key].departments.push(assignment.departmentId);
+        }
+
+        return acc;
+      },
+      {} as Record<
+        string,
+        {
+          branch: IBaseEntity;
+          shift: IShift;
+          departments: IBaseEntity[];
+        }
+      >,
+    );
+    return Object.values(groupedAssignments);
+  };

@@ -1,6 +1,6 @@
 // CalendarDayBox.tsx
 
-import { IUserAttendance } from "../../company/performance/attendance/attendance-details";
+
 import { getFirstCharacter } from "../../../utils/helper";
 import {
   AttendanceStatusEnum,
@@ -14,6 +14,7 @@ import {
   DateFormat,
   formatDate
 } from "../../../utils/date-format";
+import { IUserAttendance } from "../../company/performance/attendance";
 
 interface CalendarDayBoxProps {
   date: number | null;

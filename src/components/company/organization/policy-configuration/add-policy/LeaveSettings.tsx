@@ -17,10 +17,6 @@ interface LeaveSettingProps {
     field: keyof PolicyFormData["leaves"][0],
     value: any,
   ) => void;
-  leaveOptions: {
-    label: string;
-    value: string;
-  }[];
   editPolicyId?: string;
 }
 
@@ -43,7 +39,6 @@ const LeaveSetting = ({
   data,
   handleChange,
   handleLeaveChange,
-  leaveOptions,
   editPolicyId,
 }: LeaveSettingProps) => {
   return (
@@ -177,61 +172,6 @@ const LeaveSetting = ({
         </div>
       </div>
 
-      {/* Carry Forward */}
-
-      <div className="border-t pt-3">
-        <h3 className="mb-5 text-md font-medium text-primary">
-          Carry Forward Leave Setting
-        </h3>
-
-        <div className="space-y-3 ml-2">
-          <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-            <label className="text-sm text-secondary">
-              Carry forward leave allowed ?
-            </label>
-
-            <SelectField
-              value={
-                data.carryForwardLeave.enabled
-                  ? yesNoOption.find((item) => item.value === "YES")
-                  : yesNoOption.find((item) => item.value === "NO")
-              }
-              options={yesNoOption}
-              isDisabled={!!editPolicyId}
-              name="enabled"
-              onChange={(option) =>
-                handleChange(
-                  "enabled",
-                  option.value === "YES",
-                  "carryForwardLeave",
-                )
-              }
-            />
-          </div>
-
-          {data.carryForwardLeave.enabled && (
-            <div className="grid grid-cols-1 lg:grid-cols-[280px_180px] items-center gap-4">
-              <label className="text-sm text-secondary">
-                How many leaves should be carry forward ?
-              </label>
-
-              <TextField
-                type="number"
-                value={data.carryForwardLeave.maxLeaves}
-                disabled={!!editPolicyId}
-                onChange={(e) =>
-                  handleChange(
-                    "maxLeaves",
-                    Number(e.target.value),
-                    "carryForwardLeave",
-                  )
-                }
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
       {/* Sandwich Rule Setting */}
 
       <div className="border-t pt-3">
@@ -346,7 +286,7 @@ const LeaveSetting = ({
             <>
               <div className="grid grid-cols-1 lg:grid-cols-[380px_180px] items-center gap-4">
                 <label className="text-sm text-secondary">
-                  OT Calculation After how many hours
+                  OT Calculation After how many minutes
                 </label>
 
                 <TextField
@@ -387,7 +327,7 @@ const LeaveSetting = ({
                   }
                 />
                 <label className="text-sm text-secondary">
-                  from current salary hourly rate
+                  from current salary minute rate
                 </label>
               </div>
             </>

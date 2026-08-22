@@ -6,7 +6,6 @@ import RadioButton from "../../../common/radio-button";
 import {
   branchEnum,
   branchOptions,
-  yesNoOption,
 } from "../../../../constants/constants";
 import {
   addBranch,
@@ -25,7 +24,6 @@ interface IAddBranchProps {
 interface BranchFormData {
   name: string;
   address: string;
-  shiftApplicable: "YES" | "NO";
   branchType: BranchType;
 }
 
@@ -38,8 +36,7 @@ const AddBranch: React.FC<IAddBranchProps> = ({
   const [loading, setLoading] = useState(false);
   const initialFormData: BranchFormData = {
     name: "",
-    address: "",    
-    shiftApplicable: "NO",
+    address: "",
     branchType: branchEnum.HEAD_OFFICE,
   };
   const [formData, setFormData] = useState<BranchFormData>(initialFormData);
@@ -49,8 +46,7 @@ const AddBranch: React.FC<IAddBranchProps> = ({
       setFormData({
           name: branchDetails.name,
           address: branchDetails.address,
-          branchType: branchDetails.branchType,
-          shiftApplicable: branchDetails.shiftApplicable ? "YES" : "NO"
+          branchType: branchDetails.branchType
       })
     }
     // eslint-disable-next-line
@@ -84,10 +80,6 @@ const AddBranch: React.FC<IAddBranchProps> = ({
       newErrors.address = "Branch address is required";
     }
 
-    if (!formData.shiftApplicable) {
-      newErrors.shiftApplicable = "Please select shift applicability";
-    }
-
     if (!formData.branchType) {
       newErrors.branchType = "Please select branch type";
     }
@@ -109,7 +101,6 @@ const AddBranch: React.FC<IAddBranchProps> = ({
     const payload = {
       name: formData.name.trim(),
       address: formData.address.trim(),
-      shiftApplicable: formData.shiftApplicable === "YES",
       branchType: formData.branchType,
     };
 
@@ -157,17 +148,7 @@ const AddBranch: React.FC<IAddBranchProps> = ({
           placeholder="Enter branch address"
           required
           onChange={(e) => handleChange("address", e.target.value)}
-        />
-
-        <RadioButton
-          required
-          label="Shift Applicable on this Branch?"
-          name="shiftApplicable"
-          value={formData.shiftApplicable}
-          options={yesNoOption}
-          onChange={(value) => handleChange("shiftApplicable", value)}
-          error={errors.shiftApplicable}
-        />        
+        />       
 
         <RadioButton
           required

@@ -21,6 +21,14 @@ interface Props {
   editPolicyId?: string;
 }
 
+const percentageOption: IOption[] = [
+  { label: "10 %", value: 10 },
+  { label: "20 %", value: 20 },
+  { label: "30 %", value: 30 },
+  { label: "40 %", value: 40 },
+  { label: "50 %", value: 50 },
+];
+
 const AttendanceSettings = ({
   data,
   errors,
@@ -41,11 +49,6 @@ const AttendanceSettings = ({
     handleChange("weeklyOffs", updatedWeeklyOffs, "workHours");
   };
 
-  const percentageOption: IOption[] = [
-    { label: "10 %", value: 10 },
-    { label: "25 %", value: 25 },
-    { label: "50 %", value: 50 },
-  ];
   return (
     <div className="space-y-3 rounded-lg bg-white shadow-sm">
       {/* Attendance Setting */}
@@ -199,7 +202,9 @@ const AttendanceSettings = ({
           </div>
 
           <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
-            <span>Marked absent if total working shift hours are less than</span>
+            <span>
+              Marked absent if total working shift hours are less than
+            </span>
 
             <div className="w-36">
               <SelectField
@@ -253,6 +258,11 @@ const AttendanceSettings = ({
               />
             </div>
           </div>
+          {errors["lateRule.minHalfDayPercentage"] && (
+            <div className="mt-1 text-xs text-error">
+              {errors["lateRule.minHalfDayPercentage"]}
+            </div>
+          )}
         </div>
       </div>
 

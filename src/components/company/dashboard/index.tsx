@@ -161,15 +161,6 @@ const Dashboard = () => {
       textColor: "bg-success",
       trendDetails: null,
     },
-    {
-      id: pathNames.EMPLOYEE_PAYROLL,
-      title: "Employee Salary",
-      count: 0,
-      amount: 0,
-      activeColor: "#fffaf0",
-      textColor: "bg-warning",
-      trendDetails: null,
-    },
   ]);
 
   const [workforceCards, setWorkforceCards] = useState<FilterCardItem[]>([
@@ -368,7 +359,7 @@ const Dashboard = () => {
       <TopBar title="Dashboard" />
       <div className="content-area bg-dashboardBg flex flex-col gap-3">
         <PageLoader loading={loading} />
-        <div className="grid grid-cols-1 sm:grid-cols-[2fr_3fr] gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-4">
           <div className="content-card">
             <EmployeeCard
               role={RoleEnum.MANAGER}
@@ -395,7 +386,7 @@ const Dashboard = () => {
             loading={expenseLoading}
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <WorkforceSummaryCard workforce={workforce} cards={workforceCards} />
           <AttendanceSummaryCard
             attendanceSummary={attendanceSummary}

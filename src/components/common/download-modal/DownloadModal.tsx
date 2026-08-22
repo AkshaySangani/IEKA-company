@@ -71,6 +71,7 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
         confirmButtonName={"Download"}
         handleOnConfirm={handleOnConfirm}
         loading={loading}
+        width="max-w-2xl"
       >
     <>
       <div className="popcontent">

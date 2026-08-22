@@ -1,7 +1,6 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   pathNames,
-  roleNames,
   statusColor,
   statusMessage,
 } from "../../../../constants/constants";
@@ -52,7 +51,7 @@ export default function OnboardingsTable({
             profileImage: row.profileImage,
             firstName: row.firstName,
             lastName: row.lastName,
-            description: roleNames[row.role],
+            description: "",
           }}
           onClick={() => handleRedirectEmployeeDetails(row)}
         />

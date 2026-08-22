@@ -30,7 +30,7 @@ const PersonInfo: React.FC<IPersonInfoProps> = ({
 }: IPersonInfoProps) => {
   return (
     <div className={`flex gap-3 items-center ${className}`} onClick={onClick}>
-      <div className="relative">
+      <div className={personInfo.status ? "relative":""}>
         <Image
           src={personInfo.profileImage}
           alt={personInfo.firstName}

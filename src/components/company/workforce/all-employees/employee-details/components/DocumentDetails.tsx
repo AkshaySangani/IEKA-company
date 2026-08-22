@@ -6,6 +6,7 @@ import { IDocument } from "../../../onboarding/employee-details";
 import { config } from "../../../../../../utils/config";
 import Image from "../../../../../common/image";
 import Modal from "../../../../../common/modal/Modal";
+import { downloadFile } from "../../../../../../utils/helper";
 
 interface DocumentDetailsProps {
   documents: IDocument[];
@@ -14,6 +15,7 @@ interface DocumentDetailsProps {
 const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
   const [active, setActive] = useState<boolean>(false);
   const [preview, setPreview] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
   const documentColumns: ColumnDef<IDocument>[] = [
     {
       header: "Document Name",
@@ -34,9 +36,10 @@ const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
             src={`${config.BACKEND_API_URL}${document.front}`}
             width={20}
             className="cursor-pointer"
-            onClick={() =>
-              setPreview(`${config.BACKEND_API_URL}${document.front}`)
-            }
+            onClick={() => {
+              setPreview(`${config.BACKEND_API_URL}${document.front}`);
+              setFileName(`${documentType[document.card]}_front`);
+            }}
           />
         ) : (
           "-"
@@ -51,15 +54,20 @@ const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
             src={`${config.BACKEND_API_URL}${document.front}`}
             width={20}
             className="cursor-pointer"
-            onClick={() =>
-              setPreview(`${config.BACKEND_API_URL}${document.front}`)
-            }
+            onClick={() => {
+              setPreview(`${config.BACKEND_API_URL}${document.front}`);
+              setFileName(`${documentType[document.card]}_back`);
+            }}
           />
         ) : (
           "-"
         ),
     },
   ];
+
+  const handleDownload = () => {
+    downloadFile(preview, fileName);
+  };
   return (
     <>
       <Accordion
@@ -79,8 +87,13 @@ const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
         width="max-w-xs"
         isOpen={preview !== ""}
         title={"Preview"}
-        onClose={() => setPreview("")}
+        onClose={() => {
+          setPreview("");
+          setFileName("");
+        }}
         showFooter={false}
+        isDownload={true}
+        onDownload={handleDownload}
       >
         <Image src={preview} width={300} height={300} />
       </Modal>

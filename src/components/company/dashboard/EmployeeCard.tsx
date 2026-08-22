@@ -98,7 +98,7 @@ const GreetingCard = () => {
         </h2>
 
         {/* Right Illustration */}
-        <div className="hidden md:block">
+        <div className="hidden sm:block">
           <Image
             src={SnippetWomen}
             fallbackSrc={SnippetWomen}

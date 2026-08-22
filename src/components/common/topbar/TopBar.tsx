@@ -88,7 +88,7 @@ const TopBar = ({
                   <i
                     className={`fa-solid ${
                       showSearch ? "fa-xmark" : "fa-magnifying-glass"
-                    } text-lg text-[#406ccb]`}
+                    } text-lg text-primary`}
                   />
                 </button>
               </div>

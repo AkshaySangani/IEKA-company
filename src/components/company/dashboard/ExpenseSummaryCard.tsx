@@ -32,7 +32,7 @@ export default function ExpenseSummaryCard({
         backgroundImage: `url(${globeBg})`,
       }}
     >
-      <PageLoader loading={loading}/>
+      <PageLoader loading={loading} />
       <div className="flex items-center justify-between pb-2 border-b">
         <div className="flex items-center">
           <span className="text-[18px] font-medium">{currency.INR}</span>
@@ -64,7 +64,9 @@ export default function ExpenseSummaryCard({
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="px-2 text-2xl font-medium">{total?.amount && getFloatValue(total?.amount)}</span>
+            <span className="px-2 text-2xl font-medium">
+              {total?.amount && getFloatValue(total?.amount)}
+            </span>
             {total?.trendDetails && (
               <div className="flex items-center gap-2 mt-1">
                 <span
@@ -101,11 +103,12 @@ export default function ExpenseSummaryCard({
             )}
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5">
           {cards
             .filter((ele) => ele.id !== pathNames.OVERALL_EXPENSE)
-            .map((ele, index) => (
+            .map((ele) => (
               <SummaryCard
+                key={ele.title}
                 title={ele.title}
                 amount={`${currency.INR} ${ele.amount && getFloatValue(ele.amount)}`}
                 trendDetails={ele.trendDetails}

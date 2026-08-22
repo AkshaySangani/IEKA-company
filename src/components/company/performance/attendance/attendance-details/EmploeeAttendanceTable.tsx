@@ -1,17 +1,16 @@
-import { IUserAttendance } from ".";
+
 import { ColumnDef, CustomTable } from "../../../../common/table";
 import {
-  DateFormat,
   formatDate,
   formatMinutes,
 } from "../../../../../utils/date-format";
 import AttendanceStatusBadge from "../../../../common/badge/AttendanceBadge";
-import AttendanceCell from "../../../../common/attendance-cell";
 import {
-  AttendanceMethodNames,
-  AttendanceStatusEnum,
+  AttendanceStatusEnum
 } from "../../../../../types/common-types";
-import { getFirstCharacter } from "../../../../../utils/helper";
+import TableStatusRow from "../../../../common/table/TableStatusRow";
+import CheckInCheckOut from "../CheckInCheckOut";
+import { IUserAttendance } from "..";
 
 interface IUserAttendanceListProps {
   attendance: IUserAttendance[];
@@ -24,7 +23,7 @@ export default function EmployeeAttendanceTable({
   const columns: ColumnDef<IUserAttendance>[] = [
     {
       header: "Date",
-      className: "w-[20%]",
+      className: "w-[15%]",
       render: (row) => formatDate(row.attendanceDate),
     },
     {
@@ -33,71 +32,41 @@ export default function EmployeeAttendanceTable({
       render: (row) => {
         return (
           <>
-            {row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? <div className="bg-yellowBlur p-0.5">
-                <span className="text-md font-semibold text-warning">Week Off</span>
-            </div> : <div className="flex justify-center"><AttendanceStatusBadge status={row.attendanceStatus} /></div>}
+            {row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
+            row.attendanceStatus === AttendanceStatusEnum.HOLIDAY ? (
+              {
+                [AttendanceStatusEnum.WEEK_OFF]: (
+                  <TableStatusRow title="Week Off" variant="warning" />
+                ),
+                [AttendanceStatusEnum.HOLIDAY]: (
+                  <TableStatusRow title="Holiday" variant="info" />
+                ),
+              }[row.attendanceStatus]
+            ) : (
+              <div className="flex justify-center">
+                <AttendanceStatusBadge status={row.attendanceStatus} />
+              </div>
+            )}
           </>
         );
       },
-      colSpan: (row) => row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? 4 : 0
+      colSpan: (row) =>
+        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? 4 : 0,
     },
     {
       header: "Check In / Out",
       className: "w-[35%] text-center",
-      hidden: (row) => row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? true : false,
+      hidden: (row) =>
+        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
       render: (attendance) => (
-        <div className="flex justify-center">
-          {/* Present */}
-          <AttendanceCell
-            data={{
-              inPunch:
-                attendance.inTime && attendance.inMethod
-                  ? {
-                      time: formatDate(attendance.inTime, DateFormat.TIME_24),
-                      source: AttendanceMethodNames[attendance.inMethod],
-                    }
-                  : undefined,
-
-              outPunch:
-                attendance.outTime && attendance.outMethod
-                  ? {
-                      time: formatDate(attendance.outTime, DateFormat.TIME_24),
-                      source: AttendanceMethodNames[attendance.outMethod],
-                    }
-                  : undefined,
-
-              inLeave:
-                attendance.isHalfDay && attendance.lateMinutes && attendance.leaveRequestId
-                  ? {
-                      type: getFirstCharacter(attendance.leaveRequestId?.leaveId.name),
-                      color: "border-warning text-warning",
-                    }
-                  : undefined,
-
-              outLeave:
-                attendance.isHalfDay && attendance.earlyExitMinutes && attendance.leaveRequestId
-                  ? {
-                      type: getFirstCharacter(attendance.leaveRequestId?.leaveId.name),
-                      color: "border-warning text-warning",
-                    }
-                  : undefined,
-
-              fullDayLeave:
-                attendance.attendanceStatus === AttendanceStatusEnum.LEAVE && attendance.leaveRequestId
-                  ? {
-                      type: getFirstCharacter(attendance.leaveRequestId?.leaveId.name),
-                      color: "border-warning text-warning",
-                    }
-                  : undefined,
-            }}
-          />
-        </div>
+        <CheckInCheckOut attendance={attendance}/>
       ),
     },
     {
       header: "Late In / Early Out",
       className: "w-[25%] text-center",
-      hidden: (row) => row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? true : false,
+      hidden: (row) =>
+        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
       render: (row) => (
         <>
           {row.lateMinutes || row.earlyExitMinutes ? (
@@ -107,7 +76,7 @@ export default function EmployeeAttendanceTable({
                 <span
                   className={
                     row.lateMinutes
-                      ? "font-medium text-red-500"
+                      ? "font-medium text-danger"
                       : "text-gray-400"
                   }
                 >
@@ -120,7 +89,7 @@ export default function EmployeeAttendanceTable({
                 <span
                   className={
                     row.earlyExitMinutes
-                      ? "font-medium text-red-500"
+                      ? "font-medium text-danger"
                       : "text-gray-400"
                   }
                 >
@@ -138,11 +107,12 @@ export default function EmployeeAttendanceTable({
     },
     {
       header: "Total Hours",
-      className: "w-[10%] text-center",
-      hidden: (row) => row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? true : false,
+      className: "w-[15%] text-center",
+      hidden: (row) =>
+        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
       render: (row) => (
         <div
-          className={`flex justify-center text-medium ${row.isLate ? "text-danger" : ""}`}
+          className={`flex justify-center font-medium ${(row.isLate || row.earlyExitMinutes) ? "text-danger" : "text-success"}`}
         >
           {row.totalWorkedMinutes ? formatMinutes(row.totalWorkedMinutes) : "-"}
         </div>

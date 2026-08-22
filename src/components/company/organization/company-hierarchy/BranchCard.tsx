@@ -41,67 +41,75 @@ export default function BranchCard({ branch }: BranchCardProps) {
           </div>
         </div>
 
-        {/* Address */}
-        <div className="px-5 pt-2 pb-3">
-          <p className="text-[13px] text-[#5c5c5c]">
-            {branch.address}{" "}
-            {branch.branchType === BranchTypeEnum.HEAD_OFFICE ? "(HO)" : ""}
-          </p>
-        </div>
+        <div className="flex flex-col justify-between">
+          {/* Address */}
+          <div className="px-5 pt-2 pb-3">
+            <p className="text-[13px] text-[#5c5c5c] line-clamp-2">
+              {branch.address}{" "}
+              {branch.branchType === BranchTypeEnum.HEAD_OFFICE ? "(HO)" : ""}
+            </p>
+          </div>
 
-        {/* Shift Card */}
-        {branch?.shifts?.length > 0 ? branch?.shifts?.map((shift: IShift, index: number) => (
-          <div
-            key={index}
-            className="mx-3 mb-5 overflow-hidden border p-3 border-gray-300 bg-white"
-          >
-            {/* Shift Header */}
-            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
-              <div>
-                <div className="flex items-center gap-2 text-primary">
-                  <span
-                    className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[shift.status]}`}
-                  ></span>
-                  <span className="text-sm font-medium">{shift?.name}</span>
+          {/* Shift Card */}
+          {branch?.shifts?.length > 0 ? (
+            branch?.shifts?.map((shift: IShift, index: number) => (
+              <div
+                key={index}
+                className="mx-3 mb-5 overflow-hidden border p-3 border-gray-300 bg-white"
+              >
+                {/* Shift Header */}
+                <div className="flex items-center justify-between border-b border-gray-200 pb-3">
+                  <div>
+                    <div className="flex items-center gap-2 text-primary">
+                      <span
+                        className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[shift.status]}`}
+                      ></span>
+                      <span className="text-sm font-medium">{shift?.name}</span>
+                    </div>
+
+                    <p className=" text-xs text-gray-500">
+                      {`Time : (${shift.startTime} to ${shift.endTime})`}
+                    </p>
+                  </div>
+
+                  <span className="text-md font-medium text-gray-700">
+                    {shift.count}
+                  </span>
                 </div>
 
-                <p className=" text-xs text-gray-500">
-                  {`Time : (${shift.startTime} to ${shift.endTime})`}
-                </p>
+                {/* Departments */}
+                {shift.departments?.length > 0 ? (
+                  shift.departments.map((item, index) => (
+                    <Department
+                      item={item}
+                      shift={shift}
+                      index={index}
+                      key={index}
+                    />
+                  ))
+                ) : (
+                  <EmptyPlaceholder
+                    title="No Departments found for this shift."
+                    description="It seems there is no any department added in this shift. please add department."
+                    icon={<Info size={20} />}
+                    className="h-[100px] !gap-1"
+                    titleClassName="!text-md"
+                    showDescription={false}
+                  />
+                )}
               </div>
-
-              <span className="text-md font-medium text-gray-700">
-                {shift.count}
-              </span>
-            </div>
-
-            {/* Departments */}
-            {shift.departments?.length > 0 ? (
-              shift.departments.map((item, index) => (
-                <Department
-                  item={item}
-                  shift={shift}
-                  index={index}
-                  key={index}
-                />
-              ))
-            ) : (
-              <EmptyPlaceholder
-                title="No Departments found for this shift."
-                description="It seems there is no any department added in this shift. please add department."
-                icon={<Info size={25} />}
-                className="h-[250px]"
-              />
-            )}
-          </div>
-        )): (
-              <EmptyPlaceholder
+            ))
+          ) : (
+            <EmptyPlaceholder
               title="No Shifts found for this branch."
-                description="It seems there is no any shift added in this branch. please add shift."
-                icon={<Info size={25} />}
-                className="h-[250px]"
-              />
-            )}
+              description="It seems there is no any shift added in this branch. please add shift."
+              icon={<Info size={20} />}
+              titleClassName="!text-lg"
+              className="!py-3 h-[250px]"
+              descriptionClassName="!text-xs"
+            />
+          )}
+        </div>
       </div>
     </>
   );

@@ -82,9 +82,9 @@ export default function AttendanceSummaryCard({
       </div>
 
       {/* Content */}
-      <div className="grid grid-cols-[1fr_2fr] gap-6 pt-5">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 pt-5">
         {/* ================= LEFT ================= */}
-        <div className="flex flex-col justify-center border-r pr-6">
+        <div className="flex flex-col justify-center xs:border-b sm:border-r pr-6">
           {attendanceSummaryList.map((item) => (
             <div
               key={item.label}
@@ -116,7 +116,7 @@ export default function AttendanceSummaryCard({
             users={attendanceSummary.leavesList.map((ele) => ({
               ...ele.userId,
             }))}
-            onClick={() => navigate(pathNames.LEAVE)}
+            onClick={() => navigate(pathNames.LEAVE_REQUEST)}
           />
 
           <EmployeeActivityCard
