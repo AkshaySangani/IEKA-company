@@ -14,6 +14,7 @@ interface EmployeeActivityCardProps {
   icon: React.ReactNode;
   count: number;
   users: IUserSummary[];
+  defaultCount?: number;
   onClick?: () => void;
   className?: string;
 }
@@ -24,57 +25,66 @@ export default function EmployeeActivityCard({
   count,
   users,
   onClick,
+  defaultCount = 3,
   className = "",
 }: EmployeeActivityCardProps) {
   return (
     <div
       onClick={onClick}
-      // style={active ? { backgroundColor: activeColor } : undefined}
       className={`
-        min-w-[140px]
         cursor-pointer
         select-none
-        px-3
-        py-[10px]
         bg-cardBg
+        px-3
+        py-3
+        transition-all
+        duration-200
+        hover:bg-[#e5e5e5]
         ${className}
       `}
     >
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-[#545454]">
-          <div className="text-sm">{icon}</div>
+      <div className="flex items-center">
+        <div className="flex items-center gap-2 text-secondary">
+          <span className="w-[18px] text-center text-sm">{icon}</span>
 
           <span className="text-sm font-medium">{title}</span>
         </div>
-
-        <span className="text-md font-medium text-secondary">
-          {count}
-        </span>
       </div>
 
-      {/* Users */}
-      <div className="mt-5 flex items-center gap-3">
-        {users.slice(0, 4).map((user, index) => (
-          <div
-            key={user._id}
-            className={`${index !== 0 ? "-ml-2" : ""} transition-all
-        duration-200
-        hover:-translate-y-[5px]`}
-          >
-            <Image
-              src={user.profileImage}
-              fallbackSrc={NoImage}
-              alt={user.firstName}
-              className="h-[35px] w-[35px] rounded-full border-2 border-white object-cover"
-            />
-          </div>
-        ))}
+      {/* Users + Count */}
+      <div className="mt-3 flex items-center">
+        <div className="flex items-center gap-2">
+          {users.slice(0, defaultCount).map((user, index) => (
+            <div
+              key={user._id}
+              className={`
+                relative
+                h-[35px]
+                w-[35px]
+              `}
+            >
+              <Image
+                src={user.profileImage}
+                fallbackSrc={NoImage}
+                alt={`${user.firstName} ${user.lastName}`}
+                className="
+                  h-[35px]
+                  w-[35px]
+                  rounded-full
+                  border-2
+                  object-cover
+                "
+              />
+            </div>
+          ))}
+        </div>
 
-        {users.length > 4 && (
-          <div className="-ml-2 flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-primary text-sm font-medium text-white">
-            +{users.length - 4}
-          </div>
+        {/* Count */}
+        {count > defaultCount && (
+          <span className="ml-2 text-sm font-medium text-secondary">
+            +{count - defaultCount}
+          </span>
         )}
       </div>
     </div>

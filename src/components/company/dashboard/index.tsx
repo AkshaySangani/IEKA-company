@@ -362,21 +362,21 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-4">
           <div className="content-card">
             <EmployeeCard
-              role={RoleEnum.MANAGER}
-              employee={{
-                name: "Harsh Kanakhara",
-                designation: "COO",
-                shift: "General",
-                timing: "10:00 to 19:00",
-                image: "/images/user.jpg",
-                branches: ["Ahmedabad", "Baroda", "Surat"],
-                departments: [
-                  "Account",
-                  "Production",
-                  "Human Resources",
-                  "Sales",
-                ],
-              }}
+              // role={RoleEnum.MANAGER}
+              // employee={{
+              //   name: "Harsh Kanakhara",
+              //   designation: "COO",
+              //   shift: "General",
+              //   timing: "10:00 to 19:00",
+              //   image: "/images/user.jpg",
+              //   branches: ["Ahmedabad", "Baroda", "Surat"],
+              //   departments: [
+              //     "Account",
+              //     "Production",
+              //     "Human Resources",
+              //     "Sales",
+              //   ],
+              // }}
             />
           </div>
           <ExpenseSummaryCard

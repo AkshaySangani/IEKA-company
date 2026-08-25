@@ -11,7 +11,7 @@ const RightArrow: React.FC<RightArrowProps> = ({ className = "", label,onClick =
     <span onClick={onClick}
       className={`inline-flex group cursor-pointer items-center gap-1 ${className}`}
     >
-      {label && <span className="text-inputLabel">{label}</span>}
+      {label && <span className="text-grayText">{label}</span>}
       <i className="fa-solid fa-arrow-right-long text-gray-500 text-[18px]  transition-all duration-200 ease-in-out group-hover:translate-x-1.5" />
     </span>
   );
