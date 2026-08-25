@@ -5,6 +5,7 @@ import TextField from "../../common/text-field/TextField";
 import { Link } from "react-router-dom";
 import { loginApi } from "../../../apis/auth/auth.api";
 import { useAuthStore } from "../../../store/auth-store";
+import { RoleEnum } from "../../../types/common-types";
 
 interface LoginFormData {
   userId: string;
@@ -18,7 +19,7 @@ interface LoginFormErrors {
 
 const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { setToken, setUser } = useAuthStore();
+  const { setToken, setUser, setViewMode } = useAuthStore();
 
   const [formData, setFormData] = useState<LoginFormData>({
     userId: "",
@@ -80,6 +81,9 @@ const LoginForm: React.FC = () => {
     if (response.success) {
       setToken(response?.data?.accessToken,response?.data?.refreshToken);
       setUser(response?.data?.user);
+      if(response?.data?.user.role === RoleEnum.MANAGER){
+        setViewMode(response?.data?.user.role)
+      }
     }
   };
 

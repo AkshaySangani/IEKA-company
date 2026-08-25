@@ -11,8 +11,8 @@ interface PublicRouteProps {
 const PublicRoute = ({
   children,
 }: PublicRouteProps) => {
-  const {accessToken, user} = useAuthStore((state) => state);
-  const pathName = getDefaultRouteByRole(user?.role);
+  const {accessToken, user, viewMode} = useAuthStore((state) => state);
+  const pathName = getDefaultRouteByRole(user?.role, viewMode);
 
   return accessToken ? (
     <Navigate to={pathName} replace />

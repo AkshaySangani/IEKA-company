@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 
 import { AuthState, IUser } from "../types/auth-types";
 import { storageKeys } from "../constants/constants";
+import { RoleEnum } from "../types/common-types";
 
 const initialUserState: IUser = {
   company: { _id: "", companyLogo: "" },
@@ -10,7 +11,7 @@ const initialUserState: IUser = {
   firstName: "",
   lastName: "",
   profileImage: "",
-  role: "",
+  role: RoleEnum.OWNER,
   _id: "",
 }
 
@@ -20,6 +21,7 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       user: initialUserState,
+      viewMode: null,
 
       setToken: (token, refreshToken) =>
         set({
@@ -31,6 +33,8 @@ export const useAuthStore = create<AuthState>()(
         set({
           user,
         }),
+
+        setViewMode: (mode) => set({viewMode: mode}),
 
       clearAuth: () =>
         set({

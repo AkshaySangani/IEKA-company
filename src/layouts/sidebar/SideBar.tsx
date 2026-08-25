@@ -3,12 +3,14 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/images/ieka_logo.jpg";
 import employeeManagementIcon from "../../assets/images/employee_management.png";
+import employeeFieldIcon from "../../assets/images/project_manage.png";
 
 import { MenuItem, SubMenuItem } from "../../types/sidebar-types";
 import { useAuthStore } from "../../store/auth-store";
 import Image from "../../components/common/image";
 import useWidthHeight from "../../hooks/useWidthHeight";
 import { getAccessibleMenus } from "../../utils/permission";
+import { RoleEnum, ViewModeEnum } from "../../types/common-types";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -19,7 +21,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const navigate = useNavigate();
   const { isMobile } = useWidthHeight();
   const location = useLocation();
-  const { user } = useAuthStore();
+  const { user, viewMode } = useAuthStore();
   const accessibleMenus = getAccessibleMenus(user?.role);
 
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
@@ -51,6 +53,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       setIsOpen(false);
     }
   };
+
+  const isEmployee = ((user.role === RoleEnum.EMPLOYEE) || (viewMode === ViewModeEnum.EMPLOYEE))
 
   return (
     <aside
@@ -125,9 +129,9 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
               data-bs-toggle="modal"
               data-bs-target="#all_modules"
             >
-              <img
-                src={employeeManagementIcon}
-                className="employee_manage"
+              <Image
+                src={isEmployee ? employeeFieldIcon : employeeManagementIcon}
+                className=""
                 width="35"
                 alt="Employee Management"
               />
@@ -141,7 +145,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                   text-white
                 "
               >
-                Employee <span className="text-primary">Management</span>
+                {isEmployee ? <>Employeement <span className="text-primary">Fields</span></> : <>Employee <span className="text-primary">Management</span></>}
               </span>
             </div>
           </li>

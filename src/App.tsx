@@ -1,17 +1,23 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/login";
+import { employeePathNames, pathNames } from "./constants/constants";
+
+// public route and auth layout
 import PublicRoute from "./routes/PublicRoute";
-import ForgotPassword from "./pages/forgot-password";
 import AuthLayout from "./layouts/AuthLayout";
+
+// protected route and app layouts
+import AppLayout from "./layouts/AppLayout";
+import ProtectedRoute from "./routes/ProtectedRoute";
+
+// pages
+import Login from "./pages/login";
+import ForgotPassword from "./pages/forgot-password";
 import OTPVerifyPage from "./pages/otp-verify";
 import ResetPasswordPage from "./pages/reset-password";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import AppLayout from "./layouts/AppLayout";
 import MyProfilePage from "./pages/my-profile";
 import ChangePasswordPage from "./pages/change-password";
 import DashboardPage from "./pages/dashboard";
 import BranchPage from "./pages/company/organization/Branch";
-import { pathNames } from "./constants/constants";
 import ShiftPage from "./pages/company/organization/shift/Shift";
 import AddShift from "./components/company/organization/shift/AddShift";
 import DepartmentPage from "./pages/company/organization/department";
@@ -56,48 +62,32 @@ import LeaveRequestDetailsPage from "./pages/company/performance/leave-requests/
 import EmployeeAttendanceDetailsPage from "./pages/company/performance/attendance/attendance-details";
 import EmployeePayrollPage from "./pages/company/expense/employee-payroll";
 import EmployeePayrollPerformancePage from "./pages/company/expense/employee-payroll/EmployeePayrollPerformance";
+import PayslipPage from "./pages/company/pay-slip";
+import EmployeeJobReferralPage from "./pages/employee/job-referral";
+import EmployeeResignationPage from "./pages/employee/resignation";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route element={<AuthLayout />}>
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
-            }
-          />
+        {/* auth routes */}
+        <Route
+          element={
+            <PublicRoute>
+              <AuthLayout />
+            </PublicRoute>
+          }
+        >
+          <Route path="/login" element={<Login />} />
 
-          <Route
-            path="/forgot-password"
-            element={
-              <PublicRoute>
-                <ForgotPassword />
-              </PublicRoute>
-            }
-          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          <Route
-            path="/otp-verify"
-            element={
-              <PublicRoute>
-                <OTPVerifyPage />
-              </PublicRoute>
-            }
-          />
+          <Route path="/otp-verify" element={<OTPVerifyPage />} />
 
-          <Route
-            path="/reset-password"
-            element={
-              <PublicRoute>
-                <ResetPasswordPage />
-              </PublicRoute>
-            }
-          />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Route>
+
+        {/* protected routes */}
         <Route
           path="/"
           element={
@@ -106,75 +96,190 @@ function App() {
             </ProtectedRoute>
           }
         >
+          {/* dashboard */}
           <Route index element={<DashboardPage />} />
-          
+
           {/* Organization */}
           <Route path={pathNames.ORGANIZATION}>
-            <Route path={pathNames.BRANCH} element={<BranchPage  />} />
-            <Route path={pathNames.SHIFT} element={<ShiftPage  />} />
-            <Route path={pathNames.ADD_SHIFT} element={<AddShift  />} />
-            <Route path={pathNames.DEPARTMENT} element={<DepartmentPage />}  />
-            <Route path={pathNames.ADD_DEPARTMENT} element={<AddDepartmentPage />}  />
+            <Route path={pathNames.BRANCH} element={<BranchPage />} />
+            <Route path={pathNames.SHIFT} element={<ShiftPage />} />
+            <Route path={pathNames.ADD_SHIFT} element={<AddShift />} />
+            <Route path={pathNames.DEPARTMENT} element={<DepartmentPage />} />
+            <Route
+              path={pathNames.ADD_DEPARTMENT}
+              element={<AddDepartmentPage />}
+            />
             <Route path={pathNames.DESIGNATION} element={<DesignationPage />} />
             <Route path={pathNames.LEAVE} element={<LeavePage />} />
             <Route path={pathNames.HOLIDAYS} element={<HolidaysPage />} />
-            <Route path={pathNames.POLICY_CONFIGURATION} element={<PolicyConfigurationPage />} />
+            <Route
+              path={pathNames.POLICY_CONFIGURATION}
+              element={<PolicyConfigurationPage />}
+            />
             <Route path={pathNames.ADD_POLICY} element={<AddPolicyPage />} />
-            <Route path={pathNames.COMPANY_HIERARCHY} element={<CompanyHierarchyPage />} />
-            <Route path={pathNames.PEOPLE_HIERARCHY} element={<PeopleHierarchyPage />} />
+            <Route
+              path={pathNames.COMPANY_HIERARCHY}
+              element={<CompanyHierarchyPage />}
+            />
+            <Route
+              path={pathNames.PEOPLE_HIERARCHY}
+              element={<PeopleHierarchyPage />}
+            />
           </Route>
 
+          {/* Workforce */}
           <Route path={pathNames.WORKFORCE}>
             <Route path={pathNames.ONBOARDING} element={<OnBoardingPage />} />
-            <Route path={pathNames.ONBOARDING_DETAILS_ID} element={<EmployeeDetailsPage />}/>
-            <Route path={pathNames.ASSIGN_ROLES_RESPONSIBILITY_ID} element={<AssignRolesResponsibilityPage />}/>
+            <Route
+              path={pathNames.ONBOARDING_DETAILS_ID}
+              element={<EmployeeDetailsPage />}
+            />
+            <Route
+              path={pathNames.ASSIGN_ROLES_RESPONSIBILITY_ID}
+              element={<AssignRolesResponsibilityPage />}
+            />
 
-            <Route path={pathNames.ALL_EMPLOYEES} element={<AllEmployeesPage />}/>
-            <Route path={pathNames.EMPLOYEE_DETAILS} element={<EmployeeDetailPage />}/>
+            <Route
+              path={pathNames.ALL_EMPLOYEES}
+              element={<AllEmployeesPage />}
+            />
+            <Route
+              path={pathNames.EMPLOYEE_DETAILS}
+              element={<EmployeeDetailPage />}
+            />
 
-            <Route path={pathNames.RESIGNED} element={<ResignedEmployeesPage />}/>
-            <Route path={pathNames.RELIEVING_LETTER_ID} element={<RelievingLetterPage />}/>
-            <Route path={pathNames.EXPERIENCE_LETTER_ID} element={<ExperienceLetterPage />}/>
-            <Route path={pathNames.FNF_LETTER_ID} element={<FnFLetterPage />}/>
-            <Route path={pathNames.TERMINATION} element={<TerminationPage />}/>
-            <Route path={pathNames.TERMINATION_LETTER_ID} element={<TerminationLetterPage />}/>
+            <Route
+              path={pathNames.RESIGNED}
+              element={<ResignedEmployeesPage />}
+            />
+            <Route
+              path={pathNames.RELIEVING_LETTER_ID}
+              element={<RelievingLetterPage />}
+            />
+            <Route
+              path={pathNames.EXPERIENCE_LETTER_ID}
+              element={<ExperienceLetterPage />}
+            />
+            <Route path={pathNames.FNF_LETTER_ID} element={<FnFLetterPage />} />
+            <Route path={pathNames.TERMINATION} element={<TerminationPage />} />
+            <Route
+              path={pathNames.TERMINATION_LETTER_ID}
+              element={<TerminationLetterPage />}
+            />
 
-            <Route path={pathNames.PROMOTION} element={<PromotionPage />}/>
-            <Route path={pathNames.PROMOTION_LETTER + "/:id"} element={<PromotionLetterPage />}/>
+            <Route path={pathNames.PROMOTION} element={<PromotionPage />} />
+            <Route
+              path={pathNames.PROMOTION_LETTER + "/:id"}
+              element={<PromotionLetterPage />}
+            />
           </Route>
 
+          {/* Expense */}
           <Route path={pathNames.EXPENSE}>
-            <Route path={pathNames.REIMBURSEMENT} element={<ReimbursementPage />} />
-            <Route path={pathNames.ADD_REIMBURSEMENT} element={<AddReimbursementPage />} />
-            <Route path={pathNames.REIMBURSEMENT_DETAILS} element={<ReimbursementDetailsPage />} />
-            <Route path={pathNames.OFFICE_EXPENSE} element={<OfficeExpensePage />} />
-            <Route path={pathNames.ADD_OFFICE_EXPENSE} element={<AddOfficeExpensePage />} />
-            <Route path={pathNames.OFFICE_EXPENSE_DETAILS} element={<OfficeExpenseDetailsPage />} />
-            <Route path={pathNames.OVERALL_EXPENSE} element={<OverallExpensePage />} />
-            <Route path={pathNames.EMPLOYEE_PAYROLL} element={<EmployeePayrollPage />} />
-            <Route path={pathNames.EMPLOYEE_PAYROLL_PERFORMANCE_ID} element={<EmployeePayrollPerformancePage />} />
+            <Route
+              path={pathNames.REIMBURSEMENT}
+              element={<ReimbursementPage />}
+            />
+            <Route
+              path={pathNames.ADD_REIMBURSEMENT}
+              element={<AddReimbursementPage />}
+            />
+            <Route
+              path={pathNames.REIMBURSEMENT_DETAILS}
+              element={<ReimbursementDetailsPage />}
+            />
+            <Route
+              path={pathNames.OFFICE_EXPENSE}
+              element={<OfficeExpensePage />}
+            />
+            <Route
+              path={pathNames.ADD_OFFICE_EXPENSE}
+              element={<AddOfficeExpensePage />}
+            />
+            <Route
+              path={pathNames.OFFICE_EXPENSE_DETAILS}
+              element={<OfficeExpenseDetailsPage />}
+            />
+            <Route
+              path={pathNames.OVERALL_EXPENSE}
+              element={<OverallExpensePage />}
+            />
+            <Route
+              path={pathNames.EMPLOYEE_PAYROLL}
+              element={<EmployeePayrollPage />}
+            />
+            <Route
+              path={pathNames.EMPLOYEE_PAYROLL_PERFORMANCE_ID}
+              element={<EmployeePayrollPerformancePage />}
+            />
           </Route>
 
+          {/* Performance */}
           <Route path={pathNames.PERFORMANCE}>
             <Route path={pathNames.ATTENDANCE} element={<AttendancesPage />} />
-            <Route path={pathNames.ATTENDANCE_DETAILS_ID} element={<EmployeeAttendanceDetailsPage />} />
-            <Route path={pathNames.LEAVE_REQUEST} element={<LeaveRequestsPage />} />
-            <Route path={pathNames.LEAVE_REQUEST_DETAILS_ID} element={<LeaveRequestDetailsPage />} />
-            <Route path={pathNames.ADD_LEAVE_REQUEST_ID} element={<AddLeaveRequestPage />} />
-            <Route path={pathNames.ADD_LEAVE_REQUEST} element={<AddLeaveRequestPage />} />
-            <Route path={pathNames.MANUAL_PUNCH_REQUEST} element={<ManualPunchRequestPage />} />
+            <Route
+              path={pathNames.ATTENDANCE_DETAILS_ID}
+              element={<EmployeeAttendanceDetailsPage />}
+            />
+            <Route
+              path={pathNames.LEAVE_REQUEST}
+              element={<LeaveRequestsPage />}
+            />
+            <Route
+              path={pathNames.LEAVE_REQUEST_DETAILS_ID}
+              element={<LeaveRequestDetailsPage />}
+            />
+            <Route
+              path={pathNames.ADD_LEAVE_REQUEST_ID}
+              element={<AddLeaveRequestPage />}
+            />
+            <Route
+              path={pathNames.ADD_LEAVE_REQUEST}
+              element={<AddLeaveRequestPage />}
+            />
+            <Route
+              path={pathNames.MANUAL_PUNCH_REQUEST}
+              element={<ManualPunchRequestPage />}
+            />
           </Route>
 
+          {/* pay slips */}
           <Route path={pathNames.PAY_SLIP}>
             <Route path={pathNames.EARNING} element={<EarningsPage />} />
-            <Route path={pathNames.PAY_SLIP_DISCLAIMER} element={<PayslipDisclaimerPage />} />
-            <Route path={pathNames.DEDUCTION} element={<PayslipDeductionsPage />} />
+            <Route
+              path={pathNames.PAY_SLIP_DISCLAIMER}
+              element={<PayslipDisclaimerPage />}
+            />
+            <Route
+              path={pathNames.DEDUCTION}
+              element={<PayslipDeductionsPage />}
+            />
           </Route>
+
+          {/* employee */}
+          <Route
+            path={employeePathNames.REIMBURSEMENT}
+            element={<ReimbursementPage />}
+          />
+          <Route path={employeePathNames.PAY_SLIP} element={<PayslipPage />} />
+          <Route
+            path={employeePathNames.JOB_REFERRAL}
+            element={<EmployeeJobReferralPage />}
+          />
+          <Route
+            path={employeePathNames.RESIGNATION}
+            element={<EmployeeResignationPage />}
+          />
+
           <Route path="my-profile" element={<MyProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
 
-        <Route path={pathNames.INVITE_EMPLOYEE_FORM + "/:id"} element={<InviteEmployeePage />} />
+        {/* auth routes */}
+        <Route
+          path={pathNames.INVITE_EMPLOYEE_FORM + "/:id"}
+          element={<InviteEmployeePage />}
+        />
 
         {/* Catch all unmatched routes */}
         <Route path="*" element={<NotFoundPage />} />

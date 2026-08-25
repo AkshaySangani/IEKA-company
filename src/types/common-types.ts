@@ -39,8 +39,12 @@ export enum statusEnum {
 export enum RoleEnum {
   EMPLOYEE = "EMPLOYEE",
   MANAGER = "MANAGER",
-  ADMIN = "ADMIN",
   OWNER = "OWNER",
+}
+
+export enum ViewModeEnum {
+  MANAGER = "MANAGER",
+  EMPLOYEE = "EMPLOYEE",
 }
 
 export enum EmploymentTypeEnum {

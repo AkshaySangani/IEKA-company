@@ -100,8 +100,25 @@ export const pathNames = {
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
 } as const;
 
+  // =========================
+  // Employee Routes
+  // =========================
+export const employeePathNames = {
+  DASHBOARD: "/",
+  PERFORMANCE: "/performance",
+  ATTENDANCE: "/performance/attendance",
+  LEAVE_REQUEST: "/performance/leave-request",
+  MANUAL_PUNCH_REQUEST: "/performance/manual-punch-request",
+  REIMBURSEMENT: "/reimbursement",
+  JOB_REFERRAL: "/job-referral",
+  RESIGNATION: "/resignation",
+  PAY_SLIP: "/pay_slip"
+}
+
 export const roleBasePaths: ObjectType = {
   [RoleEnum.MANAGER]: [
+    // dashboard
+    pathNames.DASHBOARD,
     // Workforce
     pathNames.WORKFORCE,
     pathNames.ALL_EMPLOYEES,
@@ -126,16 +143,18 @@ export const roleBasePaths: ObjectType = {
   ],
 
   [RoleEnum.OWNER]: Object.values(pathNames),
+
+  [RoleEnum.EMPLOYEE]: Object.values(employeePathNames),
 };
 export const menuItems: MenuItem[] = [
   {
     label: "Dashboard",
-    icon: "fas fa-users",
+    icon: "fa-solid fa-chart-pie",
     path: pathNames.DASHBOARD,
   },
   {
     label: "Organization",
-    icon: "fas fa-file",
+    icon: "fa-solid fa-building",
     path: pathNames.ORGANIZATION,
     submenu: [
       {
@@ -178,7 +197,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: "Workforce",
-    icon: "fa-solid fa-money-bill",
+    icon: "fa-solid fa-people-group",
     path: pathNames.WORKFORCE,
     submenu: [
       {
@@ -205,7 +224,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: "Performance",
-    icon: "fas fa-briefcase",
+    icon: "fa-solid fa-user-plus",
     path: pathNames.PERFORMANCE,
     submenu: [
       {
@@ -224,7 +243,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: "Expense",
-    icon: "fas fa-briefcase",
+    icon: "fa-solid fa-road-circle-check",
     path: pathNames.EXPENSE,
     submenu: [
       {
@@ -247,7 +266,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     label: "Pay slip",
-    icon: "fas fa-briefcase",
+    icon: "fa-solid fa-calculator",
     path: pathNames.PAY_SLIP,
     submenu: [
       {
@@ -267,6 +286,53 @@ export const menuItems: MenuItem[] = [
         path: pathNames.ALL_EMPLOYEE_PAY_SLIP,
       },
     ],
+  },
+];
+
+export const employeeMenuItems: MenuItem[] = [
+  {
+    label: "Dashboard",
+    icon: "fas fa-chart-bar",
+    path: employeePathNames.DASHBOARD,
+  },
+  {
+    label: "Performance",
+    icon: "fa-solid fa-user-plus",
+    path: employeePathNames.PERFORMANCE,
+    submenu: [
+      {
+        label: "Attendance",
+        path: employeePathNames.ATTENDANCE,
+      },
+      {
+        label: "Apply Leave",
+        path: employeePathNames.LEAVE_REQUEST,
+      },
+      {
+        label: "Manual Punch Requests",
+        path: employeePathNames.MANUAL_PUNCH_REQUEST,
+      },
+    ],
+  },
+  {
+    label: "Apply Reimbursement",
+    icon: "fa-solid fa-road-circle-check",
+    path: employeePathNames.REIMBURSEMENT
+  },
+  {
+    label: "Pay slip",
+    icon: "fa-solid fa-file-circle-check",
+    path: employeePathNames.PAY_SLIP,
+  },
+  {
+    label: "Job Referral",
+    icon: "fa-solid fa-user-plus",
+    path: employeePathNames.JOB_REFERRAL,
+  },
+  {
+    label: "Apply Resignation",
+    icon: "fa-solid fa-person-circle-xmark",
+    path: employeePathNames.RESIGNATION,
   },
 ];
 
