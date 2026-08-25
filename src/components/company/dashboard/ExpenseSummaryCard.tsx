@@ -54,6 +54,7 @@ export default function ExpenseSummaryCard({
               endDate: end,
             });
           }}
+          maxDate={new Date()}
         />
       </div>
       <div className="flex flex-col gap-3 py-3">

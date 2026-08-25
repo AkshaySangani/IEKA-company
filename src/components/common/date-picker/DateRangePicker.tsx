@@ -152,21 +152,21 @@ export default function DateRangePicker({
               type="button"
               className="rounded border px-3 py-1.5 text-sm"
               onClick={() => {
-                setTempStartDate(startDate);
-                setTempEndDate(endDate);
+                setTempStartDate(null);
+                setTempEndDate(null);
 
-                if (startDate && endDate) {
-                  setValue(
-                    `${format(startDate, DATE_FORMAT)} - ${format(
-                      endDate,
-                      DATE_FORMAT,
-                    )}`,
-                  );
-                } else if (startDate) {
-                  setValue(format(startDate, DATE_FORMAT));
-                } else {
+                // if (startDate && endDate) {
+                //   setValue(
+                //     `${format(startDate, DATE_FORMAT)} - ${format(
+                //       endDate,
+                //       DATE_FORMAT,
+                //     )}`,
+                //   );
+                // } else if (startDate) {
+                //   setValue(format(startDate, DATE_FORMAT));
+                // } else {
                   setValue("");
-                }
+                // }
 
                 pickerRef.current?.setOpen(false);
               }}
