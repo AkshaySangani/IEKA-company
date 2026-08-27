@@ -29,7 +29,7 @@ export default function WorkforceSummaryCard({
         />
       </div>
       <div className="flex flex-col gap-3 py-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 lg:grid-cols-4 gap-2 lg:gap-4">
           {cards.map((card) => (
             <StatCard
               key={card.id}
@@ -43,7 +43,7 @@ export default function WorkforceSummaryCard({
             />
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 lg:gap-4">
           <EmployeeActivityCard
             title="Onboarding"
             icon={<i className="fa-solid fa-person-walking" />}

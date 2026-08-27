@@ -24,6 +24,7 @@ import AttendanceSummaryCard from "./AttendanceSummaryCard";
 import { DateFormat, formatDate } from "../../../utils/date-format";
 import { DateRangeValue } from "../../common/date-picker/DateRangePicker";
 import { toastMessage } from "../../../utils/toast-message";
+import useDevice from "../../../hooks/useDevice";
 
 export interface IUserSummary {
   _id: string;
@@ -115,7 +116,7 @@ export const initialAttendanceSummary: IAttendanceSummary = {
 
 const Dashboard = () => {
   // page loading
-
+  const { isMobile } = useDevice();
   const [attendanceLoading, setAttendanceLoading] = useState<boolean>(false);
   const [expenseLoading, setExpenseLoading] = useState<boolean>(false);
 
@@ -356,7 +357,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <TopBar title="Dashboard" />
+      {!isMobile && <TopBar title="Dashboard" />}
       <div className="content-area bg-dashboardBg flex flex-col gap-3">
         <PageLoader loading={loading} />
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-4">

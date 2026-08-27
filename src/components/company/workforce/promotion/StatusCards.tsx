@@ -14,9 +14,6 @@ interface StatusCardsProps {
 }
 
 const StatusCards = ({ setActiveCard, activeCard, cards }: StatusCardsProps) => {
-
-  
-
   const handleCardClick = (
     card: FilterCardItem
   ) => {
@@ -34,6 +31,7 @@ const StatusCards = ({ setActiveCard, activeCard, cards }: StatusCardsProps) => 
           active={activeCard === card.id}
           textColor={card.textColor}
           activeColor={card.activeColor}
+          className="md:max-w-[140px]"
           onClick={() => handleCardClick(card)}
         />
       ))}
