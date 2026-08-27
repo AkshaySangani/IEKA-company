@@ -20,11 +20,14 @@ import { IUserAttendance } from "..";
 import { pathNames, roleNames } from "../../../../../constants/constants";
 import { IUser } from "../../../../../types/user.types";
 
+interface EmployeeAttendanceDetailsProps {
+  id?: string;
+}
 
-const EmployeeAttendanceDetails = () => {
+const EmployeeAttendanceDetails = ({id}: EmployeeAttendanceDetailsProps) => {
   const navigate = useNavigate();
   const params = useParams();
-  const userId: string = params.id ?? "";
+  const userId: string = params.id ?? id ?? "";
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -112,8 +115,8 @@ const EmployeeAttendanceDetails = () => {
   return (
     <>
       {/* Month Picker */}
-      <div className="flex justify-between items-center border-b border-slate-200 bg-white px-4 py-1.5">
-        <div className="flex gap-3">
+      <div className={`flex ${id ? "justify-end" : "justify-between"} items-center border-b border-slate-200 bg-white px-4 py-1.5`}>
+        {!id && <div className="flex gap-3">
           <PersonInfo
             personInfo={{
               profileImage: employee.profileImage,
@@ -126,7 +129,7 @@ const EmployeeAttendanceDetails = () => {
             personClassName="text-black !text-md !font-[500]"
           />
           <Tabs active={active} options={options} onChange={setActive} />
-        </div>
+        </div>}
         <div className="flex gap-3">
           <Button
             name="Overview"
@@ -135,12 +138,12 @@ const EmployeeAttendanceDetails = () => {
             leftIcon={<i className="fa-solid fa-list-check"></i>}
           />
           <MonthPicker value={selectedMonth} onChange={setSelectedMonth} />
-          <Button
+          {!id && <Button
             size="sm"
             variant={"danger"}
             onClick={() => navigate(pathNames.ATTENDANCE)}
             leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />
+          />}
         </div>
       </div>
 

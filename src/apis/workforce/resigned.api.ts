@@ -1,5 +1,6 @@
 import { apiRequest } from "../../services/request";
 import { ApiResponse } from "../../types/api.types";
+import { IResignationForm } from "../../types/employee/resignation.types";
 
 export const getResignedEmployees = (payload: {
   search?: string;
@@ -38,3 +39,10 @@ export const sendResignMail = (payload: { userId: string }) =>
   apiRequest.post(`/workforce/resignation/send-mail`, payload, {
     showSuccessToast: true,
   });
+
+// employee resignation
+export const addResignation = (payload: IResignationForm) =>
+  apiRequest.post(`/workforce/resignation`, payload, {
+    showSuccessToast: true,
+  });
+  
