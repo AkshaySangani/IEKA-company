@@ -17,7 +17,7 @@ export default function WorkforceSummaryCard({
 }: WorkforceSummaryCardProps) {
   const navigate = useNavigate();
   return (
-    <div className="content-card p-[15px]">
+    <div className="content-card p-3 sm:p-4">
       <div className="flex items-center pb-3 border-b">
         <i className="fa-solid fa-users"></i>
         <span className="px-2 text-md font-medium border-r mr-2">
