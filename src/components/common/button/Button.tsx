@@ -9,6 +9,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | "secondary"
     | "success"
     | "danger"
+    | "dangerOutline"
     | "warning";
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
@@ -43,6 +44,8 @@ const Button: React.FC<ButtonProps> = ({
     success: "",
 
     danger: "bg-btn-danger hover:bg-btn-danger-hover text-white",
+
+    dangerOutline: "bg-danger/40 hover:bg-btn-danger-hover text-error",
 
     warning: "",
   }[variant];

@@ -16,6 +16,9 @@ import {
 } from "../../../../apis/workforce/resigned.api";
 import Pagination from "../../../common/pagination/Pagination";
 import { acceptStatusOptions } from "../../../../constants/constants";
+import Button from "../../../common/button/Button";
+import ApplyResignation from "./apply-resignation";
+import { useAuthStore } from "../../../../store/auth-store";
 
 export interface ResignationRequest {
   _id: string;
@@ -44,28 +47,31 @@ export interface Department {
 }
 
 export const initialEmployee: ResignationRequest = {
+  _id: "",
+  companyId: "",
+  userId: {
     _id: "",
-    companyId: "",
-    userId: {
+    firstName: "",
+    lastName: "",
+    profileImage: "",
+    role: RoleEnum.EMPLOYEE,
+    departmentId: {
       _id: "",
-      firstName: "",
-      lastName: "",
-      profileImage: "",
-      role: RoleEnum.EMPLOYEE,
-      departmentId: {
-        _id: "",
-        name: "",
-      },
+      name: "",
     },
-    lastWorkingDate: "",
-    mailSent: false,
-    reason: "",
-    status: statusEnum.REJECTED,
-    createdAt: "",
-    updatedAt: "",
-  };
+  },
+  lastWorkingDate: "",
+  mailSent: false,
+  reason: "",
+  status: statusEnum.REJECTED,
+  createdAt: "",
+  updatedAt: "",
+};
 
 const ResignedEmployees = () => {
+  const { user } = useAuthStore();
+    const isManager = user?.role === RoleEnum.MANAGER;
+    const isEmployee = user?.role === RoleEnum.EMPLOYEE;
   const [activeCard, setActiveCard] = useState<string>("");
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -78,9 +84,12 @@ const ResignedEmployees = () => {
   const [resignedEmployees, setResignedEmployees] = useState<
     ResignationRequest[]
   >([]);
-  
+
   const [employeeDetails, setEmployeeDetails] =
     useState<ResignationRequest>(initialEmployee);
+
+  const [show, setShow] = useState<boolean>(false);
+  const [resignationId, setResignationId] = useState<string>("");
 
   const [cards, setCards] = useState<FilterCardItem[]>([
     {
@@ -196,18 +205,22 @@ const ResignedEmployees = () => {
   };
 
   // handle update status
-  const handleUpdateStatus = (employeeDetails: ResignationRequest) => {
-    if(employeeDetails.status === statusEnum.ACCEPTED){
-      handleStatusOpenClose();
+  const handleUpdateStatus = (employeeDetails: ResignationRequest, type: "status" | "update") => {
+    if(type === "status"){
+      if (employeeDetails.status === statusEnum.ACCEPTED) {
+        handleStatusOpenClose();
+      } else {
+        handleResignation();
+      }
+      setEmployeeDetails(employeeDetails);
     } else {
-      handleResignation()
+      handleOpenClose(employeeDetails);
     }
-    setEmployeeDetails(employeeDetails);
   };
 
   const handleResignation = () => {
     setEmployeeDetails(initialEmployee);
-  }
+  };
 
   const handleStatusSubmit = async (formData: {
     status: statusEnum;
@@ -244,17 +257,38 @@ const ResignedEmployees = () => {
       search,
       status: "",
       isDownload: true,
-      password
+      password,
     });
   };
+
+  // handle Apply resignation open close
+  const handleOpenClose = (resignation?: ResignationRequest) => {
+    setShow((prev) => !prev);
+    if (resignation) {
+      setResignationId(resignation._id);
+    } else {
+      setResignationId("");
+    }
+  };
+
   return (
     <>
       <TopBar
-        title="All Resigned Employee"
-        isSearch
+        title={isEmployee ? "Resignation" : "All Resigned Employee"}
+        isSearch={!isEmployee}
         searchPlaceholder="Search employees..."
         onSearch={handleOnSearch}
         isExcel
+        actionButtons={
+          (isEmployee || isManager) ? (
+            <Button
+              name="Add New"
+              size="sm"
+              onClick={() => handleOpenClose()}
+              leftIcon={<i className="fa-solid fa-plus"></i>}
+            />
+          ) : null
+        }
         handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
@@ -267,7 +301,9 @@ const ResignedEmployees = () => {
         <ResignedEmployeeTable
           resignedEmployees={resignedEmployees}
           handleUpdateStatus={handleUpdateStatus}
-          refreshData={() => fetchResignedEmployeeList(page, limit, search, activeCard)}
+          refreshData={() =>
+            fetchResignedEmployeeList(page, limit, search, activeCard)
+          }
         />
         <Pagination
           totalRecords={total}
@@ -286,6 +322,7 @@ const ResignedEmployees = () => {
         loading={statusLoading}
         options={acceptStatusOptions}
       />
+      <ApplyResignation show={show} handleOpenClose={handleOpenClose} resignationId={resignationId}/>
     </>
   );
 };

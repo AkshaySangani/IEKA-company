@@ -1,15 +1,14 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import {
-  pathNames,
-  roleNames,
-  statusColor,
-  statusMessage,
-} from "../../../../constants/constants";
+import { pathNames, roleNames } from "../../../../constants/constants";
 import { initialEmployee, ResignationRequest } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import {
+  HistoryFieldEnum,
+  RoleEnum,
+  statusEnum,
+} from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
@@ -21,10 +20,16 @@ import {
   initialHistory,
 } from "../../../../apis/history/history.api";
 import { useAuthStore } from "../../../../store/auth-store";
+import Description from "../../../common/description";
+import StatusCell from "../../../common/status-cell";
+import MailStatusCell from "../../../common/mail-status-cell";
 
 interface ResignationRequestListProps {
   resignedEmployees: ResignationRequest[];
-  handleUpdateStatus: (value: ResignationRequest) => void;
+  handleUpdateStatus: (
+    value: ResignationRequest,
+    type: "status" | "update",
+  ) => void;
   refreshData: () => void;
 }
 
@@ -33,7 +38,8 @@ export default function ResignedEmployeeTable({
   handleUpdateStatus,
   refreshData,
 }: ResignationRequestListProps) {
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
+  const isEmployee = user?.role === RoleEnum.EMPLOYEE;
   const navigate = useNavigate();
   const [mailOpen, setMailOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -99,8 +105,8 @@ export default function ResignedEmployeeTable({
     },
     {
       header: "Reason",
-      className: "w-[15%]",
-      render: (row) => (row.reason ? row.reason : "-"),
+      className: "w-[25%]",
+      render: (row) => (row.reason ? <Description value={row.reason} /> : "-"),
     },
     {
       header: "Last Working Day",
@@ -110,30 +116,29 @@ export default function ResignedEmployeeTable({
     {
       header: "Info Mail",
       className: "w-[10%]",
-      render: (row) =>
-        row.status !== statusEnum.PENDING ? (
-          <div className="flex items-center gap-1.5">
-            <span className={`text-sm `}>{row?.mailSent ? "Yes" : "No"}</span>
-
-            <i
-              onClick={() => handleSendMail(row)}
-              className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>
-            <InfoIcon
-              onClick={() =>
-                handleShowHistory(row, HistoryFieldEnum.ResignationMail)
-              }
-            />
-          </div>
-        ) : (
-          <>-</>
-        ),
+      render: (row) => {
+        const isManager =
+          row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
+        return (
+          <>
+            {!isManager && row.status !== statusEnum.PENDING ? (
+              <MailStatusCell
+                mailSent={row?.mailSent}
+                onSendMail={() => handleSendMail(row)}
+                onHistory={() =>
+                  handleShowHistory(row, HistoryFieldEnum.ResignationMail)
+                }
+              />
+            ) : "-"}
+          </>
+        );
+      },
     },
     {
       header: "Certificate",
       className: "w-[20%]",
       render: (row) =>
-        row.status === statusEnum.ACCEPTED && (
+        row.status === statusEnum.ACCEPTED ? (
           <div className="flex gap-2">
             <Badge
               label="Relieving"
@@ -152,30 +157,69 @@ export default function ResignedEmployeeTable({
               onClick={() => navigate(`${pathNames.FNF_LETTER}/${row._id}`)}
             />
           </div>
-        ),
+        ) : "-",
+    },
+    {
+      header: "Status",
+      className: "w-[12%]",
+      render: (row) => {
+        const isManager =
+          row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
+        return (
+          <StatusCell
+            status={row.status}
+            isEditable={row.status !== statusEnum.REJECTED && !isManager}
+            onEdit={() => handleUpdateStatus(row, "status")}
+            onHistory={() =>
+              handleShowHistory(row, HistoryFieldEnum.ResignationStatus)
+            }
+          />
+        );
+      },
+    },
+  ];
+
+  const employeeColumns: ColumnDef<ResignationRequest>[] = [
+    {
+      header: "#",
+      className: "w-[3%] text-center text-gray-500",
+      render: (_, index) => index + 1,
+    },
+    {
+      header: "Resign Date",
+      className: "w-[15%]",
+      render: (row) => (
+        <div className="flex flex-col gap-1">
+          {formatDate(row.createdAt)}
+          <span className="text-grayText text-xs">
+            {formatDate(row.createdAt, DateFormat.TIME_24)}
+          </span>
+        </div>
+      ),
+    },
+    {
+      header: "Reason",
+      className: "w-[15%]",
+      render: (row) => (row.reason ? <Description value={row.reason} /> : "-"),
+    },
+    {
+      header: "Last Working Day",
+      className: "w-[15%]",
+      render: (row) => formatDate(row.lastWorkingDate),
     },
     {
       header: "Status",
       className: "w-[12%]",
       render: (row) => {
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon
-              onClick={() =>
-                handleShowHistory(row, HistoryFieldEnum.ResignationStatus)
-              }
-            />
-            {row.status !== statusEnum.REJECTED && (
-              <i
-                onClick={() => handleUpdateStatus(row)}
-                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-              ></i>
-            )}
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={row.status === statusEnum.PENDING && isEmployee}
+            onEdit={() => handleUpdateStatus(row, "update")}
+            onHistory={() =>
+              handleShowHistory(row, HistoryFieldEnum.ResignationStatus)
+            }
+          />
         );
       },
     },
@@ -214,7 +258,10 @@ export default function ResignedEmployeeTable({
 
   return (
     <>
-      <CustomTable columns={columns} data={resignedEmployees} />
+      <CustomTable
+        columns={isEmployee ? employeeColumns : columns}
+        data={resignedEmployees}
+      />
       <MailSendModal
         isOpen={mailOpen}
         title={"Are u sure want to send mail for this employee?"}
@@ -263,7 +310,9 @@ export default function ResignedEmployeeTable({
           <p>Regards,</p>
           <p>
             <strong>
-              <span id="actionbyname">{user.firstName}{" "}{user.lastName}</span>
+              <span id="actionbyname">
+                {user.firstName} {user.lastName}
+              </span>
             </strong>
           </p>
           <p>{"(COO)"}</p>
