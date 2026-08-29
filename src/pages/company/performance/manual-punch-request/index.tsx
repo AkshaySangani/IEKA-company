@@ -1,5 +1,5 @@
-import EmptyPlaceholder from "../../../../components/common/empty-paceholder";
+import ManualPunchRequest from "../../../../components/company/performance/manual-punch-request";
 
 export default function ManualPunchRequestPage(){
-    return <EmptyPlaceholder title="Under Development" description="this page is currently under development."></EmptyPlaceholder>
+    return <ManualPunchRequest />
 }

@@ -16,9 +16,9 @@ const Toggle: React.FC<ToggleProps> = ({
   label,
 }) => {
   return (
-    <label className="inline-flex cursor-pointer items-center gap-3">
+    <div className="flex cursor-pointer items-center gap-3">
       {label && (
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-inputLabel">
           {label}
         </span>
       )}
@@ -43,7 +43,7 @@ const Toggle: React.FC<ToggleProps> = ({
           }`}
         />
       </button>
-    </label>
+    </div>
   );
 };
 
