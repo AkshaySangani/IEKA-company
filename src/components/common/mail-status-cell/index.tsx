@@ -16,7 +16,7 @@ const MailStatusCell = ({
   showHistory = true,
 }: MailStatusCellProps) => {
   return (
-    <div className="flex min-w-max items-center gap-2">
+    <div className="flex min-w-max items-center gap-1">
       {/* Mail Status */}
       <div className="flex items-center">
         <span className="whitespace-nowrap text-sm text-secondary/60">

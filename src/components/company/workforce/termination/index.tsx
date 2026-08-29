@@ -20,7 +20,7 @@ import {
 import { terminationStatusOptions } from "../../../../constants/constants";
 import AddTermination from "./AddTermination";
 import Button from "../../../common/button/Button";
-import { getEmployees } from "../../../../apis/workforce/all-employee.api";
+import { getEmployees, getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
 import { IEmployee } from "../all-employees";
 
 export interface ITermination {
@@ -131,15 +131,10 @@ const Termination = () => {
   };
 
   const fetchEmployees = async () => {
-    const response = await getEmployees({
-      page: 1,
-      limit: 200,
-      search: "",
-      status: statusEnum.ACTIVE,
-    });
+    const response = await getManagedEmployee("");
     if (response.success) {
       setEmployees(
-        response?.data?.employee?.map((ele: IEmployee) => ({
+        response?.data?.map((ele: IEmployee) => ({
           label: `${ele.firstName} ${ele.lastName}`,
           value: ele._id,
         })),

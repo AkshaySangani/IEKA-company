@@ -16,8 +16,10 @@ import {
   HistoryPayload,
   initialHistory,
 } from "../../../../apis/history/history.api";
-import { HistoryFieldEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, RoleEnum } from "../../../../types/common-types";
 import HistoryModal from "../../../common/modal/HistoryModal";
+import { useAuthStore } from "../../../../store/auth-store";
+import StatusCell from "../../../common/status-cell";
 
 interface IOfficeExpenseListProps {
   officeExpenses: IOfficeExpense[];
@@ -29,6 +31,7 @@ export default function OfficeExpenseTable({
   handleUpdateStatus,
 }: IOfficeExpenseListProps) {
   const navigate = useNavigate();
+  const {user} = useAuthStore();
 
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
@@ -116,18 +119,14 @@ export default function OfficeExpenseTable({
       header: "Status",
       className: "w-[10%]",
       render: (row) => {
+        const isManager = row.assignedBy._id === user._id && user.role === RoleEnum.MANAGER;
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            <i
-              onClick={() => handleUpdateStatus(row)}
-              className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={!isManager}
+            onHistory={() => handleShowHistory(row)}
+            onEdit={() => handleUpdateStatus(row)}
+          />
         );
       },
     },

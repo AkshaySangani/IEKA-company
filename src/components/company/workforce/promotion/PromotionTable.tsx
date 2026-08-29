@@ -9,7 +9,7 @@ import { initialPromotion, IPromotion } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, RoleEnum, statusEnum } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
@@ -21,6 +21,8 @@ import {
   initialHistory,
 } from "../../../../apis/history/history.api";
 import { useAuthStore } from "../../../../store/auth-store";
+import MailStatusCell from "../../../common/mail-status-cell";
+import StatusCell from "../../../common/status-cell";
 
 interface IPromotionListProps {
   promotions: IPromotion[];
@@ -99,24 +101,25 @@ export default function PromotionTable({
     {
       header: "Info Mail",
       className: "w-[10%]",
-      render: (row) =>
-        row.status !== statusEnum.PENDING ? (
-          <div className="flex items-center gap-1.5">
-            <span className={`text-sm `}>{row?.mailSent ? "Yes" : "No"}</span>
-
-            <i
-              onClick={() => handleSendMail(row)}
-              className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>
-            <InfoIcon
-              onClick={() =>
-                handleShowHistory(row, HistoryFieldEnum.PromotionMail)
-              }
-            />
-          </div>
-        ) : (
-          <>-</>
-        ),
+      render: (row) => {
+        const isManager =
+          row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
+        return (
+          <>
+            {!isManager && row.status !== statusEnum.PENDING ? (
+              <MailStatusCell
+                mailSent={row?.mailSent}
+                onSendMail={() => handleSendMail(row)}
+                onHistory={() =>
+                  handleShowHistory(row, HistoryFieldEnum.PromotionMail)
+                }
+              />
+            ) : (
+              "-"
+            )}
+          </>
+        );
+      },
     },
     {
       header: "Letter",
@@ -138,24 +141,17 @@ export default function PromotionTable({
       header: "Status",
       className: "w-[12%]",
       render: (row) => {
+        const isManager =
+          row.userId._id === user._id && user.role === RoleEnum.MANAGER;
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon
-              onClick={() =>
-                handleShowHistory(row, HistoryFieldEnum.PromotionStatus)
-              }
-            />
-            {row.status !== statusEnum.CANCEL && (
-              <i
-                onClick={() => handleUpdateStatus(row)}
-                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-              ></i>
-            )}
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={!isManager}
+            onHistory={() =>
+              handleShowHistory(row, HistoryFieldEnum.PromotionStatus)
+            }
+            onEdit={() => handleUpdateStatus(row)}
+          />
         );
       },
     },

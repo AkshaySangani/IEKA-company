@@ -5,12 +5,7 @@ import {
   employmentType,
   roleNames,
 } from "../../../../../constants/constants";
-import {
-  IAssignment,
-  IEmployee,
-  IPayslip,
-  IPolicy,
-} from ".";
+import { IAssignment, IEmployee, IPayslip, IPolicy } from ".";
 import { formatDate } from "../../../../../utils/date-format";
 import DetailRow from "../../../../common/detail-row";
 import StatusUpdate from "./update-modals/StatusUpdate";
@@ -33,6 +28,7 @@ import {
 import InfoIcon from "../../../../../assets/icons/Info";
 import AssignmentHistoryModal from "../../../../common/modal/AssignmentHistoryModal";
 import { getBranches } from "../../../../../utils/helper";
+import { useAuthStore } from "../../../../../store/auth-store";
 
 interface Props {
   employeeData: IEmployee;
@@ -62,7 +58,13 @@ const EmployeeDetailCard: React.FC<Props> = ({
   payslip,
   refreshData,
 }) => {
+  const { user } = useAuthStore();
   const isManager = employeeData.role === RoleEnum.MANAGER;
+  const isOwner = user.role === RoleEnum.OWNER;
+
+  const isEditable =
+    user._id === employeeData._id && employeeData.role === RoleEnum.MANAGER;
+
   const designation = employeeData.designationId
     ? employeeData.designationId
     : { name: "", _id: "" };
@@ -96,8 +98,6 @@ const EmployeeDetailCard: React.FC<Props> = ({
     }
     setLoading(false);
   };
-
-  
 
   // handle history open
   const handleHistoryOpenClose = () => {
@@ -184,10 +184,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       )
                     }
                   />
-                  <i
-                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                    onClick={() => setUpdate(EmployeeUpdateModal.STATUS)}
-                  ></i>
+                  {!isEditable && (
+                    <i
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      onClick={() => setUpdate(EmployeeUpdateModal.STATUS)}
+                    ></i>
+                  )}
                 </div>
               }
             />
@@ -229,10 +231,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       )
                     }
                   />
-                  <i
-                    onClick={() => setUpdate(EmployeeUpdateModal.DESIGNATION)}
-                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                  ></i>
+                  {isOwner && (
+                    <i
+                      onClick={() => setUpdate(EmployeeUpdateModal.DESIGNATION)}
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                    ></i>
+                  )}
                 </div>
               }
             />
@@ -251,12 +255,14 @@ const EmployeeDetailCard: React.FC<Props> = ({
                         )
                       }
                     />
-                    <i
-                      onClick={() =>
-                        setUpdate(EmployeeUpdateModal.MANAGE_BRANCH)
-                      }
-                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                    ></i>
+                    {isOwner && (
+                      <i
+                        onClick={() =>
+                          setUpdate(EmployeeUpdateModal.MANAGE_BRANCH)
+                        }
+                        className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      ></i>
+                    )}
                   </div>
                 }
               />
@@ -275,12 +281,14 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       )
                     }
                   />
-                  <i
-                    onClick={() =>
-                      setUpdate(EmployeeUpdateModal.REPORTING_BRANCH)
-                    }
-                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                  ></i>
+                  {isOwner && (
+                    <i
+                      onClick={() =>
+                        setUpdate(EmployeeUpdateModal.REPORTING_BRANCH)
+                      }
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                    ></i>
+                  )}
                 </div>
               }
             />
@@ -298,12 +306,14 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       )
                     }
                   />
-                  <i
-                    onClick={() =>
-                      setUpdate(EmployeeUpdateModal.EMPLOYMENT_TYPE)
-                    }
-                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                  ></i>
+                  {!isEditable && (
+                    <i
+                      onClick={() =>
+                        setUpdate(EmployeeUpdateModal.EMPLOYMENT_TYPE)
+                      }
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                    ></i>
+                  )}
                 </div>
               }
             />
@@ -324,12 +334,14 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       )
                     }
                   />
-                  <i
-                    onClick={() =>
-                      setUpdate(EmployeeUpdateModal.PROBATION_PERIOD)
-                    }
-                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                  ></i>
+                  {!isEditable && (
+                    <i
+                      onClick={() =>
+                        setUpdate(EmployeeUpdateModal.PROBATION_PERIOD)
+                      }
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                    ></i>
+                  )}
                 </div>
               }
             />
@@ -347,10 +359,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       )
                     }
                   />
-                  <i
-                    onClick={() => setUpdate(EmployeeUpdateModal.POLICY)}
-                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                  ></i>
+                  {!isEditable && (
+                    <i
+                      onClick={() => setUpdate(EmployeeUpdateModal.POLICY)}
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                    ></i>
+                  )}
                 </div>
               }
             />
@@ -370,10 +384,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       )
                     }
                   />
-                  <i
-                    onClick={() => setUpdate(EmployeeUpdateModal.SALARY)}
-                    className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                  ></i>
+                  {!isEditable && (
+                    <i
+                      onClick={() => setUpdate(EmployeeUpdateModal.SALARY)}
+                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                    ></i>
+                  )}
                 </div>
               }
             />

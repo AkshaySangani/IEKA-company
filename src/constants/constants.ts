@@ -123,8 +123,11 @@ export const roleBasePaths: ObjectType = {
     // Workforce
     pathNames.WORKFORCE,
     pathNames.ALL_EMPLOYEES,
+    pathNames.EMPLOYEE_DETAILS,
     pathNames.RESIGNED,
     pathNames.TERMINATION,
+    pathNames.TERMINATION_LETTER_ID,
+    pathNames.TERMINATION_LETTER,
     pathNames.PROMOTION,
 
     // Performance
@@ -139,10 +142,8 @@ export const roleBasePaths: ObjectType = {
     pathNames.ADD_REIMBURSEMENT,
     pathNames.REIMBURSEMENT_DETAILS,
     pathNames.OFFICE_EXPENSE,
-
-    // Pay Slip
-    pathNames.PAY_SLIP,
-    pathNames.ALL_EMPLOYEE_PAY_SLIP,
+    pathNames.ADD_OFFICE_EXPENSE,
+    pathNames.OFFICE_EXPENSE_DETAILS
   ],
 
   [RoleEnum.OWNER]: Object.values(pathNames),

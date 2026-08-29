@@ -41,16 +41,15 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
   options = statusOptions,
   deleteWarning = "Deleting this item will remove it permanently from the system. Please proceed with caution."
 }) => {
-  const [formData, setFormData] = useState<FormDataPayload>(initialFormData);
-
+  const [formData, setFormData] = useState<FormDataPayload>({...initialFormData, status});
   useEffect(() => {
     if (status) {
-      setFormData({
+      setFormData({        
         status: status,
         remarks: "",
       });
     }
-  }, [status]);
+  }, [status,isOpen]);
 
   const handleChange = (field: keyof FormDataPayload, value: string) => {
     setFormData((prev) => ({

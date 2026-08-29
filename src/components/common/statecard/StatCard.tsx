@@ -23,9 +23,13 @@ const StatCard: React.FC<StatCardProps> = ({
 }) => {
   return (
     <div
+      onClick={onClick}
       className={`
         ${className}
-        w-full py-[6px] px-2 md:py-[10px] md:px-3         
+        w-full py-[6px] px-2 md:py-[10px] md:px-3 cursor-pointer transition-all select-none
+        duration-200
+        hover:-translate-y-[3px]        
+        md:hover:-translate-y-[5px]        
          ${active ? activeColor : "bg-cardBg"}`}
     >
       <div className="flex items-center justify-between">

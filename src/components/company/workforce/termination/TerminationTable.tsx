@@ -9,15 +9,24 @@ import { initialTermination, ITermination } from ".";
 import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
-import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import {
+  HistoryFieldEnum,
+  RoleEnum,
+  statusEnum,
+} from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
 import MailSendModal from "../../../common/modal/MailSendModal";
 import { sendTerminationMail } from "../../../../apis/workforce/termination.api";
 import HistoryModal from "../../../common/modal/HistoryModal";
-import { HistoryPayload, initialHistory } from "../../../../apis/history/history.api";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../../apis/history/history.api";
 import { useAuthStore } from "../../../../store/auth-store";
+import StatusCell from "../../../common/status-cell";
+import MailStatusCell from "../../../common/mail-status-cell";
 
 interface ITerminationListProps {
   terminations: ITermination[];
@@ -32,14 +41,14 @@ export default function TerminationTable({
   handleUpdateStatus,
   refreshData,
 }: ITerminationListProps) {
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
   const navigate = useNavigate();
   const [mailOpen, setMailOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   // history states
-    const [historyOpen, setHistoryOpen] = useState<boolean>(false);
-    const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+  const [historyOpen, setHistoryOpen] = useState<boolean>(false);
+  const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const [terminationDetails, setTerminationDetails] =
     useState<ITermination>(initialTermination);
@@ -92,20 +101,25 @@ export default function TerminationTable({
     {
       header: "Info Mail",
       className: "w-[10%]",
-      render: (row) =>
-        row.status !== statusEnum.CANCEL ? (
-          <div className="flex items-center gap-1.5">
-            <span className={`text-sm `}>{row?.mailSent ? "Yes" : "No"}</span>
-
-            <i
-              onClick={() => handleSendMail(row)}
-              className="fa fa-envelope cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>
-            <InfoIcon onClick={() => handleShowHistory(row, HistoryFieldEnum.TerminationMail)} />
-          </div>
-        ) : (
-          <>-</>
-        ),
+      render: (row) => {
+        const isManager =
+          row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
+        return (
+          <>
+            {!isManager && row.status !== statusEnum.HOLD ? (
+              <MailStatusCell
+                mailSent={row?.mailSent}
+                onSendMail={() => handleSendMail(row)}
+                onHistory={() =>
+                  handleShowHistory(row, HistoryFieldEnum.TerminationMail)
+                }
+              />
+            ) : (
+              "-"
+            )}
+          </>
+        );
+      },
     },
     {
       header: "Letter",
@@ -118,7 +132,7 @@ export default function TerminationTable({
               navigate(`${pathNames.TERMINATION_LETTER}/${row._id}`)
             }
           />
-        ): (
+        ) : (
           <>-</>
         ),
     },
@@ -126,22 +140,17 @@ export default function TerminationTable({
       header: "Status",
       className: "w-[12%]",
       render: (row) => {
+        const isManager =
+          row.userId._id === user._id && user.role === RoleEnum.MANAGER;
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row, HistoryFieldEnum.TerminationStatus)} />
-            {row.status !== statusEnum.CANCEL && (
-              <i
-                onClick={() => handleUpdateStatus(row)}
-                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-              ></i>
-            )}
-            <span
-              className={`font-medium text-sm ${statusColor[row.status]}`}
-            >
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={!isManager}
+            onHistory={() =>
+              handleShowHistory(row, HistoryFieldEnum.TerminationStatus)
+            }
+            onEdit={() => handleUpdateStatus(row)}
+          />
         );
       },
     },
@@ -154,12 +163,15 @@ export default function TerminationTable({
   };
 
   // handle show history
-  const handleShowHistory = (termination: ITermination, field: HistoryFieldEnum) => {
+  const handleShowHistory = (
+    termination: ITermination,
+    field: HistoryFieldEnum,
+  ) => {
     handleHistoryOpenClose();
     setHistory({
       field,
       fieldId: termination._id,
-      title: `${termination.userId.firstName} ${termination.userId.lastName}`
+      title: `${termination.userId.firstName} ${termination.userId.lastName}`,
     });
   };
 
@@ -221,7 +233,9 @@ export default function TerminationTable({
           <p>Regards,</p>
           <p>
             <strong>
-              <span id="actionbyname">{user.firstName}{" "}{user.lastName}</span>
+              <span id="actionbyname">
+                {user.firstName} {user.lastName}
+              </span>
             </strong>
           </p>
           <p>{"(COO)"}</p>

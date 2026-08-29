@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "../../../common/topbar/TopBar";
 import Button from "../../../common/button/Button";
 
-import { currency, pathNames } from "../../../../constants/constants";
+import { currency, pathNames, roleNames } from "../../../../constants/constants";
 import PageLoader from "../../../common/loader/PageLoader";
 import Image from "../../../common/image";
 import { getOfficeExpenseById } from "../../../../apis/expense/office-expense.api";
@@ -89,8 +89,9 @@ const OfficeExpenseDetails: React.FC = () => {
                     profileImage: officeExpenseDetails.assignedBy.profileImage,
                     firstName: officeExpenseDetails.assignedBy.firstName,
                     lastName: officeExpenseDetails.assignedBy.lastName,
-                    description: officeExpenseDetails.assignedBy.role,
+                    description: roleNames[officeExpenseDetails.assignedBy.role],
                   }}
+                  personClassName="text-secondary"
                 />
               </div>
 
@@ -126,45 +127,6 @@ const OfficeExpenseDetails: React.FC = () => {
           </div>
           <div className="content-card p-4">
             <div className="grid grid-cols-[180px_1fr] gap-4">
-              <div className="text-gray-500 text-sm">Vendor Name</div>
-              <div className="font-medium text-gray-900 text-sm">
-                {officeExpenseDetails.vendor.name}
-              </div>
-
-              <div className="text-gray-500 text-sm">Vendor Description</div>
-              <div className="font-medium text-gray-900 text-sm">
-                {officeExpenseDetails.vendor.description}
-              </div>
-
-              <div className="text-gray-500 text-sm">
-                Guarantee / Warranty ?
-              </div>
-              <div className="font-medium text-gray-900 text-sm">
-                {officeExpenseDetails.vendor.isOnWarranty ? "Yes" : "No"}
-              </div>
-
-              {!officeExpenseDetails.vendor.isOnWarranty &&
-                officeExpenseDetails.vendor.startDate &&
-                officeExpenseDetails.vendor.endDate && (
-                  <>
-                    <div className="text-gray-500 text-sm">Warranty Period</div>
-                    <div className="font-medium text-gray-900 text-sm">
-                      {getDateDifferenceBetween(
-                        officeExpenseDetails.vendor.startDate,
-                        officeExpenseDetails.vendor.endDate,
-                      )}
-                    </div>
-                  </>
-                )}
-
-              {officeExpenseDetails.vendor.startDate &&
-                officeExpenseDetails.vendor.endDate && (<><div className="text-gray-500 text-sm">From To Date</div>
-              <div>
-                <div className="font-medium text-gray-900 text-sm">
-                  {formatDate(officeExpenseDetails.vendor.startDate)}{" - "}{formatDate(officeExpenseDetails.vendor.endDate)}
-                </div>
-              </div></>)}
-
               <div className="text-gray-500 text-sm">Purchase Mode</div>
               <div className="font-medium text-gray-900 text-sm">
                   {officeExpenseDetails.paymentMode}
