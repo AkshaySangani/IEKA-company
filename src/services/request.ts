@@ -5,6 +5,7 @@ interface RequestOptions {
   successMessage?: string;
   errorMessage?: string;
   showSuccessToast?: boolean;
+  showErrorToast?: boolean;
 }
 
 export const apiRequest = {
@@ -141,7 +142,7 @@ export const apiRequest = {
     }
   },
 
-  get: async <T>(url: string) => {
+  get: async <T>(url: string,options: RequestOptions = {showErrorToast: true}) => {
     try {
       const response = await api.get<T>(url, url.includes("isDownload=true") ? {responseType: "blob"}:{});
   
@@ -150,11 +151,12 @@ export const apiRequest = {
       const apiMessage =
         error?.response?.data?.message || error?.message;
         console.log("apiMessage",apiMessage)
-
-      toastMessage.error(
-        apiMessage ||
-        "Something went wrong"
-      );
+      if(options.showErrorToast){
+        toastMessage.error(
+          apiMessage ||
+          "Something went wrong"
+        );
+      }
 
       return error;
     }

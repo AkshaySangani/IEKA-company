@@ -40,7 +40,7 @@ export const getReimbursementById = (reimbursementId: string) => {
 export const getReimbursementCount = ({
     month = "",
     year = ""
-}: {month?: string;year?: string}) => {
+}: {month?: string | number;year?: string | number}) => {
   return apiRequest.get<ApiResponse>(`/expense/reimbursements/count${`?year=${year}`}&month=${month}`);
 };
 

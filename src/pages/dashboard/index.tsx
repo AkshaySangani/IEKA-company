@@ -1,5 +1,5 @@
 import Dashboard from "../../components/company/dashboard";
-import EmployeeDashboard from "../../components/employee/dashboard";
+import EmployeeDashboard from "../../components/company/dashboard/EmployeeDashboard.tsx";
 import { useAuthStore } from "../../store/auth-store";
 import { RoleEnum, ViewModeEnum } from "../../types/common-types";
 

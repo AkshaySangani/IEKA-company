@@ -14,6 +14,7 @@ export enum DateFormat {
   DAY_DATE = "EEEE, dd MMM yyyy", // Wednesday, 01 Jul 2026
   ISO_DATE = "yyyy-MM-dd", // 2026-07-01
   YEAR = "yyyy", // 2026
+  DAY = "dd", // 2026
 }
 
 export const formatDate = (

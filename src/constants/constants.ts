@@ -143,7 +143,7 @@ export const roleBasePaths: ObjectType = {
     pathNames.REIMBURSEMENT_DETAILS,
     pathNames.OFFICE_EXPENSE,
     pathNames.ADD_OFFICE_EXPENSE,
-    pathNames.OFFICE_EXPENSE_DETAILS
+    pathNames.OFFICE_EXPENSE_DETAILS,
   ],
 
   [RoleEnum.OWNER]: Object.values(pathNames),
