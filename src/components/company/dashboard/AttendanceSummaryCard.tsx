@@ -55,7 +55,7 @@ export default function AttendanceSummaryCard({
   ];
 
   return (
-    <div className="content-card relative w-full rounded-lg bg-white p-3 shadow-[rgba(50,50,93,0.25)_0px_1px_3px_-5px,rgba(0,0,0,0.3)_0px_7px_15px_-8px] sm:p-4">
+    <div className="content-card relative w-full bg-white p-3 shadow-[rgba(50,50,93,0.25)_0px_1px_3px_-5px,rgba(0,0,0,0.3)_0px_7px_15px_-8px] sm:p-4">
       <PageLoader loading={loading} />
 
       {/* Header */}
