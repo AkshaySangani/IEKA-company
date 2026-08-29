@@ -6,22 +6,20 @@ import Button from "../../../common/button/Button";
 
 import {
   currency,
+  employeePathNames,
   pathNames,
+  roleNames,
 } from "../../../../constants/constants";
 import PageLoader from "../../../common/loader/PageLoader";
 
-import {
-  RoleEnum,
-  statusEnum,
-} from "../../../../types/common-types";
+import { RoleEnum, statusEnum } from "../../../../types/common-types";
 import Image from "../../../common/image";
-import {
-  getReimbursementById,
-} from "../../../../apis/expense/reimbursement.api";
+import { getReimbursementById } from "../../../../apis/expense/reimbursement.api";
 import { IUser } from ".";
 import PersonInfo from "../../../common/person-info";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { getFileNameByUrl } from "../../../../utils/helper";
+import { useAuthStore } from "../../../../store/auth-store";
 
 export interface IReimbursement {
   _id: string;
@@ -47,6 +45,8 @@ export interface IReimbursementBranch {
 const ReimbursementDetails: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuthStore();
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
 
   const { reimbursementId } =
     (location.state as {
@@ -101,7 +101,7 @@ const ReimbursementDetails: React.FC = () => {
   };
 
   const handleClose = () => {
-    navigate(pathNames.REIMBURSEMENT);
+    navigate(isEmployee ? employeePathNames.REIMBURSEMENT : pathNames.REIMBURSEMENT);
   };
 
   return (
@@ -120,65 +120,63 @@ const ReimbursementDetails: React.FC = () => {
 
       <div className="content-area">
         <PageLoader loading={loading} />
-          <div className="grid grid-cols-[180px_1fr] gap-4">
-            <div className="text-gray-500 text-sm">Expense Name</div>
-            <div className="font-medium text-gray-900 text-sm">
-              {reimbursementDetails.name}
-            </div>
-
-            <div className="text-gray-500 text-sm">Branch Name</div>
-            <div className="font-medium text-gray-900 text-sm">
-              {reimbursementDetails.branchId.name}
-            </div>
-
-            <div className="text-gray-500 text-sm">Employee Name</div>
-            <div>
-              <PersonInfo
-                personInfo={{
-                  profileImage: reimbursementDetails.userId.profileImage,
-                  firstName: reimbursementDetails.userId.firstName,
-                  lastName: reimbursementDetails.userId.lastName,
-                  description: reimbursementDetails.userId.role,
-                }}
-              />
-            </div>
-
-            <div className="text-gray-500 text-sm">Expense Date</div>
-            <div className="font-medium text-gray-900 text-sm">
-              {formatDate(reimbursementDetails.date)}
-            </div>
-
-            <div className="text-gray-500 text-sm">Request Date</div>
-            <div>
-              <div className="font-medium text-gray-900 text-sm">
-                {formatDate(reimbursementDetails.createdAt)}
-              </div>
-
-              <div className="text-xs text-gray-400">
-                {formatDate(
-                  reimbursementDetails.createdAt,
-                  DateFormat.TIME_24,
-                )}
-              </div>
-            </div>
-
-            <div className="text-gray-500 text-sm">Amount</div>
-            <div>
-              <span className="inline-flex items-center rounded-full bg-indigo-500 px-5 py-2 text-white font-medium">
-                {currency.INR} {reimbursementDetails.amount}
-              </span>
-            </div>
-
-            {reimbursementDetails.description && (
-              <>
-                <div className="text-gray-500 text-sm">Comment</div>
-
-                <div className="font-medium text-gray-900 text-sm">
-                  {reimbursementDetails.description}
-                </div>
-              </>
-            )}
+        <div className="grid grid-cols-[180px_1fr] gap-4">
+          <div className="text-gray-500 text-sm">Expense Name</div>
+          <div className="font-medium text-gray-900 text-sm">
+            {reimbursementDetails.name}
           </div>
+
+          <div className="text-gray-500 text-sm">Branch Name</div>
+          <div className="font-medium text-gray-900 text-sm">
+            {reimbursementDetails.branchId.name}
+          </div>
+
+          {!isEmployee && <><div className="text-gray-500 text-sm">Employee Name</div>
+          <div>
+            <PersonInfo
+              personInfo={{
+                profileImage: reimbursementDetails.userId.profileImage,
+                firstName: reimbursementDetails.userId.firstName,
+                lastName: reimbursementDetails.userId.lastName,
+                description: roleNames[reimbursementDetails.userId.role],
+              }}
+            />
+          </div>
+          </>}
+
+          <div className="text-gray-500 text-sm">Expense Date</div>
+          <div className="font-medium text-gray-900 text-sm">
+            {formatDate(reimbursementDetails.date)}
+          </div>
+
+          <div className="text-gray-500 text-sm">Request Date</div>
+          <div>
+            <div className="font-medium text-gray-900 text-sm">
+              {formatDate(reimbursementDetails.createdAt)}
+            </div>
+
+            <div className="text-xs text-gray-400">
+              {formatDate(reimbursementDetails.createdAt, DateFormat.TIME_24)}
+            </div>
+          </div>
+
+          <div className="text-gray-500 text-sm">Amount</div>
+          <div>
+            <span className="inline-flex items-center rounded-full bg-indigo-500 px-5 py-2 text-white font-medium">
+              {currency.INR} {reimbursementDetails.amount}
+            </span>
+          </div>
+
+          {reimbursementDetails.description && (
+            <>
+              <div className="text-gray-500 text-sm">Comment</div>
+
+              <div className="font-medium text-gray-900 text-sm">
+                {reimbursementDetails.description}
+              </div>
+            </>
+          )}
+        </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-3">
           {reimbursementDetails.documents?.length > 0 &&
             reimbursementDetails.documents.map((file, index) => {

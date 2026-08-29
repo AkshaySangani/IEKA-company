@@ -1,6 +1,7 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   currency,
+  employeePathNames,
   pathNames,
   roleNames,
   statusColor,
@@ -17,7 +18,9 @@ import {
   HistoryPayload,
   initialHistory,
 } from "../../../../apis/history/history.api";
-import { HistoryFieldEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, RoleEnum } from "../../../../types/common-types";
+import { useAuthStore } from "../../../../store/auth-store";
+import StatusCell from "../../../common/status-cell";
 
 interface IReimbursementListProps {
   reimbursements: IReimbursement[];
@@ -28,14 +31,16 @@ export default function DepartmentTable({
   reimbursements,
   handleUpdateStatus,
 }: IReimbursementListProps) {
+  const { user } = useAuthStore();
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
   const navigate = useNavigate();
 
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
-  const handleEditDepartmentDetails = (reimbursementId: string) => {
-    navigate(pathNames.REIMBURSEMENT_DETAILS, {
+  const handleShowDetails = (reimbursementId: string) => {
+    navigate(isEmployee ? employeePathNames.REIMBURSEMENT_DETAILS : pathNames.REIMBURSEMENT_DETAILS, {
       state: {
         reimbursementId,
       },
@@ -55,7 +60,7 @@ export default function DepartmentTable({
         <div className="flex flex-col">
           <div
             className="text-primary cursor-pointer text-sm font-medium"
-            onClick={() => handleEditDepartmentDetails(row._id)}
+            onClick={() => handleShowDetails(row._id)}
           >
             {row.name}
           </div>
@@ -63,20 +68,24 @@ export default function DepartmentTable({
         </div>
       ),
     },
-    {
-      header: "Employee Name",
-      className: "w-[20%]",
-      render: (row) => (
-        <PersonInfo
-          personInfo={{
-            profileImage: row.userId.profileImage,
-            firstName: row.userId.firstName,
-            lastName: row.userId.lastName,
-            description: roleNames[row.userId.role],
-          }}
-        />
-      ),
-    },
+    ...(isEmployee
+      ? []
+      : [
+          {
+            header: "Employee Name",
+            className: "w-[20%]",
+            render: (row: IReimbursement) => (
+              <PersonInfo
+                personInfo={{
+                  profileImage: row.userId.profileImage,
+                  firstName: row.userId.firstName,
+                  lastName: row.userId.lastName,
+                  description: roleNames[row.userId.role],
+                }}
+              />
+            ),
+          },
+        ]),
     {
       header: "Expense Date",
       className: "w-[15%]",
@@ -110,18 +119,15 @@ export default function DepartmentTable({
       header: "Status",
       className: "w-[10%]",
       render: (row) => {
+        const isManager =
+          row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            <i
-              onClick={() => handleUpdateStatus(row)}
-              className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={!isManager && !isEmployee}
+            onHistory={() => handleShowHistory(row)}
+            onEdit={() => handleUpdateStatus(row)}
+          />
         );
       },
     },

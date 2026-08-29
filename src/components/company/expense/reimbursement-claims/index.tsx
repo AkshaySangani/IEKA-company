@@ -9,6 +9,7 @@ import {
   statusEnum,
 } from "../../../../types/common-types";
 import {
+  employeePathNames,
   expenseStatusOptions,
   pathNames,
 } from "../../../../constants/constants";
@@ -21,6 +22,7 @@ import {
   updateReimbursementStatus,
 } from "../../../../apis/expense/reimbursement.api";
 import StatusCards, { ReimbursementStats } from "./StatusCards";
+import { useAuthStore } from "../../../../store/auth-store";
 
 export interface IReimbursementClaim {
   _id: string;
@@ -73,7 +75,9 @@ export const initialReimbursement: IReimbursement = {
   createdAt: "",
   updatedAt: "",
 };
-const Reimbursement: React.FC = () => {
+const   Reimbursement: React.FC = () => {
+  const {user} = useAuthStore();
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
   const navigate = useNavigate();
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -206,7 +210,7 @@ const Reimbursement: React.FC = () => {
 
   // handle click add new
   const handleOnAdd = () => {
-    navigate(pathNames.ADD_REIMBURSEMENT);
+    navigate(isEmployee ? employeePathNames.ADD_REIMBURSEMENT : pathNames.ADD_REIMBURSEMENT);
   };
 
   // handle status open close

@@ -261,11 +261,15 @@ function App() {
             path={employeePathNames.REIMBURSEMENT}
             element={<ReimbursementPage />}
           />
-          <Route path={employeePathNames.PAY_SLIP} element={<PayslipPage />} />
           <Route
-            path={employeePathNames.JOB_REFERRAL}
-            element={<EmployeeJobReferralPage />}
+            path={employeePathNames.ADD_REIMBURSEMENT}
+            element={<AddReimbursementPage />}
           />
+          <Route
+            path={employeePathNames.REIMBURSEMENT_DETAILS}
+            element={<ReimbursementDetailsPage />}
+          />
+          <Route path={employeePathNames.PAY_SLIP} element={<PayslipPage />} />
           <Route
             path={employeePathNames.RESIGNATION}
             element={<EmployeeResignationPage />}

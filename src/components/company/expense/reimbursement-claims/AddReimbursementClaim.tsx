@@ -5,10 +5,10 @@ import TopBar from "../../../common/topbar/TopBar";
 import Button from "../../../common/button/Button";
 import TextField from "../../../common/text-field/TextField";
 
-import { pathNames } from "../../../../constants/constants";
+import { employeePathNames, pathNames } from "../../../../constants/constants";
 import PageLoader from "../../../common/loader/PageLoader";
 
-import { IOption } from "../../../../types/common-types";
+import { IOption, RoleEnum } from "../../../../types/common-types";
 import SelectField from "../../../common/select/SelectField";
 import TextAreaField from "../../../common/text-area/TextAreaField";
 import Image from "../../../common/image";
@@ -21,10 +21,13 @@ import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api"
 import { IUser } from ".";
 import { useAuthStore } from "../../../../store/auth-store";
 import ActionModal from "../../../common/modal/ActionModal";
+import Toggle from "../../../common/toggle";
 
 const AddReimbursement: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
+  const isManager = user.role === RoleEnum.MANAGER;
 
   const initialFormData: ReimbursementFormData = {
     name: "",
@@ -41,6 +44,7 @@ const AddReimbursement: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const [self, setSelf] = useState<boolean>(true);
 
   const [branchList, setBranchList] = useState<IOption[]>([]);
   const [userOptions, setUserOptions] = useState<IOption[]>([]);
@@ -53,8 +57,10 @@ const AddReimbursement: React.FC = () => {
   >({});
 
   useEffect(() => {
-    fetchBranchList();
-  }, []);
+    if (!isEmployee) {
+      fetchBranchList();
+    }
+  }, [isEmployee]);
 
   // get branch with shifts
   const fetchBranchList = async () => {
@@ -135,14 +141,15 @@ const AddReimbursement: React.FC = () => {
   // handle validate fields
   const validate = () => {
     const newErrors: Partial<Record<keyof ReimbursementFormData, string>> = {};
+    if (!isEmployee && self) {
+      if (!formData.branchId.trim()) {
+        newErrors.branchId = "Branch is required";
+      }
 
-    if (!formData.branchId.trim()) {
-      newErrors.branchId = "Branch is required";
+      if (!formData.userId.trim()) {
+        newErrors.userId = "Employee is required";
+      }
     }
-
-    // if (!formData.userId.trim()) {
-    //   newErrors.userId = "Employee is required";
-    // }
 
     if (!formData.name.trim()) {
       newErrors.name = "Expense name is required";
@@ -226,7 +233,7 @@ const AddReimbursement: React.FC = () => {
       const response = await addReimbursement(payload);
 
       if (response.success) {
-        navigate(pathNames.REIMBURSEMENT);
+        handleClose();
       }
     } finally {
       setLoading(false);
@@ -234,7 +241,9 @@ const AddReimbursement: React.FC = () => {
   };
 
   const handleClose = () => {
-    navigate(pathNames.REIMBURSEMENT);
+    navigate(
+      isEmployee ? employeePathNames.REIMBURSEMENT : pathNames.REIMBURSEMENT,
+    );
   };
 
   const handleAction = () => {
@@ -246,12 +255,23 @@ const AddReimbursement: React.FC = () => {
     await formRef.current?.requestSubmit();
   };
 
+  // handle toggle for manager self reimbursement or for employee
+  const handleSelfToggle = () => {
+    setSelf((prev) => !prev);
+  };
   return (
     <>
       <TopBar
         title="Add Reimbursements"
         actionButtons={
           <div className="flex gap-2">
+            {isManager && (
+              <Toggle
+                label="For Employee"
+                checked={self}
+                onChange={handleSelfToggle}
+              />
+            )}
             <Button name="Action" size="sm" onClick={handleAction} />
             <Button
               size="sm"
@@ -267,31 +287,40 @@ const AddReimbursement: React.FC = () => {
         <PageLoader loading={loading} />
         <form ref={formRef} method="POST" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:w-[40%] gap-4">
-            <SelectField
-              label="Branch"
-              required
-              value={
-                formData.branchId
-                  ? branchList?.find((ele) => ele?.value === formData.branchId)
-                  : ""
-              }
-              name={"branchId"}
-              options={branchList}
-              error={errors.branchId}
-              onChange={(option) => handleBranchChange(option.value)}
-            />
-            <SelectField
-              label="Select Employee"
-              value={
-                formData.userId
-                  ? userOptions?.find((ele) => ele.value === formData.userId)
-                  : ""
-              }
-              name={"userId"}
-              options={userOptions}
-              error={errors.userId}
-              onChange={(option) => handleChange("userId", option.value)}
-            />
+            {!isEmployee && self && (
+              <>
+                <SelectField
+                  label="Branch"
+                  required
+                  value={
+                    formData.branchId
+                      ? branchList?.find(
+                          (ele) => ele?.value === formData.branchId,
+                        )
+                      : ""
+                  }
+                  name={"branchId"}
+                  options={branchList}
+                  error={errors.branchId}
+                  onChange={(option) => handleBranchChange(option.value)}
+                />
+                <SelectField
+                  label="Select Employee"
+                  value={
+                    formData.userId
+                      ? userOptions?.find(
+                          (ele) => ele.value === formData.userId,
+                        )
+                      : ""
+                  }
+                  name={"userId"}
+                  options={userOptions}
+                  error={errors.userId}
+                  onChange={(option) => handleChange("userId", option.value)}
+                  required
+                />
+              </>
+            )}
             <TextField
               label="Expense Name"
               name="name"

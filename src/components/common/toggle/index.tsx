@@ -29,7 +29,7 @@ const Toggle: React.FC<ToggleProps> = ({
         onClick={() => onChange(!checked)}
         className={`relative h-6 w-11 rounded-full transition-colors duration-200 ${
           checked
-            ? "bg-primary-color"
+            ? "bg-primary"
             : "bg-gray-300"
         } ${
           disabled

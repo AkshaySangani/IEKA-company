@@ -110,7 +110,8 @@ export const employeePathNames = {
   LEAVE_REQUEST: "/performance/leave-request",
   MANUAL_PUNCH_REQUEST: "/performance/manual-punch-request",
   REIMBURSEMENT: "/reimbursement",
-  JOB_REFERRAL: "/job-referral",
+  ADD_REIMBURSEMENT: "/reimbursement/add-reimbursement",
+  REIMBURSEMENT_DETAILS: "/reimbursement/reimbursement-details",
   RESIGNATION: "/resignation",
   PAY_SLIP: "/pay_slip"
 }
@@ -135,6 +136,8 @@ export const roleBasePaths: ObjectType = {
     // Expense
     pathNames.EXPENSE,
     pathNames.REIMBURSEMENT,
+    pathNames.ADD_REIMBURSEMENT,
+    pathNames.REIMBURSEMENT_DETAILS,
     pathNames.OFFICE_EXPENSE,
 
     // Pay Slip
@@ -323,11 +326,6 @@ export const employeeMenuItems: MenuItem[] = [
     label: "Pay slip",
     icon: "fa-solid fa-file-circle-check",
     path: employeePathNames.PAY_SLIP,
-  },
-  {
-    label: "Job Referral",
-    icon: "fa-solid fa-user-plus",
-    path: employeePathNames.JOB_REFERRAL,
   },
   {
     label: "Apply Resignation",

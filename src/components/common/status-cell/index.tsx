@@ -21,6 +21,33 @@ const StatusCell = ({
 }: StatusCellProps) => {
   return (
     <div className="flex min-w-max items-center">
+      {/* Status */}
+      <span
+        className={`
+          mr-1
+          whitespace-nowrap
+          text-sm font-medium
+          ${statusColor[status] ?? "text-gray-600"}
+        `}
+      >
+        {statusMessage[status] ?? status}
+      </span>
+
+      {/* History - fixed width */}
+      <div className="flex h-6 w-6 shrink-0 items-center justify-center">
+        {showHistory && (
+          <button
+            type="button"
+            onClick={onHistory}
+            className="
+              flex h-5 w-5 items-center justify-center
+            "
+          >
+            <InfoIcon />
+          </button>
+        )}
+      </div>
+
       {/* Edit - fixed width */}
       <div className="flex h-6 w-6 shrink-0 items-center justify-center">
         {isEditable && (
@@ -38,33 +65,6 @@ const StatusCell = ({
           </button>
         )}
       </div>
-
-      {/* History - fixed width */}
-      <div className="flex h-6 w-6 shrink-0 items-center justify-center">
-        {showHistory && (
-          <button
-            type="button"
-            onClick={onHistory}
-            className="
-              flex h-5 w-5 items-center justify-center
-            "
-          >
-            <InfoIcon />
-          </button>
-        )}
-      </div>
-
-      {/* Status */}
-      <span
-        className={`
-          ml-1
-          whitespace-nowrap
-          text-sm font-medium
-          ${statusColor[status] ?? "text-gray-600"}
-        `}
-      >
-        {statusMessage[status] ?? status}
-      </span>
     </div>
   );
 };
