@@ -1,6 +1,5 @@
 import { apiRequest } from "../../services/request";
 import { ApiResponse } from "../../types/api.types";
-import { statusEnum } from "../../types/common-types";
 import { IManualPunchRequest } from "../../types/company/performance/manual-punch-request.types";
 
 export interface ManualPunchRequestAssignment {
