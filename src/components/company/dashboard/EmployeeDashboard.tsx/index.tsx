@@ -263,13 +263,11 @@ const EmployeeDashboard = () => {
 
   return (
     <>
-      {!isMobile && <TopBar title="EmployeeDashboard" />}
+      {!isMobile && <TopBar title="Dashboard" />}
       <div className="content-area bg-dashboardBg flex flex-col gap-3">
         <PageLoader loading={loading} />
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-4">
-          <div className="content-card">
-            <EmployeeCard />
-          </div>
+          <EmployeeCard />
           <ReimbursementCard
             cards={cards}
             selected={selected}

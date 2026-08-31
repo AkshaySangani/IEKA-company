@@ -12,7 +12,11 @@ import {
   punchOut,
 } from "../../../apis/performance/attendance.api";
 
-import { AttendanceMethodEnum, AttendanceStatusEnum, RoleEnum } from "../../../types/common-types";
+import {
+  AttendanceMethodEnum,
+  AttendanceStatusEnum,
+  RoleEnum,
+} from "../../../types/common-types";
 import { getDashboardProfile } from "../../../apis/dashboard/dashboard.api";
 import { getLocationPayload } from "../../../utils/location";
 import { DateFormat, formatDate } from "../../../utils/date-format";
@@ -94,9 +98,7 @@ const EmployeeCard = () => {
   const [employeeDetails, setEmployeeDetails] =
     useState<IDashboardProfileResponse | null>(null);
 
-  const [punchInfo, setPunchInfo] = useState<IPunchInfo | null>(
-    null,
-  );
+  const [punchInfo, setPunchInfo] = useState<IPunchInfo | null>(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -133,7 +135,6 @@ const EmployeeCard = () => {
       setLoading(false);
     }
   };
-  
 
   /**
    * Punch In
@@ -191,13 +192,13 @@ const EmployeeCard = () => {
    * User
    */
   const user = employeeDetails?.user;
+  const isOwner = user ? user.role === RoleEnum.OWNER : false;
 
   /**
    * Punch status
    */
   const isPunchedIn =
-    punchInfo?.inTime ??
-    Boolean(punchInfo?.inTime && !punchInfo?.outTime);
+    punchInfo?.inTime ?? Boolean(punchInfo?.inTime && !punchInfo?.outTime);
 
   /**
    * User branches
@@ -210,8 +211,8 @@ const EmployeeCard = () => {
   const departments = employeeDetails?.departments ?? [];
 
   return (
-    <div className="w-full relative bg-white p-3 shadow-[rgba(50,50,93,0.25)_0px_1px_3px_-5px,rgba(0,0,0,0.3)_0px_7px_15px_-8px] sm:p-4">
-      <PageLoader loading={loading}/>
+    <div className="w-full relative p-3 sm:p-4 content-card">
+      <PageLoader loading={loading} />
       {/* Top Greeting */}
       <div className="relative flex min-h-[115px] overflow-hidden bg-primaryBlur sm:min-h-[130px]">
         {/* Greeting + Punch */}
@@ -219,37 +220,37 @@ const EmployeeCard = () => {
           <div className="text-lg font-medium text-primaryLight sm:text-2xl">
             {getGreeting()} !
           </div>
+          {!isOwner && (
+            <>
+              <div className="mt-2 text-xs text-primaryDark">
+                {isPunchedIn ? (
+                  <>
+                    Punched in at{" "}
+                    <span className="font-medium">
+                      {formatDate(punchInfo?.inTime, DateFormat.TIME_24) ||
+                        "--"}
+                    </span>
+                  </>
+                ) : (
+                  "Not punched in"
+                )}
+              </div>
 
-          <div className="mt-2 text-xs text-primaryDark">
-            {isPunchedIn ? (
-              <>
-                Punched in at{" "}
-                <span className="font-medium">
-                  {formatDate(punchInfo?.inTime, DateFormat.TIME_24) || "--"}
-                </span>
-              </>
-            ) : (
-              "Not punched in"
-            )}
-          </div>
+              {/* Punch Button */}
+              <button
+                type="button"
+                disabled={loading}
+                onClick={isPunchedIn ? setPunchOut : setPunchIn}
+                className="mt-3 inline-flex h-9 items-center gap-2 rounded-sm border border-primaryLight bg-white px-3 text-sm font-medium text-primaryLight transition hover:bg-primaryLight hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <i className="fa-solid fa-user-clock text-sm" />
 
-          {/* Punch Button */}
-          <button
-            type="button"
-            disabled={loading}
-            onClick={isPunchedIn ? setPunchOut : setPunchIn}
-            className="mt-3 inline-flex h-9 items-center gap-2 rounded-sm border border-primaryLight bg-white px-3 text-sm font-medium text-primaryLight transition hover:bg-primaryLight hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <i className="fa-solid fa-user-clock text-sm" />
+                <span>{isPunchedIn ? "Punch Out" : "Punch In"}</span>
 
-            <span>
-              {isPunchedIn ? "Punch Out" : "Punch In"}
-            </span>
-
-            <span className="text-xs opacity-70">
-              ({formattedTime})
-            </span>
-          </button>
+                <span className="text-xs opacity-70">({formattedTime})</span>
+              </button>
+            </>
+          )}
         </div>
 
         {/* Illustration */}
@@ -268,17 +269,9 @@ const EmployeeCard = () => {
         <div className="flex items-start gap-3 sm:gap-4">
           {/* Profile Image */}
           <Image
-            src={
-              user?.profileImage
-                ? user.profileImage
-                : UserAvatar
-            }
+            src={user?.profileImage ? user.profileImage : UserAvatar}
             fallbackSrc={UserAvatar}
-            alt={
-              user
-                ? `${user.firstName} ${user.lastName}`
-                : "Employee"
-            }
+            alt={user ? `${user.firstName} ${user.lastName}` : "Employee"}
             className="h-14 w-14 shrink-0 rounded-full border border-borderPrimary object-cover sm:h-[68px] sm:w-[68px]"
           />
 
@@ -287,13 +280,17 @@ const EmployeeCard = () => {
             {/* Name + Designation */}
             <div className="flex flex-wrap items-baseline gap-x-2">
               <h2 className="text-lg font-semibold text-secondary sm:text-xl">
-                {user
-                  ? `${user.firstName} ${user.lastName}`
-                  : "--"}
+                {user ? `${user.firstName} ${user.lastName}` : "--"}
               </h2>
 
               <span className="text-sm text-grayText">
-                ({user?.designationId ? user?.designationId?.name : user?.role === RoleEnum.OWNER ? "COO" : "--"})
+                (
+                {user?.designationId
+                  ? user?.designationId?.name
+                  : user?.role === RoleEnum.OWNER
+                    ? "COO"
+                    : "--"}
+                )
               </span>
             </div>
 
@@ -305,8 +302,7 @@ const EmployeeCard = () => {
 
               {user?.shiftId && (
                 <span className="ml-1 text-grayText">
-                  ({user.shiftId.startTime} to{" "}
-                  {user.shiftId.endTime})
+                  ({user.shiftId.startTime} to {user.shiftId.endTime})
                 </span>
               )}
             </div>
