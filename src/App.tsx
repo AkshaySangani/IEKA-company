@@ -66,6 +66,7 @@ import PayslipPage from "./pages/company/pay-slip";
 import EmployeeResignationPage from "./pages/employee/resignation";
 import AllEmployeePayslipsPage from "./pages/company/pay-slip/employee-payslips";
 import EmployeePayslipDetailsPage from "./pages/company/pay-slip/employee-payslips/EmployeePayslipDetails";
+import PayslipDownloadPage from "./pages/company/pay-slip/pay-slip-download";
 
 function App() {
   return (
@@ -262,7 +263,11 @@ function App() {
             <Route
               path={pathNames.EMPLOYEE_PAY_SLIP_DETAILS_ID}
               element={<EmployeePayslipDetailsPage />}
-            />            
+            />
+            <Route
+              path={pathNames.EMPLOYEE_PAY_SLIP_DOWNLOAD}
+              element={<PayslipDownloadPage />}
+            />
           </Route>
 
           {/* employee */}
@@ -279,6 +284,10 @@ function App() {
             element={<ReimbursementDetailsPage />}
           />
           <Route path={employeePathNames.PAY_SLIP} element={<PayslipPage />} />
+          <Route
+            path={employeePathNames.PAY_SLIP_DOWNLOAD}
+            element={<PayslipDownloadPage />}
+          />
           <Route
             path={employeePathNames.RESIGNATION}
             element={<EmployeeResignationPage />}

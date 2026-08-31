@@ -249,3 +249,116 @@ export const getGreeting: () => string = () => {
   if (hour < 21) return "Good Evening";
   return "Good Night";
 };
+
+
+
+
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+export const calculateTotal = (items: { amount: number }[]): number => {
+  return items.reduce((total, item) => total + item.amount, 0);
+};
+
+const ones = [
+  "",
+  "One",
+  "Two",
+  "Three",
+  "Four",
+  "Five",
+  "Six",
+  "Seven",
+  "Eight",
+  "Nine",
+];
+
+const teens = [
+  "Ten",
+  "Eleven",
+  "Twelve",
+  "Thirteen",
+  "Fourteen",
+  "Fifteen",
+  "Sixteen",
+  "Seventeen",
+  "Eighteen",
+  "Nineteen",
+];
+
+const tens = [
+  "",
+  "",
+  "Twenty",
+  "Thirty",
+  "Forty",
+  "Fifty",
+  "Sixty",
+  "Seventy",
+  "Eighty",
+  "Ninety",
+];
+
+const twoDigitWords = (num: number): string => {
+  if (num < 10) {
+    return ones[num];
+  }
+
+  if (num < 20) {
+    return teens[num - 10];
+  }
+
+  const ten = Math.floor(num / 10);
+  const one = num % 10;
+
+  return `${tens[ten]}${one ? `-${ones[one]}` : ""}`;
+};
+
+export const numberToWords = (num: number): string => {
+  if (num === 0) {
+    return "Zero";
+  }
+
+  let number = Math.floor(num);
+  const parts: string[] = [];
+
+  const crore = Math.floor(number / 10000000);
+  number %= 10000000;
+
+  const lakh = Math.floor(number / 100000);
+  number %= 100000;
+
+  const thousand = Math.floor(number / 1000);
+  number %= 1000;
+
+  const hundred = Math.floor(number / 100);
+  number %= 100;
+
+  if (crore) {
+    parts.push(`${twoDigitWords(crore)} Crore`);
+  }
+
+  if (lakh) {
+    parts.push(`${twoDigitWords(lakh)} Lakh`);
+  }
+
+  if (thousand) {
+    parts.push(`${twoDigitWords(thousand)} Thousand`);
+  }
+
+  if (hundred) {
+    parts.push(`${ones[hundred]} Hundred`);
+  }
+
+  if (number) {
+    parts.push(twoDigitWords(number));
+  }
+
+  return parts.join(" ");
+};

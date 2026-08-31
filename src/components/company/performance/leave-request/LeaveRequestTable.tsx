@@ -1,25 +1,22 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import {
-  pathNames,
-  roleNames,
-  statusColor,
-  statusMessage,
-} from "../../../../constants/constants";
+import { pathNames, roleNames } from "../../../../constants/constants";
 import { ILeaveRequest } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";
-import {
-  formatDate,
-  getDateDifferenceInDays,
-} from "../../../../utils/date-format";
+import { formatDate } from "../../../../utils/date-format";
 import {
   HistoryPayload,
   initialHistory,
 } from "../../../../apis/history/history.api";
-import { HistoryFieldEnum } from "../../../../types/common-types";
+import {
+  HistoryFieldEnum,
+  LeaveDurationNames,
+  RoleEnum,
+} from "../../../../types/common-types";
 import HistoryModal from "../../../common/modal/HistoryModal";
+import StatusCell from "../../../common/status-cell";
+import { useAuthStore } from "../../../../store/auth-store";
 
 interface ILeaveRequestListProps {
   leaves: ILeaveRequest[];
@@ -30,6 +27,7 @@ export default function LeaveRequestTable({
   leaves,
   handleUpdateStatus,
 }: ILeaveRequestListProps) {
+  const { user } = useAuthStore();
   const navigate = useNavigate();
 
   // history states
@@ -61,23 +59,14 @@ export default function LeaveRequestTable({
       ),
     },
     {
-      header: "Start Date",
+      header: "Leave Date",
       className: "w-[15%]",
       render: (row) => <span>{formatDate(row.startDate)}</span>,
     },
     {
-      header: "End Date",
+      header: "Leave Duration",
       className: "w-[15%]",
-      render: (row) => <span>{formatDate(row.endDate)}</span>,
-    },
-    {
-      header: "Leave Days",
-      className: "w-[15%] text-center",
-      render: (row) => (
-        <span className="flex justify-center">
-          {getDateDifferenceInDays(row.startDate, row.endDate)}
-        </span>
-      ),
+      render: (row) => LeaveDurationNames[row.duration],
     },
     {
       header: "Request Date",
@@ -88,18 +77,15 @@ export default function LeaveRequestTable({
       header: "Status",
       className: "w-[10%]",
       render: (row) => {
+        const isManager =
+          user.role === RoleEnum.MANAGER && row.userId._id === user._id;
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            <i
-              onClick={() => handleUpdateStatus(row)}
-              className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={!isManager}
+            onHistory={() => handleShowHistory(row)}
+            onEdit={() => handleUpdateStatus(row)}
+          />
         );
       },
     },

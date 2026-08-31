@@ -100,6 +100,7 @@ export const pathNames = {
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
   EMPLOYEE_PAY_SLIP_DETAILS_ID: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details/:id",
   EMPLOYEE_PAY_SLIP_DETAILS: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details",
+  EMPLOYEE_PAY_SLIP_DOWNLOAD: "/pay-slip/all-employee-pay-slip/pay-slip-download"
 } as const;
 
   // =========================
@@ -118,6 +119,7 @@ export const employeePathNames = {
   REIMBURSEMENT_DETAILS: "/reimbursement/reimbursement-details",
   RESIGNATION: "/resignation",
   PAY_SLIP: "/pay_slip",
+  PAY_SLIP_DOWNLOAD: "/pay_slip/pay-slip-download"
 }
 
 export const roleBasePaths: ObjectType = {
@@ -152,7 +154,8 @@ export const roleBasePaths: ObjectType = {
     pathNames.OFFICE_EXPENSE_DETAILS,
 
     // pay-slip
-    employeePathNames.PAY_SLIP
+    employeePathNames.PAY_SLIP,
+    employeePathNames.PAY_SLIP_DOWNLOAD
   ],
 
   [RoleEnum.OWNER]: Object.values(pathNames),

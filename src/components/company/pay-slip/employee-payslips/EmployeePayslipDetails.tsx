@@ -50,6 +50,7 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
     if (!employeeId) return;
 
     fetchEmployeePayslip(employeeId);
+    // eslint-disable-next-line
   }, [employeeId, year]);
 
   const fetchEmployeePayslip = async (id: string) => {
@@ -99,12 +100,6 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
   };
 
   // --------------------------------------------------
-  // Payrolls
-  // --------------------------------------------------
-
-  const payrolls = data?.payrolls ?? [];
-
-  // --------------------------------------------------
   // Calculate Status Cards
   // --------------------------------------------------
 
@@ -113,7 +108,7 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
     let pfAmount = 0;
     let esicAmount = 0;
 
-    payrolls.forEach((payroll) => {
+    data?.payrolls.forEach((payroll) => {
       // Total yearly net salary
       totalAmount += payroll.totals?.netPayAmount ?? 0;
 
@@ -158,7 +153,7 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
         icon: <i className="fa-solid fa-indian-rupee-sign"></i>,
       },
     ];
-  }, [payrolls]);
+  }, [data?.payrolls]);
 
   // --------------------------------------------------
   // RENDER
@@ -204,7 +199,7 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
             <StatusCards cards={cards} />
 
             {/* Payslip Table */}
-            <EmployeePayslipTable payrolls={data.payrolls} />
+            <EmployeePayslipTable payrolls={data.payrolls} employee={data.user}/>
           </>
         ) : (
           <EmptyPlaceholder

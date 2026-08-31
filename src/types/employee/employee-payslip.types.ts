@@ -107,3 +107,7 @@ export interface IEmployeePayslipResponse {
   curruntSalary: number;
   payrolls: IEmployeePayroll[];
 }
+
+export interface PayslipProps {
+  
+}

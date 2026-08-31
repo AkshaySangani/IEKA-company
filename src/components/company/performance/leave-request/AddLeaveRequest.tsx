@@ -5,7 +5,6 @@ import TopBar from "../../../common/topbar/TopBar";
 import Button from "../../../common/button/Button";
 import PageLoader from "../../../common/loader/PageLoader";
 import SelectField from "../../../common/select/SelectField";
-import DateRangePicker from "../../../common/date-picker/DateRangePicker";
 import TextAreaField from "../../../common/text-area/TextAreaField";
 import ActionModal from "../../../common/modal/ActionModal";
 import Toggle from "../../../common/toggle";
@@ -14,6 +13,7 @@ import { pathNames } from "../../../../constants/constants";
 
 import {
   addLeaveRequest,
+  getLeaveBucket,
   LeaveFormData,
 } from "../../../../apis/performance/leave-request.api";
 
@@ -21,15 +21,11 @@ import {
   IOption,
   LeaveDuration,
   RoleEnum,
-  statusEnum,
 } from "../../../../types/common-types";
 
 import { getBranchShiftDepartment } from "../../../../apis/workforce/onboardings.api";
 
 import { IBranch } from "../../workforce/onboarding/assign-roles-responsibility";
-
-import { getLeaves } from "../../../../apis/organization/leave.api";
-import { ILeave } from "../../organization/leave";
 
 import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
 
@@ -38,6 +34,7 @@ import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { IUser } from "../../../../types/user.types";
 
 import { useAuthStore } from "../../../../store/auth-store";
+import TextField from "../../../common/text-field/TextField";
 
 /* -------------------------------------------------------------------------- */
 /*                             INITIAL FORM DATA                              */
@@ -54,6 +51,18 @@ interface ICommonLeaveFormData {
   startDate: string;
   endDate: string;
   reason: string;
+}
+
+export interface ILeaveBucket {
+  _id: string;
+  leaveId: {
+    _id: string;
+    name: string;
+    isPaid: boolean;
+  };
+  allocated: number;
+  pendingApproval: number;
+  used: number;
 }
 
 const initialFormData: ICommonLeaveFormData = {
@@ -179,9 +188,9 @@ const AddLeaveRequest: React.FC = () => {
    *   }
    * }
    */
-  const [rowErrors, setRowErrors] = useState<
-    Record<string, LeaveRowErrors>
-  >({});
+  const [rowErrors, setRowErrors] = useState<Record<string, LeaveRowErrors>>(
+    {},
+  );
 
   /* ------------------------------------------------------------------------ */
   /*                            INITIAL LOAD                                  */
@@ -201,26 +210,20 @@ const AddLeaveRequest: React.FC = () => {
     setBranchLoading(true);
 
     try {
-      const [branchResponse, leaveResponse] = await Promise.all([
+      const [branchResponse, leaveBucketResponse] = await Promise.all([
         getBranchShiftDepartment(),
 
-        getLeaves({
-          page: 1,
-          limit: 200,
-          status: statusEnum.ACTIVE,
-        }),
+        getLeaveBucket(new Date().getFullYear()),
       ]);
 
       /* ----------------------------- LEAVES ------------------------------ */
 
-      if (leaveResponse?.success) {
+      if (leaveBucketResponse?.success) {
         setLeaveOptions(
-          (leaveResponse.data.leaves || []).map(
-            (ele: ILeave) => ({
-              label: ele.name,
-              value: ele._id,
-            }),
-          ),
+          (leaveBucketResponse.data || []).map((ele: ILeaveBucket) => ({
+            label: `${ele.leaveId.name} ${ele.used}/${ele.allocated}`,
+            value: ele.leaveId._id,
+          })),
         );
       } else {
         setLeaveOptions([]);
@@ -241,10 +244,7 @@ const AddLeaveRequest: React.FC = () => {
         setBranchOptions([]);
       }
     } catch (error) {
-      console.error(
-        "Failed to fetch branch and leave data:",
-        error,
-      );
+      console.error("Failed to fetch branch and leave data:", error);
 
       setBranchOptions([]);
       setLeaveOptions([]);
@@ -257,9 +257,7 @@ const AddLeaveRequest: React.FC = () => {
   /*                     GET EMPLOYEE BY BRANCH                               */
   /* ------------------------------------------------------------------------ */
 
-  const getEmployeeDetailsByBranchId = async (
-    value: string,
-  ) => {
+  const getEmployeeDetailsByBranchId = async (value: string) => {
     setBranchLoading(true);
 
     try {
@@ -276,10 +274,7 @@ const AddLeaveRequest: React.FC = () => {
         setEmployeeOptions([]);
       }
     } catch (error) {
-      console.error(
-        "Failed to fetch employees:",
-        error,
-      );
+      console.error("Failed to fetch employees:", error);
 
       setEmployeeOptions([]);
     } finally {
@@ -291,9 +286,7 @@ const AddLeaveRequest: React.FC = () => {
   /*                         COMMON FIELD CHANGE                              */
   /* ------------------------------------------------------------------------ */
 
-  const handleChange = <
-    K extends keyof ICommonLeaveFormData,
-  >(
+  const handleChange = <K extends keyof ICommonLeaveFormData>(
     field: K,
     value: ICommonLeaveFormData[K],
   ) => {
@@ -301,6 +294,10 @@ const AddLeaveRequest: React.FC = () => {
       ...prev,
       [field]: value,
     }));
+
+    if (field === "endDate" && value) {
+      generateDateRows(new Date(formData.startDate), new Date(value));
+    }
 
     setErrors((prev) => ({
       ...prev,
@@ -312,10 +309,7 @@ const AddLeaveRequest: React.FC = () => {
   /*                       BRANCH / EMPLOYEE CHANGE                           */
   /* ------------------------------------------------------------------------ */
 
-  const handleSelectFilter = (
-    name: "branchId",
-    value: string,
-  ) => {
+  const handleSelectFilter = (name: "branchId", value: string) => {
     if (name === "branchId") {
       setBranchId(value);
 
@@ -345,46 +339,18 @@ const AddLeaveRequest: React.FC = () => {
   const getDateKey = (date: Date) => {
     const year = date.getFullYear();
 
-    const month = String(
-      date.getMonth() + 1,
-    ).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
 
-    const day = String(
-      date.getDate(),
-    ).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
-  };
-
-  /* ------------------------------------------------------------------------ */
-  /*                       DISPLAY DATE HELPER                                */
-  /* ------------------------------------------------------------------------ */
-
-  /**
-   * 12-06-2026
-   */
-  const formatDisplayDate = (date: Date) => {
-    const day = String(
-      date.getDate(),
-    ).padStart(2, "0");
-
-    const month = String(
-      date.getMonth() + 1,
-    ).padStart(2, "0");
-
-    const year = date.getFullYear();
-
-    return `${day}-${month}-${year}`;
   };
 
   /* ------------------------------------------------------------------------ */
   /*                     GENERATE DATE ROWS                                   */
   /* ------------------------------------------------------------------------ */
 
-  const generateDateRows = (
-    startDate: Date | null,
-    endDate: Date | null,
-  ) => {
+  const generateDateRows = (startDate: Date | null, endDate: Date | null) => {
     /**
      * If either date is missing,
      * remove table rows.
@@ -427,10 +393,7 @@ const AddLeaveRequest: React.FC = () => {
      * selections for 12, 13, 14 remain.
      */
     const existingRowsMap = new Map(
-      leaveRows.map((row) => [
-        getDateKey(row.date),
-        row,
-      ]),
+      leaveRows.map((row) => [getDateKey(row.date), row]),
     );
 
     const rows: LeaveDateRow[] = [];
@@ -442,24 +405,19 @@ const AddLeaveRequest: React.FC = () => {
 
       const dateKey = getDateKey(date);
 
-      const existingRow =
-        existingRowsMap.get(dateKey);
+      const existingRow = existingRowsMap.get(dateKey);
 
       rows.push({
         id: dateKey,
 
         date,
 
-        leaveId:
-          existingRow?.leaveId || "",
+        leaveId: existingRow?.leaveId || "",
 
-        duration:
-          existingRow?.duration || "",
+        duration: existingRow?.duration || "",
       });
 
-      current.setDate(
-        current.getDate() + 1,
-      );
+      current.setDate(current.getDate() + 1);
     }
 
     setLeaveRows(rows);
@@ -468,28 +426,6 @@ const AddLeaveRequest: React.FC = () => {
      * Clear row errors whenever date range changes.
      */
     setRowErrors({});
-  };
-
-  /* ------------------------------------------------------------------------ */
-  /*                        DATE RANGE CHANGE                                 */
-  /* ------------------------------------------------------------------------ */
-
-  const handleDateRangeChange = (
-    dates: [Date | null, Date | null],
-  ) => {
-    const [start, end] = dates;
-
-    handleChange(
-      "startDate",
-      start ? start.toISOString() : "",
-    );
-
-    handleChange(
-      "endDate",
-      end ? end.toISOString() : "",
-    );
-
-    generateDateRows(start, end);
   };
 
   /* ------------------------------------------------------------------------ */
@@ -531,10 +467,7 @@ const AddLeaveRequest: React.FC = () => {
        * If no errors remain for this row,
        * remove the row from errors.
        */
-      if (
-        !updatedError.leaveId &&
-        !updatedError.duration
-      ) {
+      if (!updatedError.leaveId && !updatedError.duration) {
         const newErrors = {
           ...prev,
         };
@@ -556,61 +489,46 @@ const AddLeaveRequest: React.FC = () => {
   /* ------------------------------------------------------------------------ */
 
   const validate = () => {
-    const newErrors: Partial<
-      Record<keyof ICommonLeaveFormData, string>
-    > = {};
+    const newErrors: Partial<Record<keyof ICommonLeaveFormData, string>> = {};
 
-    const newRowErrors: Record<
-      string,
-      LeaveRowErrors
-    > = {};
+    const newRowErrors: Record<string, LeaveRowErrors> = {};
 
     /* ---------------------------- EMPLOYEE ------------------------------- */
 
-    if (!formData.userId) {
-      newErrors.userId =
-        "Employee is required";
+    if (!isEmployee && self) {
+      if (!formData.userId) {
+        newErrors.userId = "Employee is required";
+      }
     }
 
     /* ---------------------------- START DATE ----------------------------- */
 
     if (!formData.startDate) {
-      newErrors.startDate =
-        "Start date is required";
+      newErrors.startDate = "Start date is required";
     }
 
     /* ----------------------------- END DATE ------------------------------ */
 
     if (!formData.endDate) {
-      newErrors.endDate =
-        "End date is required";
+      newErrors.endDate = "End date is required";
     }
 
     /* -------------------------- DATE VALIDATION -------------------------- */
 
-    if (
-      formData.startDate &&
-      formData.endDate
-    ) {
-      const start = new Date(
-        formData.startDate,
-      );
+    if (formData.startDate && formData.endDate) {
+      const start = new Date(formData.startDate);
 
-      const end = new Date(
-        formData.endDate,
-      );
+      const end = new Date(formData.endDate);
 
       if (end < start) {
-        newErrors.endDate =
-          "End date cannot be before start date";
+        newErrors.endDate = "End date cannot be before start date";
       }
     }
 
     /* --------------------------- TABLE ROWS ------------------------------ */
 
     if (leaveRows.length === 0) {
-      newErrors.startDate =
-        "Please select a valid date range";
+      newErrors.startDate = "Please select a valid date range";
     }
 
     /**
@@ -620,13 +538,11 @@ const AddLeaveRequest: React.FC = () => {
       const errors: LeaveRowErrors = {};
 
       if (!row.leaveId) {
-        errors.leaveId =
-          "Leave type is required";
+        errors.leaveId = "Leave type is required";
       }
 
       if (!row.duration) {
-        errors.duration =
-          "Applied for is required";
+        errors.duration = "Applied for is required";
       }
 
       if (Object.keys(errors).length > 0) {
@@ -638,20 +554,12 @@ const AddLeaveRequest: React.FC = () => {
 
     setRowErrors(newRowErrors);
 
-    const hasFormErrors =
-      Object.keys(newErrors).length > 0;
+    const hasFormErrors = Object.keys(newErrors).length > 0;
 
-    const hasRowErrors =
-      Object.keys(newRowErrors).length > 0;
+    const hasRowErrors = Object.keys(newRowErrors).length > 0;
 
-    if (
-      hasFormErrors ||
-      hasRowErrors
-    ) {
-      scrollToFirstValidationError(
-        newErrors,
-        newRowErrors,
-      );
+    if (hasFormErrors || hasRowErrors) {
+      scrollToFirstValidationError(newErrors, newRowErrors);
 
       return false;
     }
@@ -664,26 +572,15 @@ const AddLeaveRequest: React.FC = () => {
   /* ------------------------------------------------------------------------ */
 
   const scrollToFirstError = (
-    validationErrors: Partial<
-      Record<keyof ICommonLeaveFormData, string>
-    >,
+    validationErrors: Partial<Record<keyof ICommonLeaveFormData, string>>,
   ) => {
-    const firstErrorKey =
-      Object.keys(
-        validationErrors,
-      )[0];
+    const firstErrorKey = Object.keys(validationErrors)[0];
 
-    if (
-      !firstErrorKey ||
-      !formRef.current
-    ) {
+    if (!firstErrorKey || !formRef.current) {
       return;
     }
 
-    const field =
-      formRef.current.querySelector(
-        `[name="${firstErrorKey}"]`,
-      );
+    const field = formRef.current.querySelector(`[name="${firstErrorKey}"]`);
 
     if (!field) {
       return;
@@ -703,9 +600,7 @@ const AddLeaveRequest: React.FC = () => {
           }
         ).focus === "function"
       ) {
-        (
-          field as HTMLElement
-        ).focus();
+        (field as HTMLElement).focus();
       }
     }, 300);
   };
@@ -715,20 +610,13 @@ const AddLeaveRequest: React.FC = () => {
   /* ------------------------------------------------------------------------ */
 
   const scrollToFirstValidationError = (
-    formErrors: Partial<
-      Record<keyof ICommonLeaveFormData, string>
-    >,
-    tableErrors: Record<
-      string,
-      LeaveRowErrors
-    >,
+    formErrors: Partial<Record<keyof ICommonLeaveFormData, string>>,
+    tableErrors: Record<string, LeaveRowErrors>,
   ) => {
     /**
      * Form error has priority.
      */
-    if (
-      Object.keys(formErrors).length > 0
-    ) {
+    if (Object.keys(formErrors).length > 0) {
       scrollToFirstError(formErrors);
       return;
     }
@@ -736,20 +624,13 @@ const AddLeaveRequest: React.FC = () => {
     /**
      * Otherwise scroll to first table error.
      */
-    const firstRowId =
-      Object.keys(tableErrors)[0];
+    const firstRowId = Object.keys(tableErrors)[0];
 
-    if (
-      !firstRowId ||
-      !formRef.current
-    ) {
+    if (!firstRowId || !formRef.current) {
       return;
     }
 
-    const row =
-      formRef.current.querySelector(
-        `[data-row-id="${firstRowId}"]`,
-      );
+    const row = formRef.current.querySelector(`[data-row-id="${firstRowId}"]`);
 
     if (!row) {
       return;
@@ -779,42 +660,25 @@ const AddLeaveRequest: React.FC = () => {
    *   reason
    * }
    */
-  const createPayloads = (): LeaveFormData[] => {
-    return leaveRows.map(
-      (row) => ({
-        userId: formData.userId,
+  const createPayloads = (): LeaveFormData => {
+    const leaves = leaveRows.map((row) => ({
+      leaveId: row.leaveId,
+      date: formatDate(row.date, DateFormat.ISO_DATE),
 
-        leaveId: row.leaveId,
-
-        /**
-         * One row represents one day.
-         * Therefore startDate and endDate are same.
-         */
-        startDate: formatDate(
-          row.date,
-          DateFormat.ISO_DATE,
-        ),
-
-        endDate: formatDate(
-          row.date,
-          DateFormat.ISO_DATE,
-        ),
-
-        duration:
-          row.duration as LeaveDuration,
-
-        reason: formData.reason,
-      }),
-    );
+      duration: row.duration as LeaveDuration,
+    }));
+    return {
+      userId: formData.userId ? formData.userId : user._id,
+      reason: formData.reason,
+      leaves: leaves,
+    };
   };
 
   /* ------------------------------------------------------------------------ */
   /*                              SUBMIT                                     */
   /* ------------------------------------------------------------------------ */
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     /**
@@ -830,8 +694,7 @@ const AddLeaveRequest: React.FC = () => {
       /**
        * Convert all table rows into API payloads.
        */
-      const payloads =
-        createPayloads();
+      const payloads = createPayloads();
 
       /**
        * Your existing API appears to accept
@@ -839,30 +702,13 @@ const AddLeaveRequest: React.FC = () => {
        *
        * Therefore send one request per day.
        */
-      const responses =
-        await Promise.all(
-          payloads.map((payload) =>
-            addLeaveRequest(payload),
-          ),
-        );
+      const response = await addLeaveRequest(payloads);
 
-      /**
-       * Check if any request failed.
-       */
-      const hasError =
-        responses.some(
-          (response) =>
-            !response?.success,
-        );
-
-      if (!hasError) {
+      if (response?.success) {
         handleClose();
       }
     } catch (error) {
-      console.error(
-        "Failed to submit leave request:",
-        error,
-      );
+      console.error("Failed to submit leave request:", error);
     } finally {
       setLoading(false);
     }
@@ -873,9 +719,7 @@ const AddLeaveRequest: React.FC = () => {
   /* ------------------------------------------------------------------------ */
 
   const handleClose = () => {
-    setFormData(
-      initialFormData,
-    );
+    setFormData(initialFormData);
 
     setLeaveRows([]);
 
@@ -887,9 +731,7 @@ const AddLeaveRequest: React.FC = () => {
 
     setEmployeeOptions([]);
 
-    navigate(
-      pathNames.LEAVE_REQUEST,
-    );
+    navigate(pathNames.LEAVE_REQUEST);
   };
 
   /* ------------------------------------------------------------------------ */
@@ -901,9 +743,7 @@ const AddLeaveRequest: React.FC = () => {
       return;
     }
 
-    setActionOpen(
-      (prev) => !prev,
-    );
+    setActionOpen((prev) => !prev);
   };
 
   /* ------------------------------------------------------------------------ */
@@ -919,9 +759,7 @@ const AddLeaveRequest: React.FC = () => {
   /* ------------------------------------------------------------------------ */
 
   const handleSelfToggle = () => {
-    setSelf(
-      (prev) => !prev,
-    );
+    setSelf((prev) => !prev);
   };
 
   /* ------------------------------------------------------------------------ */
@@ -942,29 +780,17 @@ const AddLeaveRequest: React.FC = () => {
               <Toggle
                 label="For Employee"
                 checked={self}
-                onChange={
-                  handleSelfToggle
-                }
+                onChange={handleSelfToggle}
               />
             )}
 
-            <Button
-              name="Action"
-              size="sm"
-              onClick={
-                handleAction
-              }
-            />
+            <Button name="Action" size="sm" onClick={handleAction} />
 
             <Button
               size="sm"
               variant="danger"
-              onClick={
-                handleClose
-              }
-              leftIcon={
-                <i className="fa-solid fa-xmark fa-xl text-danger" />
-              }
+              onClick={handleClose}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger" />}
             />
           </div>
         }
@@ -975,18 +801,9 @@ const AddLeaveRequest: React.FC = () => {
       {/* ================================================================== */}
 
       <div className="content-area">
-        <PageLoader
-          loading={
-            branchLoading ||
-            loading
-          }
-        />
+        <PageLoader loading={branchLoading || loading} />
 
-        <form
-          ref={formRef}
-          method="POST"
-          onSubmit={handleSubmit}
-        >
+        <form ref={formRef} method="POST" onSubmit={handleSubmit}>
           {/* ============================================================ */}
           {/*                         COMMON FIELDS                        */}
           {/* ============================================================ */}
@@ -1012,28 +829,15 @@ const AddLeaveRequest: React.FC = () => {
                 required
                 value={
                   branchId
-                    ? (
-                        branchOptions.find(
-                          (
-                            option,
-                          ) =>
-                            option.value ===
-                            branchId,
-                        ) ?? ""
-                      )
+                    ? (branchOptions.find(
+                        (option) => option.value === branchId,
+                      ) ?? "")
                     : ""
                 }
                 name="branchId"
-                options={
-                  branchOptions
-                }
-                onChange={(
-                  option,
-                ) =>
-                  handleSelectFilter(
-                    "branchId",
-                    option.value,
-                  )
+                options={branchOptions}
+                onChange={(option) =>
+                  handleSelectFilter("branchId", option.value)
                 }
               />
             )}
@@ -1049,81 +853,53 @@ const AddLeaveRequest: React.FC = () => {
                 required
                 value={
                   formData.userId
-                    ? (
-                        employeeOptions.find(
-                          (
-                            option,
-                          ) =>
-                            option.value ===
-                            formData.userId,
-                        ) ?? ""
-                      )
+                    ? (employeeOptions.find(
+                        (option) => option.value === formData.userId,
+                      ) ?? "")
                     : ""
                 }
                 name="userId"
-                options={
-                  employeeOptions
-                }
-                error={
-                  errors.userId
-                }
-                onChange={(
-                  option,
-                ) =>
-                  handleChange(
-                    "userId",
-                    option.value,
-                  )
-                }
+                options={employeeOptions}
+                error={errors.userId}
+                onChange={(option) => handleChange("userId", option.value)}
               />
             )}
 
             {/* ---------------------------------------------------------- */}
             {/*                             DATE                           */}
             {/* ---------------------------------------------------------- */}
+            <TextField
+              label={"Start Date"}
+              required
+              type="date"
+              value={formData.startDate}
+              error={errors.startDate}
+              onChange={(e) => handleChange("startDate", e.target.value)}
+              min={formatDate(new Date(), DateFormat.ISO_DATE)}
+            />
+            <TextField
+              label={"End Date"}
+              required
+              type="date"
+              value={formData.endDate}
+              error={errors.endDate}
+              onChange={(e) => handleChange("endDate", e.target.value)}
+              disabled={!formData.startDate}
+              min={formatDate(formData.startDate, DateFormat.ISO_DATE)}
+            />
 
-            <div
-              className="flex flex-col"
-              data-error={
-                !!(
-                  errors.startDate ||
-                  errors.endDate
-                )
-              }
-            >
-              <DateRangePicker
-                label="Date"
-                required
-                startDate={
-                  formData.startDate
-                    ? new Date(
-                        formData.startDate,
-                      )
-                    : null
-                }
-                endDate={
-                  formData.endDate
-                    ? new Date(
-                        formData.endDate,
-                      )
-                    : null
-                }
-                onChange={
-                  handleDateRangeChange
-                }
-                minDate={
-                  new Date()
-                }
-              />
+            {/* ============================================================ */}
+            {/*                            REASON                            */}
+            {/* ============================================================ */}
 
-              {(errors.startDate ||
-                errors.endDate) && (
-                <span className="mt-1 text-xs text-red-500">
-                  {errors.startDate ||
-                    errors.endDate}
-                </span>
-              )}
-            </div>
+            <TextAreaField
+              label="Reason"
+              name="reason"
+              value={formData.reason}
+              error={errors.reason}
+              placeholder="Enter reason"
+              onChange={(e) => handleChange("reason", e.target.value)}
+            />
           </div>
 
           {/* ============================================================ */}
@@ -1131,7 +907,7 @@ const AddLeaveRequest: React.FC = () => {
           {/* ============================================================ */}
 
           {leaveRows.length > 0 && (
-            <div className="mt-5 w-full overflow-hidden rounded-sm border border-borderPrimary">
+            <div className="mt-5 w-full overflow-hidden rounded-sm border-t border-borderPrimary">
               {/* -------------------------------------------------------- */}
               {/*                    MOBILE SCROLL CONTAINER               */}
               {/* -------------------------------------------------------- */}
@@ -1149,23 +925,23 @@ const AddLeaveRequest: React.FC = () => {
                   <div
                     className="
                       grid
-                      grid-cols-[100px_200px_minmax(250px,1fr)_minmax(250px,1fr)]
+                      grid-cols-[50px_100px_minmax(150px,1fr)_minmax(150px,1fr)]
                       bg-[#f1f1f1]
                     "
                   >
-                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                    <div className="px-3 py-3 text-sm font-medium text-secondary">
                       Day
                     </div>
 
-                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                    <div className="px-3 py-3 text-sm font-medium text-secondary">
                       Date
                     </div>
 
-                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                    <div className="px-3 py-3 text-sm font-medium text-secondary">
                       Leave Type
                     </div>
 
-                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                    <div className="px-3 py-3 text-sm font-medium text-secondary">
                       Applied For
                     </div>
                   </div>
@@ -1174,188 +950,107 @@ const AddLeaveRequest: React.FC = () => {
                   {/*                           ROWS                       */}
                   {/* ================================================== */}
 
-                  {leaveRows.map(
-                    (
-                      row,
-                      index,
-                    ) => {
-                      const currentErrors =
-                        rowErrors[
-                          row.id
-                        ];
+                  {leaveRows.map((row, index) => {
+                    const currentErrors = rowErrors[row.id];
 
-                      return (
-                        <div
-                          key={
-                            row.id
-                          }
-                          data-row-id={
-                            row.id
-                          }
-                          className="
+                    return (
+                      <div
+                        key={row.id}
+                        data-row-id={row.id}
+                        className="
                             grid
-                            grid-cols-[100px_200px_minmax(250px,1fr)_minmax(250px,1fr)]
+                            grid-cols-[50px_100px_minmax(150px,1fr)_minmax(150px,1fr)]
                             border-t
                             border-borderPrimary
                             bg-white
                           "
+                      >
+                        {/* ------------------------------------------------ */}
+                        {/*                            DAY                  */}
+                        {/* ------------------------------------------------ */}
+
+                        <div
+                          className="
+                              flex
+                              items-center
+                              px-3
+                              py-3
+                              text-sm
+                              text-secondary
+                            "
                         >
-                          {/* ------------------------------------------------ */}
-                          {/*                            DAY                  */}
-                          {/* ------------------------------------------------ */}
-
-                          <div
-                            className="
-                              flex
-                              items-center
-                              px-3
-                              py-3
-                              text-sm
-                              text-secondary
-                            "
-                          >
-                            {index +
-                              1}
-                          </div>
-
-                          {/* ------------------------------------------------ */}
-                          {/*                           DATE                  */}
-                          {/* ------------------------------------------------ */}
-
-                          <div
-                            className="
-                              flex
-                              items-center
-                              px-3
-                              py-3
-                              text-sm
-                              text-secondary
-                            "
-                          >
-                            {formatDisplayDate(
-                              row.date,
-                            )}
-                          </div>
-
-                          {/* ------------------------------------------------ */}
-                          {/*                       LEAVE TYPE                */}
-                          {/* ------------------------------------------------ */}
-
-                          <div className="px-3 py-2">
-                            <SelectField
-                              placeholder="Select Leave"
-                              value={
-                                row.leaveId
-                                  ? (
-                                      leaveOptions.find(
-                                        (
-                                          option,
-                                        ) =>
-                                          option.value ===
-                                          row.leaveId,
-                                      ) ??
-                                      ""
-                                    )
-                                  : ""
-                              }
-                              options={
-                                leaveOptions
-                              }
-                              error={
-                                currentErrors?.leaveId
-                              }
-                              name={`leaveId-${row.id}`}
-                              onChange={(
-                                option,
-                              ) =>
-                                updateLeaveRow(
-                                  row.id,
-                                  "leaveId",
-                                  option.value,
-                                )
-                              }
-                            />
-                          </div>
-
-                          {/* ------------------------------------------------ */}
-                          {/*                       APPLIED FOR              */}
-                          {/* ------------------------------------------------ */}
-
-                          <div className="px-3 py-2">
-                            <SelectField
-                              placeholder="Select an option"
-                              value={
-                                row.duration
-                                  ? (
-                                      durationOptions.find(
-                                        (
-                                          option,
-                                        ) =>
-                                          option.value ===
-                                          row.duration,
-                                      ) ??
-                                      ""
-                                    )
-                                  : ""
-                              }
-                              options={
-                                durationOptions
-                              }
-                              error={
-                                currentErrors?.duration
-                              }
-                              name={`duration-${row.id}`}
-                              onChange={(
-                                option,
-                              ) =>
-                                updateLeaveRow(
-                                  row.id,
-                                  "duration",
-                                  option.value,
-                                )
-                              }
-                            />
-                          </div>
+                          {index + 1}
                         </div>
-                      );
-                    },
-                  )}
+
+                        {/* ------------------------------------------------ */}
+                        {/*                           DATE                  */}
+                        {/* ------------------------------------------------ */}
+
+                        <div
+                          className="
+                              flex
+                              items-center
+                              px-3
+                              py-3
+                              text-sm
+                              text-secondary
+                            "
+                        >
+                          {formatDate(row.date)}
+                        </div>
+
+                        {/* ------------------------------------------------ */}
+                        {/*                       LEAVE TYPE                */}
+                        {/* ------------------------------------------------ */}
+
+                        <div className="px-3 py-2">
+                          <SelectField
+                            placeholder="Select Leave"
+                            value={
+                              row.leaveId
+                                ? (leaveOptions.find(
+                                    (option) => option.value === row.leaveId,
+                                  ) ?? "")
+                                : ""
+                            }
+                            options={leaveOptions}
+                            error={currentErrors?.leaveId}
+                            name={`leaveId-${row.id}`}
+                            onChange={(option) =>
+                              updateLeaveRow(row.id, "leaveId", option.value)
+                            }
+                          />
+                        </div>
+
+                        {/* ------------------------------------------------ */}
+                        {/*                       APPLIED FOR              */}
+                        {/* ------------------------------------------------ */}
+
+                        <div className="px-3 py-2">
+                          <SelectField
+                            placeholder="Select an option"
+                            value={
+                              row.duration
+                                ? (durationOptions.find(
+                                    (option) => option.value === row.duration,
+                                  ) ?? "")
+                                : ""
+                            }
+                            options={durationOptions}
+                            error={currentErrors?.duration}
+                            name={`duration-${row.id}`}
+                            onChange={(option) =>
+                              updateLeaveRow(row.id, "duration", option.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           )}
-
-          {/* ============================================================ */}
-          {/*                            REASON                            */}
-          {/* ============================================================ */}
-
-          <div
-            className="
-              mt-4
-              w-full
-              sm:w-[60%]
-              md:w-[50%]
-              lg:w-[45%]
-            "
-          >
-            <TextAreaField
-              label="Reason"
-              name="reason"
-              value={
-                formData.reason
-              }
-              error={
-                errors.reason
-              }
-              placeholder="Enter reason"
-              onChange={(e) =>
-                handleChange(
-                  "reason",
-                  e.target.value,
-                )
-              }
-            />
-          </div>
         </form>
       </div>
 
@@ -1367,12 +1062,8 @@ const AddLeaveRequest: React.FC = () => {
         isOpen={actionOpen}
         title="Are you sure you want to apply leave?"
         loading={loading}
-        handleOpenClose={
-          handleAction
-        }
-        handleSubmit={
-          handleOnConfirm
-        }
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
       />
     </>
   );

@@ -54,7 +54,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     }
   };
 
-  const isEmployee = ((user.role === RoleEnum.EMPLOYEE) || (viewMode === ViewModeEnum.EMPLOYEE))
+  const isEmployee = ((user.role === RoleEnum.EMPLOYEE) || (viewMode === ViewModeEnum.EMPLOYEE));
 
   return (
     <aside
@@ -150,7 +150,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             </div>
           </li>
 
-          {accessibleMenus.map((menu) =>
+          {accessibleMenus.map((menu) => 
             menu.submenu ? (
               <li key={menu.label}>
                 <div
