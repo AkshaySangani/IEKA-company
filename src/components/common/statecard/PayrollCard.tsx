@@ -52,7 +52,7 @@ const PayrollStatCard: React.FC<PayrollCardProps> = ({
       </div>
 
       {/* Bottom amount pill */}
-      <div className="mt-5 w-[140px] flex items-center gap-3 rounded-full bg-white px-1.5 py-1 shadow-md">
+      <div className="mt-5 w-full flex items-center gap-3 rounded-full bg-white px-1.5 py-1 shadow-md">
         <div className={`flex h-9 w-9 items-center justify-center rounded-full ${iconBgColor} text-white`}>
           {icon}
         </div>

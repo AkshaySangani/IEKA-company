@@ -45,6 +45,8 @@ body {
 
   .content-area {
     padding: 12px 8px 24px;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
   }
 }
 

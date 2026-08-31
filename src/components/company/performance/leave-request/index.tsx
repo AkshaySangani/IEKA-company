@@ -6,9 +6,10 @@ import Pagination from "../../../common/pagination/Pagination";
 import {
   FilterCardItem,
   LeaveDuration,
+  RoleEnum,
   statusEnum,
 } from "../../../../types/common-types";
-import { pathNames } from "../../../../constants/constants";
+import { employeePathNames, pathNames } from "../../../../constants/constants";
 import LeaveRequestTable from "./LeaveRequestTable";
 import { useNavigate } from "react-router-dom";
 import StatusUpdateModal from "../../../common/modal/StatusModal";
@@ -19,6 +20,7 @@ import {
 } from "../../../../apis/performance/leave-request.api";
 import StatusCards, { LeaveStats } from "./StatusCards";
 import { IUser } from "../../../../types/user.types";
+import { useAuthStore } from "../../../../store/auth-store";
 
 export interface ILeaveRequest {
   _id: string;
@@ -61,6 +63,8 @@ export const initialLeaveRequest: ILeaveRequest = {
 };
 
 const LeaveRequest: React.FC = () => {
+  const { user } = useAuthStore();
+    const isEmployee = user.role === RoleEnum.EMPLOYEE;
   const navigate = useNavigate();
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -175,7 +179,7 @@ const LeaveRequest: React.FC = () => {
 
   // handle click add new
   const handleOnAdd = () => {
-    navigate(pathNames.ADD_LEAVE_REQUEST);
+    navigate(isEmployee ? employeePathNames.ADD_LEAVE_REQUEST : pathNames.ADD_LEAVE_REQUEST);
   };
 
   // handle status open close

@@ -124,9 +124,6 @@ const EmployeeCard = () => {
         getPunchInfo(),
       ]);
 
-      console.log("Profile Response", profileResponse);
-      console.log("Punch Response", punchResponse);
-
       setEmployeeDetails(profileResponse?.data);
       setPunchInfo(punchResponse?.data);
     } catch (error) {

@@ -98,6 +98,8 @@ export const pathNames = {
   DEDUCTION: "/pay-slip/deductions",
   PAY_SLIP_ANNUAL_SHEET: "/pay-slip/pay-slip-annual-sheet",
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
+  EMPLOYEE_PAY_SLIP_DETAILS_ID: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details/:id",
+  EMPLOYEE_PAY_SLIP_DETAILS: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details",
 } as const;
 
   // =========================
@@ -108,12 +110,14 @@ export const employeePathNames = {
   PERFORMANCE: "/performance",
   ATTENDANCE: "/performance/attendance",
   LEAVE_REQUEST: "/performance/leave-request",
+  ADD_LEAVE_REQUEST: "/performance/leave-request/add-leave-request",
+  ADD_LEAVE_REQUEST_ID: "/performance/leave-request/add-leave-request/:id",
   MANUAL_PUNCH_REQUEST: "/performance/manual-punch-request",
   REIMBURSEMENT: "/reimbursement",
   ADD_REIMBURSEMENT: "/reimbursement/add-reimbursement",
   REIMBURSEMENT_DETAILS: "/reimbursement/reimbursement-details",
   RESIGNATION: "/resignation",
-  PAY_SLIP: "/pay_slip"
+  PAY_SLIP: "/pay_slip",
 }
 
 export const roleBasePaths: ObjectType = {
@@ -134,6 +138,8 @@ export const roleBasePaths: ObjectType = {
     pathNames.PERFORMANCE,
     pathNames.ATTENDANCE,
     pathNames.LEAVE_REQUEST,
+    pathNames.ADD_LEAVE_REQUEST,
+    pathNames.ADD_LEAVE_REQUEST_ID,
     pathNames.MANUAL_PUNCH_REQUEST,
 
     // Expense
@@ -144,6 +150,9 @@ export const roleBasePaths: ObjectType = {
     pathNames.OFFICE_EXPENSE,
     pathNames.ADD_OFFICE_EXPENSE,
     pathNames.OFFICE_EXPENSE_DETAILS,
+
+    // pay-slip
+    employeePathNames.PAY_SLIP
   ],
 
   [RoleEnum.OWNER]: Object.values(pathNames),
@@ -286,13 +295,20 @@ export const menuItems: MenuItem[] = [
         path: pathNames.PAY_SLIP_ANNUAL_SHEET,
       },
       {
-        label: "All Employee Pay slip",
+        label: "Employee Payslip",
         path: pathNames.ALL_EMPLOYEE_PAY_SLIP,
       },
     ],
   },
 ];
 
+export const manageExtraMenuItems: MenuItem[] = [
+  {
+    label: "Pay slip",
+    icon: "fa-solid fa-file-circle-check",
+    path: employeePathNames.PAY_SLIP,
+  },
+]
 export const employeeMenuItems: MenuItem[] = [
   {
     label: "Dashboard",

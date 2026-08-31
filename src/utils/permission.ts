@@ -1,4 +1,4 @@
-import { employeeMenuItems, employeePathNames, menuItems, pathNames, roleBasePaths } from "../constants/constants";
+import { employeeMenuItems, employeePathNames, manageExtraMenuItems, menuItems, pathNames, roleBasePaths } from "../constants/constants";
 import { RoleEnum, ViewModeEnum } from "../types/common-types";
 import { MenuItem } from "../types/sidebar-types";
 
@@ -30,10 +30,8 @@ export const getAllowedPaths = (
 export const getAccessibleMenus = (
   role: RoleEnum,
 ): MenuItem[] => {
-  if(role === RoleEnum.EMPLOYEE){
-    return employeeMenuItems;
-  }
-  return menuItems
+  // check permission and filter menus
+  const allMenus = menuItems
     .map((menu) => {
       // Menu with submenu
       if (menu.submenu?.length) {
@@ -58,6 +56,13 @@ export const getAccessibleMenus = (
       // Show normal menu if user has access
       return hasPathAccess(role, menu.path??"");
     });
+    if(role === RoleEnum.EMPLOYEE){
+    return employeeMenuItems;
+  }
+  if(role === RoleEnum.MANAGER){
+    return [...allMenus, ...manageExtraMenuItems];
+  }
+  return allMenus; 
 };
 
 export const getDefaultRouteByRole = (role: RoleEnum, viewMode: ViewModeEnum | null): string => {

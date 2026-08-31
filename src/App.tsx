@@ -63,8 +63,9 @@ import EmployeeAttendanceDetailsPage from "./pages/company/performance/attendanc
 import EmployeePayrollPage from "./pages/company/expense/employee-payroll";
 import EmployeePayrollPerformancePage from "./pages/company/expense/employee-payroll/EmployeePayrollPerformance";
 import PayslipPage from "./pages/company/pay-slip";
-import EmployeeJobReferralPage from "./pages/employee/job-referral";
 import EmployeeResignationPage from "./pages/employee/resignation";
+import AllEmployeePayslipsPage from "./pages/company/pay-slip/employee-payslips";
+import EmployeePayslipDetailsPage from "./pages/company/pay-slip/employee-payslips/EmployeePayslipDetails";
 
 function App() {
   return (
@@ -254,6 +255,14 @@ function App() {
               path={pathNames.DEDUCTION}
               element={<PayslipDeductionsPage />}
             />
+            <Route
+              path={pathNames.ALL_EMPLOYEE_PAY_SLIP}
+              element={<AllEmployeePayslipsPage />}
+            />
+            <Route
+              path={pathNames.EMPLOYEE_PAY_SLIP_DETAILS_ID}
+              element={<EmployeePayslipDetailsPage />}
+            />            
           </Route>
 
           {/* employee */}

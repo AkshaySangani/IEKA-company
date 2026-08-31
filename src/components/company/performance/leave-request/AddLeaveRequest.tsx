@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import TopBar from "../../../common/topbar/TopBar";
 import Button from "../../../common/button/Button";
 import PageLoader from "../../../common/loader/PageLoader";
 import SelectField from "../../../common/select/SelectField";
 import DateRangePicker from "../../../common/date-picker/DateRangePicker";
+import TextAreaField from "../../../common/text-area/TextAreaField";
+import ActionModal from "../../../common/modal/ActionModal";
+import Toggle from "../../../common/toggle";
 
 import { pathNames } from "../../../../constants/constants";
 
@@ -17,32 +20,46 @@ import {
 import {
   IOption,
   LeaveDuration,
+  RoleEnum,
   statusEnum,
 } from "../../../../types/common-types";
 
 import { getBranchShiftDepartment } from "../../../../apis/workforce/onboardings.api";
 
-import {
-  IBranch,
-} from "../../workforce/onboarding/assign-roles-responsibility";
-import TextAreaField from "../../../common/text-area/TextAreaField";
+import { IBranch } from "../../workforce/onboarding/assign-roles-responsibility";
+
 import { getLeaves } from "../../../../apis/organization/leave.api";
 import { ILeave } from "../../organization/leave";
-import ActionModal from "../../../common/modal/ActionModal";
+
 import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
+
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+
 import { IUser } from "../../../../types/user.types";
+
+import { useAuthStore } from "../../../../store/auth-store";
 
 /* -------------------------------------------------------------------------- */
 /*                             INITIAL FORM DATA                              */
 /* -------------------------------------------------------------------------- */
 
-const initialFormData: LeaveFormData = {
+/**
+ * Common form fields.
+ *
+ * Leave Type and Duration are NOT kept here because
+ * they are different for every selected date.
+ */
+interface ICommonLeaveFormData {
+  userId: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+}
+
+const initialFormData: ICommonLeaveFormData = {
   userId: "",
-  leaveId: "",
   startDate: "",
   endDate: "",
-  duration: LeaveDuration.FULL_DAY,
   reason: "",
 };
 
@@ -66,10 +83,35 @@ const durationOptions: IOption[] = [
 ];
 
 /* -------------------------------------------------------------------------- */
-/*                              COMPONENT                                     */
+/*                              TABLE ROW TYPE                                */
+/* -------------------------------------------------------------------------- */
+
+interface LeaveDateRow {
+  id: string;
+  date: Date;
+  leaveId: string;
+  duration: LeaveDuration | "";
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             ROW ERROR TYPE                                 */
+/* -------------------------------------------------------------------------- */
+
+interface LeaveRowErrors {
+  leaveId?: string;
+  duration?: string;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                           COMPONENT                                        */
 /* -------------------------------------------------------------------------- */
 
 const AddLeaveRequest: React.FC = () => {
+  const { user } = useAuthStore();
+
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
+  const isManager = user.role === RoleEnum.MANAGER;
+
   const navigate = useNavigate();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -79,100 +121,89 @@ const AddLeaveRequest: React.FC = () => {
   /* ------------------------------------------------------------------------ */
 
   const [loading, setLoading] = useState(false);
+
   const [branchLoading, setBranchLoading] = useState(false);
 
-  // action state for show confirmation popup
+  const [self, setSelf] = useState<boolean>(true);
+
   const [actionOpen, setActionOpen] = useState<boolean>(false);
 
   /**
-   * Branch / Shift are only used for filtering employees.
-   * They are NOT part of the API payload.
+   * Branch is only used for employee filtering.
+   * It is NOT sent to API.
    */
   const [branchId, setBranchId] = useState("");
 
   const [branchOptions, setBranchOptions] = useState<IOption[]>([]);
+
   const [employeeOptions, setEmployeeOptions] = useState<IOption[]>([]);
+
   const [leaveOptions, setLeaveOptions] = useState<IOption[]>([]);
 
   /**
-   * Main form state.
+   * Common form data.
    *
-   * This directly represents the API payload.
+   * Contains:
+   * - userId
+   * - startDate
+   * - endDate
+   * - reason
    */
-  const [formData, setFormData] = useState<LeaveFormData>(initialFormData);
+  const [formData, setFormData] =
+    useState<ICommonLeaveFormData>(initialFormData);
 
+  /**
+   * Every selected date gets one row.
+   *
+   * Example:
+   *
+   * 12 June -> Casual Leave -> Full Day
+   * 13 June -> Sick Leave   -> First Half
+   * 14 June -> Casual Leave -> Second Half
+   */
+  const [leaveRows, setLeaveRows] = useState<LeaveDateRow[]>([]);
+
+  /**
+   * Normal form errors.
+   */
   const [errors, setErrors] = useState<
-    Partial<Record<keyof LeaveFormData, string>>
+    Partial<Record<keyof ICommonLeaveFormData, string>>
+  >({});
+
+  /**
+   * Row-wise errors.
+   *
+   * {
+   *   "2026-06-12": {
+   *      leaveId: "Leave type is required"
+   *   }
+   * }
+   */
+  const [rowErrors, setRowErrors] = useState<
+    Record<string, LeaveRowErrors>
   >({});
 
   /* ------------------------------------------------------------------------ */
-  /*                              INITIAL LOAD                                */
+  /*                            INITIAL LOAD                                  */
   /* ------------------------------------------------------------------------ */
 
   useEffect(() => {
-    fetchBranchList();
+    fetchInitialData();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (leaveId) {
-  //     fetchLeaveRequestById(leaveId);
-  //   }
-  // }, [leaveId]);
-
-  // /* ------------------------------------------------------------------------ */
-  // /*                         FETCH EXISTING REQUEST                            */
-  // /* ------------------------------------------------------------------------ */
-
-  // const fetchLeaveRequestById = async (id: string) => {
-  //   try {
-  //     setLoading(true);
-
-  //     /**
-  //      * Uncomment when your API is ready.
-  //      *
-  //      * Example expected response:
-  //      *
-  //      * {
-  //      *   userId: "...",
-  //      *   leaveId: "...",
-  //      *   startDate: "...",
-  //      *   endDate: "...",
-  //      *   duration: "FULL_DAY",
-  //      *   reason: "..."
-  //      * }
-  //      */
-
-  //     const response = await getLeaveRequestById(id);
-
-  //     if (response?.success && response?.data) {
-  //       const data = response.data;
-
-  //       setFormData({
-  //         userId: data.userId ?? "",
-  //         leaveId: data.leaveId ?? "",
-  //         startDate: data.startDate ?? "",
-  //         endDate: data.endDate ?? "",
-  //         duration: data.duration ?? "",
-  //         reason: data.reason ?? "",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch leave request:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   /* ------------------------------------------------------------------------ */
-  /*                         FETCH BRANCH / SHIFT / LEAVE                     */
+  /*                         FETCH INITIAL DATA                               */
   /* ------------------------------------------------------------------------ */
 
-  const fetchBranchList = async () => {
+  const fetchInitialData = async () => {
     setBranchLoading(true);
 
     try {
       const [branchResponse, leaveResponse] = await Promise.all([
         getBranchShiftDepartment(),
+
         getLeaves({
           page: 1,
           limit: 200,
@@ -180,19 +211,23 @@ const AddLeaveRequest: React.FC = () => {
         }),
       ]);
 
-      // Handle leaves
+      /* ----------------------------- LEAVES ------------------------------ */
+
       if (leaveResponse?.success) {
         setLeaveOptions(
-          (leaveResponse.data.leaves || []).map((ele: ILeave) => ({
-            label: ele.name,
-            value: ele._id,
-          })),
+          (leaveResponse.data.leaves || []).map(
+            (ele: ILeave) => ({
+              label: ele.name,
+              value: ele._id,
+            }),
+          ),
         );
       } else {
         setLeaveOptions([]);
       }
 
-      // Handle branches
+      /* ----------------------------- BRANCH ------------------------------ */
+
       if (branchResponse?.success) {
         const branches = branchResponse.data || [];
 
@@ -206,7 +241,11 @@ const AddLeaveRequest: React.FC = () => {
         setBranchOptions([]);
       }
     } catch (error) {
-      console.error("Failed to fetch branch and leave data:", error);
+      console.error(
+        "Failed to fetch branch and leave data:",
+        error,
+      );
+
       setBranchOptions([]);
       setLeaveOptions([]);
     } finally {
@@ -214,14 +253,21 @@ const AddLeaveRequest: React.FC = () => {
     }
   };
 
-  // get Employee Details by Branch
-  const getEmployeeDetailsByBranchId = async (value: string) => {
+  /* ------------------------------------------------------------------------ */
+  /*                     GET EMPLOYEE BY BRANCH                               */
+  /* ------------------------------------------------------------------------ */
+
+  const getEmployeeDetailsByBranchId = async (
+    value: string,
+  ) => {
     setBranchLoading(true);
+
     try {
       const response = await getManagedEmployee(value);
-      if (response.success) {
+
+      if (response?.success) {
         setEmployeeOptions(
-          response?.data?.map((ele: IUser) => ({
+          (response?.data || []).map((ele: IUser) => ({
             value: ele?._id,
             label: `${ele?.firstName} ${ele?.lastName}`,
           })),
@@ -229,29 +275,33 @@ const AddLeaveRequest: React.FC = () => {
       } else {
         setEmployeeOptions([]);
       }
-    } catch (err) {
-      console.log("ERROR", err);
+    } catch (error) {
+      console.error(
+        "Failed to fetch employees:",
+        error,
+      );
+
+      setEmployeeOptions([]);
     } finally {
       setBranchLoading(false);
     }
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                            HANDLE CHANGE                                  */
+  /*                         COMMON FIELD CHANGE                              */
   /* ------------------------------------------------------------------------ */
 
-  const handleChange = <K extends keyof LeaveFormData>(
+  const handleChange = <
+    K extends keyof ICommonLeaveFormData,
+  >(
     field: K,
-    value: LeaveFormData[K],
+    value: ICommonLeaveFormData[K],
   ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
 
-    /**
-     * Clear field error when user changes the value.
-     */
     setErrors((prev) => ({
       ...prev,
       [field]: "",
@@ -259,77 +309,350 @@ const AddLeaveRequest: React.FC = () => {
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                      HANDLE BRANCH / SHIFT                               */
+  /*                       BRANCH / EMPLOYEE CHANGE                           */
   /* ------------------------------------------------------------------------ */
 
-  const handleSelectFilter = (name: "branchId" | "shiftId", value: string) => {
+  const handleSelectFilter = (
+    name: "branchId",
+    value: string,
+  ) => {
     if (name === "branchId") {
       setBranchId(value);
-      if (value) {
-        getEmployeeDetailsByBranchId(value);
-      }
 
       /**
-       * Reset employee when branch changes.
+       * Reset employee whenever branch changes.
        */
       setEmployeeOptions([]);
 
       handleChange("userId", "");
+
+      if (value) {
+        getEmployeeDetailsByBranchId(value);
+      }
     }
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                              VALIDATION                                  */
+  /*                       DATE KEY HELPER                                    */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * Creates a stable local-date key.
+   *
+   * Example:
+   * 2026-06-12
+   */
+  const getDateKey = (date: Date) => {
+    const year = date.getFullYear();
+
+    const month = String(
+      date.getMonth() + 1,
+    ).padStart(2, "0");
+
+    const day = String(
+      date.getDate(),
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                       DISPLAY DATE HELPER                                */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * 12-06-2026
+   */
+  const formatDisplayDate = (date: Date) => {
+    const day = String(
+      date.getDate(),
+    ).padStart(2, "0");
+
+    const month = String(
+      date.getMonth() + 1,
+    ).padStart(2, "0");
+
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                     GENERATE DATE ROWS                                   */
+  /* ------------------------------------------------------------------------ */
+
+  const generateDateRows = (
+    startDate: Date | null,
+    endDate: Date | null,
+  ) => {
+    /**
+     * If either date is missing,
+     * remove table rows.
+     */
+    if (!startDate || !endDate) {
+      setLeaveRows([]);
+      setRowErrors({});
+      return;
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    /**
+     * Normalize time.
+     */
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+
+    /**
+     * Invalid range.
+     */
+    if (end < start) {
+      setLeaveRows([]);
+      setRowErrors({});
+      return;
+    }
+
+    /**
+     * Preserve existing row selections.
+     *
+     * If user changes:
+     *
+     * 12 -> 14
+     *
+     * to:
+     *
+     * 12 -> 15
+     *
+     * selections for 12, 13, 14 remain.
+     */
+    const existingRowsMap = new Map(
+      leaveRows.map((row) => [
+        getDateKey(row.date),
+        row,
+      ]),
+    );
+
+    const rows: LeaveDateRow[] = [];
+
+    const current = new Date(start);
+
+    while (current <= end) {
+      const date = new Date(current);
+
+      const dateKey = getDateKey(date);
+
+      const existingRow =
+        existingRowsMap.get(dateKey);
+
+      rows.push({
+        id: dateKey,
+
+        date,
+
+        leaveId:
+          existingRow?.leaveId || "",
+
+        duration:
+          existingRow?.duration || "",
+      });
+
+      current.setDate(
+        current.getDate() + 1,
+      );
+    }
+
+    setLeaveRows(rows);
+
+    /**
+     * Clear row errors whenever date range changes.
+     */
+    setRowErrors({});
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                        DATE RANGE CHANGE                                 */
+  /* ------------------------------------------------------------------------ */
+
+  const handleDateRangeChange = (
+    dates: [Date | null, Date | null],
+  ) => {
+    const [start, end] = dates;
+
+    handleChange(
+      "startDate",
+      start ? start.toISOString() : "",
+    );
+
+    handleChange(
+      "endDate",
+      end ? end.toISOString() : "",
+    );
+
+    generateDateRows(start, end);
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                         UPDATE TABLE ROW                                 */
+  /* ------------------------------------------------------------------------ */
+
+  const updateLeaveRow = (
+    rowId: string,
+    field: "leaveId" | "duration",
+    value: string,
+  ) => {
+    setLeaveRows((prev) =>
+      prev.map((row) =>
+        row.id === rowId
+          ? {
+              ...row,
+              [field]: value,
+            }
+          : row,
+      ),
+    );
+
+    /**
+     * Clear only the changed field error.
+     */
+    setRowErrors((prev) => {
+      const currentError = prev[rowId];
+
+      if (!currentError) {
+        return prev;
+      }
+
+      const updatedError = {
+        ...currentError,
+        [field]: "",
+      };
+
+      /**
+       * If no errors remain for this row,
+       * remove the row from errors.
+       */
+      if (
+        !updatedError.leaveId &&
+        !updatedError.duration
+      ) {
+        const newErrors = {
+          ...prev,
+        };
+
+        delete newErrors[rowId];
+
+        return newErrors;
+      }
+
+      return {
+        ...prev,
+        [rowId]: updatedError,
+      };
+    });
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                         VALIDATION                                      */
   /* ------------------------------------------------------------------------ */
 
   const validate = () => {
-    const newErrors: Partial<Record<keyof LeaveFormData, string>> = {};
+    const newErrors: Partial<
+      Record<keyof ICommonLeaveFormData, string>
+    > = {};
 
-    /* ------------------------------ Employee ------------------------------ */
+    const newRowErrors: Record<
+      string,
+      LeaveRowErrors
+    > = {};
+
+    /* ---------------------------- EMPLOYEE ------------------------------- */
 
     if (!formData.userId) {
-      newErrors.userId = "Employee is required";
+      newErrors.userId =
+        "Employee is required";
     }
 
-    /* ------------------------------ Leave --------------------------------- */
-
-    if (!formData.leaveId) {
-      newErrors.leaveId = "Leave type is required";
-    }
-
-    /* ------------------------------ Start Date ---------------------------- */
+    /* ---------------------------- START DATE ----------------------------- */
 
     if (!formData.startDate) {
-      newErrors.startDate = "Start date is required";
+      newErrors.startDate =
+        "Start date is required";
     }
 
-    /* ------------------------------ End Date ------------------------------ */
+    /* ----------------------------- END DATE ------------------------------ */
 
     if (!formData.endDate) {
-      newErrors.endDate = "End date is required";
+      newErrors.endDate =
+        "End date is required";
     }
 
-    /* --------------------------- Date Validation -------------------------- */
+    /* -------------------------- DATE VALIDATION -------------------------- */
 
-    if (formData.startDate && formData.endDate) {
-      const start = new Date(formData.startDate);
-      const end = new Date(formData.endDate);
+    if (
+      formData.startDate &&
+      formData.endDate
+    ) {
+      const start = new Date(
+        formData.startDate,
+      );
+
+      const end = new Date(
+        formData.endDate,
+      );
 
       if (end < start) {
-        newErrors.endDate = "End date cannot be before start date";
+        newErrors.endDate =
+          "End date cannot be before start date";
       }
     }
 
-    /* ------------------------------ Duration ------------------------------ */
+    /* --------------------------- TABLE ROWS ------------------------------ */
 
-    if (!formData.duration) {
-      newErrors.duration = "Duration is required";
+    if (leaveRows.length === 0) {
+      newErrors.startDate =
+        "Please select a valid date range";
     }
+
+    /**
+     * Validate every row separately.
+     */
+    leaveRows.forEach((row) => {
+      const errors: LeaveRowErrors = {};
+
+      if (!row.leaveId) {
+        errors.leaveId =
+          "Leave type is required";
+      }
+
+      if (!row.duration) {
+        errors.duration =
+          "Applied for is required";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        newRowErrors[row.id] = errors;
+      }
+    });
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) {
-      scrollToFirstError(newErrors);
+    setRowErrors(newRowErrors);
+
+    const hasFormErrors =
+      Object.keys(newErrors).length > 0;
+
+    const hasRowErrors =
+      Object.keys(newRowErrors).length > 0;
+
+    if (
+      hasFormErrors ||
+      hasRowErrors
+    ) {
+      scrollToFirstValidationError(
+        newErrors,
+        newRowErrors,
+      );
+
       return false;
     }
 
@@ -337,19 +660,30 @@ const AddLeaveRequest: React.FC = () => {
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                         SCROLL FIRST ERROR                               */
+  /*                   SCROLL FIRST FORM ERROR                               */
   /* ------------------------------------------------------------------------ */
 
   const scrollToFirstError = (
-    validationErrors: Partial<Record<keyof LeaveFormData, string>>,
+    validationErrors: Partial<
+      Record<keyof ICommonLeaveFormData, string>
+    >,
   ) => {
-    const firstErrorKey = Object.keys(validationErrors)[0];
+    const firstErrorKey =
+      Object.keys(
+        validationErrors,
+      )[0];
 
-    if (!firstErrorKey || !formRef.current) {
+    if (
+      !firstErrorKey ||
+      !formRef.current
+    ) {
       return;
     }
 
-    const field = formRef.current.querySelector(`[name="${firstErrorKey}"]`);
+    const field =
+      formRef.current.querySelector(
+        `[name="${firstErrorKey}"]`,
+      );
 
     if (!field) {
       return;
@@ -361,21 +695,130 @@ const AddLeaveRequest: React.FC = () => {
     });
 
     setTimeout(() => {
-      if ("focus" in field) {
-        (field as HTMLElement).focus();
+      if (
+        "focus" in field &&
+        typeof (
+          field as HTMLElement & {
+            focus?: () => void;
+          }
+        ).focus === "function"
+      ) {
+        (
+          field as HTMLElement
+        ).focus();
       }
     }, 300);
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                              SUBMIT                                      */
+  /*                 SCROLL FIRST VALIDATION ERROR                            */
   /* ------------------------------------------------------------------------ */
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const scrollToFirstValidationError = (
+    formErrors: Partial<
+      Record<keyof ICommonLeaveFormData, string>
+    >,
+    tableErrors: Record<
+      string,
+      LeaveRowErrors
+    >,
+  ) => {
+    /**
+     * Form error has priority.
+     */
+    if (
+      Object.keys(formErrors).length > 0
+    ) {
+      scrollToFirstError(formErrors);
+      return;
+    }
+
+    /**
+     * Otherwise scroll to first table error.
+     */
+    const firstRowId =
+      Object.keys(tableErrors)[0];
+
+    if (
+      !firstRowId ||
+      !formRef.current
+    ) {
+      return;
+    }
+
+    const row =
+      formRef.current.querySelector(
+        `[data-row-id="${firstRowId}"]`,
+      );
+
+    if (!row) {
+      return;
+    }
+
+    row.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                          CREATE PAYLOADS                                */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * Converts table rows into your existing API payload.
+   *
+   * Every row becomes:
+   *
+   * {
+   *   userId,
+   *   leaveId,
+   *   startDate,
+   *   endDate,
+   *   duration,
+   *   reason
+   * }
+   */
+  const createPayloads = (): LeaveFormData[] => {
+    return leaveRows.map(
+      (row) => ({
+        userId: formData.userId,
+
+        leaveId: row.leaveId,
+
+        /**
+         * One row represents one day.
+         * Therefore startDate and endDate are same.
+         */
+        startDate: formatDate(
+          row.date,
+          DateFormat.ISO_DATE,
+        ),
+
+        endDate: formatDate(
+          row.date,
+          DateFormat.ISO_DATE,
+        ),
+
+        duration:
+          row.duration as LeaveDuration,
+
+        reason: formData.reason,
+      }),
+    );
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                              SUBMIT                                     */
+  /* ------------------------------------------------------------------------ */
+
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
 
     /**
-     * Validate before API call.
+     * Validate everything before API call.
      */
     if (!validate()) {
       return;
@@ -385,47 +828,86 @@ const AddLeaveRequest: React.FC = () => {
       setLoading(true);
 
       /**
-       * Form data already matches API payload.
+       * Convert all table rows into API payloads.
        */
-      const payload: LeaveFormData = {
-        ...formData,
-        startDate: formatDate(formData.startDate, DateFormat.ISO_DATE),
-        endDate: formatDate(formData.endDate, DateFormat.ISO_DATE),
-      };
-      const response = await addLeaveRequest(payload);
+      const payloads =
+        createPayloads();
 
-      if (response?.success) {
+      /**
+       * Your existing API appears to accept
+       * one LeaveFormData object.
+       *
+       * Therefore send one request per day.
+       */
+      const responses =
+        await Promise.all(
+          payloads.map((payload) =>
+            addLeaveRequest(payload),
+          ),
+        );
+
+      /**
+       * Check if any request failed.
+       */
+      const hasError =
+        responses.some(
+          (response) =>
+            !response?.success,
+        );
+
+      if (!hasError) {
         handleClose();
       }
     } catch (error) {
-      console.error("Failed to submit leave request:", error);
+      console.error(
+        "Failed to submit leave request:",
+        error,
+      );
     } finally {
       setLoading(false);
     }
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                              CLOSE                                       */
+  /*                          CLOSE                                          */
   /* ------------------------------------------------------------------------ */
 
   const handleClose = () => {
-    setFormData(initialFormData);
-    navigate(pathNames.LEAVE_REQUEST);
+    setFormData(
+      initialFormData,
+    );
+
+    setLeaveRows([]);
+
+    setRowErrors({});
+
+    setErrors({});
+
+    setBranchId("");
+
+    setEmployeeOptions([]);
+
+    navigate(
+      pathNames.LEAVE_REQUEST,
+    );
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                   Open Action For Confirmation                           */
+  /*                      ACTION BUTTON                                      */
   /* ------------------------------------------------------------------------ */
 
   const handleAction = () => {
     if (!validate()) {
       return;
     }
-    setActionOpen((prev) => !prev);
+
+    setActionOpen(
+      (prev) => !prev,
+    );
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                          CONFIRM SUBMIT                                  */
+  /*                       CONFIRM SUBMIT                                     */
   /* ------------------------------------------------------------------------ */
 
   const handleOnConfirm = async () => {
@@ -433,171 +915,464 @@ const AddLeaveRequest: React.FC = () => {
   };
 
   /* ------------------------------------------------------------------------ */
-  /*                               RENDER                                     */
+  /*                          SELF TOGGLE                                     */
+  /* ------------------------------------------------------------------------ */
+
+  const handleSelfToggle = () => {
+    setSelf(
+      (prev) => !prev,
+    );
+  };
+
+  /* ------------------------------------------------------------------------ */
+  /*                              RENDER                                      */
   /* ------------------------------------------------------------------------ */
 
   return (
     <>
+      {/* ================================================================== */}
+      {/*                               TOP BAR                              */}
+      {/* ================================================================== */}
+
       <TopBar
-        title={"Add Leave Request"}
+        title="Add Leave Request"
         actionButtons={
-          <div className="flex gap-3">
-            <Button name="Action" size="sm" onClick={handleAction} />
+          <div className="flex items-center gap-3">
+            {isManager && (
+              <Toggle
+                label="For Employee"
+                checked={self}
+                onChange={
+                  handleSelfToggle
+                }
+              />
+            )}
+
+            <Button
+              name="Action"
+              size="sm"
+              onClick={
+                handleAction
+              }
+            />
+
             <Button
               size="sm"
               variant="danger"
-              onClick={handleClose}
-              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger" />}
+              onClick={
+                handleClose
+              }
+              leftIcon={
+                <i className="fa-solid fa-xmark fa-xl text-danger" />
+              }
             />
           </div>
         }
       />
 
+      {/* ================================================================== */}
+      {/*                             CONTENT                                */}
+      {/* ================================================================== */}
+
       <div className="content-area">
-        <PageLoader loading={branchLoading || loading} />
+        <PageLoader
+          loading={
+            branchLoading ||
+            loading
+          }
+        />
 
-        <form ref={formRef} method="POST" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:w-[25%] md:w-[35%] gap-3">
-            {/* ---------------------------------------------------------------- */}
-            {/*                              BRANCH                              */}
-            {/* ---------------------------------------------------------------- */}
+        <form
+          ref={formRef}
+          method="POST"
+          onSubmit={handleSubmit}
+        >
+          {/* ============================================================ */}
+          {/*                         COMMON FIELDS                        */}
+          {/* ============================================================ */}
 
-            <SelectField
-              placeholder="Select Branch"
-              label="Branch"
-              required
-              value={
-                branchId
-                  ? (branchOptions.find(
-                      (option) => option.value === branchId,
-                    ) ?? "")
-                  : ""
-              }
-              name="branchId"
-              options={branchOptions}
-              onChange={(option) =>
-                handleSelectFilter("branchId", option.value)
-              }
-            />
+          <div
+            className="
+              grid
+              grid-cols-1
+              gap-3
+              sm:w-[25%]
+              md:w-[35%]
+              lg:w-[35%]
+            "
+          >
+            {/* ---------------------------------------------------------- */}
+            {/*                            BRANCH                          */}
+            {/* ---------------------------------------------------------- */}
 
-            {/* ---------------------------------------------------------------- */}
-            {/*                             EMPLOYEE                             */}
-            {/* ---------------------------------------------------------------- */}
+            {!isEmployee && self && (
+              <SelectField
+                placeholder="Select Branch"
+                label="Branch"
+                required
+                value={
+                  branchId
+                    ? (
+                        branchOptions.find(
+                          (
+                            option,
+                          ) =>
+                            option.value ===
+                            branchId,
+                        ) ?? ""
+                      )
+                    : ""
+                }
+                name="branchId"
+                options={
+                  branchOptions
+                }
+                onChange={(
+                  option,
+                ) =>
+                  handleSelectFilter(
+                    "branchId",
+                    option.value,
+                  )
+                }
+              />
+            )}
 
-            <SelectField
-              placeholder="Select Employee"
-              label="Employee"
-              required
-              value={
-                formData.userId
-                  ? (employeeOptions.find(
-                      (option) => option.value === formData.userId,
-                    ) ?? "")
-                  : ""
-              }
-              name="userId"
-              options={employeeOptions}
-              error={errors.userId}
-              onChange={(option) => handleChange("userId", option.value)}
-            />
+            {/* ---------------------------------------------------------- */}
+            {/*                           EMPLOYEE                         */}
+            {/* ---------------------------------------------------------- */}
 
-            {/* ---------------------------------------------------------------- */}
-            {/*                           LEAVE TYPE                             */}
-            {/* ---------------------------------------------------------------- */}
+            {!isEmployee && self && (
+              <SelectField
+                placeholder="Select Employee"
+                label="Employee"
+                required
+                value={
+                  formData.userId
+                    ? (
+                        employeeOptions.find(
+                          (
+                            option,
+                          ) =>
+                            option.value ===
+                            formData.userId,
+                        ) ?? ""
+                      )
+                    : ""
+                }
+                name="userId"
+                options={
+                  employeeOptions
+                }
+                error={
+                  errors.userId
+                }
+                onChange={(
+                  option,
+                ) =>
+                  handleChange(
+                    "userId",
+                    option.value,
+                  )
+                }
+              />
+            )}
 
-            <SelectField
-              placeholder="Select Leave"
-              label="Leave Type"
-              required
-              value={
-                formData.leaveId
-                  ? (leaveOptions.find(
-                      (option) => option.value === formData.leaveId,
-                    ) ?? "")
-                  : ""
-              }
-              name="leaveId"
-              options={leaveOptions}
-              error={errors.leaveId}
-              onChange={(option) => handleChange("leaveId", option.value)}
-            />
-
-            {/* ---------------------------------------------------------------- */}
-            {/*                            DURATION                              */}
-            {/* ---------------------------------------------------------------- */}
-
-            <SelectField
-              placeholder="Select Duration"
-              label="Duration"
-              required
-              value={
-                formData.duration
-                  ? (durationOptions.find(
-                      (option) => option.value === formData.duration,
-                    ) ?? "")
-                  : ""
-              }
-              name="duration"
-              options={durationOptions}
-              error={errors.duration}
-              onChange={(option) =>
-                handleChange("duration", option.value as LeaveDuration)
-              }
-            />
-
-            {/* ---------------------------------------------------------------- */}
-            {/*                              DATE                                */}
-            {/* ---------------------------------------------------------------- */}
+            {/* ---------------------------------------------------------- */}
+            {/*                             DATE                           */}
+            {/* ---------------------------------------------------------- */}
 
             <div
               className="flex flex-col"
-              data-error={!!(errors.startDate || errors.endDate)}
+              data-error={
+                !!(
+                  errors.startDate ||
+                  errors.endDate
+                )
+              }
             >
               <DateRangePicker
                 label="Date"
                 required
                 startDate={
-                  formData.startDate ? new Date(formData.startDate) : null
+                  formData.startDate
+                    ? new Date(
+                        formData.startDate,
+                      )
+                    : null
                 }
-                endDate={formData.endDate ? new Date(formData.endDate) : null}
-                onChange={(dates: [Date | null, Date | null]) => {
-                  const [start, end] = dates;
-
-                  handleChange("startDate", start ? start.toISOString() : "");
-
-                  handleChange("endDate", end ? end.toISOString() : "");
-                }}
-                minDate={new Date()}
+                endDate={
+                  formData.endDate
+                    ? new Date(
+                        formData.endDate,
+                      )
+                    : null
+                }
+                onChange={
+                  handleDateRangeChange
+                }
+                minDate={
+                  new Date()
+                }
               />
 
-              {(errors.startDate || errors.endDate) && (
+              {(errors.startDate ||
+                errors.endDate) && (
                 <span className="mt-1 text-xs text-red-500">
-                  {errors.startDate || errors.endDate}
+                  {errors.startDate ||
+                    errors.endDate}
                 </span>
               )}
             </div>
+          </div>
 
-            {/* ---------------------------------------------------------------- */}
-            {/*                             REASON                              */}
-            {/* ---------------------------------------------------------------- */}
+          {/* ============================================================ */}
+          {/*                         LEAVE TABLE                          */}
+          {/* ============================================================ */}
 
+          {leaveRows.length > 0 && (
+            <div className="mt-5 w-full overflow-hidden rounded-sm border border-borderPrimary">
+              {/* -------------------------------------------------------- */}
+              {/*                    MOBILE SCROLL CONTAINER               */}
+              {/* -------------------------------------------------------- */}
+
+              <div className="w-full overflow-x-auto">
+                <div
+                  className="
+                    min-w-[800px]
+                  "
+                >
+                  {/* ================================================== */}
+                  {/*                         HEADER                       */}
+                  {/* ================================================== */}
+
+                  <div
+                    className="
+                      grid
+                      grid-cols-[100px_200px_minmax(250px,1fr)_minmax(250px,1fr)]
+                      bg-[#f1f1f1]
+                    "
+                  >
+                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                      Day
+                    </div>
+
+                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                      Date
+                    </div>
+
+                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                      Leave Type
+                    </div>
+
+                    <div className="px-3 py-3 text-sm font-medium text-primary">
+                      Applied For
+                    </div>
+                  </div>
+
+                  {/* ================================================== */}
+                  {/*                           ROWS                       */}
+                  {/* ================================================== */}
+
+                  {leaveRows.map(
+                    (
+                      row,
+                      index,
+                    ) => {
+                      const currentErrors =
+                        rowErrors[
+                          row.id
+                        ];
+
+                      return (
+                        <div
+                          key={
+                            row.id
+                          }
+                          data-row-id={
+                            row.id
+                          }
+                          className="
+                            grid
+                            grid-cols-[100px_200px_minmax(250px,1fr)_minmax(250px,1fr)]
+                            border-t
+                            border-borderPrimary
+                            bg-white
+                          "
+                        >
+                          {/* ------------------------------------------------ */}
+                          {/*                            DAY                  */}
+                          {/* ------------------------------------------------ */}
+
+                          <div
+                            className="
+                              flex
+                              items-center
+                              px-3
+                              py-3
+                              text-sm
+                              text-secondary
+                            "
+                          >
+                            {index +
+                              1}
+                          </div>
+
+                          {/* ------------------------------------------------ */}
+                          {/*                           DATE                  */}
+                          {/* ------------------------------------------------ */}
+
+                          <div
+                            className="
+                              flex
+                              items-center
+                              px-3
+                              py-3
+                              text-sm
+                              text-secondary
+                            "
+                          >
+                            {formatDisplayDate(
+                              row.date,
+                            )}
+                          </div>
+
+                          {/* ------------------------------------------------ */}
+                          {/*                       LEAVE TYPE                */}
+                          {/* ------------------------------------------------ */}
+
+                          <div className="px-3 py-2">
+                            <SelectField
+                              placeholder="Select Leave"
+                              value={
+                                row.leaveId
+                                  ? (
+                                      leaveOptions.find(
+                                        (
+                                          option,
+                                        ) =>
+                                          option.value ===
+                                          row.leaveId,
+                                      ) ??
+                                      ""
+                                    )
+                                  : ""
+                              }
+                              options={
+                                leaveOptions
+                              }
+                              error={
+                                currentErrors?.leaveId
+                              }
+                              name={`leaveId-${row.id}`}
+                              onChange={(
+                                option,
+                              ) =>
+                                updateLeaveRow(
+                                  row.id,
+                                  "leaveId",
+                                  option.value,
+                                )
+                              }
+                            />
+                          </div>
+
+                          {/* ------------------------------------------------ */}
+                          {/*                       APPLIED FOR              */}
+                          {/* ------------------------------------------------ */}
+
+                          <div className="px-3 py-2">
+                            <SelectField
+                              placeholder="Select an option"
+                              value={
+                                row.duration
+                                  ? (
+                                      durationOptions.find(
+                                        (
+                                          option,
+                                        ) =>
+                                          option.value ===
+                                          row.duration,
+                                      ) ??
+                                      ""
+                                    )
+                                  : ""
+                              }
+                              options={
+                                durationOptions
+                              }
+                              error={
+                                currentErrors?.duration
+                              }
+                              name={`duration-${row.id}`}
+                              onChange={(
+                                option,
+                              ) =>
+                                updateLeaveRow(
+                                  row.id,
+                                  "duration",
+                                  option.value,
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      );
+                    },
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ============================================================ */}
+          {/*                            REASON                            */}
+          {/* ============================================================ */}
+
+          <div
+            className="
+              mt-4
+              w-full
+              sm:w-[60%]
+              md:w-[50%]
+              lg:w-[45%]
+            "
+          >
             <TextAreaField
               label="Reason"
               name="reason"
-              value={formData.reason}
-              error={errors.reason}
+              value={
+                formData.reason
+              }
+              error={
+                errors.reason
+              }
               placeholder="Enter reason"
-              onChange={(e) => handleChange("reason", e.target.value)}
+              onChange={(e) =>
+                handleChange(
+                  "reason",
+                  e.target.value,
+                )
+              }
             />
           </div>
         </form>
       </div>
+
+      {/* ================================================================== */}
+      {/*                         CONFIRMATION MODAL                        */}
+      {/* ================================================================== */}
+
       <ActionModal
         isOpen={actionOpen}
-        title={`Are you sure you want to apply leave?`}
+        title="Are you sure you want to apply leave?"
         loading={loading}
-        handleOpenClose={handleAction}
-        handleSubmit={handleOnConfirm}
+        handleOpenClose={
+          handleAction
+        }
+        handleSubmit={
+          handleOnConfirm
+        }
       />
     </>
   );

@@ -11,7 +11,7 @@ import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
 import { HistoryFieldEnum } from "../../../../types/common-types";
 import BranchDepartmentInfo from "../../../common/branch-department";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   HistoryPayload,
   initialHistory,
@@ -24,16 +24,21 @@ interface IEmployeeListProps {
 
 export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleOnClick = (row: IEmployee) => {
-    navigate(pathNames.EMPLOYEE_DETAILS, {
-      state: {
-        employeeId: row?._id,
-      },
-    });
+    if(location.pathname === pathNames.ALL_EMPLOYEE_PAY_SLIP){
+      navigate(`${pathNames.EMPLOYEE_PAY_SLIP_DETAILS}/${row?._id}`)
+    } else {
+      navigate(pathNames.EMPLOYEE_DETAILS, {
+        state: {
+          employeeId: row?._id,
+        },
+      });
+    }
   };
 
   // Define configuration structures with isolated column custom components

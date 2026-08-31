@@ -9,6 +9,7 @@ export enum DateFormat {
   TIME_12 = "hh:mm a", // 10:30 AM
   TIME_24 = "HH:mm", // 22:30
   MONTH_YEAR = "MMM yyyy", // Jul 2026
+  FULL_MONTH_YEAR = "MMMM yyyy", // August 2026
   FULL_DATE = "dd MMM yyyy", // 01 Jul 2026
   FULL_DATE_TIME = "dd MMM yyyy, hh:mm a", // 01 Jul 2026, 10:30 AM
   DAY_DATE = "EEEE, dd MMM yyyy", // Wednesday, 01 Jul 2026
@@ -267,4 +268,13 @@ export const getMonthDays = (selectedMonth: MonthPickerValue) => {
 
 export const getDaysInMonth = (selectedMonth: MonthPickerValue): number => {
   return new Date(selectedMonth.year, selectedMonth.month, 0).getDate();
+};
+
+// get month name with year e.g  Jul 2026
+
+export const formatMonthYear = (
+  month: number,
+  year: number,
+): string => {
+  return format(new Date(year, month - 1, 1), DateFormat.FULL_MONTH_YEAR);
 };

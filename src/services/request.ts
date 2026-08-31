@@ -150,7 +150,6 @@ export const apiRequest = {
     } catch(error: any){
       const apiMessage =
         error?.response?.data?.message || error?.message;
-        console.log("apiMessage",apiMessage)
       if(options.showErrorToast){
         toastMessage.error(
           apiMessage ||

@@ -29,7 +29,7 @@ const EmployeeDashboard = () => {
   const [reimbursementLoading, setReimbursementLoading] =
     useState<boolean>(false);
 
-  // start and end date for expense data
+  // month for expense data
   const initialMonth: MonthPickerValue = {
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),

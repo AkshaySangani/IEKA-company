@@ -1,7 +1,8 @@
-import EmptyPlaceholder from "../../../components/common/empty-paceholder";
-import EmployeePayslip from "../../../components/employee/pay-slip";
+import { EmployeePayslipDetails } from "../../../components/company/pay-slip/employee-payslips/EmployeePayslipDetails";
+import { useAuthStore } from "../../../store/auth-store";
+
 
 export default function PayslipPage(){
-    // return <EmployeePayslip/>
-    return <EmptyPlaceholder title="Under Development" description="this page is currently under development."></EmptyPlaceholder>
+    const {user} = useAuthStore();
+    return <EmployeePayslipDetails id={user._id} />
 }
