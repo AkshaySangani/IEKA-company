@@ -23,12 +23,12 @@ export default function EmployeeAttendanceTable({
   const columns: ColumnDef<IUserAttendance>[] = [
     {
       header: "Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.attendanceDate),
     },
     {
       header: "Status",
-      className: "w-[10%] text-center",
+      className: " text-center",
       render: (row) => {
         return (
           <>
@@ -55,7 +55,7 @@ export default function EmployeeAttendanceTable({
     },
     {
       header: "Check In / Out",
-      className: "w-[35%] text-center",
+      className: " text-center",
       hidden: (row) =>
         (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
       render: (attendance) => (
@@ -64,7 +64,7 @@ export default function EmployeeAttendanceTable({
     },
     {
       header: "Late In / Early Out",
-      className: "w-[25%] text-center",
+      className: " text-center",
       hidden: (row) =>
         (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
       render: (row) => (
@@ -107,7 +107,7 @@ export default function EmployeeAttendanceTable({
     },
     {
       header: "Total Hours",
-      className: "w-[15%] text-center",
+      className: " text-center",
       hidden: (row) =>
         (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
       render: (row) => (

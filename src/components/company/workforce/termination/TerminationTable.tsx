@@ -1,12 +1,9 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   pathNames,
-  roleNames,
-  statusColor,
-  statusMessage,
+  roleNames
 } from "../../../../constants/constants";
 import { initialTermination, ITermination } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
 import {
@@ -70,12 +67,12 @@ export default function TerminationTable({
   const columns: ColumnDef<ITermination>[] = [
     {
       header: "#",
-      className: "w-[3%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Employee Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -90,17 +87,17 @@ export default function TerminationTable({
     },
     {
       header: "Department",
-      className: "w-[15%]",
+      className: "",
       render: (row) => row.userId.departmentId.name,
     },
     {
       header: "Last Working Day",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.lastWorkingDate),
     },
     {
       header: "Info Mail",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         const isManager =
           row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
@@ -123,7 +120,7 @@ export default function TerminationTable({
     },
     {
       header: "Letter",
-      className: "w-[10%]",
+      className: "",
       render: (row) =>
         row.status === statusEnum.TERMINATE ? (
           <Badge
@@ -138,7 +135,7 @@ export default function TerminationTable({
     },
     {
       header: "Status",
-      className: "w-[12%]",
+      className: "",
       render: (row) => {
         const isManager =
           row.userId._id === user._id && user.role === RoleEnum.MANAGER;

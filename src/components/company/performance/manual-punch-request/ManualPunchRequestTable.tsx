@@ -31,6 +31,7 @@ export default function ManualPunchRequestTable({
     ...(!isEmployee ? [{
       header: "Employee Name",
       className: "w-[25%]",
+      isSticky: true,
       render: (row: IPunchManualRequest) => (
         <PersonInfo
           personInfo={{

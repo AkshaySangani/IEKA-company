@@ -51,7 +51,7 @@ export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
     },
     {
       header: "Employee Name",
-      className: "w-[40%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -66,7 +66,7 @@ export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
     },
     {
       header: "Branch & Department",
-      className: "w-[40%]",
+      className: "",
       render: (row) => (
         <BranchDepartmentInfo
           branch={{ name: row.branchId?.name ?? "" }}

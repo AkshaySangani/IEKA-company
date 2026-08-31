@@ -139,6 +139,8 @@ export const roleBasePaths: ObjectType = {
     // Performance
     pathNames.PERFORMANCE,
     pathNames.ATTENDANCE,
+    pathNames.ATTENDANCE_DETAILS_ID,
+    pathNames.ATTENDANCE_DETAILS,
     pathNames.LEAVE_REQUEST,
     pathNames.ADD_LEAVE_REQUEST,
     pathNames.ADD_LEAVE_REQUEST_ID,

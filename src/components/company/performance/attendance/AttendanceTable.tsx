@@ -26,12 +26,12 @@ export default function AttendanceTable({
   const columns: ColumnDef<IUserAttendance>[] = [
     {
       header: "#",
-      className: "w-[3%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Employee Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -48,7 +48,7 @@ export default function AttendanceTable({
     },
     {
       header: "Status",
-      className: "w-[10%] text-center",
+      className: "text-center",
       render: (row) => {
         return (
           <>
@@ -78,7 +78,7 @@ export default function AttendanceTable({
     },
     {
       header: "Check In / Out",
-      className: "w-[30%] text-center",
+      className: "text-center",
       hidden: (row) =>
         row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
         row.attendanceStatus === AttendanceStatusEnum.HOLIDAY
@@ -88,7 +88,7 @@ export default function AttendanceTable({
     },
     {
       header: "Late In / Early Out",
-      className: "w-[27%] text-center",
+      className: "text-center",
       hidden: (row) =>
         row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
         row.attendanceStatus === AttendanceStatusEnum.HOLIDAY
@@ -134,7 +134,7 @@ export default function AttendanceTable({
     },
     {
       header: "Total Hours",
-      className: "w-[10%] text-center",
+      className: "text-center",
       hidden: (row) =>
         row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
         row.attendanceStatus === AttendanceStatusEnum.HOLIDAY

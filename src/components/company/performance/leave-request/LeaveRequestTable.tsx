@@ -38,12 +38,13 @@ export default function LeaveRequestTable({
   const columns: ColumnDef<ILeaveRequest>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Employee Name",
-      className: "w-[25%]",
+      className: "",
+      isSticky: true,
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -60,22 +61,22 @@ export default function LeaveRequestTable({
     },
     {
       header: "Leave Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => <span>{formatDate(row.startDate)}</span>,
     },
     {
       header: "Leave Duration",
-      className: "w-[15%]",
+      className: "",
       render: (row) => LeaveDurationNames[row.duration],
     },
     {
       header: "Request Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => <span>{formatDate(row.createdAt)}</span>,
     },
     {
       header: "Status",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         const isManager =
           user.role === RoleEnum.MANAGER && row.userId._id === user._id;

@@ -41,7 +41,7 @@ export default function BranchTable({
     },
     {
       header: "Branch Name",
-      className: "w-[65%]",
+      className: "w-[45%]",
       render: (row) => (
         <div className="flex flex-col">
           <div
@@ -50,13 +50,13 @@ export default function BranchTable({
           >
             {row.name} {row.branchType === branchEnum.HEAD_OFFICE ? "(HO)" : ""}
           </div>
-          <div className="text-grayText text-xs">{row.address}</div>
+          <div className="text-grayText text-xs line-clamp-2 truncate text-wrap">{row.address}</div>
         </div>
       ),
     },
     {
       header: "Status",
-      className: "w-[20%]",
+      className: "w-[40%]",
       render: (row) => {
         return (
           <div className="flex items-center gap-1.5">

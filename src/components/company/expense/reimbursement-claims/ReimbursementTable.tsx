@@ -4,11 +4,8 @@ import {
   employeePathNames,
   pathNames,
   roleNames,
-  statusColor,
-  statusMessage,
 } from "../../../../constants/constants";
 import { IReimbursement } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";
@@ -50,12 +47,12 @@ export default function DepartmentTable({
   const columns: ColumnDef<IReimbursement>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Expense Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col">
           <div
@@ -73,7 +70,7 @@ export default function DepartmentTable({
       : [
           {
             header: "Employee Name",
-            className: "w-[20%]",
+            className: "",
             render: (row: IReimbursement) => (
               <PersonInfo
                 personInfo={{
@@ -88,12 +85,12 @@ export default function DepartmentTable({
         ]),
     {
       header: "Expense Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.date),
     },
     {
       header: "Request Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <div>
           <div className="text-gray-600 text-sm">
@@ -108,7 +105,7 @@ export default function DepartmentTable({
     },
     {
       header: "Amount",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <span className="font-medium text-secondary">
           {currency.INR} {row.amount}
@@ -117,7 +114,7 @@ export default function DepartmentTable({
     },
     {
       header: "Status",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         const isManager =
           row?.userId._id === user._id && user.role === RoleEnum.MANAGER;

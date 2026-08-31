@@ -50,7 +50,7 @@ export default function DesignationTable({
     {
       header: "Description",
       className: "w-[30%]",
-      render: (row) => row.description,
+      render: (row) => row.description ? row.description : '-',
     },
     {
       header: "Status",

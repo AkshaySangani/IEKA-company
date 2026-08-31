@@ -1,7 +1,6 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import { pathNames, roleNames } from "../../../../constants/constants";
 import { initialEmployee, ResignationRequest } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
 import {
@@ -73,12 +72,12 @@ export default function ResignedEmployeeTable({
   const columns: ColumnDef<ResignationRequest>[] = [
     {
       header: "#",
-      className: "w-[3%] text-center text-gray-500",
+      className: " text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Employee Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -93,7 +92,7 @@ export default function ResignedEmployeeTable({
     },
     {
       header: "Resign Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col gap-1">
           {formatDate(row.createdAt)}
@@ -105,17 +104,17 @@ export default function ResignedEmployeeTable({
     },
     {
       header: "Reason",
-      className: "w-[25%]",
+      className: "",
       render: (row) => (row.reason ? <Description value={row.reason} /> : "-"),
     },
     {
       header: "Last Working Day",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.lastWorkingDate),
     },
     {
       header: "Info Mail",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         const isManager =
           row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
@@ -136,9 +135,9 @@ export default function ResignedEmployeeTable({
     },
     {
       header: "Certificate",
-      className: "w-[20%]",
+      className: "",
       render: (row) =>
-        row.status === statusEnum.ACCEPTED ? (
+        row.status !== statusEnum.ACCEPTED ? (
           <div className="flex gap-2">
             <Badge
               label="Relieving"
@@ -161,7 +160,7 @@ export default function ResignedEmployeeTable({
     },
     {
       header: "Status",
-      className: "w-[12%]",
+      className: "",
       render: (row) => {
         const isManager =
           row?.userId._id === user._id && user.role === RoleEnum.MANAGER;

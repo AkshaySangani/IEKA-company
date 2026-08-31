@@ -48,12 +48,12 @@ export default function OfficeExpenseTable({
   const columns: ColumnDef<IOfficeExpense>[] = [
     {
       header: "#",
-      className: "w-[3%] text-center text-gray-500",
+      className: " text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Expense Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col">
           <div
@@ -68,17 +68,17 @@ export default function OfficeExpenseTable({
     },
     {
       header: "For Branch",
-      className: "w-[15%]",
+      className: "",
       render: (row) => row.branchId.name,
     },
     {
       header: "Expense Date",
-      className: "w-[11%]",
+      className: "",
       render: (row) => formatDate(row.date),
     },
     {
       header: "Request Date",
-      className: "w-[11%]",
+      className: "",
       render: (row) => (
         <div>
           <div className="text-gray-600 text-sm">
@@ -94,7 +94,7 @@ export default function OfficeExpenseTable({
 
     {
       header: "Added By",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -108,7 +108,7 @@ export default function OfficeExpenseTable({
     },
     {
       header: "Amount",
-      className: "w-[10%]",
+      className: "",
       render: (row) => (
         <span className="font-medium text-secondary">
           {currency.INR} {row.amount}
@@ -117,7 +117,7 @@ export default function OfficeExpenseTable({
     },
     {
       header: "Status",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         const isManager = row.assignedBy._id === user._id && user.role === RoleEnum.MANAGER;
         return (

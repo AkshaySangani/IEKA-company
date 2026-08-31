@@ -44,7 +44,7 @@ export default function OnboardingsTable({
     },
     {
       header: "Employee Name",
-      className: "w-[30%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -59,7 +59,7 @@ export default function OnboardingsTable({
     },
     {
       header: "Requested Date",
-      className: "w-[25%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col gap-1">
           {formatDate(row.createdAt)}
@@ -71,12 +71,12 @@ export default function OnboardingsTable({
     },
     {
       header: "Info Mail",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (row.email ? row.email : "-"),
     },
     {
       header: "Status",
-      className: "w-[20%]",
+      className: "",
       render: (row) => {
         return (
           <div className="flex items-center gap-1.5">

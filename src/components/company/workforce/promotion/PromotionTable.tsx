@@ -2,11 +2,8 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   pathNames,
   roleNames,
-  statusColor,
-  statusMessage,
 } from "../../../../constants/constants";
 import { initialPromotion, IPromotion } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
 import { HistoryFieldEnum, RoleEnum, statusEnum } from "../../../../types/common-types";
@@ -70,12 +67,12 @@ export default function PromotionTable({
   const columns: ColumnDef<IPromotion>[] = [
     {
       header: "#",
-      className: "w-[3%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Employee Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -90,17 +87,17 @@ export default function PromotionTable({
     },
     {
       header: "Designation",
-      className: "w-[15%]",
+      className: "",
       render: (row) => row.designationId.name,
     },
     {
       header: "Effective From Month",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.effectiveDate, DateFormat.MONTH_YEAR),
     },
     {
       header: "Info Mail",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         const isManager =
           row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
@@ -123,7 +120,7 @@ export default function PromotionTable({
     },
     {
       header: "Letter",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         return (
           row.status === statusEnum.PROMOTED && (
@@ -139,7 +136,7 @@ export default function PromotionTable({
     },
     {
       header: "Status",
-      className: "w-[12%]",
+      className: "",
       render: (row) => {
         const isManager =
           row.userId._id === user._id && user.role === RoleEnum.MANAGER;
