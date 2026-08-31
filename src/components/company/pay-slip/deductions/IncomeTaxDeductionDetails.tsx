@@ -25,7 +25,7 @@ const IncomeTaxDeductionDetails = ({
   const columns: ColumnDef<IIncomeTaxDeductionDetails>[] = [
     {
       header: "Income From",
-      className: "w-[50%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (deduction, index) => (
         <TextField
           name="from"
@@ -40,7 +40,7 @@ const IncomeTaxDeductionDetails = ({
     },
     {
       header: "Income To",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (deduction, index) => (
         <TextField
           name="to"
@@ -56,7 +56,7 @@ const IncomeTaxDeductionDetails = ({
 
     {
       header: `Tax Rate (%)`,
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (deduction, index) => (
         <TextField
           name="taxRate"
@@ -71,7 +71,7 @@ const IncomeTaxDeductionDetails = ({
     },
     {
       header: "Action",
-      className: "w-[10%] pr-0 pl-0",
+      className: "pr-0 pl-0",
       render: (_, index) => {
         return (
           <Button

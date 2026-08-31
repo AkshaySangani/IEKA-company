@@ -3,11 +3,8 @@ import {
   currency,
   pathNames,
   roleNames,
-  statusColor,
-  statusMessage,
 } from "../../../../constants/constants";
 import { IOfficeExpense } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";

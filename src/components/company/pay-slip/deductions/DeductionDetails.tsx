@@ -38,7 +38,7 @@ const DeductionDetails = ({
   const columns: ColumnDef<IDeductionDetails>[] = [
     {
       header: "Deduction",
-      className: "w-[50%] pr-2 pl-2",
+      className: " pr-2 pl-2",
       render: (deduction, index) => (
         <TextField
           name="name"
@@ -51,7 +51,7 @@ const DeductionDetails = ({
     },
     {
       header: "Value",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (deduction, index) => (
         <TextField
           name="value"
@@ -67,7 +67,7 @@ const DeductionDetails = ({
 
     {
       header: `${payValueType.PERCENTAGE} / ${payValueType.FIXED}`,
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (deduction, index) => (
         <SelectField
           value={
@@ -88,7 +88,7 @@ const DeductionDetails = ({
     },
     {
       header: "Action",
-      className: "w-[10%] pr-0 pl-0",
+      className: "pr-0 pl-0",
       render: (deduction, index) => {
         return !deductionTypes.includes(deduction.name) ? (
           <Button

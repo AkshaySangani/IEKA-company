@@ -29,12 +29,12 @@ export default function EarningTable({
   const columns: ColumnDef<IEarning>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: " text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Payslip Name",
-      className: "w-[40%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col">
           <div
@@ -49,12 +49,12 @@ export default function EarningTable({
     },
     {
       header: "Applicable Peoples",
-      className: "w-[35%]",
+      className: "",
       render: (row) => <>View</>,
     },
     {
       header: "Status",
-      className: "w-[20%]",
+      className: "",
       render: (row) => {
         return (
           <div className="flex items-center gap-1.5">

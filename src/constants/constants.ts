@@ -96,7 +96,6 @@ export const pathNames = {
   EARNING: "/pay-slip/earnings",
   PAY_SLIP_DISCLAIMER: "/pay-slip/earnings/payslip-disclaimer",
   DEDUCTION: "/pay-slip/deductions",
-  PAY_SLIP_ANNUAL_SHEET: "/pay-slip/pay-slip-annual-sheet",
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
   EMPLOYEE_PAY_SLIP_DETAILS_ID: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details/:id",
   EMPLOYEE_PAY_SLIP_DETAILS: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details",
@@ -294,10 +293,6 @@ export const menuItems: MenuItem[] = [
       {
         label: "Deductions",
         path: pathNames.DEDUCTION,
-      },
-      {
-        label: "Pay slip & Annual Sheet",
-        path: pathNames.PAY_SLIP_ANNUAL_SHEET,
       },
       {
         label: "Employee Payslip",
