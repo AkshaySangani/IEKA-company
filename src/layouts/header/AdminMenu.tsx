@@ -9,8 +9,10 @@ import { removeLocalStorageData } from "../../utils/helper";
 import { roleNames, storageKeys } from "../../constants/constants";
 import { useAuthStore } from "../../store/auth-store";
 import { logoutApi } from "../../apis/auth/auth.api";
+import useDevice from "../../hooks/useDevice";
 
 const AdminMenu = () => {
+  const { isMobile } = useDevice();
   const { clearAuth, user, refreshToken } = useAuthStore();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -69,13 +71,13 @@ const AdminMenu = () => {
               className="h-10 w-10 rounded-[24px] border border-[#ddd] object-cover"
             />
 
-            <div className="ml-[10px] flex flex-col">
+            {!isMobile && <div className="ml-[10px] flex flex-col">
               <span className="text-sm font-medium">
                 {user?.firstName} {user?.lastName}
               </span>
 
               <span className="text-xs font-medium text-[#7e7e7e]">{roleNames[user.role]}</span>
-            </div>
+            </div>}
           </div>
 
           <div

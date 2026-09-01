@@ -10,7 +10,7 @@ import { useAuthStore } from "../../store/auth-store";
 import Image from "../../components/common/image";
 import useWidthHeight from "../../hooks/useWidthHeight";
 import { getAccessibleMenus } from "../../utils/permission";
-import { RoleEnum, ViewModeEnum } from "../../types/common-types";
+import { RoleEnum } from "../../types/common-types";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -21,7 +21,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const navigate = useNavigate();
   const { isMobile } = useWidthHeight();
   const location = useLocation();
-  const { user, viewMode } = useAuthStore();
+  const { user } = useAuthStore();
   const accessibleMenus = getAccessibleMenus(user?.role);
 
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   useEffect(() => {
     const activeParent = accessibleMenus.find((menu) =>
       menu.submenu?.some((sub) => location.pathname.startsWith(sub.path)),
-    );
+    ) || accessibleMenus.find((menu) => location.pathname.startsWith(`${menu.path}/`));
 
     if (activeParent) {
       setOpenMenus({
@@ -54,7 +54,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     }
   };
 
-  const isEmployee = ((user.role === RoleEnum.EMPLOYEE) || (viewMode === ViewModeEnum.EMPLOYEE));
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
 
   return (
     <aside
@@ -150,8 +150,9 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             </div>
           </li>
 
-          {accessibleMenus.map((menu) => 
-            menu.submenu ? (
+          {accessibleMenus.map((menu) => {
+            const isParentActive = location.pathname === menu.path || location.pathname.startsWith(`${menu.path}/`)
+            return menu.submenu ? (
               <li key={menu.label}>
                 <div
                   onClick={(e) => {
@@ -250,7 +251,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                 key={menu.path}
                 className={`
                   ${
-                    location.pathname === menu.path
+                    isParentActive
                       ? `
                         border-l-[3px]
                         border-l-[var(--primary-color)]
@@ -278,7 +279,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                     transition-all
                     duration-200
                     hover:text-white
-                    ${location.pathname === menu.path ? "text-white" : ""}
+                    ${isParentActive ? "text-white" : ""}
                   `}
                 >
                   <i
@@ -288,7 +289,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                   <span>{menu.label}</span>
                 </div>
               </li>
-            ),
+            )}
           )}
         </ul>
       </div>

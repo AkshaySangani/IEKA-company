@@ -6,6 +6,6 @@ export interface SubMenuItem {
 export interface MenuItem {
   label: string;
   icon: string;
-  path?: string;
+  path: string;
   submenu?: SubMenuItem[];
 }

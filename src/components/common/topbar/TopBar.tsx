@@ -3,6 +3,7 @@ import XLSX from "../../../assets/images/xls.png";
 import PDF from "../../../assets/images/pdf_icon.png";
 import TextField from "../text-field/TextField";
 import DownloadModal from "../download-modal/DownloadModal";
+import useDevice from "../../../hooks/useDevice";
 
 interface TopBarProps {
   title?: string;
@@ -27,6 +28,7 @@ const TopBar = ({
   handleDownloadExcel = () => {},
   handleDownloadPdfClick = () => {},
 }: TopBarProps) => {
+  const { isMobile } = useDevice();
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [downloadOpen, setDownloadOpen] = useState<boolean>(false);
   const searchTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -55,7 +57,7 @@ const TopBar = ({
     <div className="sticky border-b border-borderPrimary px-[25px]">
       <div className="flex min-h-[50px] items-center justify-between">
         <div>
-          <h1 className="text-[18px] leading-7 font-medium ">{title}</h1>
+          {!isMobile && <h1 className="text-[18px] leading-7 font-medium ">{title}</h1>}
         </div>
 
         <div>
