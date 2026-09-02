@@ -1,17 +1,34 @@
 import { apiRequest } from "../../services/request";
 import { ApiResponse } from "../../types/api.types";
 
-export const getEmployees = (payload: {
+export interface IGetEmployeePayload {
   search?: string;
   status: string;
   page: number;
   limit?: number;
   isDownload?: boolean;
   password?: string;
-}) => {
-  const { page, limit, search, status, isDownload = false, password = "" } = payload;
+  branchId?: string;
+  shiftId?: string;
+  departmentId?: string;
+  role?: string;
+}
+
+export const getEmployees = (payload: IGetEmployeePayload) => {
+  const {
+    page,
+    limit,
+    search,
+    status,
+    isDownload = false,
+    password = "",
+    branchId,
+    shiftId,
+    departmentId,
+    role,
+  } = payload;
   return apiRequest.get<ApiResponse>(
-    `/workforce/employee?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
+    `/workforce/employee?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${branchId ? `&branchId=${branchId}` : ""}${shiftId ? `&shiftId=${shiftId}` : ""}${departmentId ? `&departmentId=${departmentId}` : ""}${role ? `&role=${role}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 
@@ -19,10 +36,7 @@ export const getEmployeeById = (userId: string) => {
   return apiRequest.get<ApiResponse>(`/workforce/employee/${userId}`);
 };
 
-export const updateEmployee = (
-  payload: any,
-  userId: string = "",
-) =>
+export const updateEmployee = (payload: any, userId: string = "") =>
   apiRequest.put(`workforce/employee/${userId}`, payload, {
     showSuccessToast: true,
   });
@@ -43,7 +57,9 @@ export const getEmployeeCount = () => {
 };
 
 export const getManagedEmployee = (branchId: string) => {
-  return apiRequest.get<ApiResponse>(`/workforce/employee/my-managed?branchId=${branchId}`);
+  return apiRequest.get<ApiResponse>(
+    `/workforce/employee/my-managed?branchId=${branchId}`,
+  );
 };
 
 export const getCompanyDetails = () => {
@@ -51,17 +67,19 @@ export const getCompanyDetails = () => {
 };
 
 export const getEmployeeSalary = (userId: string) => {
-  return apiRequest.get<ApiResponse>(`/workforce/employee/salary?userId=${userId}`);
+  return apiRequest.get<ApiResponse>(
+    `/workforce/employee/salary?userId=${userId}`,
+  );
 };
 
 export interface IEmployeeSalaryPayload {
-    userId: string;
-    salary: number;
-    effectiveFromMonth: number;
-    effectiveFromYear: number;
-    remarks: string;
-    allowPFDeduction: boolean;
-    allowESICDeduction: boolean;
+  userId: string;
+  salary: number;
+  effectiveFromMonth: number;
+  effectiveFromYear: number;
+  remarks: string;
+  allowPFDeduction: boolean;
+  allowESICDeduction: boolean;
 }
 export const updateEmployeeSalary = (payload: IEmployeeSalaryPayload) => {
   return apiRequest.post(`/workforce/employee/salary`, payload);

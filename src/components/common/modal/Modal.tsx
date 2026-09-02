@@ -13,6 +13,7 @@ interface ModalProps {
   showFooter?: boolean;
   isDownload?: boolean;
   onDownload?: () => void;
+  ref?: any;
 }
 
 const Modal = ({
@@ -26,7 +27,8 @@ const Modal = ({
   loading = false,
   showFooter = true,
   isDownload = false,
-  onDownload = () => {}
+  onDownload = () => {},
+  ref = null
 }: ModalProps) => {
   return (
     <div
@@ -39,6 +41,7 @@ const Modal = ({
         transition-all duration-300 ease-in-out
         ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}
       `}
+      ref={ref}
     >
       {/* Modal Wrapper */}
       <div

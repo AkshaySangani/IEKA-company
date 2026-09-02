@@ -9,10 +9,12 @@ import {
 import {
   getEmployeeCount,
   getEmployees,
+  IGetEmployeePayload,
 } from "../../../../apis/workforce/all-employee.api";
 import PageLoader from "../../../common/loader/PageLoader";
 import AllEmployeeTable from "./AllEmployeeTable";
 import Pagination from "../../../common/pagination/Pagination";
+import FilterModal from "./FilterModal";
 
 export interface IEmployee {
   _id: string;
@@ -44,6 +46,20 @@ export interface IEmployee {
   } | null;
   status: statusEnum;
 }
+
+export interface IFilter {
+  branchId: string;
+  shiftId: string;
+  departmentId: string;
+  role: string;
+}
+
+export const initialFilter: IFilter = {
+  branchId: "",
+  shiftId: "",
+  departmentId: "",
+  role: "",
+};
 const AllEmployees = () => {
   const [activeCard, setActiveCard] = useState<string>("");
   const [page, setPage] = useState<number>(1);
@@ -51,6 +67,8 @@ const AllEmployees = () => {
   const [search, setSearch] = useState<string>("");
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
   const [allEmployees, setAllEmployees] = useState<IEmployee[]>([]);
 
@@ -116,19 +134,14 @@ const AllEmployees = () => {
 
   // useEffect for get employeeDetails
   useEffect(() => {
-    fetchAllEmployeeList(page, limit, search, activeCard);
+    fetchAllEmployeeList({ page, limit, search, status: activeCard });
     // eslint-disable-next-line
   }, [page, limit, search, activeCard]);
 
   // get employeeDetails list
-  const fetchAllEmployeeList = async (
-    page: number,
-    limit: number,
-    search: string = "",
-    status: string = "",
-  ) => {
+  const fetchAllEmployeeList = async (payload: IGetEmployeePayload) => {
     setLoading(true);
-    const response = await getEmployees({ page, limit, search, status });
+    const response = await getEmployees(payload);
     if (response.success && response.data?.employee?.length > 0) {
       setAllEmployees(response.data?.employee);
       setTotal(response.data?.total);
@@ -154,7 +167,21 @@ const AllEmployees = () => {
       search,
       status: "",
       isDownload: true,
-      password
+      password,
+    });
+  };
+
+  const handleClickFilter = () => {
+    setFilterOpen((prev) => !prev);
+  };
+
+  const handleSelectFilter = (filter: IFilter) => {
+    fetchAllEmployeeList({
+      page,
+      limit,
+      search,
+      status: activeCard,
+      ...filter,
     });
   };
 
@@ -167,6 +194,8 @@ const AllEmployees = () => {
         onSearch={handleOnSearch}
         isExcel
         handleDownloadExcel={handleDownloadExcel}
+        isFilter
+        handleClickFilter={handleClickFilter}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />
@@ -184,6 +213,11 @@ const AllEmployees = () => {
           onPageSizeChange={setLimit}
         />
       </div>
+      <FilterModal
+        isOpen={filterOpen}
+        onClose={handleClickFilter}
+        handleSearch={handleSelectFilter}
+      />
     </>
   );
 };

@@ -15,18 +15,22 @@ interface TopBarProps {
   searchPlaceholder?: string;
   isExcel?: boolean;
   isPdf?: boolean;
+  isFilter?: boolean;
+  handleClickFilter?: () => void;
 }
 
 const TopBar = ({
   title = "",
   actionButtons = <></>,
   isSearch = false,
+  isFilter = false,
   isExcel = false,
   isPdf = false,
   onSearch = () => {},
   searchPlaceholder = "Search...",
   handleDownloadExcel = () => {},
   handleDownloadPdfClick = () => {},
+  handleClickFilter = () => {},
 }: TopBarProps) => {
   const { isMobile } = useDevice();
   const [showSearch, setShowSearch] = useState<boolean>(false);
@@ -49,86 +53,102 @@ const TopBar = ({
 
   // download confirmation popup
   const handleDownLoadOpenClose = () => {
-    setDownloadOpen(prev => !prev);
-  }
+    setDownloadOpen((prev) => !prev);
+  };
 
   return (
     <>
-    <div className="sticky border-b border-borderPrimary px-[25px]">
-      <div className="flex min-h-[50px] items-center justify-between">
-        <div>
-          {!isMobile && <h1 className="text-[18px] leading-7 font-medium ">{title}</h1>}
-        </div>
+      <div className="sticky border-b border-borderPrimary px-[25px]">
+        <div className="flex min-h-[50px] items-center justify-between">
+          <div>
+            {!isMobile && (
+              <h1 className="text-[18px] leading-7 font-medium ">{title}</h1>
+            )}
+          </div>
 
-        <div>
-          <div className="flex items-center gap-[10px]">
-            {/* Search */}
-            {isSearch && (
-              <div className="flex items-center">
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    showSearch ? "mr-3 w-64 opacity-100" : "mr-0 w-0 opacity-0"
-                  }`}
-                >
-                  <TextField
-                    value={search}
-                    onChange={(e) => handleSearchChange(e.target.value)}
-                    placeholder={searchPlaceholder}
-                  />
+          <div>
+            <div className="flex items-center gap-[10px]">
+              {/* Search */}
+              {isSearch && (
+                <div className="flex items-center">
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      showSearch
+                        ? "mr-3 w-64 opacity-100"
+                        : "mr-0 w-0 opacity-0"
+                    }`}
+                  >
+                    <TextField
+                      value={search}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      placeholder={searchPlaceholder}
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      if (showSearch && search) {
+                        setSearch("");
+                        onSearch?.("");
+                      }
+                      setShowSearch((prev) => !prev);
+                    }}
+                    className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-gray-100"
+                  >
+                    <i
+                      className={`fa-solid ${
+                        showSearch ? "fa-xmark" : "fa-magnifying-glass"
+                      } text-lg text-primary`}
+                    />
+                  </button>
                 </div>
-
+              )}
+              {isFilter && (
                 <button
-                  onClick={() => {
-                    if (showSearch && search) {
-                      setSearch("");
-                      onSearch?.("");
-                    }
-                    setShowSearch((prev) => !prev);
-                  }}
+                  onClick={handleClickFilter}
                   className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-gray-100"
                 >
-                  <i
-                    className={`fa-solid ${
-                      showSearch ? "fa-xmark" : "fa-magnifying-glass"
-                    } text-lg text-primary`}
+                  <i className={`fa-solid fa-filter text-lg text-primary`} />
+                </button>
+              )}
+
+              {isPdf && (
+                <button
+                  type="button"
+                  onClick={handleDownloadPdfClick}
+                  className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center"
+                >
+                  <img
+                    src={PDF}
+                    alt="Pdf"
+                    className="h-full w-full object-contain"
                   />
                 </button>
-              </div>
-            )}
+              )}
 
-            {isPdf && (
-              <button
-                type="button"
-                onClick={handleDownloadPdfClick}
-                className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center"
-              >
-                <img
-                  src={PDF}
-                  alt="Pdf"
-                  className="h-full w-full object-contain"
-                />
-              </button>
-            )}
-
-            {isExcel && (
-              <button
-                type="button"
-                onClick={handleDownLoadOpenClose}
-                className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center"
-              >
-                <img
-                  src={XLSX}
-                  alt="Excel"
-                  className="h-full w-full object-contain"
-                />
-              </button>
-            )}
-            {actionButtons}
+              {isExcel && (
+                <button
+                  type="button"
+                  onClick={handleDownLoadOpenClose}
+                  className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center"
+                >
+                  <img
+                    src={XLSX}
+                    alt="Excel"
+                    className="h-full w-full object-contain"
+                  />
+                </button>
+              )}
+              {actionButtons}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <DownloadModal isOpen={downloadOpen} onClose={handleDownLoadOpenClose} handleDownLoad={handleDownloadExcel} />
+      <DownloadModal
+        isOpen={downloadOpen}
+        onClose={handleDownLoadOpenClose}
+        handleDownLoad={handleDownloadExcel}
+      />
     </>
   );
 };

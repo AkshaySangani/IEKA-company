@@ -1,5 +1,6 @@
 import { PunchInOutPayload } from "../apis/performance/attendance.api";
 import { AttendanceMethodEnum } from "../types/common-types";
+import { toastMessage } from "./toast-message";
 
 /**
  * Detect whether the current device is mobile/tablet
@@ -44,12 +45,12 @@ export const getAttendanceMethod = (): AttendanceMethodEnum => {
  * Get browser location
  */
 export const getCurrentLocation = (): Promise<{
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
 }> => {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      reject(new Error("Geolocation is not supported by your browser."));
+      toastMessage.info("Geolocation is not supported by your browser.");
 
       return;
     }
@@ -78,7 +79,11 @@ export const getCurrentLocation = (): Promise<{
             break;
         }
 
-        reject(new Error(message));
+        // toastMessage.error(message);
+        resolve({
+          latitude: null,
+          longitude: null,
+        });
       },
       {
         enableHighAccuracy: true,
@@ -98,7 +103,7 @@ export const getAddressFromLocation = async (latitude: number, longitude: number
   );
 
   if (!response.ok) {
-    throw new Error("Unable to get location address.");
+    console.log("Address fetch error:-", "Unable to get location address.");
   }
 
   const data = await response.json();
@@ -112,7 +117,7 @@ export const getAddressFromLocation = async (latitude: number, longitude: number
 export const getLocationPayload = async (): Promise<PunchInOutPayload> => {
   const { latitude, longitude } = await getCurrentLocation();
 
-  const address = await getAddressFromLocation(latitude, longitude);
+  const address = (latitude && longitude) ? await getAddressFromLocation(latitude, longitude) : "";
 
   return {
     latitude,

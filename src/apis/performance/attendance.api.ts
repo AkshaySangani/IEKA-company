@@ -106,8 +106,8 @@ export const getPunchInfo = () => {
 };
 
 export interface PunchInOutPayload {
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   address: string;
   method: AttendanceMethodEnum;
 }

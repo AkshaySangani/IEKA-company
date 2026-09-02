@@ -21,6 +21,7 @@ interface SelectFieldProps {
   required?: boolean;
   isMenuPortalTarget?: boolean;
   onChange: (value: any) => void;
+  menuPortalTarget?: HTMLElement | null;
 }
 
 const SelectField = ({
@@ -34,6 +35,7 @@ const SelectField = ({
   isMulti,
   required,
   isMenuPortalTarget = true,
+  menuPortalTarget,
   onChange,
 }: SelectFieldProps) => {
   const customStyles: StylesConfig<SelectOption, boolean> = {
@@ -139,7 +141,7 @@ const SelectField = ({
         isDisabled={isDisabled}
         isMulti={isMulti}
         styles={customStyles}
-        {...(isMenuPortalTarget ? {menuPortalTarget: document.body}:{})}
+        {...(isMenuPortalTarget ? {menuPortalTarget: menuPortalTarget ? menuPortalTarget : document.body}:{})}
         menuPlacement="auto"
         onChange={(
           option: SingleValue<SelectOption> | MultiValue<SelectOption>
