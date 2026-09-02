@@ -33,7 +33,7 @@ const EducationDetails = ({
   const columns: ColumnDef<Education>[] = [
     {
       header: "Board/ University",
-      className: "w-[40%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => (
         <TextField
           name="organization"
@@ -47,7 +47,7 @@ const EducationDetails = ({
     },
     {
       header: "Passing Year",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => (
         <YearPicker
           value={Number(education.passingYear)}
@@ -61,7 +61,7 @@ const EducationDetails = ({
 
     {
       header: "Percentage  (%)",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => (
         <TextField
           type="number"
@@ -79,7 +79,7 @@ const EducationDetails = ({
 
     {
       header: "MarkSheet",
-      className: "w-[5%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (_, index) => (
         <DocumentUpload
           name="document"
@@ -92,7 +92,7 @@ const EducationDetails = ({
     },
     {
       header: "",
-      className: "w-[5%] pr-0 pl-0",
+      className: "pr-0 pl-0",
       render: (_, index) => {
         return (
             <>

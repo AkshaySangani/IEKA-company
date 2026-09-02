@@ -116,12 +116,18 @@ const CalendarDayBox = ({
                   >
                     {formatDate(data.inTime, DateFormat.TIME_24)}
                   </span>
-
+                  <div className="flex items-center justify-center gap-1">
                   {data.lateMinutes > 0 && (
                     <div className="text-[10px] text-secondary/60">
                       {data.lateMinutes} min
                     </div>
                   )}
+                  {data.isManualPunchIn && (
+                    <div className="text-[10px] text-secondary/60">
+                      (M)
+                    </div>
+                  )}
+                  </div>
                 </div>
               )}
 
@@ -141,11 +147,18 @@ const CalendarDayBox = ({
                     {formatDate(data.outTime, DateFormat.TIME_24)}
                   </span>
 
+                      <div className="flex items-center justify-center gap-1">
                   {data.earlyExitMinutes > 0 && (
                     <div className="text-[10px] text-secondary/60">
                       {data.earlyExitMinutes} min
                     </div>
                   )}
+                  {data.isManualPunchOut && (
+                    <div className="text-[10px] text-secondary/60">
+                      (M)
+                    </div>
+                  )}
+                  </div>
                 </div>
               )}
             </div>

@@ -60,8 +60,17 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
   };
 
   // handleDownloadPdfClick
-  const handleDownloadPdfClick = () => {
+  const handleDownloadPdfClick = async () => {
     reactToPrintFn();
+    // const fileName = `Payslip_${employee.firstName}_${employee.lastName}_${employeePayroll.payrollMonth}`
+    //   .replace(/[^a-zA-Z0-9-_]/g, "_") + ".pdf";
+    // if(contentRef.current){
+    // const pdfFile = await generatePayslipPdf(
+    //   contentRef.current,
+    //   fileName,
+    // );
+    // }
+
   };
   return (
     <>
@@ -134,7 +143,6 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
           </div>
 
           {/* Net Pay */}
-          {/* Net Pay */}
           <div className="mt-auto pt-8">
             <NetPaySummary
               grossEarnings={employeePayroll.totals.netPayAmount}
@@ -142,11 +150,6 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
               netPay={employeePayroll.totals.netPayAmount}
             />
           </div>
-          {/* <NetPaySummary
-            grossEarnings={employeePayroll.totals.netPayAmount}
-            totalDeductions={employeePayroll.totals.deductionsAmount}
-            netPay={employeePayroll.totals.netPayAmount}
-          /> */}
         </div>
       </div>
     </>

@@ -15,6 +15,8 @@ interface MonthPickerProps {
   placeholder?: string;
   disabled?: boolean;
   position?: PickerPosition;
+  // Minimum selectable month
+  minDate?: MonthPickerValue;
   onChange: (value: MonthPickerValue) => void;
 }
 
@@ -43,6 +45,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
   placeholder = "Select Month",
   position = "bottom",
   disabled,
+  minDate,
   onChange,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -150,6 +153,18 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
     setOpen((prev) => !prev);
   };
 
+  const isMonthDisabled = (month: number, year: number) => {
+    if (!minDate) return false;
+
+    if (year < minDate.year) return true;
+
+    if (year === minDate.year && month <= minDate.month) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <div className="relative" ref={wrapperRef}>
       {label && (
@@ -191,7 +206,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
           >
             {/* Header */}
 
-            <div className="flex items-center justify-between p-4">
+            <div className="flex items-center justify-between px-4 py-1 border-b bg-disabledBg">
               <button
                 type="button"
                 onClick={() => {
@@ -264,33 +279,51 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
                 })}
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-1 p-2">
-                {Object.keys(MONTHS).map((month: any, index) => (
-                  <button
-                    key={month}
-                    type="button"
-                    onClick={() => {
-                      onChange({
-                        month: Number(month),
-                        year: selectedYear,
-                      });
+              <div className="grid grid-cols-3 p-1">
+                {Object.keys(MONTHS).map((month) => {
+                  const monthNumber = Number(month);
 
-                      setOpen(false);
-                    }}
-                    className={`
-                      mx-auto flex items-center justify-center
-                      rounded-md p-2 text-[18px] transition
-                      ${
-                        value?.month === Number(month) &&
-                        value?.year === selectedYear
-                          ? "bg-primary text-white font-medium"
-                          : "hover:bg-primaryBlur"
-                      }
-                    `}
-                  >
-                    {MONTHS[month]}
-                  </button>
-                ))}
+                  const disabledMonth = isMonthDisabled(
+                    monthNumber,
+                    selectedYear,
+                  );
+
+                  const isSelected =
+                    value?.month === monthNumber &&
+                    value?.year === selectedYear;
+
+                  return (
+                    <button
+                      key={month}
+                      type="button"
+                      disabled={disabledMonth}
+                      onClick={() => {
+                        if (disabledMonth) return;
+
+                        onChange({
+                          month: monthNumber,
+                          year: selectedYear,
+                        });
+
+                        setOpen(false);
+                      }}
+                      className={`
+          mx-auto flex items-center justify-center
+          rounded-md px-2 py-2 text-[18px] transition
+
+          ${
+            isSelected
+              ? "bg-primary font-medium text-white"
+              : disabledMonth
+                ? "cursor-not-allowed text-gray-300"
+                : "hover:bg-primaryBlur"
+          }
+        `}
+                    >
+                      {MONTHS[monthNumber]}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>,

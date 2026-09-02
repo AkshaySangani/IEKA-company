@@ -351,20 +351,20 @@ const EmployeeDetailCard: React.FC<Props> = ({
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <span>{policy?.policyId?.name}</span>
-                  <InfoIcon
+                  {/* <InfoIcon
                     onClick={() =>
                       handleShowHistory(
                         employeeData,
                         HistoryFieldEnum.EmploymentType,
                       )
                     }
-                  />
-                  {!isEditable && (
+                  /> */}
+                  {/* {!isEditable && (
                     <i
                       onClick={() => setUpdate(EmployeeUpdateModal.POLICY)}
                       className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
                     ></i>
-                  )}
+                  )} */}
                 </div>
               }
             />
@@ -444,7 +444,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
         employeeDetails={employeeDetails}
         payslip={payslip}
         setActive={() => setUpdate("")}
-        handleSubmit={handleSubmit}
+        refreshData={refreshData}
         loading={loading}
       />
       <BranchAssignmentUpdate

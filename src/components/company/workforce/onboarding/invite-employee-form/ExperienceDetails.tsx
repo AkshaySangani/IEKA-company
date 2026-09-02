@@ -33,7 +33,7 @@ const ExperienceDetails = ({
   const columns: ColumnDef<Experience>[] = [
     {
       header: "Organization",
-      className: "w-[25%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience, index) => (
         <TextField
           name="organization"
@@ -47,7 +47,7 @@ const ExperienceDetails = ({
     },
     {
       header: "Position",
-      className: "w-[25%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience, index) => (
         <TextField
           name="designation"
@@ -61,7 +61,7 @@ const ExperienceDetails = ({
     },
     {
       header: "Start Date",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience, index) => (
         <TextField
           type="date"
@@ -77,7 +77,7 @@ const ExperienceDetails = ({
     },
     {
       header: "End Date",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience, index) => (
         <TextField
           type="date"
@@ -94,7 +94,7 @@ const ExperienceDetails = ({
     },
     {
       header: "Experience Letter",
-      className: "w-[5%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (_, index) => (
         <DocumentUpload
           name="document"
@@ -107,7 +107,7 @@ const ExperienceDetails = ({
     },
     {
       header: "",
-      className: "w-[5%] pr-0 pl-0",
+      className: "pr-0 pl-0",
       render: (_, index) => {
         return (
           <>

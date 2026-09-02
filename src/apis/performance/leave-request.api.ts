@@ -82,8 +82,8 @@ export const updateLeaveRequestStatus = (
     },
   );
 
-export const getLeaveBucket = (year: number) => {
+export const getLeaveBucket = (year: number, userId: string) => {
   return apiRequest.get<ApiResponse>(
-    `/performance/leave-request/bucket?year=${year}`,
+    `/performance/leave-request/bucket?year=${year}&userId=${userId}`,
   );
 };

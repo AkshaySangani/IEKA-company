@@ -15,24 +15,24 @@ const EductionDetails = ({ eductions, employee }: EductionDetailsProps) => {
   const educationColumns: ColumnDef<IEducation>[] = [
     {
       header: "Board/ University",
-      className: "w-[40%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => education.organization,
     },
     {
       header: "Passing Year",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => education.passingYear,
     },
 
     {
       header: "Percentage (%)",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => education.marks,
     },
 
     {
       header: "MarkSheet",
-      className: "w-[5%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => (
         <i
           className="fa-solid fa-image text-primary"

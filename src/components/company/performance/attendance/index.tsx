@@ -33,10 +33,10 @@ export interface ILeaveRequest {
 export interface IUserAttendance {
   _id: string;
   userId: IUser;
-  inTime: string;
-  outTime: string;
-  inMethod: AttendanceMethodEnum;
-  outMethod: AttendanceMethodEnum;
+  inTime: string | null;
+  outTime: string | null;
+  inMethod: AttendanceMethodEnum | null;
+  outMethod: AttendanceMethodEnum | null;
   totalWorkedMinutes: number;
   lateMinutes: number;
   isHalfDay: boolean;
@@ -44,9 +44,11 @@ export interface IUserAttendance {
   attendanceStatus: AttendanceStatusEnum;
   leaveRequestId: ILeaveRequest | null;
   isLate: boolean;
-  inLocation?: ILocation;
-  outLocation?: ILocation;
+  inLocation: ILocation | null;
+  outLocation: ILocation | null;
   attendanceDate?: string;
+  isManualPunchIn?: boolean;
+  isManualPunchOut?: boolean;
 }
 
 export interface ILocation {

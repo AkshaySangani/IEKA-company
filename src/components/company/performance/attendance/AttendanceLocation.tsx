@@ -1,14 +1,17 @@
 import React from "react";
 import Image from "../../../common/image";
 import Modal from "../../../common/modal/Modal";
-import { AttendanceMethodEnum, AttendanceMethodNames } from "../../../../types/common-types";
+import {
+  AttendanceMethodEnum,
+  AttendanceMethodNames,
+} from "../../../../types/common-types";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import NoImage from "../../../../assets/images/User-Image.png";
 import { IUser } from "../../../../types/user.types";
 
 export interface ILocationData {
-  attendanceMethod: AttendanceMethodEnum;
-  date: string;
+  attendanceMethod: AttendanceMethodEnum | null;
+  date: string | null;
   latitude?: number;
   longitude?: number;
 }
@@ -28,16 +31,27 @@ const AttendanceLocation: React.FC<AttendanceLocationProps> = ({
   onClose,
   className = "",
 }) => {
-  const { attendanceMethod, date, latitude, longitude } =
-    locationData;
-  const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}&z=16&output=embed`;
+  const { attendanceMethod, date, latitude, longitude } = locationData;
 
-//   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+  const mapUrl =
+    latitude !== undefined && longitude !== undefined
+      ? `https://www.google.com/maps?q=${latitude},${longitude}&z=16&output=embed`
+      : "";
 
   return (
-    <Modal isOpen={isOpen} title={`${userDetail.firstName} ${userDetail.lastName}`} onClose={onClose} confirmButtonName={"Reject"}>
+    <Modal
+      isOpen={isOpen}
+      title={`${userDetail.firstName} ${userDetail.lastName}`}
+      onClose={onClose}
+      confirmButtonName="Reject"
+    >
       <div
-        className={`w-full ${className}`}
+        className={`
+          w-full
+          px-1
+          sm:px-2
+          ${className}
+        `}
       >
         {/* Profile Image */}
         <div className="flex justify-center">
@@ -45,52 +59,98 @@ const AttendanceLocation: React.FC<AttendanceLocationProps> = ({
             src={userDetail.profileImage}
             alt="Employee"
             fallbackSrc={NoImage}
-            className="h-[100px] w-[100px] object-cover"
+            className="
+              h-20 w-20
+              sm:h-[100px] sm:w-[100px]
+              rounded-full
+              object-cover
+            "
           />
         </div>
 
         {/* Details */}
-        <div className="mt-4 grid grid-cols-[170px_1fr] gap-y-6">
+        <div
+          className="
+            mt-5
+            grid
+            grid-cols-1
+            gap-y-4
+            sm:grid-cols-[140px_minmax(0,1fr)]
+            sm:gap-x-5
+            sm:gap-y-6
+            md:grid-cols-[170px_minmax(0,1fr)]
+          "
+        >
           {/* Attendance Marked */}
-          <div className="text-sm font-normal text-inputLabel text-start">
-            Attendance Marked
-          </div>
+          <div className="flex gap-2">
+            <div className="text-start text-sm font-normal text-inputLabel">
+              Attendance Marked:
+            </div>
 
-          <div className="text-sm font-semibold text-secondary text-start">
-            {AttendanceMethodNames[attendanceMethod]}
+            <div className="text-start text-sm font-semibold text-secondary">
+              {attendanceMethod
+                ? AttendanceMethodNames[attendanceMethod]
+                : "N/A"}
+            </div>
           </div>
 
           {/* Date & Time */}
-          <div className="text-sm font-normal text-inputLabel text-start">
-            Date & Time
-          </div>
-
-          <div>
-            <div className="text-sm font-semibold text-secondary text-start">
-              {formatDate(date)}
+          <div className="flex gap-2">
+            <div className="text-start text-sm font-normal text-inputLabel">
+              Date & Time:
             </div>
 
-            <div className="mt-1 text-xs text-info text-start">{formatDate(date, DateFormat.TIME_24)}</div>
+            <div className="min-w-0">
+              <div className="text-start text-sm font-semibold text-secondary">
+                {formatDate(date)}
+              </div>
+
+              <div className="mt-1 text-start text-xs text-info">
+                {formatDate(date, DateFormat.TIME_24)}
+              </div>
+            </div>
           </div>
 
           {/* Geo Location */}
-          <div className="text-sm font-normal text-inputLabel text-start">
-            Geo Location
-          </div>
+          {latitude && longitude && (
+            <>
+              <div className="text-start text-sm font-normal text-inputLabel">
+                Geo Location:
+              </div>
 
-          <div>
-            {/* Map */}
-            <div className="relative h-[375px] w-full overflow-hidden rounded-sm border border-gray-200">
-              <iframe
-                title="Attendance Location"
-                src={mapUrl}
-                className="h-full w-full border-0"
-                loading="lazy"
-                allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </div>
+              <div className="min-w-0">
+                {latitude !== undefined && longitude !== undefined ? (
+                  <div
+                    className="
+                  relative
+                  h-[220px]
+                  w-full
+                  overflow-hidden
+                  rounded-md
+                  border
+                  border-gray-200
+                  sm:h-[280px]
+                  md:h-[350px]
+                  lg:h-[375px]
+                "
+                  >
+                    <iframe
+                      title="Attendance Location"
+                      src={mapUrl}
+                      className="h-full w-full border-0"
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  </div>
+                ) : (
+                  <div className="rounded-md border border-gray-200 px-3 py-4 text-sm text-gray-500">
+                    Location not available
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </Modal>

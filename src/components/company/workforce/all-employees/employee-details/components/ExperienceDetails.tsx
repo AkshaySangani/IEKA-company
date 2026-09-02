@@ -19,28 +19,28 @@ const ExperienceDetails = ({
   const experienceColumns: ColumnDef<IExperience>[] = [
     {
       header: "Organization",
-      className: "w-[25%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => experience.organization,
     },
     {
       header: "Start Date",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => formatDate(experience.startDate),
     },
     {
       header: "End Date",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => formatDate(experience.endDate),
     },
     {
       header: "Position",
-      className: "w-[30%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => experience.designation,
     },
 
     {
       header: "Document",
-      className: "w-[5%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => (
         <i
           className="fa-solid fa-image text-primary"

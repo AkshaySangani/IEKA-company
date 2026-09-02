@@ -213,7 +213,7 @@ const AddLeaveRequest: React.FC = () => {
       const [branchResponse, leaveBucketResponse] = await Promise.all([
         getBranchShiftDepartment(),
 
-        getLeaveBucket(new Date().getFullYear()),
+        getLeaveBucket(new Date().getFullYear(), formData.userId || user._id),
       ]);
 
       /* ----------------------------- LEAVES ------------------------------ */
@@ -282,6 +282,18 @@ const AddLeaveRequest: React.FC = () => {
     }
   };
 
+  const getLeaveBucketByUserId = async (userId: string) => {
+    const response = await getLeaveBucket(new Date().getFullYear(), userId);
+    if (response?.success) {
+      setLeaveOptions(
+        (response.data || []).map((ele: ILeaveBucket) => ({
+          label: `${ele.leaveId.name} ${ele.used}/${ele.allocated}`,
+          value: ele.leaveId._id,
+        })),
+      );
+    }
+  };
+
   /* ------------------------------------------------------------------------ */
   /*                         COMMON FIELD CHANGE                              */
   /* ------------------------------------------------------------------------ */
@@ -309,7 +321,7 @@ const AddLeaveRequest: React.FC = () => {
   /*                       BRANCH / EMPLOYEE CHANGE                           */
   /* ------------------------------------------------------------------------ */
 
-  const handleSelectFilter = (name: "branchId", value: string) => {
+  const handleSelectFilter = (name: "branchId" | "userId", value: string) => {
     if (name === "branchId") {
       setBranchId(value);
 
@@ -322,6 +334,18 @@ const AddLeaveRequest: React.FC = () => {
 
       if (value) {
         getEmployeeDetailsByBranchId(value);
+      }
+    }
+    if (name === "userId") {
+      handleChange("userId", value);
+
+      /**
+       * Reset leave option based on branch.
+       */
+      setLeaveOptions([]);
+
+      if (value) {
+        getLeaveBucketByUserId(value);
       }
     }
   };
@@ -668,7 +692,7 @@ const AddLeaveRequest: React.FC = () => {
       duration: row.duration as LeaveDuration,
     }));
     return {
-      userId: formData.userId ? formData.userId : user._id,
+      userId: !self ? user._id : formData.userId,
       reason: formData.reason,
       leaves: leaves,
     };
@@ -759,7 +783,15 @@ const AddLeaveRequest: React.FC = () => {
   /* ------------------------------------------------------------------------ */
 
   const handleSelfToggle = () => {
-    setSelf((prev) => !prev);
+    setSelf((prev) => {
+      if(prev){
+        getLeaveBucketByUserId(user._id);
+      } else {
+        formData.userId && getLeaveBucketByUserId(formData.userId);
+      }
+      return !prev
+    });
+    
   };
 
   /* ------------------------------------------------------------------------ */
@@ -861,7 +893,9 @@ const AddLeaveRequest: React.FC = () => {
                 name="userId"
                 options={employeeOptions}
                 error={errors.userId}
-                onChange={(option) => handleChange("userId", option.value)}
+                onChange={(option) =>
+                  handleSelectFilter("userId", option.value)
+                }
               />
             )}
 

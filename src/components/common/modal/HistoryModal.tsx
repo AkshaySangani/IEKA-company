@@ -110,17 +110,17 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
     ? [
         {
           header: firstColumnNames[history.field],
-          className: "w-[20%]",
+          className: "",
           render: (row) => row.fieldValue,
         },
         {
           header: "Action Date",
-          className: "w-[40%]",
+          className: "",
           render: (row) => formatDate(row.createdAt, DateFormat.DATE_TIME_24),
         },
         {
           header: "Action By",
-          className: "w-[40%]",
+          className: "",
           render: (row) =>
             `${row.assignedBy.firstName} ${row.assignedBy.lastName}`,
         },
@@ -128,7 +128,7 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
     : [
         {
           header: firstColumnNames[history.field],
-          className: "w-[20%]",
+          className: "",
           render: (row) => (
             <span
               className={`font-medium text-sm ${statusColor[row.fieldValue] ?? "text-secondary"}`}
@@ -139,18 +139,18 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
         },
         {
           header: "Action Date",
-          className: "w-[15%]",
+          className: "",
           render: (row) => formatDate(row.createdAt, DateFormat.DATE_TIME_24),
         },
         {
           header: "Action By",
-          className: "w-[15%]",
+          className: "",
           render: (row) =>
             `${row.assignedBy.firstName} ${row.assignedBy.lastName}`,
         },
         {
           header: "Remarks",
-          className: "w-[30%]",
+          className: "",
           render: (row) => (
             <div className="line-clamp-2 max-w-full overflow-hidden">
               {row.remarks || "-"}

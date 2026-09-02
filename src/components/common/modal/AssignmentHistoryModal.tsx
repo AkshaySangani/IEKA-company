@@ -88,7 +88,7 @@ const AssignmentHistoryModal: React.FC<IStatusHistoryProps> = ({
   const columns: ColumnDef<IHistory>[] = [
     {
       header: "Branch/Departments",
-      className: "w-[20%]",
+      className: "",
       render: (row) => {
         const cards = getBranches(row.assignments);
         return (
@@ -102,12 +102,12 @@ const AssignmentHistoryModal: React.FC<IStatusHistoryProps> = ({
     },
     {
       header: "Action Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.createdAt, DateFormat.DATE_TIME_24),
     },
     {
       header: "Action By",
-      className: "w-[15%]",
+      className: "",
       render: (row) => {
         const assignedBy = row.assignments[0]?.assignedBy;
         return `${assignedBy.firstName} ${assignedBy.lastName}`;
@@ -115,7 +115,7 @@ const AssignmentHistoryModal: React.FC<IStatusHistoryProps> = ({
     },
     {
       header: "Remarks",
-      className: "w-[30%]",
+      className: "",
       render: (row) => {
         const remarks = row.assignments[0]?.remarks;
         return (

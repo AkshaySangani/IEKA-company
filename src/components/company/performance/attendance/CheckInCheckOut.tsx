@@ -17,6 +17,7 @@ interface CheckInCheckOutProps {
 export default function CheckInCheckOut({ attendance }: CheckInCheckOutProps) {
   const [location, setLocation] = useState<keyof IUserAttendance | null>(null);
   const isInLocation = location === "inLocation";
+  console.log("location", location);
   return (
     <>
       <div className="flex justify-center">
@@ -26,7 +27,7 @@ export default function CheckInCheckOut({ attendance }: CheckInCheckOutProps) {
             inPunch:
               attendance.inTime && attendance.inMethod
                 ? {
-                    time: formatDate(attendance.inTime, DateFormat.TIME_24),
+                    time: `${formatDate(attendance.inTime, DateFormat.TIME_24)} ${attendance.isManualPunchIn ? "(M)" : ""}`,
                     source: AttendanceMethodNames[attendance.inMethod],
                   }
                 : undefined,
@@ -34,7 +35,7 @@ export default function CheckInCheckOut({ attendance }: CheckInCheckOutProps) {
             outPunch:
               attendance.outTime && attendance.outMethod
                 ? {
-                    time: formatDate(attendance.outTime, DateFormat.TIME_24),
+                    time: `${formatDate(attendance.outTime, DateFormat.TIME_24)} ${attendance.isManualPunchOut ? "(M)" : ""}`,
                     source: AttendanceMethodNames[attendance.outMethod],
                   }
                 : undefined,
@@ -78,7 +79,6 @@ export default function CheckInCheckOut({ attendance }: CheckInCheckOutProps) {
                 : undefined,
           }}
           onClick={(value: "inLocation" | "outLocation") => {
-            (attendance.inLocation || attendance.outLocation) &&
               setLocation(value);
           }}
         />

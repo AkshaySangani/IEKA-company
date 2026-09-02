@@ -203,6 +203,7 @@ export enum AttendanceMethodEnum {
   WEB = "WEB",
   BIOMETRIC = "BIOMETRIC",
   QR = "QR",
+  SYSTEM = "SYSTEM"
 }
 
 export enum AttendanceMethodNames {
@@ -210,6 +211,7 @@ export enum AttendanceMethodNames {
   WEB = "Web",
   BIOMETRIC = "Biometric",
   QR = "QR",
+  SYSTEM = "System",
 }
 
 export enum AttendanceViewEnum {

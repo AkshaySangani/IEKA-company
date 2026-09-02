@@ -19,17 +19,17 @@ const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
   const documentColumns: ColumnDef<IDocument>[] = [
     {
       header: "Document Name",
-      className: "w-[40%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) => documentType[document.card],
     },
     {
       header: "No",
-      className: "w-[30%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) => document.cardNumber,
     },
     {
       header: "Front Pic",
-      className: "w-[15%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) =>
         document.front ? (
           <Image
@@ -47,7 +47,7 @@ const DocumentDetails = ({ documents }: DocumentDetailsProps) => {
     },
     {
       header: "Back Pic",
-      className: "w-[15%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) =>
         document.back ? (
           <Image

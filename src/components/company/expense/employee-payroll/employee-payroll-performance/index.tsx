@@ -39,9 +39,14 @@ export interface ILeaveRequest {
   duration: LeaveDuration;
 }
 
+export interface ILocation  {
+    latitude: number;
+    longitude: number;
+    address: string;
+}
 export interface IUserAttendance {
   _id: string;
-  userId: string;
+  userId: IUser;
   companyId: string;
   attendanceDate: string;
 
@@ -65,6 +70,9 @@ export interface IUserAttendance {
   leaveRequestId: ILeaveRequest | null;
 
   autoClosed: boolean;
+
+  inLocation : ILocation | null;
+  outLocation : ILocation | null;
 }
 
 const EmployeePayrollPerformance = () => {

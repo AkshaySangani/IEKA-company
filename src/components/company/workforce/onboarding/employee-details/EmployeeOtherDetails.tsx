@@ -30,24 +30,24 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
   const educationColumns: ColumnDef<IEducation>[] = [
     {
       header: "Board/ University",
-      className: "w-[40%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => education.organization,
     },
     {
       header: "Passing Year",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => education.passingYear,
     },
 
     {
       header: "Percentage (%)",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => education.marks,
     },
 
     {
       header: "MarkSheet",
-      className: "w-[5%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (education, index) => (
         <i
           className="fa-solid fa-image cursor-pointer text-primary"
@@ -65,28 +65,28 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
   const experienceColumns: ColumnDef<IExperience>[] = [
     {
       header: "Organization",
-      className: "w-[25%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => experience.organization,
     },
     {
       header: "Start Date",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => formatDate(experience.startDate),
     },
     {
       header: "End Date",
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => formatDate(experience.endDate),
     },
     {
       header: "Position",
-      className: "w-[30%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => experience.designation,
     },
 
     {
       header: "Document",
-      className: "w-[5%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (experience) => (
         <i
           className="fa-solid fa-image cursor-pointer text-primary"
@@ -104,17 +104,17 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
   const documentColumns: ColumnDef<IDocument>[] = [
     {
       header: "Document Name",
-      className: "w-[40%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) => documentType[document.card],
     },
     {
       header: "No",
-      className: "w-[30%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) => document.cardNumber,
     },
     {
       header: "Front Pic",
-      className: "w-[15%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) => document.front ? (
           <Image
             src={`${config.BACKEND_API_URL}${document.front}`}
@@ -131,7 +131,7 @@ const EmployeeOtherDetailCard: React.FC<Props> = ({
     },
     {
       header: "Back Pic",
-      className: "w-[15%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (document) =>
         document.back ? (
           <Image

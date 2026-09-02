@@ -143,6 +143,8 @@ export const roleBasePaths: ObjectType = {
     pathNames.LEAVE_REQUEST,
     pathNames.ADD_LEAVE_REQUEST,
     pathNames.ADD_LEAVE_REQUEST_ID,
+    pathNames.LEAVE_REQUEST_DETAILS,
+    pathNames.LEAVE_REQUEST_DETAILS_ID,
     pathNames.MANUAL_PUNCH_REQUEST,
 
     // Expense

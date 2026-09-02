@@ -49,3 +49,20 @@ export const getManagedEmployee = (branchId: string) => {
 export const getCompanyDetails = () => {
   return apiRequest.get<ApiResponse>(`/workforce/company-details`);
 };
+
+export const getEmployeeSalary = (userId: string) => {
+  return apiRequest.get<ApiResponse>(`/workforce/employee/salary?userId=${userId}`);
+};
+
+export interface IEmployeeSalaryPayload {
+    userId: string;
+    salary: number;
+    effectiveFromMonth: number;
+    effectiveFromYear: number;
+    remarks: string;
+    allowPFDeduction: boolean;
+    allowESICDeduction: boolean;
+}
+export const updateEmployeeSalary = (payload: IEmployeeSalaryPayload) => {
+  return apiRequest.post(`/workforce/employee/salary`, payload);
+};
