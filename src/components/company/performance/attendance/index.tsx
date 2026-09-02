@@ -7,7 +7,7 @@ import {
   AttendanceMethodEnum,
   AttendanceStatusEnum,
   FilterCardItem,
-  LeaveDuration
+  LeaveDuration,
 } from "../../../../types/common-types";
 import { pathNames, statusMessage } from "../../../../constants/constants";
 import AttendanceTable from "./AttendanceTable";
@@ -200,7 +200,7 @@ const Attendance: React.FC = () => {
       status: "",
       date,
       isDownload: true,
-      password
+      password,
     });
   };
 
@@ -239,7 +239,18 @@ const Attendance: React.FC = () => {
           activeCard={activeCard}
           setActiveCard={setActiveCard}
         />
-        <AttendanceTable attendance={attendanceList} />
+        <AttendanceTable
+          attendance={attendanceList}
+          refreshData={() =>
+            fetchAttendanceList({
+              page,
+              limit,
+              search,
+              status: activeCard,
+              date: date,
+            })
+          }
+        />
         <Pagination
           totalRecords={total}
           currentPage={page}

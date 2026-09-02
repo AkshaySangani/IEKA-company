@@ -5,7 +5,11 @@ import {
   pathNames,
 } from "../../../../constants/constants";
 import { useNavigate } from "react-router-dom";
-import { IEmployeePayroll, IPayslipUser } from "../../../../types/employee/employee-payslip.types";
+import {
+  IEmployeePayroll,
+  IPayslipUser,
+  IUserDetails,
+} from "../../../../types/employee/employee-payslip.types";
 import { getFloatValue } from "../../../../utils/helper";
 import { deductionEnum, RoleEnum } from "../../../../types/common-types";
 import { formatMonthYear } from "../../../../utils/date-format";
@@ -14,9 +18,14 @@ import { useAuthStore } from "../../../../store/auth-store";
 interface IEmployeeListProps {
   payrolls: IEmployeePayroll[];
   employee: IPayslipUser;
+  userDetails: IUserDetails;
 }
 
-export default function EmployeePayslipTable({ payrolls, employee }: IEmployeeListProps) {
+export default function EmployeePayslipTable({
+  payrolls,
+  employee,
+  userDetails,
+}: IEmployeeListProps) {
   const { user } = useAuthStore();
   const isOwner = user.role === RoleEnum.OWNER;
   const navigate = useNavigate();
@@ -29,7 +38,8 @@ export default function EmployeePayslipTable({ payrolls, employee }: IEmployeeLi
       {
         state: {
           employeePayroll: row,
-          employee
+          employee,
+          userDetails,
         },
       },
     );

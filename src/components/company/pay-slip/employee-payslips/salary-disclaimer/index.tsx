@@ -9,6 +9,7 @@ import NetPaySummary from "./NetPaySummary";
 import {
   IEmployeePayroll,
   IPayslipUser,
+  IUserDetails,
   PayslipProps,
 } from "../../../../../types/employee/employee-payslip.types";
 import Button from "../../../../common/button/Button";
@@ -24,9 +25,11 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
   const {
     employeePayroll,
     employee,
+    userDetails,
   }: {
     employeePayroll: IEmployeePayroll;
     employee: IPayslipUser;
+    userDetails: IUserDetails;
   } = location.state;
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -40,19 +43,6 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
     contentRef,
     documentTitle: fileName,
   });
-  const data: any = {
-    company: {
-      name: "Ieka Digital LLP",
-      address:
-        "Office No. 78, Poojan Complex, New India Colony, Nikol, Ahmedabad, Gujarat 380049",
-      logo: "/images/company-logo.png",
-    },
-
-    attendance: {
-      paidDays: 30,
-      lopDays: 0,
-    },
-  };
 
   // handle close
   const handleClose = () => {
@@ -70,7 +60,6 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
     //   fileName,
     // );
     // }
-
   };
   return (
     <>
@@ -109,7 +98,7 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
           ref={contentRef}
         >
           {/* Company */}
-          <CompanyHeader company={data.company} />
+          <CompanyHeader company={employee.companyId} />
 
           {/* Salary Summary */}
           <SalarySummary
@@ -118,12 +107,10 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
               employeePayroll.payrollYear,
             )}
             netPay={employeePayroll.totals.netPayAmount}
-            paidDays={data.attendance.paidDays}
-            lopDays={data.attendance.lopDays}
           />
 
           {/* Employee */}
-          <EmployeeInfo employee={employee} />
+          <EmployeeInfo employee={employee} userDetails={userDetails} />
 
           {/* Earnings + Deductions */}
           <div className="mt-7 grid grid-cols-1 print:grid-cols-2 gap-8 sm:mt-10 sm:gap-10 md:grid-cols-2">

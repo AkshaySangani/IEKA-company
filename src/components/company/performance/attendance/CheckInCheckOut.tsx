@@ -12,12 +12,15 @@ import AttendanceLocation from "./AttendanceLocation";
 
 interface CheckInCheckOutProps {
   attendance: IUserAttendance;
+  refreshData: () => void;
 }
 
-export default function CheckInCheckOut({ attendance }: CheckInCheckOutProps) {
+export default function CheckInCheckOut({
+  attendance,
+  refreshData,
+}: CheckInCheckOutProps) {
   const [location, setLocation] = useState<keyof IUserAttendance | null>(null);
   const isInLocation = location === "inLocation";
-  console.log("location", location);
   return (
     <>
       <div className="flex justify-center">
@@ -79,7 +82,7 @@ export default function CheckInCheckOut({ attendance }: CheckInCheckOutProps) {
                 : undefined,
           }}
           onClick={(value: "inLocation" | "outLocation") => {
-              setLocation(value);
+            setLocation(value);
           }}
         />
       </div>
@@ -97,8 +100,10 @@ export default function CheckInCheckOut({ attendance }: CheckInCheckOutProps) {
           attendanceMethod: isInLocation
             ? attendance.inMethod
             : attendance.outMethod,
+          attendance: attendance,
         }}
         userDetail={attendance.userId}
+        refreshData={refreshData}
       />
     </>
   );

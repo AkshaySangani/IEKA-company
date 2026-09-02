@@ -4,16 +4,9 @@ import { formatCurrency } from "../../../../../utils/helper";
 interface SalarySummaryProps {
   month: string;
   netPay: number;
-  paidDays: number;
-  lopDays: number;
 }
 
-const SalarySummary: React.FC<SalarySummaryProps> = ({
-  month,
-  netPay,
-  paidDays,
-  lopDays,
-}) => {
+const SalarySummary: React.FC<SalarySummaryProps> = ({ month, netPay }) => {
   return (
     <div className="mt-5 flex flex-col gap-5 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
       {/* Payslip Month */}

@@ -24,7 +24,7 @@ interface EmployeeAttendanceDetailsProps {
   id?: string;
 }
 
-const EmployeeAttendanceDetails = ({id}: EmployeeAttendanceDetailsProps) => {
+const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
   const navigate = useNavigate();
   const params = useParams();
   const userId: string = params.id ?? id ?? "";
@@ -64,8 +64,8 @@ const EmployeeAttendanceDetails = ({id}: EmployeeAttendanceDetailsProps) => {
     lastName: "",
     profileImage: "",
     status: statusEnum.ACTIVE,
-    role: RoleEnum.EMPLOYEE
-  }; 
+    role: RoleEnum.EMPLOYEE,
+  };
   const [employee, setEmployee] = useState<IUser>(initialState);
 
   const [selectedMonth, setSelectedMonth] = useState({
@@ -81,11 +81,11 @@ const EmployeeAttendanceDetails = ({id}: EmployeeAttendanceDetailsProps) => {
   }, [userId, selectedMonth.month]);
 
   useEffect(() => {
-    if(userId){
+    if (userId) {
       fetchEmployeeDetails();
     }
     // eslint-disable-next-line
-  }, [userId])
+  }, [userId]);
 
   const fetchUserAttendance = async () => {
     setLoading(true);
@@ -105,31 +105,35 @@ const EmployeeAttendanceDetails = ({id}: EmployeeAttendanceDetailsProps) => {
 
   const fetchEmployeeDetails = async () => {
     const response = await getEmployeeDetails(userId);
-    if(response?.success){
-      setEmployee(response?.data?.user)
+    if (response?.success) {
+      setEmployee(response?.data?.user);
     } else {
       setEmployee(initialState);
     }
-  }
+  };
 
   return (
     <>
       {/* Month Picker */}
-      <div className={`flex ${id ? "justify-end" : "justify-between"} items-center border-b border-slate-200 bg-white px-4 py-1.5`}>
-        {!id && <div className="flex gap-3">
-          <PersonInfo
-            personInfo={{
-              profileImage: employee.profileImage,
-              firstName: employee.firstName,
-              lastName: employee.lastName,
-              description: roleNames[employee.role],
-            }}
-            className="border-r pr-3 border-inputBorder"
-            imageClassName="rounded-0 w-[50px] h-[50px]"
-            personClassName="text-black !text-md !font-[500]"
-          />
-          <Tabs active={active} options={options} onChange={setActive} />
-        </div>}
+      <div
+        className={`flex ${id ? "justify-end" : "justify-between"} items-center border-b border-slate-200 bg-white px-4 py-1.5`}
+      >
+        {!id && (
+          <div className="flex gap-3">
+            <PersonInfo
+              personInfo={{
+                profileImage: employee.profileImage,
+                firstName: employee.firstName,
+                lastName: employee.lastName,
+                description: roleNames[employee.role],
+              }}
+              className="border-r pr-3 border-inputBorder"
+              imageClassName="rounded-0 w-[50px] h-[50px]"
+              personClassName="text-black !text-md !font-[500]"
+            />
+            <Tabs active={active} options={options} onChange={setActive} />
+          </div>
+        )}
         <div className="flex gap-3">
           <Button
             name="Overview"
@@ -138,12 +142,14 @@ const EmployeeAttendanceDetails = ({id}: EmployeeAttendanceDetailsProps) => {
             leftIcon={<i className="fa-solid fa-list-check"></i>}
           />
           <MonthPicker value={selectedMonth} onChange={setSelectedMonth} />
-          {!id && <Button
-            size="sm"
-            variant={"danger"}
-            onClick={() => navigate(pathNames.ATTENDANCE)}
-            leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
-          />}
+          {!id && (
+            <Button
+              size="sm"
+              variant={"danger"}
+              onClick={() => navigate(pathNames.ATTENDANCE)}
+              leftIcon={<i className="fa-solid fa-xmark fa-xl text-danger"></i>}
+            />
+          )}
         </div>
       </div>
 
@@ -163,7 +169,10 @@ const EmployeeAttendanceDetails = ({id}: EmployeeAttendanceDetailsProps) => {
               />
             ),
             [AttendanceViewEnum.TABLE_VIEW]: (
-              <EmployeeAttendanceTable attendance={attendanceDetails} />
+              <EmployeeAttendanceTable
+                attendance={attendanceDetails}
+                refreshData={() => fetchUserAttendance()}
+              />
             ),
           }[active]
         }

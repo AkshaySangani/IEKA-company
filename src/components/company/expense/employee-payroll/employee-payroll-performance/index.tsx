@@ -39,10 +39,10 @@ export interface ILeaveRequest {
   duration: LeaveDuration;
 }
 
-export interface ILocation  {
-    latitude: number;
-    longitude: number;
-    address: string;
+export interface ILocation {
+  latitude: number;
+  longitude: number;
+  address: string;
 }
 export interface IUserAttendance {
   _id: string;
@@ -71,8 +71,8 @@ export interface IUserAttendance {
 
   autoClosed: boolean;
 
-  inLocation : ILocation | null;
-  outLocation : ILocation | null;
+  inLocation: ILocation | null;
+  outLocation: ILocation | null;
 }
 
 const EmployeePayrollPerformance = () => {
@@ -299,7 +299,16 @@ const EmployeePayrollPerformance = () => {
           setActiveCard={handleSelectFilterCard}
         />
         {/* Attendance Table */}
-        <EmployeePerformanceTable attendance={attendanceDetails} />
+        <EmployeePerformanceTable
+          attendance={attendanceDetails}
+          refreshData={() =>
+            getUserAttendanceByUserId(
+              selectedMonth.month,
+              selectedMonth.year,
+              userId,
+            )
+          }
+        />
       </div>
     </>
   );

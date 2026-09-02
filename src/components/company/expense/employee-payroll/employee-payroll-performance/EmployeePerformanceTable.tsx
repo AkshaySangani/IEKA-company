@@ -7,10 +7,12 @@ import CheckInCheckOut from "../../../performance/attendance/CheckInCheckOut";
 
 interface IUserAttendanceListProps {
   attendance: IUserAttendance[];
+  refreshData: () => void;
 }
 
 export default function EmployeeAttendanceTable({
   attendance,
+  refreshData,
 }: IUserAttendanceListProps) {
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IUserAttendance>[] = [
@@ -47,7 +49,9 @@ export default function EmployeeAttendanceTable({
       className: "text-center",
       hidden: (row) =>
         row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ? true : false,
-      render: (attendance) => <CheckInCheckOut attendance={attendance} />,
+      render: (attendance) => (
+        <CheckInCheckOut attendance={attendance} refreshData={refreshData} />
+      ),
     },
     {
       header: "Late In / Early Out",

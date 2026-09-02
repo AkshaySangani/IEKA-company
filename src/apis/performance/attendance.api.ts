@@ -120,3 +120,12 @@ export const punchOut = (payload: PunchInOutPayload) =>
   apiRequest.post(`/performance/attendance/punch/out`, payload, {
     showSuccessToast: true,
   });
+
+export const rejectAttendance = (attendanceId: string) =>
+  apiRequest.put(
+    `/performance/attendance/punch/reject/${attendanceId}`,
+    {},
+    {
+      showSuccessToast: true,
+    },
+  );

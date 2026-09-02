@@ -179,6 +179,7 @@ export interface ExpenseCategoryOption {
 }
 
 export enum AttendanceStatusEnum {
+  REJECTED = "REJECTED",
   PRESENT = "PRESENT",
   ABSENT = "ABSENT",
   HOLIDAY = "HOLIDAY",

@@ -7,18 +7,22 @@ interface AttendanceStatusBadgeProps {
   className?: string;
 }
 
-const statusConfig: any | Record<
-  Extract<
-  AttendanceStatusEnum,
-  AttendanceStatusEnum.PRESENT | AttendanceStatusEnum.ABSENT | AttendanceStatusEnum.LEAVE
->,
-  {
-    label: string;
-    border: string;
-    text: string;
-    bg: string;
-  }
-> = {
+const statusConfig:
+  | any
+  | Record<
+      Extract<
+        AttendanceStatusEnum,
+        | AttendanceStatusEnum.PRESENT
+        | AttendanceStatusEnum.ABSENT
+        | AttendanceStatusEnum.LEAVE
+      >,
+      {
+        label: string;
+        border: string;
+        text: string;
+        bg: string;
+      }
+    > = {
   [AttendanceStatusEnum.PRESENT]: {
     label: "P",
     border: "border-success",
@@ -43,24 +47,24 @@ const statusConfig: any | Record<
     text: "text-warning text-md",
     bg: "bg-white",
   },
-    [AttendanceStatusEnum.HOLIDAY]: {
-      label: "H",
-      border: "border-primaryPurple",
-      text: "text-primaryPurple",
-      bg: "bg-white",
-    },
-    [AttendanceStatusEnum.WEEK_OFF]: {
-      label: "W",
-      border: "border-secondary",
-      text: "text-secondary",
-      bg: "bg-white",
-    },
-  //   [AttendanceStatusEnum.LATE]: {
-  //     label: "LT",
-  //     border: "border-yellow-500",
-  //     text: "text-yellow-600",
-  //     bg: "bg-white",
-  //   },
+  [AttendanceStatusEnum.HOLIDAY]: {
+    label: "H",
+    border: "border-primaryPurple",
+    text: "text-primaryPurple",
+    bg: "bg-white",
+  },
+  [AttendanceStatusEnum.WEEK_OFF]: {
+    label: "W",
+    border: "border-secondary",
+    text: "text-secondary",
+    bg: "bg-white",
+  },
+  [AttendanceStatusEnum.REJECTED]: {
+    label: "A",
+    border: "border-danger",
+    text: "text-danger",
+    bg: "bg-white",
+  },
 };
 
 const AttendanceStatusBadge: React.FC<AttendanceStatusBadgeProps> = ({

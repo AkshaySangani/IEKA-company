@@ -1,3 +1,5 @@
+import { documentEnum } from "../common-types";
+
 export interface IPayslipBranch {
   _id: string;
   name: string;
@@ -20,6 +22,15 @@ export interface IPayslipDesignation {
   name: string;
 }
 
+export interface ICompany {
+    _id: string;
+    companyName: string;
+    gstin: string;
+    companyEmail: string;
+    companyPhone: number;
+    companyAddress: string;
+    companyLogo: string;
+}
 export interface IPayslipUser {
   _id: string;
   firstName: string;
@@ -30,6 +41,7 @@ export interface IPayslipUser {
   shiftId?: IPayslipShift | null;
   departmentId?: IPayslipDepartment | null;
   designationId?: IPayslipDesignation | null;
+  companyId: ICompany;
 }
 
 export interface ISalaryMetadata {
@@ -99,6 +111,30 @@ export interface IEmployeePayroll {
   __v: number;
 }
 
+export interface IDocuments {
+  card: documentEnum;
+  cardNumber: number;
+  front: string;
+  back: string;
+  _id: string;
+}
+
+export interface IBankDetails {
+  bankName: string;
+  accountNo: number;
+  ifscCode: string;
+  uanNo: string;
+  esicNo: string;
+  pfJoiningDate: string | null;
+  esicJoiningDate: string | null;
+}
+
+export interface IUserDetails {
+    bank: IBankDetails;
+    _id: string;
+    documents: IDocuments[];
+  }
+
 export interface IEmployeePayslipResponse {
   branches: IPayslipBranch[];
   shifts: IPayslipShift[];
@@ -106,8 +142,7 @@ export interface IEmployeePayslipResponse {
   user: IPayslipUser;
   curruntSalary: number;
   payrolls: IEmployeePayroll[];
+  userDetails: IUserDetails;
 }
 
-export interface PayslipProps {
-  
-}
+export interface PayslipProps {}

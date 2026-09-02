@@ -1,9 +1,10 @@
 import React from "react";
 import Image from "../../../../common/image";
 import IekaLogo from "../../../../../assets/images/ieka_logo.jpg";
+import { ICompany } from "../../../../../types/employee/employee-payslip.types";
 
 interface CompanyHeaderProps {
-  company: any;
+  company: ICompany;
 }
 
 const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company }) => {
@@ -13,9 +14,8 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company }) => {
         {/* Logo */}
         <div className="flex h-14 w-24 shrink-0 items-center sm:h-16 sm:w-28">
           <Image
-            src={IekaLogo}
-            alt={`${company.name} logo`}
-            fallbackSrc={IekaLogo}
+            src={company.companyLogo}
+            alt={`${company.companyName} logo`}
             className="max-h-full max-w-full object-contain"
           />
         </div>
@@ -23,11 +23,11 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company }) => {
         {/* Company Information */}
         <div className="min-w-0">
           <h1 className="text-xl font-medium text-secondary sm:text-2xl">
-            {company.name}
+            {company.companyName}
           </h1>
 
           <p className="mt-1 max-w-md text-wrap text-xs leading-5 text-grayText sm:text-sm sm:leading-5 line-clamp-2 truncate">
-            {company.address}
+            {company.companyAddress}
           </p>
         </div>
       </div>

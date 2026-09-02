@@ -2,23 +2,21 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import { pathNames, roleNames } from "../../../../constants/constants";
 import { IUserAttendance } from ".";
 import { useNavigate } from "react-router-dom";
-import {
-  AttendanceStatusEnum,
-} from "../../../../types/common-types";
+import { AttendanceStatusEnum } from "../../../../types/common-types";
 import PersonInfo from "../../../common/person-info";
 import AttendanceStatusBadge from "../../../common/badge/AttendanceBadge";
-import {
-  formatMinutes,
-} from "../../../../utils/date-format";
+import { formatMinutes } from "../../../../utils/date-format";
 import TableStatusRow from "../../../common/table/TableStatusRow";
 import CheckInCheckOut from "./CheckInCheckOut";
 
 interface IUserAttendanceListProps {
   attendance: IUserAttendance[];
+  refreshData: () => void;
 }
 
 export default function AttendanceTable({
   attendance,
+  refreshData,
 }: IUserAttendanceListProps) {
   const navigate = useNavigate();
 
@@ -84,7 +82,9 @@ export default function AttendanceTable({
         row.attendanceStatus === AttendanceStatusEnum.HOLIDAY
           ? true
           : false,
-      render: (attendance) => <CheckInCheckOut attendance={attendance}/>,
+      render: (attendance) => (
+        <CheckInCheckOut attendance={attendance} refreshData={refreshData} />
+      ),
     },
     {
       header: "Late In / Early Out",
@@ -142,7 +142,7 @@ export default function AttendanceTable({
           : false,
       render: (row) => (
         <div
-          className={`flex justify-center font-medium ${(row.isLate || row.earlyExitMinutes) ? "text-danger" : "text-success"}`}
+          className={`flex justify-center font-medium ${row.isLate || row.earlyExitMinutes ? "text-danger" : "text-success"}`}
         >
           {row.totalWorkedMinutes ? formatMinutes(row.totalWorkedMinutes) : "-"}
         </div>

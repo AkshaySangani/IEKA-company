@@ -1,23 +1,19 @@
-
 import { ColumnDef, CustomTable } from "../../../../common/table";
-import {
-  formatDate,
-  formatMinutes,
-} from "../../../../../utils/date-format";
+import { formatDate, formatMinutes } from "../../../../../utils/date-format";
 import AttendanceStatusBadge from "../../../../common/badge/AttendanceBadge";
-import {
-  AttendanceStatusEnum
-} from "../../../../../types/common-types";
+import { AttendanceStatusEnum } from "../../../../../types/common-types";
 import TableStatusRow from "../../../../common/table/TableStatusRow";
 import CheckInCheckOut from "../CheckInCheckOut";
 import { IUserAttendance } from "..";
 
 interface IUserAttendanceListProps {
   attendance: IUserAttendance[];
+  refreshData: () => void;
 }
 
 export default function EmployeeAttendanceTable({
   attendance,
+  refreshData,
 }: IUserAttendanceListProps) {
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IUserAttendance>[] = [
@@ -51,22 +47,31 @@ export default function EmployeeAttendanceTable({
         );
       },
       colSpan: (row) =>
-        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? 4 : 0,
+        row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
+        row.attendanceStatus === AttendanceStatusEnum.HOLIDAY
+          ? 4
+          : 0,
     },
     {
       header: "Check In / Out",
       className: " text-center",
       hidden: (row) =>
-        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
+        row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
+        row.attendanceStatus === AttendanceStatusEnum.HOLIDAY
+          ? true
+          : false,
       render: (attendance) => (
-        <CheckInCheckOut attendance={attendance}/>
+        <CheckInCheckOut attendance={attendance} refreshData={refreshData} />
       ),
     },
     {
       header: "Late In / Early Out",
       className: " text-center",
       hidden: (row) =>
-        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
+        row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
+        row.attendanceStatus === AttendanceStatusEnum.HOLIDAY
+          ? true
+          : false,
       render: (row) => (
         <>
           {row.lateMinutes || row.earlyExitMinutes ? (
@@ -109,10 +114,13 @@ export default function EmployeeAttendanceTable({
       header: "Total Hours",
       className: " text-center",
       hidden: (row) =>
-        (row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF || row.attendanceStatus === AttendanceStatusEnum.HOLIDAY) ? true : false,
+        row.attendanceStatus === AttendanceStatusEnum.WEEK_OFF ||
+        row.attendanceStatus === AttendanceStatusEnum.HOLIDAY
+          ? true
+          : false,
       render: (row) => (
         <div
-          className={`flex justify-center font-medium ${(row.isLate || row.earlyExitMinutes) ? "text-danger" : "text-success"}`}
+          className={`flex justify-center font-medium ${row.isLate || row.earlyExitMinutes ? "text-danger" : "text-success"}`}
         >
           {row.totalWorkedMinutes ? formatMinutes(row.totalWorkedMinutes) : "-"}
         </div>

@@ -199,7 +199,11 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
             <StatusCards cards={cards} />
 
             {/* Payslip Table */}
-            <EmployeePayslipTable payrolls={data.payrolls} employee={data.user}/>
+            <EmployeePayslipTable
+              payrolls={data.payrolls}
+              employee={data.user}
+              userDetails={data.userDetails}
+            />
           </>
         ) : (
           <EmptyPlaceholder
