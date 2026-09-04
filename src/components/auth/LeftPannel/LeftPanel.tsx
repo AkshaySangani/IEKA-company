@@ -7,10 +7,10 @@ const LeftPanel = () => {
   return (
     <div
       className="
-        relative flex w-full lg:w-[65%] flex-col items-center justify-center
+        relative lg:flex w-full lg:w-[65%] flex-col items-center justify-center
         bg-cover bg-center bg-no-repeat
         px-6 py-[60px] lg:px-[25px]
-        text-white
+        text-white hidden
       "
       style={{
         backgroundImage: `url(${leftBarBg})`,

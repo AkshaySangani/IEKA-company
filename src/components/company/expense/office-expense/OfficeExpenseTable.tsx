@@ -153,7 +153,7 @@ export default function OfficeExpenseTable({
         handleOpenClose={handleHistoryOpenClose}
         history={history}
         isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
-      />
+      />  
     </>
   );
 }
