@@ -9,6 +9,7 @@ interface ExpenseStatCardProps {
   activeColor?: string;
   textColor?: string;
   onClick?: () => void;
+  className?: string;
 }
 
 const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
@@ -17,61 +18,122 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
   icon,
   amount = count,
   active = false,
-  activeColor = "bg-[#7b7b7b]",
+  activeColor = "bg-info",
   onClick,
+  className
 }) => {
   return (
     <div
       onClick={onClick}
       className={`
+        ${className}
         relative
-        min-w-[200px]
         overflow-hidden
-        px-4
-        py-3
-        cursor-pointer
-        transition-all
-        duration-300
-        hover:-translate-y-1
+        w-full py-[6px] px-2 md:py-[10px] md:px-3 cursor-pointer transition-all select-none
+        duration-200
+        hover:-translate-y-[3px]        
+        md:hover:-translate-y-[5px]
         ${active ? activeColor : "bg-cardBg"}
       `}
     >
-      {/* Top right circle */}
-      <div className={`absolute -right-[2rem] -top-[2rem] flex h-20 w-20 items-end justify-start rounded-full ${active ? "bg-cardBg/20": "bg-white/30"} p-4`}>
-      <div className={active ? "text-white" : "text-[#9b9b9b]"}>
+      {/* Top Right Icon Circle */}
+      <div
+        className={`
+          pointer-events-none
+          absolute
+          -right-8
+          -top-7
+          flex
+          h-16
+          w-16
+          items-end
+          justify-start
+          rounded-full
+          p-2.5
+          sm:-right-10
+          sm:-top-10
+          sm:h-20
+          sm:w-20
+          sm:p-4
+          md:-right-12
+          md:-top-12
+          md:h-24
+          md:w-24
+          ${active ? "bg-cardBg/20" : "bg-white/30"}
+        `}
+      >
+        <div
+          className={`
+            ${active ? "text-white" : "text-[#9b9b9b]"}
+          `}
+        >
           {icon}
         </div>
       </div>
 
       {/* Header */}
-      <div className="z-10 flex items-center justify-between gap-2">
-        <div className="flex gap-2">
-        <span
-          className={`text-[18px] font-medium ${
-            active ? "text-white" : "text-[#222]"
-          }`}
-        >
-          {count}
-        </span>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span
+            className={`
+              text-sm
+              font-medium
+              sm:text-[18px]
+              ${active ? "text-white" : "text-[#222]"}
+            `}
+          >
+            {count}
+          </span>
 
-        <span
-          className={`text-[18px] ${
-            active ? "text-white" : "text-[#444]"
-          }`}
-        >
-          {title}
-        </span>
+          <span
+            className={`
+              text-sm
+              sm:text-[18px]
+              ${active ? "text-white" : "text-[#444]"}
+            `}
+          >
+            {title}
+          </span>
         </div>
-        
       </div>
 
-      {/* Bottom amount pill */}
-      <div className="mt-5 w-[140px] flex items-center gap-3 rounded-full bg-white px-1.5 py-1 shadow-md">
-        <div className={`flex h-9 w-9 items-center justify-center rounded-full ${activeColor} text-white`}>
+      {/* Bottom Amount Pill */}
+      <div
+        className="
+          flex
+          w-[130px]
+          items-center
+          gap-3
+          rounded-full
+          bg-white
+          px-1.5
+          py-0.5
+          shadow-md
+          sm:mt-3
+          sm:py-1
+          mt-5
+          md:w-[140px]
+        "
+      >
+        <div
+          className={`
+            flex
+            h-5
+            w-5
+            shrink-0
+            items-center
+            justify-center
+            rounded-full
+            text-white
+            md:h-9
+            md:w-9
+            ${activeColor}
+          `}
+        >
           ₹
         </div>
 
-        <span className="text-lg font-medium text-[#333]">
+        <span className="truncate text-xs font-medium text-[#333] sm:text-sm md:text-md lg:text-lg">
           {amount}
         </span>
       </div>

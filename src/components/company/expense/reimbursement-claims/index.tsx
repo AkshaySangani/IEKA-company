@@ -24,6 +24,7 @@ import {
 import StatusCards, { ReimbursementStats } from "./StatusCards";
 import { useAuthStore } from "../../../../store/auth-store";
 import { IUser } from "../../../../types/user.types";
+import MonthPicker, { MonthPickerValue } from "../../../common/date-picker/MonthPicker";
 
 export interface IReimbursementClaim {
   _id: string;
@@ -87,6 +88,12 @@ const   Reimbursement: React.FC = () => {
   const [reimbursement, setReimbursement] =
     useState<IReimbursement>(initialReimbursement);
 
+    const initialMonth: MonthPickerValue = {
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear(),
+  };
+    const [month, setMonth] = useState<MonthPickerValue>(initialMonth);
+
   const [activeCard, setActiveCard] = useState<string>("");
   const [cards, setCards] = useState<FilterCardItem[]>([
     {
@@ -96,7 +103,7 @@ const   Reimbursement: React.FC = () => {
       amount: 0,
       activeColor: "bg-info",
       textColor: "text-info",
-      icon: <i className="fa-solid fa-users"></i>,
+      icon: <i className="fa-solid fa-users text-xs sm:text-sm md:text-md"></i>,
     },
     {
       id: statusEnum.PENDING,
@@ -105,7 +112,7 @@ const   Reimbursement: React.FC = () => {
       amount: 0,
       activeColor: "bg-pending",
       textColor: "text-pending",
-      icon: <i className="fa-solid fa-mug-hot"></i>,
+      icon: <i className="fa-solid fa-mug-hot text-xs sm:text-sm md:text-md"></i>,
     },
     {
       id: statusEnum.APPROVED,
@@ -114,7 +121,7 @@ const   Reimbursement: React.FC = () => {
       amount: 0,
       activeColor: "bg-success",
       textColor: "text-success",
-      icon: <i className="fa-solid fa-user-plus"></i>,
+      icon: <i className="fa-solid fa-user-plus text-xs sm:text-sm md:text-md"></i>,
     },
     {
       id: statusEnum.REJECTED,
@@ -123,22 +130,22 @@ const   Reimbursement: React.FC = () => {
       amount: 0,
       activeColor: "bg-danger",
       textColor: "text-danger",
-      icon: <i className="fa-solid fa-user-minus"></i>,
+      icon: <i className="fa-solid fa-user-minus text-xs sm:text-sm md:text-md"></i>,
     },
   ]);
 
   // useEffect for get branch
   useEffect(() => {
-    fetchReimbursementList({ page, limit, search, status: activeCard });
-  }, [page, limit, search, activeCard]);
+    fetchReimbursementList({ page, limit, search, status: activeCard, ...month });
+  }, [page, limit, search, activeCard, month]);
 
   useEffect(() => {
     fetchReimbursementCount();
     // eslint-disable-next-line
-  }, []);
+  }, [month.month]);
 
   const fetchReimbursementCount = async () => {
-    const response = await getReimbursementCount({});
+    const response = await getReimbursementCount(month);
     if (response?.success) {
       updateCards(response?.data);
     }
@@ -186,6 +193,8 @@ const   Reimbursement: React.FC = () => {
     limit: number;
     search: string;
     status?: string;
+    month?: number;
+    year?: number;
   }) => {
     setLoading(true);
     const response = await getReimbursementList(payload);
@@ -251,6 +260,10 @@ const   Reimbursement: React.FC = () => {
     setPage(1);
   };
 
+  const handleMonthChange = (value: MonthPickerValue) => {
+    setMonth(value);
+  };
+
   // handle Download Excel
   const handleDownloadExcel = async (password: string) => {
     await getReimbursementList({
@@ -268,12 +281,22 @@ const   Reimbursement: React.FC = () => {
       <TopBar
         title="Reimbursement Claims"
         actionButtons={
+          <div className="flex gap-2">
+            <div className="flex items-center gap-2 w-[150px]">
+              <MonthPicker
+                placeholder="Select Month"
+                value={month}
+                onChange={handleMonthChange}
+                position="bottomCenter"
+              />
+            </div>
           <Button
             name="Add Expense"
             size="sm"
             onClick={handleOnAdd}
             leftIcon={<i className="fa-solid fa-plus"></i>}
           />
+          </div>
         }
         isSearch
         searchPlaceholder="Search reimbursement..."

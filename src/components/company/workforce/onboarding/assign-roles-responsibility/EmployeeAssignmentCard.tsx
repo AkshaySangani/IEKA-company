@@ -5,7 +5,7 @@ import {
   IBranch,
   IEmployeeFormData,
 } from ".";
-import { getDateDifference } from "../../../../../utils/date-format";
+import { getDateDifference, getShiftHours } from "../../../../../utils/date-format";
 import { BranchAssignmentFormData } from "../../all-employees/employee-details/update-modals/BranchAssignmentUpdate";
 import UserImage from "../../../../../assets/images/User-Image.png";
 
@@ -112,11 +112,7 @@ const EmployeeAssignmentCard = ({
 
               <div className="pr-6">
                 <p className="mt-7 text-xs font-medium">
-                  {getDateDifference({
-                    from: shift.startTime,
-                    to: shift.endTime,
-                    unit: "hours",
-                  })}{" "}
+                  {getShiftHours(shift.startTime,shift.endTime,)}{" "}
                   hours
                 </p>
               </div>

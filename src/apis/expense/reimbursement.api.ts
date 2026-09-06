@@ -17,8 +17,8 @@ export const getReimbursementList = (payload: {
   status?: string;
   page: number;
   limit: number;
-  year?: string;
-  month?: string;
+  year?: number;
+  month?: number;
   isDownload?: boolean;
   password?: string;
 }) => {

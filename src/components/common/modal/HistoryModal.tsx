@@ -59,6 +59,7 @@ const firstColumnNames: {[key in HistoryFieldEnum]: string} = {
   [HistoryFieldEnum.ReimbursementStatus]: "Status",
   [HistoryFieldEnum.Designation]: "Designation",
   [HistoryFieldEnum.Assignment]: "Assignment",
+  [HistoryFieldEnum.SalaryStatus]: "Salary"
 }
 
 const historyFieldValues: {[key: string | number]: string} = {

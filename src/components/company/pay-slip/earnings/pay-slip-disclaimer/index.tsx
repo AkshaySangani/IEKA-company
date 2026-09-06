@@ -205,7 +205,6 @@ const PayslipDisclaimer: React.FC = () => {
               onChange={(e) => handleChange("name", e.target.value)}
             />
           </div>
-          <div className="bg-[#eff1f9] p-4">
             <div className="content-card w-full sm:w-[70%] p-4">
               <EarningDetails
                 earnings={formData.details}
@@ -215,7 +214,6 @@ const PayslipDisclaimer: React.FC = () => {
                 handleRemoveEarning={handleRemoveConfirmation}
               />
             </div>
-          </div>
         </form>
       </div>
       <ActionModal

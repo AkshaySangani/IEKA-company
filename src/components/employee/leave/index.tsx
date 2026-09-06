@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { IUser } from "../../../types/user.types";
 import { FilterCardItem, LeaveDuration, statusEnum } from "../../../types/common-types";
 import { useNavigate } from "react-router-dom";
-import { getLeaveRequestCount, getLeaveRequestList, updateLeaveRequestStatus } from "../../../apis/performance/leave-request.api";
+import { getLeaveRequestCount, getLeaveRequestList } from "../../../apis/performance/leave-request.api";
 import StatusCards, { LeaveStats } from "../../company/performance/leave-request/StatusCards";
 import { pathNames } from "../../../constants/constants";
 import TopBar from "../../common/topbar/TopBar";
@@ -55,16 +55,13 @@ export const initialEmployeeLeaveRequest: IEmployeeLeaveRequest = {
 
 const EmployeeLeaveRequest: React.FC = () => {
   const navigate = useNavigate();
-  const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [statusLoading, setStatusLoading] = useState<boolean>(false);
 
   const [leaveList, setEmployeeLeaveRequestList] = useState<IEmployeeLeaveRequest[]>([]);
-  const [leave, setEmployeeLeaveRequest] = useState<IEmployeeLeaveRequest>(initialEmployeeLeaveRequest);
 
   const [activeCard, setActiveCard] = useState<string>("");
 
@@ -171,36 +168,6 @@ const EmployeeLeaveRequest: React.FC = () => {
     navigate(pathNames.ADD_LEAVE_REQUEST);
   };
 
-  // handle status open close
-  const handleStatusOpenClose = () => {
-    setStatusOpen((prev) => !prev);
-    setEmployeeLeaveRequest(initialEmployeeLeaveRequest);
-  };
-
-  // handle update status
-  const handleUpdateStatus = (leave: IEmployeeLeaveRequest) => {
-    handleStatusOpenClose();
-    setEmployeeLeaveRequest(leave);
-  };
-
-  const handleStatusSubmit = async (formData: {
-    status: statusEnum;
-    remarks: string;
-  }) => {
-    setStatusLoading(true);
-
-    const payload = {
-      status: formData.status.trim(),
-      remarks: formData.remarks,
-    };
-
-    const response = await updateLeaveRequestStatus(payload, leave._id);
-    if (response.success) {
-      fetchEmployeeLeaveRequestList({ page, limit, search });
-    }
-    setStatusLoading(false);
-  };
-
   // handle search branch
   const handleOnSearch = (value: string) => {
     setSearch(value);
@@ -251,7 +218,6 @@ const EmployeeLeaveRequest: React.FC = () => {
         />
         <EmployeeLeaveRequestTable
           leaves={leaveList}
-          handleUpdateStatus={handleUpdateStatus}
         />
         <Pagination
           totalRecords={total}

@@ -29,6 +29,7 @@ import InfoIcon from "../../../../../assets/icons/Info";
 import AssignmentHistoryModal from "../../../../common/modal/AssignmentHistoryModal";
 import { getBranches } from "../../../../../utils/helper";
 import { useAuthStore } from "../../../../../store/auth-store";
+import SalaryHistoryModal from "../../../../common/modal/SalaryHistoryModal";
 
 interface Props {
   employeeData: IEmployee;
@@ -86,6 +87,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
   const [assignmentHistory, setAssignmentHistory] =
     useState<HistoryPayload>(initialHistory);
 
+    // salary history states
+  const [salaryHistoryOpen, setSalaryHistoryOpen] =
+    useState<boolean>(false);
+  const [salaryHistory, setSalaryHistory] =
+    useState<HistoryPayload>(initialHistory);
+
   const handleSubmit = async (payload: any) => {
     setLoading(true);
     const response = await assignRolesAndResponsibility({
@@ -111,11 +118,24 @@ const EmployeeDetailCard: React.FC<Props> = ({
     setAssignmentHistory(initialHistory);
   };
 
+  // handle Salary history open
+  const handleSalaryHistoryOpenClose = () => {
+    setSalaryHistoryOpen((prev) => !prev);
+    setSalaryHistory(initialHistory);
+  };
+
   // handle show history
   const handleShowHistory = (employee: IEmployee, field: HistoryFieldEnum) => {
     if (field === HistoryFieldEnum.Assignment) {
       handleAssignmentHistoryOpenClose();
       setAssignmentHistory({
+        field,
+        fieldId: employee._id,
+        title: `${employee.firstName} ${employee.lastName}`,
+      });
+    } else if (field === HistoryFieldEnum.SalaryStatus) {
+      handleSalaryHistoryOpenClose();
+      setSalaryHistory({
         field,
         fieldId: employee._id,
         title: `${employee.firstName} ${employee.lastName}`,
@@ -371,13 +391,13 @@ const EmployeeDetailCard: React.FC<Props> = ({
               value={
                 <div className="flex items-center gap-2 mr-1">
                   <span>
-                    {currency.INR} {payslip.salary}
+                    {currency.INR} {payslip.salary} {" / Month"}
                   </span>
                   <InfoIcon
                     onClick={() =>
                       handleShowHistory(
                         employeeData,
-                        HistoryFieldEnum.EmploymentType,
+                        HistoryFieldEnum.SalaryStatus,
                       )
                     }
                   />
@@ -466,6 +486,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
         handleOpenClose={handleAssignmentHistoryOpenClose}
         history={assignmentHistory}
       />
+      <SalaryHistoryModal
+        isOpen={salaryHistoryOpen}
+        handleOpenClose={handleSalaryHistoryOpenClose}
+        history={salaryHistory}
+      />
+      
     </>
   );
 };

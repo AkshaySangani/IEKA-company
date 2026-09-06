@@ -116,7 +116,7 @@ export default function OfficeExpenseTable({
       header: "Status",
       className: "",
       render: (row) => {
-        const isManager = row.assignedBy._id === user._id && user.role === RoleEnum.MANAGER;
+        const isManager = user.role === RoleEnum.MANAGER;
         return (
           <StatusCell
             status={row.status}

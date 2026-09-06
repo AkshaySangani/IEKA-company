@@ -48,7 +48,7 @@ const Modal = ({
         className={`
           w-full
           ${width}
-          max-h-[calc(100vh-1rem)]
+          max-h-[calc(100vh-8rem)]
           sm:max-h-[calc(100vh-2rem)]
           bg-white
           border border-[#8f8f8f]
@@ -91,9 +91,8 @@ const Modal = ({
         {/* Body */}
         <div
           className="
-            flex-1
             min-h-0
-            overflow-y-auto
+            overflow-y-scroll
             p-3
             sm:p-4
           "

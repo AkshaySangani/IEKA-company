@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+
 import { IEmployeeLeaveRequest } from ".";
 import { useState } from "react";
 import { HistoryPayload, initialHistory } from "../../../apis/history/history.api";
@@ -14,14 +14,11 @@ import Description from "../../common/description";
 
 interface IEmployeeLeaveRequestListProps {
   leaves: IEmployeeLeaveRequest[];
-  handleUpdateStatus: (value: IEmployeeLeaveRequest) => void;
 }
 
 export default function EmployeeLeaveRequestTable({
-  leaves,
-  handleUpdateStatus,
+  leaves
 }: IEmployeeLeaveRequestListProps) {
-  const navigate = useNavigate();
 
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);

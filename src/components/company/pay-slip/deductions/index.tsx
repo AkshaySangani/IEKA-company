@@ -257,7 +257,6 @@ const PayslipDeductions: React.FC = () => {
           className="flex flex-col gap-3"
           onSubmit={handleSubmit}
         >
-          <div className="bg-[#eff1f9] p-4">
             <div className="content-card w-full sm:w-[85%] p-4">
               <DeductionDetails
                 deductions={formData.details}
@@ -267,8 +266,6 @@ const PayslipDeductions: React.FC = () => {
                 handleRemoveDeduction={handleRemoveConfirmation}
               />
             </div>
-          </div>
-          <div className="bg-[#eff1f9] p-4">
             <div className="content-card w-full sm:w-[85%] p-4">
               <IncomeTaxDeductionDetails
                 deductions={formData.incomeDetails}
@@ -278,7 +275,6 @@ const PayslipDeductions: React.FC = () => {
                 handleRemoveDeduction={handleRemoveConfirmation}
               />
             </div>
-          </div>
         </form>
       </div>
       <ActionModal

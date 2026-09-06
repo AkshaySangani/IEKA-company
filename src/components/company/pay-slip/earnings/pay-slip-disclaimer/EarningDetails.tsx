@@ -31,7 +31,7 @@ const EarningDetails = ({
   const columns: ColumnDef<IEarningDetails>[] = [
     {
       header: "Earning Name",
-      className: "w-[50%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (earning, index) => (
         <TextField
           name="name"
@@ -43,7 +43,7 @@ const EarningDetails = ({
     },
     {
       header: "Value",
-      className: "w-[25%] pr-2 pl-2",
+      className: "w-[120px] sm:w-[150px] pr-2 pl-2",
       render: (earning, index) => (
         <TextField
           name="value"
@@ -51,13 +51,14 @@ const EarningDetails = ({
           value={earning.value}
           onChange={(e) => handleEarningChange(index, "value", e.target.value)}
           placeholder="Value"
+          className="w-[80%]"
         />
       ),
     },
 
     {
       header: `${payValueType.PERCENTAGE} / ${payValueType.FIXED}`,
-      className: "w-[20%] pr-2 pl-2",
+      className: "pr-2 pl-2",
       render: (earning, index) => (
         <SelectField
           value={
@@ -78,7 +79,7 @@ const EarningDetails = ({
     },
     {
       header: "Action",
-      className: "w-[5%] pr-0 pl-0",
+      className: "pr-0 pl-0",
       render: (_, index) => {
         return (
           <Button
@@ -94,7 +95,7 @@ const EarningDetails = ({
     },
   ];
   return (
-    <div className="bg-transparent">
+    <>
       <div className="flex items-center justify-between border-b border-secondary pb-3 mb-2">
         <h2 className="text-md  font-medium">Earning Details</h2>
 
@@ -110,7 +111,7 @@ const EarningDetails = ({
       {errors.details && (
         <p className="mt-1 text-xs text-error">{errors.details}</p>
       )}
-    </div>
+    </>
   );
 };
 

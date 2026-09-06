@@ -35,7 +35,13 @@ const MONTHS: { [key: number]: string } = {
   12: "Dec",
 };
 
-type PickerPosition = "top" | "bottom" | "left" | "right";
+type PickerPosition =
+  | "top"
+  | "topCenter"
+  | "bottom"
+  | "bottomCenter"
+  | "left"
+  | "right";
 
 const MonthPicker: React.FC<MonthPickerProps> = ({
   label,
@@ -108,7 +114,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
     return `${MONTHS[value.month]} ${value.year}`;
   }, [value]);
 
-  // const DROPDOWN_WIDTH = 235;
+  const DROPDOWN_WIDTH = 235;
   const DROPDOWN_HEIGHT = 285;
   const GAP = 20;
 
@@ -128,14 +134,24 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
         left = rect.left + window.scrollX;
         break;
 
+      case "topCenter":
+        top = rect.top + window.scrollY - DROPDOWN_HEIGHT - GAP;
+        left = rect.left + window.scrollX + rect.width / 2 - DROPDOWN_WIDTH / 2;
+        break;
+
       case "bottom":
         top = rect.bottom + window.scrollY - GAP + 20;
         left = rect.left + window.scrollX;
         break;
 
+      case "bottomCenter":
+        top = rect.bottom + window.scrollY - GAP + 20;
+        left = rect.left + window.scrollX + rect.width / 2 - DROPDOWN_WIDTH / 2;
+        break;
+
       case "left":
         top = rect.bottom + window.scrollY - GAP + 20;
-        left = rect.left + window.scrollX - 140;
+        left = rect.left + window.scrollX - 85;
         break;
 
       case "right":

@@ -159,7 +159,7 @@ export default function BranchAssignmentUpdate({
       handleOnConfirm={handleOnSubmit}
       loading={loading}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex-1 gap-2">
         <PageLoader loading={branchLoading} />
         <ConfirmationHeader
           imageUrl={employeeData.profileImage}

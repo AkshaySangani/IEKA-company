@@ -20,7 +20,7 @@ import {
 import { terminationStatusOptions } from "../../../../constants/constants";
 import AddTermination from "./AddTermination";
 import Button from "../../../common/button/Button";
-import { getEmployees, getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
+import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
 import { IEmployee } from "../all-employees";
 
 export interface ITermination {

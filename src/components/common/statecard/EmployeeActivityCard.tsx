@@ -55,7 +55,7 @@ export default function EmployeeActivityCard({
       {/* Users + Count */}
       <div className="mt-3 flex items-center">
         <div className="flex items-center gap-2">
-          {users.slice(0, defaultCount).map((user, index) => (
+          {users.slice(0, defaultCount).map((user) => (
             <div
               key={user._id}
               className={`

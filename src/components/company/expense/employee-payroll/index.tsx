@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
-import { RoleEnum, statusEnum } from "../../../../types/common-types";
+import { RoleEnum } from "../../../../types/common-types";
 import EmployeePayrollTable from "./EmployeePayrollTable";
 import { getEmployeePayrollList } from "../../../../apis/expense/employee-payroll.api";
 import StatusCards, {
@@ -218,10 +218,10 @@ const EmployeePayroll: React.FC = () => {
   return (
     <>
       <TopBar
-        title="EmployeePayroll Claims"
+        title="Employees Payroll"
         actionButtons={
           <div className="flex items-center gap-2 w-[150px]">
-            <label className="font-medium">Month</label>
+            {/* <label className="font-medium">Month</label> */}
             <MonthPicker
               placeholder="Select Month"
               value={month}

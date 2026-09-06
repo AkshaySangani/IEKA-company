@@ -27,39 +27,64 @@ const PayrollStatCard: React.FC<PayrollCardProps> = ({
       onClick={onClick}
       className={`
         relative
-        min-w-[200px]
         overflow-hidden
-        px-4
-        py-3
-        cursor-pointer
-        transition-all
-        duration-300
-        hover:-translate-y-1
+        w-full py-[6px] px-2 md:py-[10px] md:px-3 cursor-pointer transition-all select-none
+        duration-200
+        hover:-translate-y-[3px]        
+        md:hover:-translate-y-[5px]
         ${bgColor}
       `}
     >
-
-      {/* Header */}
-      <div className="z-10 flex items-center justify-between gap-2">
-        <div className="flex gap-2">
+      {/* content */}
+      <div className="flex flex-col items-start justify-between min-h-[80px] sm:min-h-[100px]">
         <span
-          className={`text-md font-medium text-secondary`}
+          className={`
+              text-sm
+              sm:text-md
+              ${active ? "text-white" : "text-[#444]"}
+            `}
         >
           {title}
         </span>
-        </div>
-        
-      </div>
+        {/* Bottom Amount Pill */}
+        <div
+          className="
+          flex
+          w-[100px]
+          items-center
+          gap-3
+          rounded-full
+          bg-white
+          px-1.5
+          py-0.5
+          shadow-md
+          sm:mt-3
+          sm:py-1
+          md:w-[160px]
+        "
+        >
+          <div
+            className={`
+            flex
+            h-5
+            w-5
+            shrink-0
+            items-center
+            justify-center
+            rounded-full
+            text-white
+            md:h-9
+            md:w-9
+            ${iconBgColor}
+          `}
+          >
+            ₹
+          </div>
 
-      {/* Bottom amount pill */}
-      <div className="mt-5 w-full flex items-center gap-3 rounded-full bg-white px-1.5 py-1 shadow-md">
-        <div className={`flex h-9 w-9 items-center justify-center rounded-full ${iconBgColor} text-white`}>
-          {icon}
+          <span className="truncate text-xs font-medium text-[#333] sm:text-sm md:text-md lg:text-lg">
+            {amount}
+          </span>
         </div>
-
-        <span className="text-lg font-medium text-[#333]">
-          {amount}
-        </span>
       </div>
     </div>
   );

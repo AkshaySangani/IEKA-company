@@ -137,6 +137,24 @@ export function getDateDifference({
   }
 }
 
+export function getShiftHours(
+  startTime: string,
+  endTime: string
+): number {
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+
+  const startMinutes = startHour * 60 + startMinute;
+  let endMinutes = endHour * 60 + endMinute;
+
+  // Night shift: end time is on the next day
+  if (endMinutes <= startMinutes) {
+    endMinutes += 24 * 60;
+  }
+
+  return (endMinutes - startMinutes) / 60;
+}
+
 function parseDate(value: string): Date {
   const [datePart = "", timePart = ""] = value.trim().split(" ");
 

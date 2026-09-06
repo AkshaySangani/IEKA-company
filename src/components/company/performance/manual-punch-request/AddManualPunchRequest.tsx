@@ -65,7 +65,7 @@ const punchTypeOption: IOption[] = [
 const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
   isOpen,
   onClose,
-  refreshData
+  refreshData,
 }) => {
   const { user } = useAuthStore();
   const isManager = user.role === RoleEnum.MANAGER;
@@ -118,9 +118,7 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
     setBranchLoading(true);
 
     try {
-      const [branchResponse] = await Promise.all([
-        getBranchShiftDepartment()
-      ]);
+      const [branchResponse] = await Promise.all([getBranchShiftDepartment()]);
 
       // Handle branches
       if (branchResponse?.success) {
@@ -231,7 +229,7 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
     // ---------------------------------------------
     // Employee
     // ---------------------------------------------
-    if(!isEmployee && self){
+    if (!isEmployee && self) {
       if (!formData.userId) {
         newErrors.userId = "Employee is required";
       }
@@ -363,16 +361,18 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
 
         <form ref={formRef} method="POST" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-3">
-            {isManager && <Toggle
-              label="For Employee"
-              checked={self}
-              onChange={() => setSelf((prev) => !prev)}
-            />}
+            {isManager && (
+              <Toggle
+                label="For Employee"
+                checked={self}
+                onChange={() => setSelf((prev) => !prev)}
+              />
+            )}
             {/* ---------------------------------------------------------------- */}
             {/*                              BRANCH                              */}
             {/* ---------------------------------------------------------------- */}
 
-            {(!isEmployee && self) && (
+            {!isEmployee && self && (
               <SelectField
                 placeholder="Select Branch"
                 label="Branch"
@@ -396,7 +396,7 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
             {/*                             EMPLOYEE                             */}
             {/* ---------------------------------------------------------------- */}
 
-            {(!isEmployee && self) && (
+            {!isEmployee && self && (
               <SelectField
                 placeholder="Select Employee"
                 label="Employee"
@@ -445,36 +445,41 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
               }
             />
 
-            {/* ---------------------------------------------------------------- */}
-            {/*                           PUNCH IN TIME                          */}
-            {/* ---------------------------------------------------------------- */}
-            {(formData.punchType === "in" || formData.punchType === "both") && (
-              <TextField
-                type="time"
-                label="Punch In Time"
-                required
-                name="inTime"
-                value={formData.manual.inTime}
-                error={errors.manual?.inTime}
-                onChange={(e) => handleManualChange("inTime", e.target.value)}
-              />
-            )}
+            <div className="grid grid-cols-2 gap-2">
+              {/* ---------------------------------------------------------------- */}
+              {/*                           PUNCH IN TIME                          */}
+              {/* ---------------------------------------------------------------- */}
+              {(formData.punchType === "in" ||
+                formData.punchType === "both") && (
+                <TextField
+                  type="time"
+                  label="Punch In Time"
+                  required
+                  name="inTime"
+                  value={formData.manual.inTime}
+                  error={errors.manual?.inTime}
+                  onChange={(e) => handleManualChange("inTime", e.target.value)}
+                />
+              )}
 
-            {/* ---------------------------------------------------------------- */}
-            {/*                           PUNCH OUT TIME                         */}
-            {/* ---------------------------------------------------------------- */}
-            {(formData.punchType === "out" ||
-              formData.punchType === "both") && (
-              <TextField
-                type="time"
-                label="Punch Out Time"
-                required
-                name="outTime"
-                value={formData.manual.outTime}
-                error={errors.manual?.outTime}
-                onChange={(e) => handleManualChange("outTime", e.target.value)}
-              />
-            )}
+              {/* ---------------------------------------------------------------- */}
+              {/*                           PUNCH OUT TIME                         */}
+              {/* ---------------------------------------------------------------- */}
+              {(formData.punchType === "out" ||
+                formData.punchType === "both") && (
+                <TextField
+                  type="time"
+                  label="Punch Out Time"
+                  required
+                  name="outTime"
+                  value={formData.manual.outTime}
+                  error={errors.manual?.outTime}
+                  onChange={(e) =>
+                    handleManualChange("outTime", e.target.value)
+                  }
+                />
+              )}
+            </div>
           </div>
         </form>
       </div>

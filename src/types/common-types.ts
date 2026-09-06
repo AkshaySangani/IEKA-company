@@ -249,5 +249,6 @@ export enum HistoryFieldEnum {
   OfficeExpenseStatus = "officeExpenseStatus",
   ReimbursementStatus = "reimbursementStatus",
   Designation = "designation",
-  Assignment = "assignment"
+  Assignment = "assignment",
+  SalaryStatus = "salaryStatus"
 }

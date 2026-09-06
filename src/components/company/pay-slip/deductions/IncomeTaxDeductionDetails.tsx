@@ -56,7 +56,7 @@ const IncomeTaxDeductionDetails = ({
 
     {
       header: `Tax Rate (%)`,
-      className: "pr-2 pl-2",
+      className: "w-[120px] sm:w-[150px] pr-2 pl-2",
       render: (deduction, index) => (
         <TextField
           name="taxRate"
@@ -66,6 +66,7 @@ const IncomeTaxDeductionDetails = ({
             handleIncomeTaxDeductionChange(index, "taxRate", e.target.value)
           }
           placeholder="Tax rate (%)"
+          className="w-[80%]"
         />
       ),
     },

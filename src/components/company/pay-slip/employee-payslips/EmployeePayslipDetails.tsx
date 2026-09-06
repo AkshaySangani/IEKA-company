@@ -181,6 +181,8 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
             )}
           </div>
         }
+        isExcel
+        handleDownloadExcel={() => {}}
       />
 
       <div className="content-area flex flex-col gap-3 relative">
@@ -199,11 +201,13 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
             <StatusCards cards={cards} />
 
             {/* Payslip Table */}
-            <EmployeePayslipTable
-              payrolls={data.payrolls}
-              employee={data.user}
-              userDetails={data.userDetails}
-            />
+            <div className="max-h-[350px]">
+              <EmployeePayslipTable
+                payrolls={data.payrolls}
+                employee={data.user}
+                userDetails={data.userDetails}
+              />
+            </div>
           </>
         ) : (
           <EmptyPlaceholder

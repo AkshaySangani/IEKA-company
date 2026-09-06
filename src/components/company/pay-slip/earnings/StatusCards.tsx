@@ -24,7 +24,7 @@ const StatusCards = ({ setActiveCard, activeCard, cards }: StatusCardsProps) => 
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-3">
       {cards.map((card) => (
         <StatCard
           key={card.id}

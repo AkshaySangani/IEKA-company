@@ -30,6 +30,7 @@ import {
 import { ApiResponse } from "../../../../../../types/api.types";
 import PageLoader from "../../../../../common/loader/PageLoader";
 import SelectField from "../../../../../common/select/SelectField";
+import { IUser } from "../../../../../../types/user.types";
 
 interface SalaryUpdateProps {
   active: boolean;
@@ -72,13 +73,13 @@ interface IPayslipId {
   updatedAt: string;
 }
 
-interface IEmployeeSalary {
+export interface IEmployeeSalary {
   _id: string;
   userId: string;
   salary: number;
   payslipId: IPayslipId;
   remarks: string;
-  assignedBy: string;
+  assignedBy: IUser;
   createdAt: string;
   updatedAt: string;
   allowESICDeduction: boolean;

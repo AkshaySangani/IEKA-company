@@ -2,11 +2,8 @@ import { ColumnDef, CustomTable } from "../../../common/table";
 import {
   pathNames,
   roleNames,
-  statusColor,
-  statusMessage,
 } from "../../../../constants/constants";
 import { IEmployee } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import PersonInfo from "../../../common/person-info";
 import { HistoryFieldEnum } from "../../../../types/common-types";

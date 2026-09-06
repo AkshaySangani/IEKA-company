@@ -57,6 +57,8 @@ export function CustomTable<T>({
           border-collapse
           text-left
           text-sm
+          [&_tr>*:last-child]:pr-4
+          sm:[&_tr>*:last-child]:pr-3
         "
       >
         {/* Table Header */}

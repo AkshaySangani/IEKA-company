@@ -47,11 +47,11 @@ export default function EarningTable({
         </div>
       ),
     },
-    {
-      header: "Applicable Peoples",
-      className: "",
-      render: (row) => <>View</>,
-    },
+    // {
+    //   header: "Applicable Peoples",
+    //   className: "",
+    //   render: (row) => <>View</>,
+    // },
     {
       header: "Status",
       className: "",

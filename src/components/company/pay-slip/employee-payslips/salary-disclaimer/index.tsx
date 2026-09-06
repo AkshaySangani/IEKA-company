@@ -17,10 +17,13 @@ import TopBar from "../../../../common/topbar/TopBar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { formatMonthYear } from "../../../../../utils/date-format";
 import { useReactToPrint } from "react-to-print";
+import { generatePayslipPdf } from "../../../../../utils/generate-payslip-pdf";
+import useDevice from "../../../../../hooks/useDevice";
 
 const PayslipDownload: React.FC<PayslipProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const {isDesktop} = useDevice();
 
   const {
     employeePayroll,
@@ -49,17 +52,22 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
     navigate(-1);
   };
 
+  // handle download pdf
+  const handleDownloadPdf = async () => {
+    alert("Hello")
+    const fileName =
+      `Payslip_${employee.firstName}_${employee.lastName}_${employeePayroll.payrollMonth}`.replace(
+        /[^a-zA-Z0-9-_]/g,
+        "_",
+      ) + ".pdf";
+    if (contentRef.current) {
+      await generatePayslipPdf(contentRef.current, fileName);
+    }
+  };
+
   // handleDownloadPdfClick
   const handleDownloadPdfClick = async () => {
     reactToPrintFn();
-    // const fileName = `Payslip_${employee.firstName}_${employee.lastName}_${employeePayroll.payrollMonth}`
-    //   .replace(/[^a-zA-Z0-9-_]/g, "_") + ".pdf";
-    // if(contentRef.current){
-    // const pdfFile = await generatePayslipPdf(
-    //   contentRef.current,
-    //   fileName,
-    // );
-    // }
   };
   return (
     <>
@@ -67,6 +75,10 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
         title="Salary Disclaimer"
         actionButtons={
           <div className="flex items-center gap-3">
+            <i
+              className="fa-solid fa-download text-[24px] text-grayText"
+              onClick={handleDownloadPdf}
+            />
             <Button
               size="sm"
               variant="danger"
@@ -75,7 +87,7 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
             />
           </div>
         }
-        isPdf
+        isPdf={isDesktop}
         handleDownloadPdfClick={handleDownloadPdfClick}
       />
       <div className="content-area bg-dashboardBg">
@@ -113,7 +125,7 @@ const PayslipDownload: React.FC<PayslipProps> = () => {
           <EmployeeInfo employee={employee} userDetails={userDetails} />
 
           {/* Earnings + Deductions */}
-          <div className="mt-7 grid grid-cols-1 print:grid-cols-2 gap-8 sm:mt-10 sm:gap-10 md:grid-cols-2">
+          <div className="mt-7 grid grid-cols-2 print:grid-cols-2 gap-3 sm:mt-10 sm:gap-10 md:grid-cols-2">
             <EarningsSection
               earnings={employeePayroll.salaryBreakdown.filter(
                 (ele) => !ele.isDeduction,

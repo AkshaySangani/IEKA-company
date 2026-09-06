@@ -51,7 +51,7 @@ const DeductionDetails = ({
     },
     {
       header: "Value",
-      className: "pr-2 pl-2",
+      className: "w-[120px] sm:w-[150px] pr-2 pl-2",
       render: (deduction, index) => (
         <TextField
           name="value"
@@ -61,6 +61,7 @@ const DeductionDetails = ({
             handleDeductionChange(index, "value", e.target.value)
           }
           placeholder="Value"
+          className="w-[80%]"
         />
       ),
     },

@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   icon?: React.ReactNode;
   required?: boolean;
+  mainClassName?: string;
 }
 
 const TextField: React.FC<InputProps> = ({
@@ -12,6 +13,7 @@ const TextField: React.FC<InputProps> = ({
   error,
   icon,
   className = "",
+  mainClassName = "",
   required,
   ...props
 }) => {
@@ -45,7 +47,7 @@ const TextField: React.FC<InputProps> = ({
   };
 
   return (
-    <div>
+    <div className={`w-full ${mainClassName}`}>
       {label && (
         <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
           {label} {required && <span className="text-error">*</span>}

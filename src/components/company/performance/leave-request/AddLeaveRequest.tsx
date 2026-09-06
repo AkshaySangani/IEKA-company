@@ -972,11 +972,11 @@ const AddLeaveRequest: React.FC = () => {
                     </div>
 
                     <div className="px-3 py-3 text-sm font-medium text-secondary">
-                      Leave Type
+                      Leave Name
                     </div>
 
                     <div className="px-3 py-3 text-sm font-medium text-secondary">
-                      Applied For
+                      Leave Type
                     </div>
                   </div>
 
