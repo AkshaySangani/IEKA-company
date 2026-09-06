@@ -9,6 +9,7 @@ import {
   initialHistory,
 } from "../../../../apis/history/history.api";
 import HistoryModal from "../../../common/modal/HistoryModal";
+import StatusCell from "../../../common/status-cell";
 
 interface IPolicyListProps {
   policyList: IPolicy[];
@@ -29,12 +30,12 @@ export default function PolicyTable({
   const columns: ColumnDef<IPolicy>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Policy Name",
-      className: "w-[55%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col">
           <div
@@ -49,22 +50,14 @@ export default function PolicyTable({
     },
     {
       header: "Status",
-      className: "w-[30%]",
+      className: "",
       render: (row) => {
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            {row.status !== statusEnum.DELETED && (
-              <i
-                onClick={() => handleUpdateStatus(row)}
-                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-              ></i>
-            )}
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            onEdit={() => handleUpdateStatus(row)}
+            onHistory={() => handleShowHistory(row)}
+          />
         );
       },
     },

@@ -261,7 +261,7 @@ const AddShift: React.FC = () => {
       <div className="content-area">
         <PageLoader loading={loading} />
         <form ref={formRef} method="POST" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:w-[50%] gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
             <TextField
               label="Shift Name"
               name="name"
@@ -272,7 +272,8 @@ const AddShift: React.FC = () => {
               onChange={(e) => handleChange("name", e.target.value)}
             />
 
-            <div />
+            </div>
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-4 mt-3">
 
             <TextField
               type="time"
@@ -319,7 +320,7 @@ const AddShift: React.FC = () => {
             <div className="mb-5 flex items-center gap-2">
               <i className="fa-solid fa-location-dot text-primary" />
 
-              <h3 className="text-lg font-medium">
+              <h3 className="text-md sm:text-lg font-medium">
                 Select Branch to Assign this Shift
               </h3>
             </div>

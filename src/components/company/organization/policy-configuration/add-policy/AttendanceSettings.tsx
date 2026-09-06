@@ -53,18 +53,18 @@ const AttendanceSettings = ({
     <div className="space-y-3 rounded-lg bg-white shadow-sm">
       {/* Attendance Setting */}
 
-      <div className="border-b pb-4 border-inputBorder">
+      <div className="border-b pb-2 sm:pb-4 border-inputBorder">
         <div className="mb-5 border-l-4 border-primary bg-primaryBlur px-2 py-2">
           <h3 className="text-md font-medium text-secondary">
             Attendance Setting
           </h3>
         </div>
-        <div className="space-y-3 mt-3">
+        <div className="space-y-1 sm:space-y-3 mt-2 sm:mt-3">
           <h3 className="text-md font-medium text-primary">
             Weekly Off Settings
           </h3>
 
-          <div className="rounded-md border border-gray-200 bg-white p-5 space-y-4">
+          <div className="rounded-md border border-gray-200 bg-white p-5 space-y-3 sm:space-y-4">
             {WEEKLY_OFF_OPTIONS.map((day) => {
               const isSaturday = day.value === "SATURDAY";
 

@@ -1,14 +1,14 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import { statusColor, statusMessage } from "../../../../constants/constants";
 import { ILeave } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum } from "../../../../types/common-types";
 import {
   HistoryPayload,
   initialHistory,
 } from "../../../../apis/history/history.api";
 import HistoryModal from "../../../common/modal/HistoryModal";
+import StatusCell from "../../../common/status-cell";
+import Description from "../../../common/description";
 
 interface ILeaveListProps {
   leaveList: ILeave[];
@@ -29,12 +29,12 @@ export default function LeaveTable({
   const columns: ColumnDef<ILeave>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Leave Name",
-      className: "w-[25%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col">
           <div
@@ -49,32 +49,24 @@ export default function LeaveTable({
     },
     {
       header: "Leave Type",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (row.isPaid ? "Paid" : "Unpaid"),
     },
     {
       header: "Description",
-      className: "w-[30%]",
-      render: (row) => (row.description ? row.description : "-"),
+      className: "",
+      render: (row) => <Description value={row.description} className="!max-w-150px"/>,
     },
     {
       header: "Status",
-      className: "w-[20%]",
+      className: "",
       render: (row) => {
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            {row.status !== statusEnum.DELETED && (
-              <i
-                onClick={() => handleUpdateStatus(row)}
-                className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-              ></i>
-            )}
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            onEdit={() => handleUpdateStatus(row)}
+            onHistory={() => handleShowHistory(row)}
+          />
         );
       },
     },

@@ -34,7 +34,7 @@ export interface IDepartment {
 export default function PeopleHierarchy() {
   const { user } = useAuthStore();
   const [branches, setBranches] = useState<IBranch[]>([]);
-   const [employeeCount, setEmployeeCount] = useState<number>(0);
+  const [employeeCount, setEmployeeCount] = useState<number>(0);
   const [managerCount, setManagerCount] = useState<number>(0);
   const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [branchOptions, setBranchOptions] = useState<IOption[]>([]);
@@ -79,7 +79,11 @@ export default function PeopleHierarchy() {
         value: ele?._id,
       }));
       setBranchOptions(branchOption);
-      handleSelectFilter("branchId", branchOption[0]?.value, response?.data?.list);
+      handleSelectFilter(
+        "branchId",
+        branchOption[0]?.value,
+        response?.data?.list,
+      );
     } else {
       setBranches([]);
       setBranchOptions([]);
@@ -110,39 +114,44 @@ export default function PeopleHierarchy() {
       <TopBar
         title="People Hierarchy"
         actionButtons={
-          <div className="flex items-center gap-2">
-            <SelectField
-              value={
-                branchId
-                  ? (branchOptions?.find((ele) => ele.value === branchId) ?? "")
-                  : ""
-              }
-              name={"branchId"}
-              options={branchOptions}
-              onChange={(option) =>
-                handleSelectFilter("branchId", option.value)
-              }
-            />
-            <SelectField
-              value={
-                shiftId
-                  ? (shiftOptions?.find((ele) => ele.value === shiftId) ?? "")
-                  : ""
-              }
-              name={"shiftId"}
-              options={shiftOptions}
-              onChange={(option) => handleSelectFilter("shiftId", option.value)}
-            />
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row justify-center py-1 px-0 gap-2 w-full">
+            <div className="flex justify-between gap-2">
+              <SelectField
+                value={
+                  branchId
+                    ? (branchOptions?.find((ele) => ele.value === branchId) ??
+                      "")
+                    : ""
+                }
+                name={"branchId"}
+                options={branchOptions}
+                onChange={(option) =>
+                  handleSelectFilter("branchId", option.value)
+                }
+              />
+              <SelectField
+                value={
+                  shiftId
+                    ? (shiftOptions?.find((ele) => ele.value === shiftId) ?? "")
+                    : ""
+                }
+                name={"shiftId"}
+                options={shiftOptions}
+                onChange={(option) =>
+                  handleSelectFilter("shiftId", option.value)
+                }
+              />
+            </div>
+            <div className="flex items-center justify-center gap-3">
               <div className="flex items-center gap-3">
-                <span className="font-medium">Total Manager</span>
-                <div className="flex px-[5px] min-h-[35px] min-w-[35px] items-center justify-center bg-black text-[20px] font-medium text-white shadow">
+                <span className="text-sm sm:text-sm md:text-md font-medium">Total Manager</span>
+                <div className="flex px-[5px] min-h-[30px] sm:min-h-[35px] min-w-[30px] sm:min-w-[35px] items-center justify-center bg-black text-[18px] sm:text-[20px] font-medium text-white shadow">
                   {managerCount}
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <span className="font-medium">Total Employee</span>
-                <div className="flex px-[5px] py-[3px] min-w-[35px] items-center justify-center bg-black text-[20px] font-medium text-white shadow">
+                <span className="text-sm sm:text-sm md:text-md font-medium">Total Employee</span>
+                <div className="flex px-[5px] min-h-[30px] sm:min-h-[35px] min-w-[30px] sm:min-w-[35px] items-center justify-center bg-black text-[18px] sm:text-[20px] font-medium text-white shadow">
                   {employeeCount}
                 </div>
               </div>

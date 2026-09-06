@@ -332,7 +332,7 @@ const AddDepartment: React.FC = () => {
       <div className="content-area">
         <PageLoader loading={loading} />
         <form ref={formRef} method="POST" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:w-[50%] gap-5 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-4 mb-2">
             <TextField
               label="Department Name"
               name="name"
@@ -342,15 +342,13 @@ const AddDepartment: React.FC = () => {
               required
               onChange={(e) => handleChange("name", e.target.value)}
             />
-
-            <div />
           </div>
 
-          <div className="mt-8 border-t border-borderPrimary pt-6">
+          <div className="border-t border-borderPrimary py-3">
             <div className="mb-5 flex items-center gap-2">
               <i className="fa-solid fa-location-dot text-primary" />
 
-              <h3 className="text-sm font-medium">
+              <h3 className="text-md sm:text-lg font-medium">
                 Select Branch & Shift to Assign this Department
               </h3>
             </div>
@@ -359,7 +357,7 @@ const AddDepartment: React.FC = () => {
               <p className="mb-4 text-sm text-danger">{errors.assignments}</p>
             )}
 
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {branchLoading ? (
                 <PageLoader loading={branchLoading} />
               ) : (
@@ -395,7 +393,7 @@ const AddDepartment: React.FC = () => {
                               : ""}
                           </h4>
 
-                          <p className="mt-1 text-xs text-grayText">
+                          <p className="mt-1 text-xs text-grayText line-clamp-2 truncate text-wrap">
                             {branch.address}
                           </p>
                           <div className=" mt-2 flex flex-wrap gap-4">

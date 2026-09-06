@@ -405,7 +405,7 @@ const AddPolicy: React.FC<{
           onSubmit={handleSubmit}
         >
           {!editPolicyId && (
-            <div className={`grid grid-cols-1 w-[75%] gap-4`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2`}>
               <TextField
                 label="Policy Name"
                 required

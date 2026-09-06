@@ -125,7 +125,7 @@ const SelectField = ({
   };
 
   return (
-    <div id={`field-${name}`}>
+    <div id={`field-${name}`} className="w-full">
        {label && (
         <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
           {label} {required && <span className="text-error">*</span>}

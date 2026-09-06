@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "../../../../common/image";
-import IekaLogo from "../../../../../assets/images/ieka_logo.jpg";
 import { ICompany } from "../../../../../types/employee/employee-payslip.types";
 
 interface CompanyHeaderProps {

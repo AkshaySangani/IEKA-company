@@ -1,11 +1,8 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
-  branchEnum,
-  statusColor,
-  statusMessage,
+  branchEnum
 } from "../../../../constants/constants";
 import { IBranch } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
 import {
   BranchTypeEnum,
@@ -16,6 +13,7 @@ import {
   HistoryPayload,
   initialHistory,
 } from "../../../../apis/history/history.api";
+import StatusCell from "../../../common/status-cell";
 
 interface IBranchListProps {
   branches: IBranch[];
@@ -36,40 +34,36 @@ export default function BranchTable({
   const columns: ColumnDef<IBranch>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Branch Name",
-      className: "w-[45%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col">
           <div
-            className="text-primary cursor-pointer text-sm font-medium"
+            className="text-primary cursor-pointer text-sm font-medium line-clamp-1 truncate text-wrap max-w-[150px]"
             onClick={() => handleEditBranchDetails(row._id)}
           >
             {row.name} {row.branchType === branchEnum.HEAD_OFFICE ? "(HO)" : ""}
           </div>
-          <div className="text-grayText text-xs line-clamp-2 truncate text-wrap">{row.address}</div>
+          <div className="text-grayText text-xs line-clamp-2 truncate text-wrap max-w-[200px]">
+            {row.address}
+          </div>
         </div>
       ),
     },
     {
       header: "Status",
-      className: "w-[40%]",
+      className: "",
       render: (row) => {
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            <i
-              onClick={() => handleUpdateStatus(row)}
-              className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-gray-500"
-            ></i>
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            onEdit={() => handleUpdateStatus(row)}
+            onHistory={() => handleShowHistory(row)}
+          />
         );
       },
     },

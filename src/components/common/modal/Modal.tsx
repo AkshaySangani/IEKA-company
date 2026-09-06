@@ -35,7 +35,7 @@ const Modal = ({
       onClick={onClose}
       className={`
         fixed inset-0 z-[9999]
-        flex items-start justify-center
+        flex items-center sm:items-start justify-center
         p-2 sm:p-4
         bg-black/45
         transition-all duration-300 ease-in-out

@@ -18,7 +18,7 @@ interface BranchCardProps {
 export default function BranchCard({ branch }: BranchCardProps) {
   return (
     <>
-      <div className="content-card max-h-[350px]">
+      <div className="content-card">
         {/* Header */}
         <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-3 text-white">
           <div className="flex items-center gap-2">
@@ -41,9 +41,9 @@ export default function BranchCard({ branch }: BranchCardProps) {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between py-1.5 px-2 sm:px-2.5 sm:py-2 gap-1.5 sm:gap-2">
           {/* Address */}
-          <div className="px-5 pt-2 pb-3">
+          <div className="">
             <p className="text-[13px] text-[#5c5c5c] line-clamp-2">
               {branch.address}{" "}
               {branch.branchType === BranchTypeEnum.HEAD_OFFICE ? "(HO)" : ""}
@@ -55,10 +55,10 @@ export default function BranchCard({ branch }: BranchCardProps) {
             branch?.shifts?.map((shift: IShift, index: number) => (
               <div
                 key={index}
-                className="mx-3 mb-5 overflow-hidden border p-3 border-gray-300 bg-white"
+                className="overflow-hidden border px-3 py-2 border-gray-300 bg-white"
               >
                 {/* Shift Header */}
-                <div className="flex items-center justify-between border-b border-gray-200 pb-3">
+                <div className="flex items-center justify-between border-b border-gray-200 pb-1.5">
                   <div>
                     <div className="flex items-center gap-2 text-primary">
                       <span

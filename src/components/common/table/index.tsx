@@ -45,8 +45,7 @@ export function CustomTable<T>({
         bg-white
         max-h-[calc(100vh-160px)]
         max-sm:max-h-[calc(100vh-130px)]
-        sm:min-h-[auto]
-        min-h-[calc(100vh-400px)]
+        min-h-[auto]
         scrollbar-thin
         scrollbar-thumb-secondary
       "

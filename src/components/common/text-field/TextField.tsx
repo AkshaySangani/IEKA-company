@@ -59,7 +59,7 @@ const TextField: React.FC<InputProps> = ({
           onWheel={handleWheel}
           autoComplete={"off"}
           className={`
-            w-full
+            min-w-full
             border border-inputBorder
             bg-white
             px-[15px]

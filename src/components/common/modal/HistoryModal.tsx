@@ -6,6 +6,7 @@ import { HistoryFieldEnum } from "../../../types/common-types";
 import { ColumnDef, CustomTable } from "../table";
 import { statusColor, statusMessage } from "../../../constants/constants";
 import { DateFormat, formatDate } from "../../../utils/date-format";
+import Description from "../description";
 
 interface IStatusHistoryProps {
   title?: string;
@@ -152,9 +153,7 @@ const HistoryModal: React.FC<IStatusHistoryProps> = ({
           header: "Remarks",
           className: "",
           render: (row) => (
-            <div className="line-clamp-2 max-w-full overflow-hidden">
-              {row.remarks || "-"}
-            </div>
+            <Description value={row.remarks} />
           ),
         },
       ];

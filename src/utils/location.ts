@@ -63,21 +63,21 @@ export const getCurrentLocation = (): Promise<{
         });
       },
       (error) => {
-        let message = "Unable to get your location.";
+        // let message = "Unable to get your location.";
 
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            message = "Location permission is required to punch in/out.";
-            break;
+        // switch (error.code) {
+        //   case error.PERMISSION_DENIED:
+        //     message = "Location permission is required to punch in/out.";
+        //     break;
 
-          case error.POSITION_UNAVAILABLE:
-            message = "Your current location is unavailable.";
-            break;
+        //   case error.POSITION_UNAVAILABLE:
+        //     message = "Your current location is unavailable.";
+        //     break;
 
-          case error.TIMEOUT:
-            message = "Location request timed out.";
-            break;
-        }
+        //   case error.TIMEOUT:
+        //     message = "Location request timed out.";
+        //     break;
+        // }
 
         // toastMessage.error(message);
         resolve({

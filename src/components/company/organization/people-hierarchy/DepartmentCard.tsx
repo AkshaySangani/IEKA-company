@@ -10,9 +10,9 @@ interface DepartmentCardProps {
 export default function DepartmentCard({ department }: DepartmentCardProps) {
   return (
     <>
-      <div className="content-card p-2.5 max-h-[350px]">
+      <div className="content-card p-1.5 sm:p-2.5">
         {/* Header */}
-        <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-1 text-white">
+        <div className="flex items-center justify-between bg-[#4F79C7] px-2 sm:px-3 py-1 text-white">
           <div className="flex items-center gap-2 ">
             <span
               className={`w-2.5 h-2.5 rounded-full ring-1 ring-gray-200 ${statusBgColor[department.status]}`}
@@ -27,7 +27,7 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
 
         {department.manager && (
           <>
-            <div className="flex flex-col items-center py-6">
+            <div className="flex flex-col items-center py-3 sm:py-6">
               <PersonInfo
                 personInfo={{
                   profileImage: department.manager.profileImage,
@@ -42,14 +42,14 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
               />
             </div>
 
-            <div className="mx-5 border-b border-gray-300" />
+            <div className="border-b border-gray-300" />
           </>
         )}
 
         {/* Employees */}
         {department?.employee?.length > 0 ? (
-          <div className="grid grid-cols-2 gap-y-6 gap-x-2 px-2 py-6 md:grid-cols-3 lg:grid-cols-3">
-            {department.employee.map((employee) => (
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-y-3 sm:gap-y-6 gap-x-2 py-3 sm:py-6">
+            {[...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,].map((employee) => (
               <PersonInfo
                 key={employee._id}
                 personInfo={{
