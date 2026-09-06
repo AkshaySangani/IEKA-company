@@ -1,5 +1,5 @@
 {
-  "name": "company-portal",
+  "name": "ieka",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,7 +20,6 @@
     "react-select": "^5.10.2",
     "react-to-print": "^3.3.0",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4",
     "workbox-webpack-plugin": "^7.4.1",
     "zustand": "^5.0.14"
   },

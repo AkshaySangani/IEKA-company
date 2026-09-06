@@ -1,5 +1,4 @@
 import { useState } from "react";
-import AppStoreButtons from "../AppStoreButtons/AppStoreButtons";
 import Button from "../../common/button/Button";
 import TextField from "../../common/text-field/TextField";
 import { Link } from "react-router-dom";
@@ -149,8 +148,6 @@ const LoginForm: React.FC = () => {
           loading={loading}
           type="submit"
         />
-
-        <AppStoreButtons />
       </form>
 
       <div className="mt-5 text-center text-sm">
