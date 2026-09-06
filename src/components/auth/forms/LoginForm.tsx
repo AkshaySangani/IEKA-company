@@ -66,7 +66,7 @@ const LoginForm: React.FC = () => {
     setLoading(true);
 
     const payload = {
-      email: formData.userId,
+      loginId: formData.userId,
       password: formData.password,
     };
 
