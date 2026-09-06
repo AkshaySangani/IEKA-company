@@ -62,9 +62,9 @@ export default function AttendanceSummaryCard({
       <div className="flex flex-col gap-3 border-b border-borderPrimary pb-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Title */}
         <div className="flex items-center">
-          <i className="fa-solid fa-user-plus text-secondary" />
+          <i className="fa-solid fa-user-plus text-black" />
 
-          <span className="mx-2 border-r border-borderPrimary pr-2 text-md font-medium text-secondary">
+          <span className="mx-2 border-r border-borderPrimary pr-2 text-md font-medium">
             Attendance
           </span>
 
@@ -99,7 +99,7 @@ export default function AttendanceSummaryCard({
                   {item.icon}
                 </span>
 
-                <span className="truncate text-xs sm:text-sm">
+                <span className="truncate text-xs font-medium sm:text-sm">
                   {item.label}
                 </span>
               </div>

@@ -28,6 +28,7 @@ module.exports = {
         /* Base */
         white: "#ffffff",
         text: "#333333",
+        textSecondary: "#818181",
         grayText: "#6c757d",
         borderPrimary: "#ccc",
 
