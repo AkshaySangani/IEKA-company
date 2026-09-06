@@ -45,7 +45,6 @@ export default function SummaryCard({
       <div
         className="
           relative
-          h-[100px]
           rounded-sm
           p-2
           sm:h-[140px]
@@ -77,9 +76,9 @@ export default function SummaryCard({
             className="
               min-w-0
               truncate
-              text-xs
+              text-md
               font-medium
-              text-secondary
+              text-black
               sm:text-lg
             "
           >
@@ -90,15 +89,14 @@ export default function SummaryCard({
         {/* Title */}
         <p
           className="
-            mt-2
+            mt-3
             truncate
-            text-[10px]
+            text-xs
             font-medium
             uppercase
             tracking-wide
-            text-grayText
+            text-textSecondary
             sm:mt-3
-            sm:text-xs
           "
         >
           {title}
@@ -114,7 +112,7 @@ export default function SummaryCard({
             </span>
 
             <span
-              className={`shrink-0 text-[11px] font-medium sm:text-sm ${trendColor}`}
+              className={`shrink-0 text-xs font-medium sm:text-sm ${trendColor}`}
             >
               {trendDetails.type === "high" ? "+" : ""}
               {trendDetails.percentage}%

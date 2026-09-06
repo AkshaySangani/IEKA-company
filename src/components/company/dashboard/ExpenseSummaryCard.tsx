@@ -80,11 +80,11 @@ export default function ExpenseSummaryCard({
       >
         {/* Title */}
         <div className="flex items-center">
-          <span className="text-lg font-medium text-secondary">
+          <span className="text-lg font-medium text-black">
             {currency.INR}
           </span>
 
-          <span className="mx-2 border-r border-borderPrimary pr-2 text-md font-medium text-secondary">
+          <span className="mx-2 border-r pr-2 text-md font-medium">
             Total Expense
           </span>
 
@@ -118,7 +118,7 @@ export default function ExpenseSummaryCard({
           <div className="flex flex-col">
             <div className="flex items-center gap-1">
               <div className="h-[45px] w-[45px] sm:h-[45px] sm:w-[45px] rounded-full bg-primaryBlue flex items-center justify-center">
-                <span className="text-lg font-medium text-white">
+                <span className="text-3xl font-medium text-white">
                   {currency.INR}
                 </span>
               </div>

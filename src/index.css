@@ -11,7 +11,7 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -24,7 +24,7 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: inherit;
+  font-family: "Roboto", sans-serif;
 }
 
 input,
