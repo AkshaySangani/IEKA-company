@@ -22,6 +22,7 @@ export interface IEmployee {
   lastName: string;
   profileImage: string;
   role: RoleEnum;
+  userId: string;
 
   branchId: {
     _id: string;

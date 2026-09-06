@@ -79,7 +79,7 @@ export default function TerminationTable({
             profileImage: row?.userId?.profileImage,
             firstName: row?.userId?.firstName,
             lastName: row?.userId?.lastName,
-            description: roleNames[row?.userId?.role],
+            description: `${row.userId.userId} | ${roleNames[row?.userId?.role]}`,
           }}
           onClick={() => handleOnClick(row)}
         />
@@ -168,7 +168,7 @@ export default function TerminationTable({
     setHistory({
       field,
       fieldId: termination._id,
-      title: `${termination.userId.firstName} ${termination.userId.lastName}`,
+      title: `${termination.userId.firstName} ${termination.userId.lastName} | ${termination.userId?.userId}`,
     });
   };
 

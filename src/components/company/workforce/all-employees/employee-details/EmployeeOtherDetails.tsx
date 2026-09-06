@@ -37,7 +37,7 @@ const EmployeeOtherDetails = ({employee, employeeDetails, fetchEmployeeOtherDeta
   return (
     <>
       {employeeId ? (
-        <div className="content-card bg-white border border-gray-200 p-4 space-y-2">
+        <div className="content-card bg-white border border-gray-200 p-3 sm:p-4 space-y-2">
           <PersonDetails
             employee={employee.user}
             loading={loading}

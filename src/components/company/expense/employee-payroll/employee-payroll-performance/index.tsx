@@ -22,13 +22,13 @@ import {
 import EmployeePerformanceTable from "./EmployeePerformanceTable";
 import PageLoader from "../../../../common/loader/PageLoader";
 import { getEmployeeDetails } from "../../../../../apis/workforce/onboardings.api";
-import { IUser } from "..";
 import {
   pathNames,
   roleNames,
   statusMessage,
 } from "../../../../../constants/constants";
 import StatusCards, { AttendanceStats } from "./StatusCards";
+import { IUser } from "../../../../../types/user.types";
 
 export interface ILeaveRequest {
   _id: string;
@@ -272,7 +272,7 @@ const EmployeePayrollPerformance = () => {
               profileImage: employee.profileImage,
               firstName: employee.firstName,
               lastName: employee.lastName,
-              description: roleNames[employee.role],
+              description: `${employee.userId} | ${roleNames[employee.role]}` ,
             }}
             className="border-r pr-3 border-inputBorder"
             imageClassName="rounded-0 w-[50px] h-[50px]"

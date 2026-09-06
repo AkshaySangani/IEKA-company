@@ -27,7 +27,7 @@ const EmployeeInfo: React.FC<EmployeeInfoProps> = ({
         </p>
 
         <p className="mt-1 text-[11px] text-grayText sm:text-xs">
-          {employee.designationId?.name}
+          {`${employee.userId} | ${employee.designationId?.name}`}
           {/* | Date of Joining:{" "} */}
           {/* {employee.joiningDate} */}
         </p>

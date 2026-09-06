@@ -79,7 +79,7 @@ export default function PromotionTable({
             profileImage: row?.userId?.profileImage,
             firstName: row?.userId?.firstName,
             lastName: row?.userId?.lastName,
-            description: roleNames[row?.userId?.role],
+            description: `${row.userId?.userId} | ${roleNames[row?.userId?.role]}`,
           }}
           onClick={() => handleOnClick(row)}
         />
@@ -103,7 +103,7 @@ export default function PromotionTable({
           row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
         return (
           <>
-            {!isManager && row.status !== statusEnum.PENDING ? (
+            {!isManager && row.status !== statusEnum.HOLD ? (
               <MailStatusCell
                 mailSent={row?.mailSent}
                 onSendMail={() => handleSendMail(row)}
@@ -123,14 +123,14 @@ export default function PromotionTable({
       className: "",
       render: (row) => {
         return (
-          row.status === statusEnum.PROMOTED && (
+          row.status === statusEnum.PROMOTED ? (
             <Badge
               label="Letter"
               onClick={() =>
                 navigate(`${pathNames.PROMOTION_LETTER}/${row._id}`)
               }
             />
-          )
+          ) : "-"
         );
       },
     },
@@ -169,7 +169,7 @@ export default function PromotionTable({
     setHistory({
       field: field,
       fieldId: promotion._id,
-      title: `${promotion.userId.firstName} ${promotion.userId.lastName}`,
+      title: `${promotion.userId.firstName} ${promotion.userId.lastName} | ${promotion.userId?.userId}`,
     });
   };
 

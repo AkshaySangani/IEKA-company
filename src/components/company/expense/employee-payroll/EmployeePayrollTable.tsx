@@ -50,7 +50,7 @@ export default function EmployeePayrollTable({
             profileImage: row.userId.profileImage,
             firstName: row.userId.firstName,
             lastName: row.userId.lastName,
-            description: roleNames[row.userId.role],
+            description: `${row.userId.userId} | ${roleNames[row.userId.role]}`,
           }}
           onClick={() => navigate(`${pathNames.EMPLOYEE_PAYROLL_PERFORMANCE}/${row.userId._id}`)}
         />

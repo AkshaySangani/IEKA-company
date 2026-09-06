@@ -65,6 +65,7 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
     profileImage: "",
     status: statusEnum.ACTIVE,
     role: RoleEnum.EMPLOYEE,
+    userId:""
   };
   const [employee, setEmployee] = useState<IUser>(initialState);
 
@@ -125,7 +126,7 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
                 profileImage: employee.profileImage,
                 firstName: employee.firstName,
                 lastName: employee.lastName,
-                description: roleNames[employee.role],
+                description: `${employee.userId} | ${roleNames[employee.role]}`,
               }}
               className="border-r pr-3 border-inputBorder"
               imageClassName="rounded-0 w-[50px] h-[50px]"

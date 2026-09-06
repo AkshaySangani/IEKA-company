@@ -13,15 +13,8 @@ import MonthPicker, {
   MonthPickerValue,
 } from "../../../common/date-picker/MonthPicker";
 import { getFloatValue } from "../../../../utils/helper";
+import { IUser } from "../../../../types/user.types";
 
-export interface IUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  profileImage: string;
-  role: RoleEnum;
-  status?: statusEnum;
-}
 
 export interface IReimbursement {
   _id: string;
@@ -60,6 +53,7 @@ export const initialEmployeePayroll: IEmployeePayroll = {
     lastName: "",
     profileImage: "",
     role: RoleEnum.EMPLOYEE,
+    userId: ""
   },
 
   totals: {

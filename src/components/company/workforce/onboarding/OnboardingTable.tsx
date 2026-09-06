@@ -51,7 +51,7 @@ export default function OnboardingsTable({
             profileImage: row.profileImage,
             firstName: row.firstName,
             lastName: row.lastName,
-            description: "",
+            description: row.userId,
           }}
           onClick={() => handleRedirectEmployeeDetails(row)}
         />

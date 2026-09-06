@@ -98,15 +98,15 @@ const LeaveRequestDetails = () => {
             {/* Leave Details */}
             <div className="grid grid-cols-2 gap-4 px-5 py-5 sm:grid-cols-4">
               {/* Leave Type */}
-              <div>
+              {/* <div>
                 <p className="mb-1 text-xs font-medium text-gray-400">
                   Leave Type
                 </p>
 
                 <p className="text-sm font-semibold text-gray-800">
-                  {leaveDetails.leaveId}
+                  {leaveDetails.leaveId.name}
                 </p>
-              </div>
+              </div> */}
 
               {/* Duration */}
               <div>
@@ -119,14 +119,14 @@ const LeaveRequestDetails = () => {
                 </p>
               </div>
 
-              {/* Total Days */}
+              {/* Leave Date */}
               <div>
                 <p className="mb-1 text-xs font-medium text-gray-400">
-                  Total Days
+                  Leave Date
                 </p>
 
                 <p className="text-sm font-semibold text-gray-800">
-                  {leaveDetails.totalDays}
+                  {formatDate(leaveDetails.startDate)}
                 </p>
               </div>
 
@@ -143,7 +143,7 @@ const LeaveRequestDetails = () => {
             </div>
 
             {/* Date Range */}
-            <div className="mx-5 rounded-lg bg-gray-50 px-4 py-3">
+            {/* <div className="mx-5 rounded-lg bg-gray-50 px-4 py-3">
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
@@ -175,7 +175,7 @@ const LeaveRequestDetails = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Reason */}
             <div className="px-5 py-4">

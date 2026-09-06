@@ -7,4 +7,5 @@ export interface IUser {
   profileImage: string;
   role: string;
   status?: statusEnum;
+  userId?: string;
 }

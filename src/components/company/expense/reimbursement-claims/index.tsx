@@ -23,6 +23,7 @@ import {
 } from "../../../../apis/expense/reimbursement.api";
 import StatusCards, { ReimbursementStats } from "./StatusCards";
 import { useAuthStore } from "../../../../store/auth-store";
+import { IUser } from "../../../../types/user.types";
 
 export interface IReimbursementClaim {
   _id: string;
@@ -44,14 +45,6 @@ export interface IReimbursement {
   assignedBy: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface IUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  profileImage: string;
-  role: RoleEnum;
 }
 
 export const initialReimbursement: IReimbursement = {

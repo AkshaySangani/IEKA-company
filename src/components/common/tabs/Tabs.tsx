@@ -20,7 +20,7 @@ const Tabs: React.FC<TabsProps> = ({
   onChange,
 }) => {
   return (
-    <div className="inline-flex items-center gap-2">
+    <div className="flex w-full items-center gap-2">
       {options.map((option) => {
         const isActive = active === option.label;
 

@@ -42,6 +42,7 @@ export interface IPayslipUser {
   departmentId?: IPayslipDepartment | null;
   designationId?: IPayslipDesignation | null;
   companyId: ICompany;
+  userId: string;
 }
 
 export interface ISalaryMetadata {

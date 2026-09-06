@@ -26,6 +26,7 @@ export interface IOnboarding {
   status: statusEnum;
   role: RoleEnum;
   createdAt: string;
+  userId: string;
 }
 
 const Onboarding = () => {

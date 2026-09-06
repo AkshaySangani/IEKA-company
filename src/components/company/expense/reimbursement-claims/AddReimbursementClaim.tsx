@@ -18,10 +18,10 @@ import {
 } from "../../../../apis/expense/reimbursement.api";
 import { getMyBranchList } from "../../../../apis/organization/branch.api";
 import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
-import { IUser } from ".";
 import { useAuthStore } from "../../../../store/auth-store";
 import ActionModal from "../../../common/modal/ActionModal";
 import Toggle from "../../../common/toggle";
+import { IUser } from "../../../../types/user.types";
 
 const AddReimbursement: React.FC = () => {
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ const AddReimbursement: React.FC = () => {
         setUserOptions(
           response?.data?.map((ele: IUser) => ({
             value: ele?._id,
-            label: `${ele?.firstName} ${ele?.lastName}`,
+            label: `${ele?.firstName} ${ele?.lastName} | ${ele.userId}`,
           })),
         );
       } else {

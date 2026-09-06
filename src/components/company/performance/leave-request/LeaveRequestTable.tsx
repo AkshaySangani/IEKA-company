@@ -51,7 +51,7 @@ export default function LeaveRequestTable({
             profileImage: row.userId.profileImage,
             firstName: row.userId.firstName,
             lastName: row.userId.lastName,
-            description: roleNames[row.userId.role],
+            description: `${row.userId.userId} | ${roleNames[row.userId.role]}`,
           }}
           onClick={() =>
             navigate(`${pathNames.LEAVE_REQUEST_DETAILS}/${row._id}`)

@@ -43,6 +43,7 @@ export interface ITerminationUser {
   profileImage: string;
   role: RoleEnum;
   departmentId: Department;
+  userId: string;
 }
 
 export interface Department {
@@ -63,6 +64,7 @@ export const initialTermination: ITermination = {
       _id: "",
       name: "",
     },
+    userId: ""
   },
   terminationType: "",
   lastWorkingDate: "",
@@ -135,7 +137,7 @@ const Termination = () => {
     if (response.success) {
       setEmployees(
         response?.data?.map((ele: IEmployee) => ({
-          label: `${ele.firstName} ${ele.lastName}`,
+          label: `${ele.firstName} ${ele.lastName} | ${ele.userId}`,
           value: ele._id,
         })),
       );

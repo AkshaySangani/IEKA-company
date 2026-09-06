@@ -42,6 +42,7 @@ export interface IShift extends IBaseEntity {
 export interface IEmployee {
   _id: string;
   role: RoleEnum;
+  userId: string;
 
   firstName: string;
   lastName: string;
@@ -148,6 +149,7 @@ export const initialEmployee: IEmployee = {
   _id: "",
 
   role: RoleEnum.EMPLOYEE,
+  userId: "",
 
   firstName: "",
   lastName: "",
@@ -334,7 +336,7 @@ const EmployeeDetails = () => {
         }
       />
 
-      <div className="content-area flex flex-col gap-4">
+      <div className="content-area flex-1 gap-4">
         <PageLoader loading={loading} />
 
         {!loading && employeeId ? (

@@ -24,15 +24,7 @@ import StatusCards, { OfficeExpenseStats } from "./StatusCards";
 import MonthPicker, {
   MonthPickerValue,
 } from "../../../common/date-picker/MonthPicker";
-
-export interface IUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  profileImage: string;
-  role: RoleEnum;
-}
-
+import { IUser } from "../../../../types/user.types";
 export interface IBranch {
   _id: string;
   name: string;

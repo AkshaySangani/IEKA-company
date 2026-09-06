@@ -50,15 +50,6 @@ export default function ResignedEmployeeTable({
   const [resignDetails, setResignDetails] =
     useState<ResignationRequest>(initialEmployee);
 
-  // Define configuration structures with isolated column custom components
-  const handleOnClick = (row: ResignationRequest) => {
-    navigate(pathNames.EMPLOYEE_DETAILS, {
-      state: {
-        employeeId: row?.userId?._id,
-      },
-    });
-  };
-
   const handleSendMail = (row: ResignationRequest) => {
     setMailOpen(true);
     setResignDetails(row);
@@ -84,9 +75,8 @@ export default function ResignedEmployeeTable({
             profileImage: row?.userId?.profileImage,
             firstName: row?.userId?.firstName,
             lastName: row?.userId?.lastName,
-            description: roleNames[row?.userId?.role],
+            description: `${row.userId?.userId} | ${roleNames[row?.userId?.role]}`,
           }}
-          onClick={() => handleOnClick(row)}
         />
       ),
     },
@@ -137,7 +127,7 @@ export default function ResignedEmployeeTable({
       header: "Certificate",
       className: "",
       render: (row) =>
-        row.status !== statusEnum.ACCEPTED ? (
+        row.status === statusEnum.ACCEPTED ? (
           <div className="flex gap-2">
             <Badge
               label="Relieving"
@@ -181,12 +171,12 @@ export default function ResignedEmployeeTable({
   const employeeColumns: ColumnDef<ResignationRequest>[] = [
     {
       header: "#",
-      className: "w-[3%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Resign Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col gap-1">
           {formatDate(row.createdAt)}
@@ -198,17 +188,17 @@ export default function ResignedEmployeeTable({
     },
     {
       header: "Reason",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (row.reason ? <Description value={row.reason} /> : "-"),
     },
     {
       header: "Last Working Day",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.lastWorkingDate),
     },
     {
       header: "Status",
-      className: "w-[12%]",
+      className: "",
       render: (row) => {
         return (
           <StatusCell
@@ -239,7 +229,7 @@ export default function ResignedEmployeeTable({
     setHistory({
       field,
       fieldId: employee._id,
-      title: `${employee.userId.firstName} ${employee.userId.lastName}`,
+      title: `${employee.userId.firstName} ${employee.userId.lastName} | ${employee.userId?.userId}`,
     });
   };
 

@@ -36,7 +36,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({user, branches, departments,
           {/* ID + Role */}
           <div className="mt-1 flex items-center gap-2 text-[13px]">
 
-            <span className="text-gray-600">{roleNames[user.role]}</span>
+            <span className="text-gray-600">{`${user.userId} | ${roleNames[user.role]}`}</span>
           </div>
 
           {/* Shift */}

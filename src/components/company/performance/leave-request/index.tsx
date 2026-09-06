@@ -22,10 +22,14 @@ import StatusCards, { LeaveStats } from "./StatusCards";
 import { IUser } from "../../../../types/user.types";
 import { useAuthStore } from "../../../../store/auth-store";
 
+export interface ILeaveId {
+    _id: string;
+    name: string;
+}
 export interface ILeaveRequest {
   _id: string;
   userId: IUser;
-  leaveId: string;
+  leaveId: ILeaveId;
   startDate: string;
   endDate: string;
   duration: LeaveDuration;
@@ -47,8 +51,12 @@ export const initialLeaveRequest: ILeaveRequest = {
     lastName: "",
     profileImage: "",
     role: "",
+    userId: "",
   },
-  leaveId: "",
+  leaveId: {
+    _id: "",
+    name: ""
+  },
   startDate: "",
   endDate: "",
   duration: LeaveDuration.FULL_DAY,

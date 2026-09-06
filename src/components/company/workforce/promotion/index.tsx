@@ -47,6 +47,7 @@ export interface IPromotionUser {
   lastName: string;
   profileImage: string;
   role: RoleEnum;
+  userId: string;
 }
 
 export interface Department {
@@ -63,6 +64,7 @@ export const initialPromotion: IPromotion = {
     lastName: "",
     profileImage: "",
     role: RoleEnum.EMPLOYEE,
+    userId: ""
   },
   designationId: {
     _id: "",
@@ -145,7 +147,7 @@ const Promotion = () => {
     if (response.success) {
       setEmployees(
         response?.data?.employee?.map((ele: IEmployee) => ({
-          label: `${ele.firstName} ${ele.lastName}`,
+          label: `${ele.firstName} ${ele.lastName} | ${ele.userId}`,
           value: ele._id,
           designation: ele?.designationId?.name,
         })),

@@ -38,7 +38,7 @@ export default function ManualPunchRequestTable({
             profileImage: row.userId.profileImage,
             firstName: row.userId.firstName,
             lastName: row.userId.lastName,
-            description: roleNames[row.userId.role],
+            description: `${row.userId.userId} | ${roleNames[row.userId.role]}`,
           }}
           personClassName="text-secondary"
         />

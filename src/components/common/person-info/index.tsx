@@ -2,12 +2,13 @@ import Image from "../image";
 import NoImage from "../../../assets/images/User-Image.png";
 import { statusEnum } from "../../../types/common-types";
 import { statusBgColor } from "../../../constants/constants";
+import { ReactNode } from "react";
 
 export interface IPersonInfo {
   profileImage: string;
   firstName: string;
   lastName: string;
-  description: string;
+  description: string | ReactNode;
   status?: statusEnum;
 }
 

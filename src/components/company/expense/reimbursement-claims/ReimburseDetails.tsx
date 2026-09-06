@@ -15,11 +15,11 @@ import PageLoader from "../../../common/loader/PageLoader";
 import { RoleEnum, statusEnum } from "../../../../types/common-types";
 import Image from "../../../common/image";
 import { getReimbursementById } from "../../../../apis/expense/reimbursement.api";
-import { IUser } from ".";
 import PersonInfo from "../../../common/person-info";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { getFileNameByUrl } from "../../../../utils/helper";
 import { useAuthStore } from "../../../../store/auth-store";
+import { IUser } from "../../../../types/user.types";
 
 export interface IReimbursement {
   _id: string;
@@ -66,6 +66,7 @@ const ReimbursementDetails: React.FC = () => {
       lastName: "",
       profileImage: "",
       role: RoleEnum.EMPLOYEE,
+      userId: ""
     },
     name: "",
     date: "",
@@ -138,7 +139,7 @@ const ReimbursementDetails: React.FC = () => {
                 profileImage: reimbursementDetails.userId.profileImage,
                 firstName: reimbursementDetails.userId.firstName,
                 lastName: reimbursementDetails.userId.lastName,
-                description: roleNames[reimbursementDetails.userId.role],
+                description: `${reimbursementDetails.userId.userId} | ${roleNames[reimbursementDetails.userId.role]}`,
               }}
             />
           </div>

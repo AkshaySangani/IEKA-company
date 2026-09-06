@@ -144,13 +144,15 @@ const EmployeeDetailCard: React.FC<Props> = ({
               className="max-h-16 object-contain"
             />
           </div>
-
-          <h2 className="text-lg text-white font-medium">
-            {employeeData.firstName} {employeeData.lastName}
-          </h2>
+          <div>
+            <h2 className="text-lg text-white font-medium">
+              {employeeData.firstName} {employeeData.lastName}
+            </h2>
+            <span className="text-sm text-white">{employeeData.userId}</span>
+          </div>
         </div>
 
-        <div className="p-5">
+        <div className="p-3 sm:p-5">
           <div className="flex items-center gap-2 border-b pb-3 mb-4">
             <i className="fa-solid fa-user-pen text-secondary"></i>
             <h3 className="text-md text-gray-600 font-medium">
@@ -186,7 +188,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                   />
                   {!isEditable && (
                     <i
-                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-gray-400 hover:text-secondary"
                       onClick={() => setUpdate(EmployeeUpdateModal.STATUS)}
                     ></i>
                   )}
@@ -195,7 +197,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
             />
           </div>
         </div>
-        <div className="p-5">
+        <div className="p-3 sm:p-5">
           <div className="flex items-center gap-2 border-b pb-3 mb-4">
             <i className="fa-solid fa-user-gear"></i>
             <h3 className="text-md text-gray-600 font-medium">
@@ -234,7 +236,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                   {isOwner && (
                     <i
                       onClick={() => setUpdate(EmployeeUpdateModal.DESIGNATION)}
-                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-gray-400 hover:text-secondary"
                     ></i>
                   )}
                 </div>
@@ -242,37 +244,12 @@ const EmployeeDetailCard: React.FC<Props> = ({
             />
 
             {employeeData.role === RoleEnum.MANAGER && (
-              <DetailRow
-                label="Managed Branch & Departments"
-                value={
-                  <div className="flex items-center gap-2 mr-1">
-                    <BranchDepartmentCards cards={cards} />
-                    <InfoIcon
-                      onClick={() =>
-                        handleShowHistory(
-                          employeeData,
-                          HistoryFieldEnum.Assignment,
-                        )
-                      }
-                    />
-                    {isOwner && (
-                      <i
-                        onClick={() =>
-                          setUpdate(EmployeeUpdateModal.MANAGE_BRANCH)
-                        }
-                        className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
-                      ></i>
-                    )}
-                  </div>
-                }
-              />
-            )}
-
-            <DetailRow
-              label="Reporting Branch & Shift"
-              value={
+              <div className="flex justify-between text-sm border-b border-gray-200 pb-3">
+                <div className="text-gray-700">
+                  Managed Branch & Departments
+                </div>
                 <div className="flex items-center gap-2 mr-1">
-                  <BranchDepartmentCards cards={reportingCards} />
+                  <BranchDepartmentCards cards={cards} />
                   <InfoIcon
                     onClick={() =>
                       handleShowHistory(
@@ -284,14 +261,34 @@ const EmployeeDetailCard: React.FC<Props> = ({
                   {isOwner && (
                     <i
                       onClick={() =>
-                        setUpdate(EmployeeUpdateModal.REPORTING_BRANCH)
+                        setUpdate(EmployeeUpdateModal.MANAGE_BRANCH)
                       }
-                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-gray-400 hover:text-secondary"
                     ></i>
                   )}
                 </div>
-              }
-            />
+              </div>
+            )}
+
+            <div className="flex justify-between text-sm border-b border-gray-200 pb-3">
+              <div className="text-gray-700">Reporting Branch & Shift</div>
+              <div className="flex items-center gap-2 mr-1">
+                <BranchDepartmentCards cards={reportingCards} />
+                <InfoIcon
+                  onClick={() =>
+                    handleShowHistory(employeeData, HistoryFieldEnum.Assignment)
+                  }
+                />
+                {isOwner && (
+                  <i
+                    onClick={() =>
+                      setUpdate(EmployeeUpdateModal.REPORTING_BRANCH)
+                    }
+                    className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-gray-400 hover:text-secondary"
+                  ></i>
+                )}
+              </div>
+            </div>
 
             <DetailRow
               label="Employment Type"
@@ -311,7 +308,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       onClick={() =>
                         setUpdate(EmployeeUpdateModal.EMPLOYMENT_TYPE)
                       }
-                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-gray-400 hover:text-secondary"
                     ></i>
                   )}
                 </div>
@@ -339,7 +336,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                       onClick={() =>
                         setUpdate(EmployeeUpdateModal.PROBATION_PERIOD)
                       }
-                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-gray-400 hover:text-secondary"
                     ></i>
                   )}
                 </div>
@@ -387,7 +384,7 @@ const EmployeeDetailCard: React.FC<Props> = ({
                   {!isEditable && (
                     <i
                       onClick={() => setUpdate(EmployeeUpdateModal.SALARY)}
-                      className="fa-solid fa-pen-to-square cursor-pointer text-gray-400 hover:text-secondary"
+                      className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-gray-400 hover:text-secondary"
                     ></i>
                   )}
                 </div>

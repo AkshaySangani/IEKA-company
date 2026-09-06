@@ -37,6 +37,7 @@ export const initialEmployeeLeaveRequest: IEmployeeLeaveRequest = {
     lastName: "",
     profileImage: "",
     role: "",
+    userId: ""
   },
   leaveId: "",
   startDate: "",

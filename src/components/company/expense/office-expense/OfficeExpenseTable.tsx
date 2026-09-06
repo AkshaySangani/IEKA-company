@@ -98,7 +98,7 @@ export default function OfficeExpenseTable({
             profileImage: row.assignedBy.profileImage,
             firstName: row.assignedBy.firstName,
             lastName: row.assignedBy.lastName,
-            description: roleNames[row.assignedBy.role],
+            description: `${row.assignedBy.userId} | ${roleNames[row.assignedBy.role]}`,
           }}
         />
       ),

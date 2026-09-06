@@ -39,6 +39,7 @@ export interface ResignationUser {
   profileImage: string;
   role: RoleEnum;
   departmentId: Department;
+  userId: string;
 }
 
 export interface Department {
@@ -59,6 +60,7 @@ export const initialEmployee: ResignationRequest = {
       _id: "",
       name: "",
     },
+    userId: ""
   },
   lastWorkingDate: "",
   mailSent: false,

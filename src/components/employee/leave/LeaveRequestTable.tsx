@@ -9,6 +9,7 @@ import { statusColor, statusMessage } from "../../../constants/constants";
 import { HistoryFieldEnum, LeaveDurationNames } from "../../../types/common-types";
 import HistoryModal from "../../common/modal/HistoryModal";
 import { getFirstCharacter } from "../../../utils/helper";
+import Description from "../../common/description";
 
 
 interface IEmployeeLeaveRequestListProps {
@@ -30,12 +31,12 @@ export default function EmployeeLeaveRequestTable({
   const columns: ColumnDef<IEmployeeLeaveRequest>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "text-center text-gray-500",
       render: (_, index) => index + 1,
     },
     {
       header: "Leave Date",
-      className: "w-[25%]",
+      className: "",
       render: (row) => <div className="flex items-center gap-2"><span className="text-primary font-medium border-r border-inputBorder pr-1">{formatDate(row.startDate)}</span>
       <span className="border-r text-xs border-inputBorder pr-1">{LeaveDurationNames[row.duration]}</span>
       <span className="">{getFirstCharacter("")}</span>
@@ -43,8 +44,8 @@ export default function EmployeeLeaveRequestTable({
     },
     {
       header: "Reason",
-      className: "w-[35%]",
-      render: (row) => <span className="line-clamp-2">{row.reason}</span>,
+      className: "",
+      render: (row) => (<Description value={row.reason} />),
     },
     {
       header: "Request Date",

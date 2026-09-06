@@ -17,6 +17,7 @@ import {
   initialHistory,
 } from "../../../../apis/history/history.api";
 import HistoryModal from "../../../common/modal/HistoryModal";
+import StatusCell from "../../../common/status-cell";
 
 interface IEmployeeListProps {
   allEmployees: IEmployee[];
@@ -58,7 +59,7 @@ export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
             profileImage: row?.profileImage,
             firstName: row?.firstName,
             lastName: row?.lastName,
-            description: roleNames[row?.role],
+            description: `${row.userId} | ${roleNames[row?.role]}`,
           }}
           onClick={() => handleOnClick(row)}
         />
@@ -81,16 +82,14 @@ export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
     },
     {
       header: "Status",
-      className: "w-[15%]",
+      className: "",
       render: (row) => {
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={false}
+            onHistory={() => handleShowHistory(row)}
+          />
         );
       },
     },
