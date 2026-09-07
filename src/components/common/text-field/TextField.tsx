@@ -47,7 +47,7 @@ const TextField: React.FC<InputProps> = ({
   };
 
   return (
-    <div className={`w-full ${mainClassName}`}>
+    <div className={`${mainClassName}`}>
       {label && (
         <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
           {label} {required && <span className="text-error">*</span>}
@@ -65,17 +65,19 @@ const TextField: React.FC<InputProps> = ({
             border border-inputBorder
             bg-white
             px-[15px]
-            py-[5px]
+            sm:py-[5px]
+            py-[10px]
             text-sm
             font-medium
             ${props.type === "date" ? "leading-[25px]" : "leading-[27px]"}
-            text-[#383838]
+            text-inputValue
             outline-none
             placeholder:transition-all
             placeholder:duration-400
             placeholder:ease-in-out
             focus:border-inputFocus
-            placeholder:text-sm
+            sm:placeholder:text-sm
+            placeholder:text-md
             placeholder:font-normal
             focus:placeholder:pl-[10px]
             disabled:bg-disabledBg
@@ -95,7 +97,7 @@ const TextField: React.FC<InputProps> = ({
               -translate-y-1/2
               cursor-pointer
               text-[18px]
-              text-[#666]
+              text-inputIcon
               transition-colors
               duration-200
               group-focus-within:text-inputFocus

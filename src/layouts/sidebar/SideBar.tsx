@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import logo from "../../assets/images/ieka_logo.jpg";
 import employeeManagementIcon from "../../assets/images/employee_management.png";
 import employeeFieldIcon from "../../assets/images/project_manage.png";
 
@@ -89,7 +88,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       >
         <NavLink to="/">
           <Image
-            src={user?.company?.companyLogo || logo}
+            src={user?.company?.companyLogo}
             alt="Logo"
             className="max-h-[50px] max-w-[150px] object-contain"
           />
@@ -165,7 +164,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                     items-center
                     px-3
                     py-[18px]
-                    text-sm
+                    sm:text-sm
+                    text-md
                     text-sidebarText
                     transition-all
                     duration-200
@@ -233,7 +233,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                             cursor-pointer
                             px-5
                             py-[15px]
-                            text-sm
+                            sm:text-sm
+                    text-md
                             transition-all
                             duration-200
                             hover:text-white
@@ -274,7 +275,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                     items-center
                     px-3
                     py-[18px]
-                    text-sm
+                    sm:text-sm
+                    text-md
                     text-sidebarText
                     transition-all
                     duration-200
