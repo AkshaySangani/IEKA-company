@@ -48,7 +48,7 @@ export default function EmployeeActivityCard({
         <div className="flex items-center gap-2 text-secondary">
           <span className="w-[18px] text-center text-sm">{icon}</span>
 
-          <span className="text-sm font-medium">{title}</span>
+          <span className="text-lg md:text-base font-medium">{title}</span>
         </div>
       </div>
 
@@ -60,8 +60,10 @@ export default function EmployeeActivityCard({
               key={user._id}
               className={`
                 relative
-                h-[35px]
-                w-[35px]
+                  h-[37px]
+                  w-[37px]
+                  md:h-[35px]
+                  md:w-[35px]
               `}
             >
               <Image
@@ -69,8 +71,10 @@ export default function EmployeeActivityCard({
                 fallbackSrc={NoImage}
                 alt={`${user.firstName} ${user.lastName}`}
                 className="
-                  h-[35px]
-                  w-[35px]
+                  h-[37px]
+                  w-[37px]
+                  md:h-[35px]
+                  md:w-[35px]
                   rounded-full
                   border-2
                   object-cover

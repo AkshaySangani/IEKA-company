@@ -100,14 +100,14 @@ export default function AttendanceSummaryCard({
                   {item.icon}
                 </span>
 
-                <span className="truncate text-xs font-medium sm:text-sm">
+                <span className="truncate text-base font-medium sm:text-sm">
                   {item.label}
                 </span>
               </div>
 
               {/* Count */}
               <span
-                className={`ml-2 shrink-0 text-sm font-medium ${item.countClass}`}
+                className={`ml-2 shrink-0 text-base font-medium ${item.countClass}`}
               >
                 {attendanceSummary[item.key]}
               </span>
