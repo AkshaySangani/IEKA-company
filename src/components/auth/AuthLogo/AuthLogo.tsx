@@ -1,10 +1,10 @@
-import styles from "./AuthLogo.module.css";
-import logo from "../../../assets/images/ieka_logo.jpg";
+import logo from "../../../assets/images/ieka_logo.png";
+import Image from "../../common/image";
 
 const AuthLogo = () => {
   return (
-    <div className={styles.logo}>
-      <img src={logo} alt="logo" />
+    <div className={"flex items-center justify-center my-0 mx-auto w-[120px]"}>
+      <Image fallbackSrc={logo} alt="logo" />
     </div>
   );
 };

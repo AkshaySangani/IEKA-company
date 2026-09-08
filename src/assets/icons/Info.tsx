@@ -1,6 +1,6 @@
 import { Info } from "lucide-react";
-import Image from "../../components/common/image";
-import InfoImage from "../images/info.png"
+// import Image from "../../components/common/image";
+// import InfoImage from "../images/info.png"
 
 interface IInfoProps {
   onClick?: () => void;

@@ -92,7 +92,7 @@ const Modal = ({
         <div
           className="
             min-h-0
-            overflow-y-scroll
+            overflow-y-auto
             p-3
             sm:p-4
           "

@@ -5,7 +5,7 @@ import {
   IBranch,
   IEmployeeFormData,
 } from ".";
-import { getDateDifference, getShiftHours } from "../../../../../utils/date-format";
+import { getShiftHours } from "../../../../../utils/date-format";
 import { BranchAssignmentFormData } from "../../all-employees/employee-details/update-modals/BranchAssignmentUpdate";
 import UserImage from "../../../../../assets/images/User-Image.png";
 

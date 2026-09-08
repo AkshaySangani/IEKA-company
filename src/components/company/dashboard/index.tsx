@@ -125,7 +125,7 @@ const Dashboard = () => {
     endDate: Date | null;
   }>({
     startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-    endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+    endDate: new Date(),
   });
 
   const [date, setDate] = useState<string>(

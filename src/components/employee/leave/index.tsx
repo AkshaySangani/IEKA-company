@@ -11,11 +11,15 @@ import PageLoader from "../../common/loader/PageLoader";
 import Pagination from "../../common/pagination/Pagination";
 import EmployeeLeaveRequestTable from "./LeaveRequestTable";
 
+export interface ILeaveId {
+    _id: string;
+    name: string;
+}
 
 export interface IEmployeeLeaveRequest {
   _id: string;
   userId: IUser;
-  leaveId: string;
+  leaveId: ILeaveId;
   startDate: string;
   endDate: string;
   duration: LeaveDuration;
@@ -39,7 +43,10 @@ export const initialEmployeeLeaveRequest: IEmployeeLeaveRequest = {
     role: "",
     userId: ""
   },
-  leaveId: "",
+  leaveId: {
+    _id: "",
+    name: ""
+  },
   startDate: "",
   endDate: "",
   duration: LeaveDuration.FULL_DAY,

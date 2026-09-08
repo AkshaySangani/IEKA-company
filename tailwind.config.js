@@ -36,6 +36,8 @@ module.exports = {
         inputBorder: "#aaa",
         inputFocus: "#4E72F8",
         inputLabel: "#4c4c4c",
+        inputValue: "#383838",
+        inputIcon: "#666",
         placeholder: "#aaaaaa",
         link: "#4E72F8",
         error: "#ff4d4f",

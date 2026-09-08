@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./sidebar/SideBar";
 import Header from "./header/Header";
 import useWidthHeight from "../hooks/useWidthHeight";
 
 const AppLayout: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-
   const {isMobile} = useWidthHeight();
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  
+  useEffect(() => {
+    if(isMobile){
+      setIsOpen(false)
+    }
+  },[isMobile])
 
   return (
     <>

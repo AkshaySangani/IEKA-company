@@ -1,9 +1,7 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import { statusColor, statusMessage } from "../../../../constants/constants";
 import { IPolicy } from ".";
-import InfoIcon from "../../../../assets/icons/Info";
 import { useState } from "react";
-import { HistoryFieldEnum, statusEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum } from "../../../../types/common-types";
 import {
   HistoryPayload,
   initialHistory,

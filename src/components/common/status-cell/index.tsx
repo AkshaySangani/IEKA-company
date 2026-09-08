@@ -1,6 +1,5 @@
 import InfoIcon from "../../../assets/icons/Info";
 import { statusColor, statusMessage } from "../../../constants/constants";
-import useDevice from "../../../hooks/useDevice";
 import { statusEnum } from "../../../types/common-types";
 
 interface StatusCellProps {
@@ -20,7 +19,6 @@ const StatusCell = ({
   onHistory,
   showHistory = true,
 }: StatusCellProps) => {
-  const {isMobile} = useDevice();
   return (
     <div className="flex items-center gap-1">
       {/* Status */}

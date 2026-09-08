@@ -67,8 +67,27 @@ import EmployeeResignationPage from "./pages/employee/resignation";
 import AllEmployeePayslipsPage from "./pages/company/pay-slip/employee-payslips";
 import EmployeePayslipDetailsPage from "./pages/company/pay-slip/employee-payslips/EmployeePayslipDetails";
 import PayslipDownloadPage from "./pages/company/pay-slip/pay-slip-download";
+import { useEffect, useState } from "react";
+import SplashScreen from "./components/splash-screen";
+import { useIsPWA } from "./hooks/useIsPWA";
 
 function App() {
+  const isPWA = useIsPWA();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(isPWA);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [isPWA]);
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
   return (
     <Router>
       <Routes>

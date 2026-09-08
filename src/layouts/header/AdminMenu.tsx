@@ -104,7 +104,7 @@ const AdminMenu = () => {
                 </NavLink>
               </li>
 
-              <li>
+              {/* <li>
                 <NavLink
                   to="/change-password"
                   onClick={handleMenuOenClose}
@@ -113,7 +113,7 @@ const AdminMenu = () => {
                   <i className="fas fa-lock mr-[10px] w-5 text-center text-sm text-[#6c757d]" />
                   Password Change
                 </NavLink>
-              </li>
+              </li> */}
             </ul>
 
             <ul className="mb-0 mt-[10px] list-none border-t border-[#e9ecef] p-0 pt-[10px]">

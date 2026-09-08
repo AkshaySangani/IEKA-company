@@ -83,8 +83,6 @@ const AttendanceLocation: React.FC<AttendanceLocationProps> = ({
         <div
           className={`
           w-full
-          px-1
-          sm:px-2
           ${className}
         `}
         >
@@ -113,7 +111,7 @@ const AttendanceLocation: React.FC<AttendanceLocationProps> = ({
           "
           >
             {/* Attendance Marked */}
-            <div className="flex gap-2">
+            <div className="grid grid-cols-[1fr_4fr] sm:grid-cols-[1fr_5fr] items-start gap-2">
               <div className="text-start text-sm font-normal text-inputLabel">
                 Attendance Marked:
               </div>
@@ -123,10 +121,8 @@ const AttendanceLocation: React.FC<AttendanceLocationProps> = ({
                   ? AttendanceMethodNames[attendanceMethod]
                   : "N/A"}
               </div>
-            </div>
 
-            {/* Date & Time */}
-            <div className="flex gap-2">
+                  {/* Date & Time */}
               <div className="text-start text-sm font-normal text-inputLabel">
                 Date & Time:
               </div>
@@ -144,12 +140,12 @@ const AttendanceLocation: React.FC<AttendanceLocationProps> = ({
 
             {/* Geo Location */}
             {latitude && longitude && (
-              <>
+              <div className="grid grid-cols-1 sm:grid-cols-[1fr_5fr] items-start gap-2">
                 <div className="text-start text-sm font-normal text-inputLabel">
                   Geo Location:
                 </div>
 
-                <div className="min-w-0">
+                <div className="w-full">
                   {latitude !== undefined && longitude !== undefined ? (
                     <div
                       className="
@@ -180,7 +176,7 @@ const AttendanceLocation: React.FC<AttendanceLocationProps> = ({
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>
