@@ -14,10 +14,10 @@ interface EmployeeCardProps {
 
 const EmployeeCard: React.FC<EmployeeCardProps> = ({user, branches, departments, currentSalary}) => {
   return (
-    <div className="content-card px-6 py-5">
-      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+    <div className="content-card px-3 sm:px-6 py-2 sm:py-5">
+      <div className="flex flex-row sm:flex-row sm:items-start gap-4">
         {/* Profile Image */}
-        <div className="flex justify-center sm:justify-start">
+        <div className="flex justify-start">
           <Image
             src={user.profileImage}
             alt={`${user.firstName} ${user.lastName}`}

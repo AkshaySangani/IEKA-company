@@ -150,7 +150,9 @@ const OfficeExpense: React.FC = () => {
       amount: 0,
       activeColor: "bg-pending",
       textColor: "text-pending",
-      icon: <i className="fa-solid fa-mug-hot text-xs sm:text-sm md:text-md"></i>,
+      icon: (
+        <i className="fa-solid fa-mug-hot text-xs sm:text-sm md:text-md"></i>
+      ),
     },
     {
       id: statusEnum.APPROVED,
@@ -159,7 +161,9 @@ const OfficeExpense: React.FC = () => {
       amount: 0,
       activeColor: "bg-success",
       textColor: "text-success",
-      icon: <i className="fa-solid fa-user-plus text-xs sm:text-sm md:text-md"></i>,
+      icon: (
+        <i className="fa-solid fa-user-plus text-xs sm:text-sm md:text-md"></i>
+      ),
     },
     {
       id: statusEnum.REJECTED,
@@ -168,7 +172,9 @@ const OfficeExpense: React.FC = () => {
       amount: 0,
       activeColor: "bg-danger",
       textColor: "text-danger",
-      icon: <i className="fa-solid fa-user-minus text-xs sm:text-sm md:text-md"></i>,
+      icon: (
+        <i className="fa-solid fa-user-minus text-xs sm:text-sm md:text-md"></i>
+      ),
     },
   ]);
 
@@ -316,7 +322,7 @@ const OfficeExpense: React.FC = () => {
       status: "",
       month,
       isDownload: true,
-      password
+      password,
     });
   };
 
@@ -325,16 +331,13 @@ const OfficeExpense: React.FC = () => {
       <TopBar
         title="Office & Assets Expense"
         actionButtons={
-          <div className="flex gap-2">
-            <div className="flex items-center gap-2 w-[150px]">
-              {/* <label className="font-medium">Month</label> */}
-              <MonthPicker
-                placeholder="Select Month"
-                value={month}
-                onChange={handleMonthChange}
-                position="bottomCenter"
-              />
-            </div>
+          <div className="flex mx-auto gap-2">
+            <MonthPicker
+              placeholder="Select Month"
+              value={month}
+              onChange={handleMonthChange}
+              position="bottomCenter"
+            />
             <Button
               name="Add New"
               size="sm"

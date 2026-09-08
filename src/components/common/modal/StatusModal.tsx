@@ -25,6 +25,11 @@ interface FormDataPayload {
   remarks: string;
 }
 
+interface FormErrors {
+  status?: string;
+  remarks?: string;
+}
+
 const initialFormData: FormDataPayload = {
   status: statusEnum.ACTIVE,
   remarks: "",
@@ -39,27 +44,61 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
   status,
   loading,
   options = statusOptions,
-  deleteWarning = "Deleting this item will remove it permanently from the system. Please proceed with caution."
+  deleteWarning = "Deleting this item will remove it permanently from the system. Please proceed with caution.",
 }) => {
-  const [formData, setFormData] = useState<FormDataPayload>({...initialFormData, status});
+  const [formData, setFormData] = useState<FormDataPayload>({
+    ...initialFormData,
+    status,
+  });
+
+  const [errors, setErrors] = useState<FormErrors>({});
+
   useEffect(() => {
     if (status) {
-      setFormData({        
-        status: status,
+      setFormData({
+        status,
         remarks: "",
       });
-    }
-  }, [status,isOpen]);
 
-  const handleChange = (field: keyof FormDataPayload, value: string) => {
+      setErrors({});
+    }
+  }, [status, isOpen]);
+
+  const handleChange = (
+    field: keyof FormDataPayload,
+    value: string
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+
+    // Clear field error when user starts correcting it
+    setErrors((prev) => ({
+      ...prev,
+      [field]: "",
+    }));
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    if (!formData.status) {
+      newErrors.status = "Status is required";
+    }
+
+    if (!formData.remarks.trim()) {
+      newErrors.remarks = "Remarks are required";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const resetForm = () => {
     setFormData(initialFormData);
+    setErrors({});
   };
 
   const handleClose = () => {
@@ -68,7 +107,15 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
   };
 
   const handleConfirm = async () => {
-    await handleSubmit(formData);
+    if (!validateForm()) {
+      return;
+    }
+
+    await handleSubmit({
+      status: formData.status,
+      remarks: formData.remarks.trim(),
+    });
+
     handleClose();
   };
 
@@ -96,6 +143,7 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
               : `Are you sure you want to update status for this ${title}?`}
           </h3>
         </div>
+
         <div className="grid grid-cols-1 gap-4">
           <RadioButton
             required
@@ -103,22 +151,29 @@ const StatusUpdateModal: React.FC<IStatusUpdateProps> = ({
             name="status"
             value={formData.status}
             options={options}
+            error={errors.status}
             onChange={(value) => handleChange("status", value)}
           />
+
           <TextAreaField
             label="Remarks"
             name="remarks"
+            required
             value={formData.remarks}
+            error={errors.remarks}
             placeholder="Enter remarks..."
-            onChange={(e) => handleChange("remarks", e.target.value)}
+            onChange={(e) =>
+              handleChange("remarks", e.target.value)
+            }
           />
         </div>
-        {formData.status === statusEnum.DELETED && <Note
-          variant="danger"
-          message={
-            deleteWarning
-          }
-        />}
+
+        {formData.status === statusEnum.DELETED && (
+          <Note
+            variant="danger"
+            message={deleteWarning}
+          />
+        )}
       </>
     </Modal>
   );
