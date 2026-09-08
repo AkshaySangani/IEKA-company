@@ -22,7 +22,7 @@ const StatusCards = ({ setActiveCard, activeCard, cards }: StatusCardsProps) => 
   };
 
   return (
-    <div className="grid grid-cols-2 sm:flex gap-3">
+    <div className="flex gap-3">
       {cards.map((card) => (
         <StatCard
           key={card.id}
@@ -33,6 +33,7 @@ const StatusCards = ({ setActiveCard, activeCard, cards }: StatusCardsProps) => 
           textColor={card.textColor}
           activeColor={card.activeColor}
           className="md:max-w-[140px]"
+          titleClassName="text-base"
           onClick={() => handleCardClick(card)}
         />
       ))}

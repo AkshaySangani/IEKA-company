@@ -39,7 +39,7 @@ const PayrollStatCard: React.FC<PayrollCardProps> = ({
       <div className="flex flex-col items-start justify-between min-h-[80px] sm:min-h-[100px]">
         <span
           className={`
-              text-sm
+              text-base
               sm:text-md
               ${active ? "text-white" : "text-[#444]"}
             `}
@@ -50,24 +50,23 @@ const PayrollStatCard: React.FC<PayrollCardProps> = ({
         <div
           className="
           flex
-          w-[100px]
+          w-[90%]
           items-center
           gap-3
           rounded-full
           bg-white
           px-1.5
-          py-0.5
+          py-2
           shadow-md
           sm:mt-3
           sm:py-1
-          md:w-[160px]
         "
         >
           <div
             className={`
             flex
-            h-5
-            w-5
+            h-6
+            w-6
             shrink-0
             items-center
             justify-center
@@ -81,7 +80,7 @@ const PayrollStatCard: React.FC<PayrollCardProps> = ({
             ₹
           </div>
 
-          <span className="truncate text-xs font-medium text-[#333] sm:text-sm md:text-md lg:text-lg">
+        <span className="truncate text-lg font-medium text-secondary lg:text-lg">
             {amount}
           </span>
         </div>

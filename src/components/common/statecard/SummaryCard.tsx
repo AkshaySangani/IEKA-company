@@ -76,7 +76,7 @@ export default function SummaryCard({
             className="
               min-w-0
               truncate
-              text-md
+              text-xl
               font-medium
               text-black
               sm:text-lg
@@ -91,7 +91,7 @@ export default function SummaryCard({
           className="
             mt-3
             truncate
-            text-xs
+            text-base
             font-medium
             uppercase
             tracking-wide

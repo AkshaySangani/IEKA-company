@@ -35,6 +35,7 @@ const StatusCards = ({ setActiveCard, activeCard, cards }: StatusCardsProps) => 
           textColor={card.textColor}
           activeColor={card.activeColor}
           className="md:max-w-[140px]"
+          titleClassName="text-base"
           onClick={() => handleCardClick(card)}
         />
       ))}

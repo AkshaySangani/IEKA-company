@@ -76,7 +76,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
         <div className="flex items-center gap-2">
           <span
             className={`
-              text-sm
+              text-base
               font-medium
               sm:text-[18px]
               ${active ? "text-white" : "text-[#222]"}
@@ -87,7 +87,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
 
           <span
             className={`
-              text-sm
+              text-base
               sm:text-[18px]
               ${active ? "text-white" : "text-[#444]"}
             `}
@@ -107,7 +107,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
           rounded-full
           bg-white
           px-1.5
-          py-0.5
+          py-1
           shadow-md
           sm:mt-3
           sm:py-1
@@ -118,8 +118,8 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
         <div
           className={`
             flex
-            h-5
-            w-5
+            h-6
+            w-6
             shrink-0
             items-center
             justify-center
@@ -133,7 +133,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
           ₹
         </div>
 
-        <span className="truncate text-xs font-medium text-[#333] sm:text-sm md:text-md lg:text-lg">
+        <span className="truncate text-base font-medium text-secondary md:text-md lg:text-lg">
           {amount}
         </span>
       </div>
