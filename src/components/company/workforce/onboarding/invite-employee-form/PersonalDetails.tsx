@@ -8,7 +8,13 @@ import {
   maritalStatusOptions,
   yesNoOption,
 } from "../../../../../constants/constants";
-import { getDobDisabledDate } from "../../../../../utils/date-format";
+import DatePickerField from "../../../../common/date-picker/DatePicker";
+const today = new Date();
+const maxDobDate = new Date(
+  today.getFullYear() - 18,
+  today.getMonth(),
+  today.getDate(),
+);
 
 interface PersonalDetailsProps {
   formData: any;
@@ -17,6 +23,7 @@ interface PersonalDetailsProps {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
   handleFileChange: (file: File | null, name: string) => void;
+  handleDateChange: (name: "dob", value: string) => void;
 }
 
 const PersonalDetails = ({
@@ -24,6 +31,7 @@ const PersonalDetails = ({
   errors,
   handleChange,
   handleFileChange,
+  handleDateChange,
 }: PersonalDetailsProps) => {
   return (
     <div className="bg-transparent p-4">
@@ -68,14 +76,13 @@ const PersonalDetails = ({
         />
 
         {/* DOB */}
-        <TextField
+        <DatePickerField
           label="Date of Birth"
           name="dob"
-          type="date"
           value={formData.dob}
-          onChange={handleChange}
           error={errors.dob}
-          max={getDobDisabledDate()}
+          onChange={(date: string): void => handleDateChange("dob", date)}
+          maxDate={maxDobDate}
           required
         />
 

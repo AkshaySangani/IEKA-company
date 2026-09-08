@@ -9,6 +9,7 @@ import TextAreaField from "../../../common/text-area/TextAreaField";
 import { IOnboarding } from ".";
 import { getDateDifferenceInDays } from "../../../../utils/date-format";
 import YearPicker from "../../../common/date-picker/YearPicker";
+import DatePickerField from "../../../common/date-picker/DatePicker";
 
 interface IInviteEmployeeFormProps {
   isOpen: boolean;
@@ -66,7 +67,7 @@ const InviteEmployeeForm: React.FC<IInviteEmployeeFormProps> = ({
     field: keyof OnboardingFormData,
     value: string | number,
   ) => {
-    validate()
+    validate();
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -212,38 +213,32 @@ const InviteEmployeeForm: React.FC<IInviteEmployeeFormProps> = ({
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <TextField
-            type="date"
+          <DatePickerField
             label="Start Date"
             required
             value={formData.startDate}
             error={errors.startDate}
-            onChange={(e) => handleChange("startDate", e.target.value)}
-            min={new Date().toISOString().split("T")[0]}
-            max={
+            onChange={(date: string): void => handleChange("startDate", date)}
+            maxDate={
               formData.effectiveYear
-                ? `${formData.effectiveYear}-12-31`
+                ? new Date(`${formData.effectiveYear}-12-31`)
                 : undefined
             }
+            minDate={new Date()}
           />
 
-          <TextField
-            type="date"
+          <DatePickerField
             label="End Date"
             required
             value={formData.endDate}
             error={errors.endDate}
-            onChange={(e) => handleChange("endDate", e.target.value)}
-            min={
-              formData.startDate
-                ? formData.startDate
-                : new Date().toISOString().split("T")[0]
-            }
-            max={
+            onChange={(date: string): void => handleChange("endDate", date)}
+            maxDate={
               formData.effectiveYear
-                ? `${formData.effectiveYear}-12-31`
+                ? new Date(`${formData.effectiveYear}-12-31`)
                 : undefined
             }
+            minDate={formData.startDate ? new Date(formData.startDate) : new Date()}
           />
         </div>
 

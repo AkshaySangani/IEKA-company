@@ -1,13 +1,23 @@
 import React from "react";
 import TextField from "../../../../common/text-field/TextField";
+import DatePickerField from "../../../../common/date-picker/DatePicker";
 
 interface BankDetailsProps {
   formData: any;
   errors: any;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDateChange: (
+    name: "pfJoiningDate" | "esicJoiningDate",
+    value: string,
+  ) => void;
 }
 
-const BankDetails = ({ formData, errors, handleChange }: BankDetailsProps) => {
+const BankDetails = ({
+  formData,
+  errors,
+  handleChange,
+  handleDateChange,
+}: BankDetailsProps) => {
   return (
     <div className="bg-transparent p-4">
       <h2 className="text-xl text-white font-medium mb-6 border-b pb-3">
@@ -95,24 +105,26 @@ const BankDetails = ({ formData, errors, handleChange }: BankDetailsProps) => {
           placeholder="Enter ESIC No."
         />
 
-        <TextField
-          type="date"
+        <DatePickerField
           label="PF Joining Date"
           name="pfJoiningDate"
           value={formData.pfJoiningDate}
-          onChange={handleChange}
           error={errors.pfJoiningDate}
-          max={new Date().toISOString().split("T")[0]}
+          onChange={(date: string): void =>
+            handleDateChange("pfJoiningDate", date)
+          }
+          maxDate={new Date()}
         />
 
-        <TextField
-          type="date"
+        <DatePickerField
           label="ESIC Joining Date"
           name="esicJoiningDate"
           value={formData.esicJoiningDate}
-          onChange={handleChange}
           error={errors.esicJoiningDate}
-          max={new Date().toISOString().split("T")[0]}
+          onChange={(date: string): void =>
+            handleDateChange("esicJoiningDate", date)
+          }
+          maxDate={new Date()}
         />
       </div>
     </div>

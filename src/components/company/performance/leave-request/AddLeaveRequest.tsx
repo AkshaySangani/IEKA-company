@@ -34,7 +34,7 @@ import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { IUser } from "../../../../types/user.types";
 
 import { useAuthStore } from "../../../../store/auth-store";
-import TextField from "../../../common/text-field/TextField";
+import DatePickerField from "../../../common/date-picker/DatePicker";
 
 /* -------------------------------------------------------------------------- */
 /*                             INITIAL FORM DATA                              */
@@ -784,14 +784,13 @@ const AddLeaveRequest: React.FC = () => {
 
   const handleSelfToggle = () => {
     setSelf((prev) => {
-      if(prev){
+      if (prev) {
         getLeaveBucketByUserId(user._id);
       } else {
         formData.userId && getLeaveBucketByUserId(formData.userId);
       }
-      return !prev
+      return !prev;
     });
-    
   };
 
   /* ------------------------------------------------------------------------ */
@@ -902,24 +901,24 @@ const AddLeaveRequest: React.FC = () => {
             {/* ---------------------------------------------------------- */}
             {/*                             DATE                           */}
             {/* ---------------------------------------------------------- */}
-            <TextField
-              label={"Start Date"}
+            <DatePickerField
+              label="Start Date"
+              name="startDate"
               required
-              type="date"
               value={formData.startDate}
               error={errors.startDate}
-              onChange={(e) => handleChange("startDate", e.target.value)}
-              min={formatDate(new Date(), DateFormat.ISO_DATE)}
+              onChange={(date: string): void => handleChange("startDate", date)}
+              minDate={new Date()}
             />
-            <TextField
-              label={"End Date"}
+
+            <DatePickerField
+              label="End Date"
+              name="endDate"
               required
-              type="date"
               value={formData.endDate}
               error={errors.endDate}
-              onChange={(e) => handleChange("endDate", e.target.value)}
-              disabled={!formData.startDate}
-              min={formatDate(formData.startDate, DateFormat.ISO_DATE)}
+              onChange={(date: string): void => handleChange("endDate", date)}
+              minDate={new Date(formData.startDate)}
             />
 
             {/* ============================================================ */}

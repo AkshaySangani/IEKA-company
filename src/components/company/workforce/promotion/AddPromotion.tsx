@@ -11,6 +11,7 @@ import {
 import SelectField from "../../../common/select/SelectField";
 import { IOption } from "../../../../types/common-types";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import DatePickerField from "../../../common/date-picker/DatePicker";
 
 interface IAddPromotionProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ const AddPromotion: React.FC<IAddPromotionProps> = ({
   fetchPromotions,
   promotion,
   employees,
-  designations
+  designations,
 }) => {
   const [loading, setLoading] = useState(false);
   const initialFormData: PromotionFormData = {
@@ -39,8 +40,7 @@ const AddPromotion: React.FC<IAddPromotionProps> = ({
 
   const [oldDesignation, setOldDesignation] = useState("");
 
-  const [formData, setFormData] =
-    useState<PromotionFormData>(initialFormData);
+  const [formData, setFormData] = useState<PromotionFormData>(initialFormData);
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof PromotionFormData, string>>
@@ -51,13 +51,19 @@ const AddPromotion: React.FC<IAddPromotionProps> = ({
       setFormData({
         userId: promotion?.userId._id,
         designationId: promotion?.designationId._id,
-        effectiveDate: formatDate(promotion?.effectiveDate,DateFormat.ISO_DATE),
+        effectiveDate: formatDate(
+          promotion?.effectiveDate,
+          DateFormat.ISO_DATE,
+        ),
         reason: promotion?.reason,
       });
-      if(promotion?.userId._id){
-      const oldDesignation = promotion?.userId._id ? employees.find(ele => ele?.value === promotion?.userId._id)?.designation??"": "";
-      setOldDesignation(oldDesignation)
-    }
+      if (promotion?.userId._id) {
+        const oldDesignation = promotion?.userId._id
+          ? (employees.find((ele) => ele?.value === promotion?.userId._id)
+              ?.designation ?? "")
+          : "";
+        setOldDesignation(oldDesignation);
+      }
     } else {
       setFormData(initialFormData);
       setOldDesignation("");
@@ -66,9 +72,11 @@ const AddPromotion: React.FC<IAddPromotionProps> = ({
   }, [promotion]);
 
   const handleChange = (field: keyof PromotionFormData, value: string) => {
-    if(field === "userId"){
-      const oldDesignation = value ? employees.find(ele => ele?.value === value)?.designation??"": "";
-      setOldDesignation(oldDesignation)
+    if (field === "userId") {
+      const oldDesignation = value
+        ? (employees.find((ele) => ele?.value === value)?.designation ?? "")
+        : "";
+      setOldDesignation(oldDesignation);
     }
     setFormData((prev) => ({
       ...prev,
@@ -173,26 +181,29 @@ const AddPromotion: React.FC<IAddPromotionProps> = ({
           required
           value={
             formData.designationId
-              ? (designations?.find((ele) => ele.value === formData.designationId) ?? "")
+              ? (designations?.find(
+                  (ele) => ele.value === formData.designationId,
+                ) ?? "")
               : ""
           }
           error={errors.designationId}
           placeholder="Select employee"
           isMenuPortalTarget={false}
           options={designations}
-          onChange={(option) => handleChange("designationId", option?.value || "")}
+          onChange={(option) =>
+            handleChange("designationId", option?.value || "")
+          }
           name={"designationId"}
         />
 
-        <TextField
-          type="date"
+        <DatePickerField
           label="Effective Date"
           name="effectiveDate"
           required
           value={formData.effectiveDate}
           error={errors.effectiveDate}
-          min={new Date().toISOString().split("T")[0]}
-          onChange={(e) => handleChange("effectiveDate", e.target.value)}
+          onChange={(date: string): void => handleChange("effectiveDate", date)}
+          minDate={new Date()}
         />
 
         <TextAreaField

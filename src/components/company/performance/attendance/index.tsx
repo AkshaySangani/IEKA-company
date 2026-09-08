@@ -17,9 +17,9 @@ import {
   getAttendanceList,
 } from "../../../../apis/performance/attendance.api";
 import StatusCards, { AttendanceStats } from "./StatusCards";
-import TextField from "../../../common/text-field/TextField";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { IUser } from "../../../../types/user.types";
+import DatePickerField from "../../../common/date-picker/DatePicker";
 
 export interface ILeaveRequest {
   _id: string;
@@ -210,11 +210,10 @@ const Attendance: React.FC = () => {
         title="All Attendances"
         actionButtons={
           <div className="flex gap-2">
-            <TextField
-              type="date"
+            <DatePickerField
               value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
+              onChange={(date: string): void => {
+                setDate(date);
                 setPage(1);
               }}
             />

@@ -85,3 +85,15 @@ button {
 .menu-scroll-container::-webkit-scrollbar-track {
   background: #2a3444;
 }
+
+.time-picker-popper {
+  z-index: 100000 !important;
+}
+
+.react-datepicker-popper {
+  z-index: 100000 !important;
+}
+
+.react-datepicker {
+  z-index: 100000 !important;
+}

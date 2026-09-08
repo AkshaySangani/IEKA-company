@@ -51,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
   }[variant];
 
   const sizeClasses = {
-    sm: "py-[5px] sm:py-[5px] px-[12px] sm:px-[15px] text-xs sm:text-sm min-h-[32px] sm:min-h-[34px]",
+    sm: "py-[5px] px-[20px] sm:px-[15px] text-md sm:text-sm min-h-[42px] sm:min-h-[34px]",
     md: "h-[55px] sm:h-[44px] px-5 text-lg sm:text-sm",
     lg: "h-[50px] px-6 text-md",
   }[size];

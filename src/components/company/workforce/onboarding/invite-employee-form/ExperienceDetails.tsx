@@ -2,6 +2,7 @@ import Button from "../../../../common/button/Button";
 import TextField from "../../../../common/text-field/TextField";
 import DocumentUpload from "../../../../common/document";
 import { ColumnDef, CustomTable } from "../../../../common/table";
+import DatePickerField from "../../../../common/date-picker/DatePicker";
 
 export interface Experience {
   organization: string;
@@ -19,7 +20,9 @@ interface Props {
     field: keyof Experience,
     value: string | File | null,
   ) => void;
-  addExperience: (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => void;
+  addExperience: (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+  ) => void;
   removeExperience: (index: number) => void;
 }
 
@@ -63,15 +66,14 @@ const ExperienceDetails = ({
       header: "Start Date",
       className: "pr-2 pl-2",
       render: (experience, index) => (
-        <TextField
-          type="date"
+        <DatePickerField
+          label="PF Joining Date"
           name="startDate"
           value={experience.startDate}
-          onChange={(e) =>
-            handleExperienceChange(index, "startDate", e.target.value)
+          onChange={(date: string): void =>
+            handleExperienceChange(index, "startDate", date)
           }
-          placeholder="Start Date"
-          max={new Date().toISOString().split("T")[0]}
+          maxDate={new Date()}
         />
       ),
     },
@@ -79,16 +81,14 @@ const ExperienceDetails = ({
       header: "End Date",
       className: "pr-2 pl-2",
       render: (experience, index) => (
-        <TextField
-          type="date"
+        <DatePickerField
+          label="PF Joining Date"
           name="endDate"
           value={experience.endDate}
-          onChange={(e) =>
-            handleExperienceChange(index, "endDate", e.target.value)
+          onChange={(date: string): void =>
+            handleExperienceChange(index, "endDate", date)
           }
-          min={experience.startDate}
-          placeholder="End Date"
-          max={new Date().toISOString().split("T")[0]}
+          maxDate={new Date()}
         />
       ),
     },
@@ -111,12 +111,14 @@ const ExperienceDetails = ({
       render: (_, index) => {
         return (
           <>
-          {index > 0 && <Button
-            onClick={() => removeExperience(index)}
-            variant="danger"
-            size="sm"
-            leftIcon={<i className="fa-solid text-secondary fa-xmark"></i>}
-          />}
+            {index > 0 && (
+              <Button
+                onClick={() => removeExperience(index)}
+                variant="danger"
+                size="sm"
+                leftIcon={<i className="fa-solid text-secondary fa-xmark"></i>}
+              />
+            )}
           </>
         );
       },

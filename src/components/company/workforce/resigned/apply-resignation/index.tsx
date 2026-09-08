@@ -12,16 +12,16 @@ import {
 import { DateFormat, formatDate } from "../../../../../utils/date-format";
 import Modal from "../../../../common/modal/Modal";
 import Image from "../../../../common/image";
-import TextField from "../../../../common/text-field/TextField";
 import TextAreaField from "../../../../common/text-area/TextAreaField";
 import Button from "../../../../common/button/Button";
 import UserImage from "../../../../../assets/images/User-Image.png";
 import PageLoader from "../../../../common/loader/PageLoader";
+import DatePickerField from "../../../../common/date-picker/DatePicker";
 
 export default function ApplyResignation({
   show,
   handleOpenClose,
-  resignationId
+  resignationId,
 }: ApplyResignationProps) {
   const { user } = useAuthStore();
 
@@ -47,12 +47,15 @@ export default function ApplyResignation({
   const fetchEmployeeResignation = async (id: string) => {
     setLoading(true);
     const response = await getResignedEmployeeById(id);
-    if(response.success){
-      setFormData(prev => ({
+    if (response.success) {
+      setFormData((prev) => ({
         ...prev,
         reason: response?.data?.reason,
-        lastWorkingDate: formatDate(response?.data?.lastWorkingDate, DateFormat.ISO_DATE)
-      }))
+        lastWorkingDate: formatDate(
+          response?.data?.lastWorkingDate,
+          DateFormat.ISO_DATE,
+        ),
+      }));
     }
     setLoading(false);
   };
@@ -184,7 +187,7 @@ export default function ApplyResignation({
       <form onSubmit={handleSubmit}>
         {/* Employee */}
         <div className="mb-6 flex flex-col items-center gap-2 text-center relative">
-          <PageLoader loading={loading}/>
+          <PageLoader loading={loading} />
           <Image
             src={user.profileImage}
             fallbackSrc={UserImage}
@@ -210,17 +213,16 @@ export default function ApplyResignation({
           />
 
           {/* Last Working Date */}
-          <TextField
-            type="date"
+          <DatePickerField
             label="Last Working Date"
             required
             name="lastWorkingDate"
             value={formData.lastWorkingDate}
-            min={new Date().toISOString().split("T")[0]}
-            onChange={(event) =>
-              handleChange("lastWorkingDate", event.target.value)
-            }
             error={errors.lastWorkingDate}
+            onChange={(date: string): void =>
+              handleChange("lastWorkingDate", date)
+            }
+            minDate={new Date()}
           />
         </div>
 

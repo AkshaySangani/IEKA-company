@@ -146,7 +146,7 @@ const Header = ({ setIsOpen, isOpen }: HeaderProps) => {
         <div
           id="sidebarToggle"
           onClick={() => setIsOpen?.(!isOpen)}
-          className="cursor-pointer p-[5px] text-[1.2rem] text-[#333]"
+          className="cursor-pointer p-[5px] text-[1.8rem] sm:text-[1.2rem] text-secondary/80"
         >
           <i className="fas fa-bars" />
         </div>

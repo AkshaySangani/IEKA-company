@@ -2,10 +2,10 @@ import { useNavigate } from "react-router-dom";
 import RightArrow from "../../common/right-arrow";
 import EmployeeActivityCard from "../../common/statecard/EmployeeActivityCard";
 import { pathNames } from "../../../constants/constants";
-import TextField from "../../common/text-field/TextField";
 import { IAttendanceSummary } from ".";
 import { ReactNode } from "react";
 import PageLoader from "../../common/loader/PageLoader";
+import DatePickerField from "../../common/date-picker/DatePicker";
 
 interface AttendanceSummaryCardProps {
   attendanceSummary: IAttendanceSummary;
@@ -75,11 +75,12 @@ export default function AttendanceSummaryCard({
         </div>
 
         {/* Date */}
-        <div className="w-full sm:w-[150px]">
-          <TextField
-            type="date"
+        <div className="">
+          <DatePickerField
             value={date}
-            onChange={(e) => handleDateChange(e.target.value)}
+            onChange={(date: string): void => {
+              handleDateChange(date);
+            }}
           />
         </div>
       </div>

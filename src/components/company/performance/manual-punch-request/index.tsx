@@ -67,6 +67,17 @@ const ManualPunchRequest: React.FC = () => {
     setMonth(value);
   };
 
+  // handle Download Excel
+    const handleDownloadExcel = async (password: string) => {
+      await getManualPunchRequestList({
+        page,
+        limit,
+        ...month,
+        isDownload: true,
+        password
+      })
+    };
+
   return (
     <>
       <TopBar
@@ -74,12 +85,11 @@ const ManualPunchRequest: React.FC = () => {
         actionButtons={
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2 w-[150px]">
-            <label className="font-medium">Month</label>
+            {/* <label className="font-medium">Month</label> */}
             <MonthPicker
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
-              position="left"
             />
           </div>
           <Button
@@ -90,6 +100,8 @@ const ManualPunchRequest: React.FC = () => {
           />
           </div>
         }
+        isExcel
+        handleDownloadExcel={handleDownloadExcel}
       />
       <div className="content-area flex flex-col gap-3">
         <PageLoader loading={loading} />

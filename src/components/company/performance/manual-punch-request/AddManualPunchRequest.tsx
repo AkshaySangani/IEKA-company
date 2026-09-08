@@ -7,7 +7,6 @@ import { IBranch } from "../../workforce/onboarding/assign-roles-responsibility"
 import { getManagedEmployee } from "../../../../apis/workforce/all-employee.api";
 import { IUser } from "../../../../types/user.types";
 import Modal from "../../../common/modal/Modal";
-import TextField from "../../../common/text-field/TextField";
 import RadioButton from "../../../common/radio-button";
 import {
   IManualPunch,
@@ -18,6 +17,8 @@ import {
 import { useAuthStore } from "../../../../store/auth-store";
 import Toggle from "../../../common/toggle";
 import { addManualPunchRequest } from "../../../../apis/performance/manual-punch-request.api";
+import DatePickerField from "../../../common/date-picker/DatePicker";
+import TimePickerField from "../../../common/date-picker/TimePickerField";
 
 interface AddManualPunchRequestProps {
   isOpen: boolean;
@@ -179,12 +180,15 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
     }));
   };
 
-  const handleManualChange = (field: keyof IManualPunch, value: string) => {
+  const handleManualChange = (
+    field: keyof IManualPunch,
+    value: string | Date | null,
+  ) => {
     setFormData((prev) => ({
       ...prev,
       manual: {
         ...prev.manual,
-        [field]: value,
+        [field]: field === "date" ? value : value,
       },
     }));
 
@@ -419,16 +423,17 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
             {/* ---------------------------------------------------------------- */}
             {/*                              DATE                                */}
             {/* ---------------------------------------------------------------- */}
-
-            <TextField
-              type="date"
+            <DatePickerField
               label="Date"
               required
-              name="date"
-              value={formData.manual.date}
-              max={new Date().toISOString().split("T")[0]}
+              value={
+                formData.manual.date
+              }
+              maxDate={new Date()}
+              onChange={(date: string): void => {
+                handleManualChange("date", date);
+              }}
               error={errors.manual?.date}
-              onChange={(e) => handleManualChange("date", e.target.value)}
             />
 
             {/* ---------------------------------------------------------------- */}
@@ -449,16 +454,16 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
               {/* ---------------------------------------------------------------- */}
               {/*                           PUNCH IN TIME                          */}
               {/* ---------------------------------------------------------------- */}
+              
               {(formData.punchType === "in" ||
                 formData.punchType === "both") && (
-                <TextField
-                  type="time"
+                <TimePickerField
                   label="Punch In Time"
-                  required
-                  name="inTime"
-                  value={formData.manual.inTime}
                   error={errors.manual?.inTime}
-                  onChange={(e) => handleManualChange("inTime", e.target.value)}
+                  value={formData.manual.inTime ? formData.manual.inTime : null}
+                  onChange={(time: string | null): void => {
+                    handleManualChange("inTime", time);
+                  }}
                 />
               )}
 
@@ -467,16 +472,13 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
               {/* ---------------------------------------------------------------- */}
               {(formData.punchType === "out" ||
                 formData.punchType === "both") && (
-                <TextField
-                  type="time"
+                  <TimePickerField
                   label="Punch Out Time"
-                  required
-                  name="outTime"
                   value={formData.manual.outTime}
                   error={errors.manual?.outTime}
-                  onChange={(e) =>
-                    handleManualChange("outTime", e.target.value)
-                  }
+                  onChange={(time: string | null): void => {
+                    handleManualChange("outTime", time);
+                  }}
                 />
               )}
             </div>

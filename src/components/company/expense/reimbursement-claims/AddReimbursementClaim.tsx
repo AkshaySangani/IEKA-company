@@ -22,6 +22,7 @@ import { useAuthStore } from "../../../../store/auth-store";
 import ActionModal from "../../../common/modal/ActionModal";
 import Toggle from "../../../common/toggle";
 import { IUser } from "../../../../types/user.types";
+import DatePickerField from "../../../common/date-picker/DatePicker";
 
 const AddReimbursement: React.FC = () => {
   const navigate = useNavigate();
@@ -330,15 +331,16 @@ const AddReimbursement: React.FC = () => {
               required
               onChange={(e) => handleChange("name", e.target.value)}
             />
-            <TextField
+            <DatePickerField
+              required
               label="Expense Date"
-              name="date"
-              type="date"
               value={formData.date}
               error={errors.date}
-              placeholder="Enter date"
-              required
-              onChange={(e) => handleChange("date", e.target.value)}
+              name="date"
+              maxDate={new Date()}
+              onChange={(date: string): void => {
+                handleChange("date", date);
+              }}
             />
             <TextField
               label="Amount"

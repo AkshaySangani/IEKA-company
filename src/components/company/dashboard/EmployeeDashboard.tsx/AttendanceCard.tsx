@@ -62,7 +62,7 @@ export default function AttendanceCard({
           <i className="fa-solid fa-user-plus text-secondary" />
 
           <span className="mx-2 border-r border-borderPrimary pr-2 text-md font-medium text-secondary">
-            Total Expense
+            Attendance
           </span>
 
           <RightArrow
@@ -72,9 +72,7 @@ export default function AttendanceCard({
         </div>
 
         {/* Date Filter */}
-        {/* <div className="w-full sm:w-auto"> */}
         <MonthPicker value={month} onChange={handleSelectMonth} />
-        {/* </div> */}
       </div>
 
       {/* Attendance */}

@@ -11,6 +11,7 @@ import {
 import SelectField from "../../../common/select/SelectField";
 import { IOption } from "../../../../types/common-types";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
+import DatePickerField from "../../../common/date-picker/DatePicker";
 
 interface IAddTerminationProps {
   isOpen: boolean;
@@ -169,15 +170,14 @@ const AddTermination: React.FC<IAddTerminationProps> = ({
           onChange={(e) => handleChange("terminationType", e.target.value)}
         />
 
-        <TextField
-          type="date"
+        <DatePickerField
           label="Last Working Date"
           name="lastWorkingDate"
           required
           value={formData.lastWorkingDate}
           error={errors.lastWorkingDate}
-          min={new Date().toISOString().split("T")[0]}
-          onChange={(e) => handleChange("lastWorkingDate", e.target.value)}
+          onChange={(date: string): void => handleChange("lastWorkingDate", date)}
+          minDate={new Date()}
         />
 
         <TextAreaField

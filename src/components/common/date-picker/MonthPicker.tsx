@@ -49,7 +49,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
   error,
   value,
   placeholder = "Select Month",
-  position = "bottom",
+  position = "bottomCenter",
   disabled,
   minDate,
   onChange,

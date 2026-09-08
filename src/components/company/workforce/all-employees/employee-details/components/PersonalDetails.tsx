@@ -14,22 +14,32 @@ import { DateFormat, formatDate } from "../../../../../../utils/date-format";
 import { IEmployee } from "../../../onboarding/employee-details";
 import { regex } from "../../../../../../constants/validation-regex";
 import { GenderEnum } from "../../../../../../types/common-types";
+import DatePickerField from "../../../../../common/date-picker/DatePicker";
 
 interface IPersonalDetailsForm {
-    firstName: string;
-    lastName: string;
-    dob: string;
-    gender: GenderEnum;
-    email: string;
-    phone: string;
-    bloodGroup: string;
-    isMarried: string;
-  }
+  firstName: string;
+  lastName: string;
+  dob: string;
+  gender: GenderEnum;
+  email: string;
+  phone: string;
+  bloodGroup: string;
+  isMarried: string;
+}
 interface PersonalDetailsProps {
   employee: IEmployee;
   loading: boolean;
   handleSubmit: (formData: FormData) => void;
 }
+
+const today = new Date();
+
+const maxDobDate = new Date(
+  today.getFullYear() - 18,
+  today.getMonth(),
+  today.getDate(),
+);
+
 const PersonDetails = ({
   employee,
   loading,
@@ -48,7 +58,8 @@ const PersonDetails = ({
     bloodGroup: "",
     isMarried: "",
   };
-  const [formData, setFormData] = useState<IPersonalDetailsForm>(initialFormData);
+  const [formData, setFormData] =
+    useState<IPersonalDetailsForm>(initialFormData);
   const handleClickOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
@@ -82,6 +93,21 @@ const PersonDetails = ({
     const { name, value } = e.target;
 
     setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prev: any) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  const handleDateChange = (
+    name: keyof IPersonalDetailsForm,
+    value: string,
+  ) => {
+    setFormData((prev: typeof initialFormData) => ({
       ...prev,
       [name]: value,
     }));
@@ -221,14 +247,13 @@ const PersonDetails = ({
           />
 
           {/* DOB */}
-          <TextField
+          <DatePickerField
             label="Date of Birth"
             name="dob"
-            type="date"
             value={formData.dob}
-            onChange={handleChange}
-            error={errors.dob}
-            required
+            error={errors.pfJoiningDate}
+            onChange={(date: string): void => handleDateChange("dob", date)}
+            maxDate={maxDobDate}
           />
 
           {/* Email */}

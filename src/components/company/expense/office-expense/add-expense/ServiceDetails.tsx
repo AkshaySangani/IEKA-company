@@ -5,6 +5,7 @@ import TextAreaField from "../../../../common/text-area/TextAreaField";
 import TextField from "../../../../common/text-field/TextField";
 import { getMyBranchList } from "../../../../../apis/organization/branch.api";
 import { IOption } from "../../../../../types/common-types";
+import DatePickerField from "../../../../common/date-picker/DatePicker";
 
 interface IServiceDetailsProps {
   formData: OfficeExpenseFormData;
@@ -67,15 +68,16 @@ export default function ServiceDetails({
           error={errors.branchId}
           onChange={(option) => handleChange("branchId", option.value)}
         />
-        <TextField
+        <DatePickerField
+          required
           label="Date"
-          name="date"
-          type="date"
           value={formData.date}
           error={errors.date}
-          placeholder="Enter date"
-          required
-          onChange={(e) => handleChange("date", e.target.value)}
+          name="date"
+          maxDate={new Date()}
+          onChange={(date: string): void => {
+            handleChange("date", date);
+          }}
         />
         <TextAreaField
           label="Reason"

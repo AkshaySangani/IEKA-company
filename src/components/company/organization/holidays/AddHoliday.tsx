@@ -9,6 +9,7 @@ import {
 import { IHoliday } from ".";
 import { getDateDifferenceInDays } from "../../../../utils/date-format";
 import YearPicker from "../../../common/date-picker/YearPicker";
+import DatePickerField from "../../../common/date-picker/DatePicker";
 
 interface IAddHolidayProps {
   isOpen: boolean;
@@ -66,7 +67,7 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
     field: keyof HolidayFormData,
     value: string | number,
   ) => {
-    validate()
+    validate();
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -212,39 +213,39 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <TextField
-            type="date"
-            label="Start Date"
+          <DatePickerField
             required
+            label="Start Date"
             value={formData.startDate}
             error={errors.startDate}
-            onChange={(e) => handleChange("startDate", e.target.value)}
-            min={new Date().toISOString().split("T")[0]}
-            max={
+            name="startDate"
+            maxDate={
               formData.effectiveYear
-                ? `${formData.effectiveYear}-12-31`
+                ? new Date(`${formData.effectiveYear}-12-31`)
                 : undefined
             }
+            onChange={(date: string): void => {
+              handleChange("startDate", date);
+            }}
           />
 
-          <TextField
-            type="date"
-            label="End Date"
+          <DatePickerField
             required
+             label="End Date"
             value={formData.endDate}
             error={errors.endDate}
-            onChange={(e) => handleChange("endDate", e.target.value)}
-            min={
-              formData.startDate
-                ? formData.startDate
-                : new Date().toISOString().split("T")[0]
-            }
-            max={
+            name="endDate"
+            maxDate={
               formData.effectiveYear
-                ? `${formData.effectiveYear}-12-31`
+                ? new Date(`${formData.effectiveYear}-12-31`)
                 : undefined
             }
+            minDate={formData.startDate ? new Date(formData.startDate) : new Date()}
+            onChange={(date: string): void => {
+              handleChange("endDate", date);
+            }}
           />
+
         </div>
 
         <TextField

@@ -3,6 +3,7 @@ import Select, {
   SingleValue,
   StylesConfig,
 } from "react-select";
+import useDevice from "../../../hooks/useDevice";
 
 export interface SelectOption {
   label: string;
@@ -38,10 +39,11 @@ const SelectField = ({
   menuPortalTarget,
   onChange,
 }: SelectFieldProps) => {
+  const {isMobile } = useDevice();
   const customStyles: StylesConfig<SelectOption, boolean> = {
     control: (base, state) => ({
       ...base,
-      minHeight: "20px",
+      minHeight: isMobile ? "50px" : "30px",
       border: `1px solid ${state.isFocused ? "#5897fb" : "#aaa"}`,
       borderRadius: 0,
       boxShadow: "none",

@@ -180,6 +180,24 @@ const InviteEmployeeForm = () => {
     }));
   };
 
+  // handle change function
+  const handleDateChange = (
+    name: "pfJoiningDate" | "esicJoiningDate" | "dob",
+    value: string,
+  ) => {
+    let fieldValue: any = value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: fieldValue,
+    }));
+
+    setErrors((prev: any) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
   // handle file change function
   const handleFileChange = (file: File | null, name: string) => {
     if (!file) return;
@@ -196,7 +214,9 @@ const InviteEmployeeForm = () => {
   };
 
   // add education
-  const addEducation = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+  const addEducation = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+  ) => {
     e.stopPropagation();
     e.preventDefault();
     setEducations((prev) => [
@@ -229,7 +249,9 @@ const InviteEmployeeForm = () => {
   };
 
   // add experience
-  const addExperience = (e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+  const addExperience = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+  ) => {
     e.stopPropagation();
     e.preventDefault();
     setExperiences((prev) => [
@@ -489,7 +511,10 @@ const InviteEmployeeForm = () => {
     payload.append("email", formData.email);
     payload.append("phone", formData.phone);
     payload.append("alternatePhone", formData.alternatePhone);
-    payload.append("gender", formData.gender ? formData?.gender : GenderEnum.MALE);
+    payload.append(
+      "gender",
+      formData.gender ? formData?.gender : GenderEnum.MALE,
+    );
     payload.append("dob", formData.dob);
     payload.append("bloodGroup", formData.bloodGroup);
     payload.append("address", formData.address);
@@ -613,7 +638,7 @@ const InviteEmployeeForm = () => {
     // API
     // ===========================
 
-    const response = await inviteEmployee(payload,false);
+    const response = await inviteEmployee(payload, false);
 
     if (response?.success) {
       await toastMessage.success("Employee invited successfully");
@@ -658,6 +683,7 @@ const InviteEmployeeForm = () => {
             errors={errors}
             handleChange={handleChange}
             handleFileChange={handleFileChange}
+            handleDateChange={handleDateChange}
           />
           {/* Parent Details */}
           <ParentDetails
@@ -676,6 +702,7 @@ const InviteEmployeeForm = () => {
             formData={formData}
             errors={errors}
             handleChange={handleChange}
+            handleDateChange={handleDateChange}
           />
           {/* Education Details */}
           <EducationDetails
@@ -709,7 +736,11 @@ const InviteEmployeeForm = () => {
           </div>
         </form>
       </div>
-      <SuccessModal isOpen={successOpen} title={"Invite employee form submitted successfully."} handleOpenClose={handleResetForm} />
+      <SuccessModal
+        isOpen={successOpen}
+        title={"Invite employee form submitted successfully."}
+        handleOpenClose={handleResetForm}
+      />
     </div>
   );
 };

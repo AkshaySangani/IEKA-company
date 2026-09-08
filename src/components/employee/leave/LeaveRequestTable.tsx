@@ -36,7 +36,7 @@ export default function EmployeeLeaveRequestTable({
       className: "",
       render: (row) => <div className="flex items-center gap-2"><span className="text-primary font-medium border-r border-inputBorder pr-1">{formatDate(row.startDate)}</span>
       <span className="border-r text-xs border-inputBorder pr-1">{LeaveDurationNames[row.duration]}</span>
-      <span className="">{getFirstCharacter("")}</span>
+      <span className="text-xs">{getFirstCharacter(row.leaveId.name)}</span>
       </div>,
     },
     {

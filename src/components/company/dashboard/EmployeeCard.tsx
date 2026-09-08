@@ -22,6 +22,7 @@ import { getLocationPayload } from "../../../utils/location";
 import { DateFormat, formatDate } from "../../../utils/date-format";
 import PageLoader from "../../common/loader/PageLoader";
 import LocationPermissionModal from "../../common/modal/LocationPermissionModal";
+import { useAuthStore } from "../../../store/auth-store";
 
 interface IBranch {
   _id: string;
@@ -92,6 +93,7 @@ export interface IPunchInfo {
 }
 
 const EmployeeCard = () => {
+  const { user } = useAuthStore();
   const [loading, setLoading] = useState<boolean>(false);
   const [locationOpen, setLocationOpen] = useState<boolean>(false);
 
@@ -119,11 +121,13 @@ const EmployeeCard = () => {
    */
   const fetchDashboardData = async () => {
     try {
+      const punchInfo =
+        user?.role === RoleEnum.OWNER ? Promise.resolve(null) : getPunchInfo();
       setLoading(true);
 
       const [profileResponse, punchResponse] = await Promise.all([
         getDashboardProfile(),
-        getPunchInfo(),
+        punchInfo,
       ]);
 
       setEmployeeDetails(profileResponse?.data);
@@ -201,8 +205,8 @@ const EmployeeCard = () => {
   /**
    * User
    */
-  const user = employeeDetails?.user;
-  const isOwner = user ? user.role === RoleEnum.OWNER : false;
+  const userData = employeeDetails?.user;
+  const isOwner = userData ? userData.role === RoleEnum.OWNER : false;
 
   /**
    * Punch status
@@ -280,9 +284,13 @@ const EmployeeCard = () => {
           <div className="flex items-start gap-3 sm:gap-4">
             {/* Profile Image */}
             <Image
-              src={user?.profileImage ? user.profileImage : UserAvatar}
+              src={userData?.profileImage ? userData.profileImage : UserAvatar}
               fallbackSrc={UserAvatar}
-              alt={user ? `${user.firstName} ${user.lastName}` : "Employee"}
+              alt={
+                userData
+                  ? `${userData.firstName} ${userData.lastName}`
+                  : "Employee"
+              }
               className="h-14 w-14 shrink-0 rounded-full border border-borderPrimary object-cover sm:h-[68px] sm:w-[68px]"
             />
 
@@ -291,14 +299,16 @@ const EmployeeCard = () => {
               {/* Name + Designation */}
               <div className="flex flex-wrap items-baseline gap-x-2">
                 <h2 className="text-lg font-semibold text-secondary sm:text-xl">
-                  {user ? `${user.firstName} ${user.lastName}` : "--"}
+                  {userData
+                    ? `${userData.firstName} ${userData.lastName}`
+                    : "--"}
                 </h2>
 
                 <span className="text-sm text-grayText">
                   (
-                  {user?.designationId
-                    ? user?.designationId?.name
-                    : user?.role === RoleEnum.OWNER
+                  {userData?.designationId
+                    ? userData?.designationId?.name
+                    : userData?.role === RoleEnum.OWNER
                       ? "COO"
                       : "--"}
                   )
@@ -308,12 +318,12 @@ const EmployeeCard = () => {
               {/* Shift */}
               <div className="mt-1.5 text-sm text-grayText">
                 <span className="font-medium text-secondary">
-                  {user?.shiftId?.name || "--"}
+                  {userData?.shiftId?.name || "--"}
                 </span>
 
-                {user?.shiftId && (
+                {userData?.shiftId && (
                   <span className="ml-1 text-grayText">
-                    ({user.shiftId.startTime} to {user.shiftId.endTime})
+                    ({userData.shiftId.startTime} to {userData.shiftId.endTime})
                   </span>
                 )}
               </div>

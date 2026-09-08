@@ -5,6 +5,7 @@ import Modal from "../../../../../common/modal/Modal";
 import TextField from "../../../../../common/text-field/TextField";
 import { IBank } from "../../../onboarding/employee-details";
 import { formatDate } from "../../../../../../utils/date-format";
+import DatePickerField from "../../../../../common/date-picker/DatePicker";
 
 interface BankDetailsProps {
   bank: IBank;
@@ -59,6 +60,18 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
+    setFormData((prev: typeof initialFormData) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    setErrors((prev: any) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  const handleDateChange = (name: keyof IBank, value: string) => {
     setFormData((prev: typeof initialFormData) => ({
       ...prev,
       [name]: value,
@@ -219,42 +232,44 @@ const BankDetails = ({ bank, loading, handleSubmit }: BankDetailsProps) => {
           />
 
           <TextField
-          label="UAN No. (if Applicable)"
-          name="uanNo"
-          value={formData.uanNo}
-          onChange={handleChange}
-          error={errors.uanNo}
-          placeholder="Enter UAN No."
-        />
+            label="UAN No. (if Applicable)"
+            name="uanNo"
+            value={formData.uanNo}
+            onChange={handleChange}
+            error={errors.uanNo}
+            placeholder="Enter UAN No."
+          />
 
-        <TextField
-          label="ESIC No (if Applicable)"
-          name="esicNo"
-          value={formData.esicNo}
-          onChange={handleChange}
-          error={errors.esicNo}
-          placeholder="Enter ESIC No."
-        />
+          <TextField
+            label="ESIC No (if Applicable)"
+            name="esicNo"
+            value={formData.esicNo}
+            onChange={handleChange}
+            error={errors.esicNo}
+            placeholder="Enter ESIC No."
+          />
 
-        <TextField
-          type="date"
-          label="PF Joining Date"
-          name="pfJoiningDate"
-          value={formData.pfJoiningDate}
-          onChange={handleChange}
-          error={errors.pfJoiningDate}
-          max={new Date().toISOString().split("T")[0]}
-        />
+          <DatePickerField
+            label="PF Joining Date"
+            name="pfJoiningDate"
+            value={formData.pfJoiningDate}
+            error={errors.pfJoiningDate}
+            onChange={(date: string): void =>
+              handleDateChange("pfJoiningDate", date)
+            }
+            maxDate={new Date()}
+          />
 
-        <TextField
-          type="date"
-          label="ESIC Joining Date"
-          name="esicJoiningDate"
-          value={formData.esicJoiningDate}
-          onChange={handleChange}
-          error={errors.esicJoiningDate}
-          max={new Date().toISOString().split("T")[0]}
-        />
+          <DatePickerField
+            label="ESIC Joining Date"
+            name="esicJoiningDate"
+            value={formData.esicJoiningDate}
+            error={errors.esicJoiningDate}
+            onChange={(date: string): void =>
+              handleDateChange("esicJoiningDate", date)
+            }
+            maxDate={new Date()}
+          />
         </div>
       </Modal>
     </>

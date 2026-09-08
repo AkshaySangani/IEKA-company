@@ -49,7 +49,7 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
         {/* Employees */}
         {department?.employee?.length > 0 ? (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 gap-y-3 sm:gap-y-6 gap-x-2 py-3 sm:py-6">
-            {[...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,...department.employee,].map((employee) => (
+            {department.employee.map((employee) => (
               <PersonInfo
                 key={employee._id}
                 personInfo={{
