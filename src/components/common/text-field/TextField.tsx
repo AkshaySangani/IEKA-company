@@ -67,7 +67,8 @@ const TextField: React.FC<InputProps> = ({
             px-[15px]
             sm:py-[5px]
             py-[10px]
-            text-sm
+            text-base
+            sm:text-sm
             font-medium
             ${props.type === "date" ? "leading-[25px]" : "leading-[27px]"}
             text-inputValue
