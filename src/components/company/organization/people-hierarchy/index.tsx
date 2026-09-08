@@ -159,7 +159,7 @@ export default function PeopleHierarchy() {
           </div>
         }
       />
-      <div className="flex flex-col items-center gap-1 py-2 bg-white mb-2">
+      <div className="hidden sm:flex sm:flex-col items-center gap-1 py-2 bg-white mb-2">
         <PersonInfo
           personInfo={{
             profileImage: user?.profileImage ?? "",

@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
-import {
-  ExpenseCardItem
-} from "../../../../types/common-types";
+import { ExpenseCardItem } from "../../../../types/common-types";
 import { useNavigate } from "react-router-dom";
 import StatusCards, { OverallExpenseStats } from "./StatusCards";
 import { getOverAllExpenseCount } from "../../../../apis/expense/overall-expense.api";
@@ -104,18 +102,28 @@ const OverallExpense: React.FC = () => {
         switch (card.id) {
           case pathNames.OVERALL_EXPENSE:
             const total = getTrend(stats.total, stats.past.total);
-            return { ...card, amount: getFloatValue(stats.total),trendDetails: total };
+            return {
+              ...card,
+              amount: getFloatValue(stats.total),
+              trendDetails: total,
+            };
 
           case pathNames.REIMBURSEMENT:
-            const reimbursement = getTrend(stats.reimbursement, stats.past.reimbursement);
+            const reimbursement = getTrend(
+              stats.reimbursement,
+              stats.past.reimbursement,
+            );
             return {
               ...card,
               amount: getFloatValue(stats.reimbursement),
-              trendDetails: reimbursement
+              trendDetails: reimbursement,
             };
 
           case pathNames.OFFICE_EXPENSE:
-            const officeExpense = getTrend(stats.officeExpense, stats.past.officeExpense);
+            const officeExpense = getTrend(
+              stats.officeExpense,
+              stats.past.officeExpense,
+            );
             return {
               ...card,
               trendDetails: officeExpense,
@@ -147,15 +155,12 @@ const OverallExpense: React.FC = () => {
       <TopBar
         title="Office & Assets Expense"
         actionButtons={
-          <div className="flex items-center gap-2 w-[150px]">
-            <label className="font-medium">Month</label>
-            <MonthPicker
-              placeholder="Select Month"
-              value={month}
-              onChange={setMonth}
-              position="left"
-            />
-          </div>
+          <MonthPicker
+            placeholder="Select Month"
+            value={month}
+            onChange={setMonth}
+            position="left"
+          />
         }
       />
       <div className="content-area flex flex-col gap-3">

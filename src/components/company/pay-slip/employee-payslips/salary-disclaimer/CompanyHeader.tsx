@@ -9,7 +9,7 @@ interface CompanyHeaderProps {
 const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company }) => {
   return (
     <div className="border-b border-black pb-5 sm:pb-7">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+      <div className="flex gap-4 flex-row sm:items-center sm:gap-5">
         {/* Logo */}
         <div className="flex h-14 w-24 shrink-0 items-center sm:h-16 sm:w-28">
           <Image

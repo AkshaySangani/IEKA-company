@@ -8,7 +8,7 @@ interface SalarySummaryProps {
 
 const SalarySummary: React.FC<SalarySummaryProps> = ({ month, netPay }) => {
   return (
-    <div className="mt-5 flex flex-col gap-5 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mt-5 flex flex-row gap-5 sm:mt-6 sm:flex-row sm:items-center sm:justify-between">
       {/* Payslip Month */}
       <div className="min-w-0">
         <p className="text-base font-medium text-secondary sm:text-lg">
@@ -17,7 +17,7 @@ const SalarySummary: React.FC<SalarySummaryProps> = ({ month, netPay }) => {
       </div>
 
       {/* Net Pay */}
-      <div className="text-left sm:text-right">
+      <div className="text-right">
         <p className="text-xs font-medium text-secondary sm:text-sm">
           Total Net Pay
         </p>

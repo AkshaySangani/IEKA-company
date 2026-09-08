@@ -24,7 +24,9 @@ import {
 import StatusCards, { ReimbursementStats } from "./StatusCards";
 import { useAuthStore } from "../../../../store/auth-store";
 import { IUser } from "../../../../types/user.types";
-import MonthPicker, { MonthPickerValue } from "../../../common/date-picker/MonthPicker";
+import MonthPicker, {
+  MonthPickerValue,
+} from "../../../common/date-picker/MonthPicker";
 
 export interface IReimbursementClaim {
   _id: string;
@@ -69,8 +71,8 @@ export const initialReimbursement: IReimbursement = {
   createdAt: "",
   updatedAt: "",
 };
-const   Reimbursement: React.FC = () => {
-  const {user} = useAuthStore();
+const Reimbursement: React.FC = () => {
+  const { user } = useAuthStore();
   const isEmployee = user.role === RoleEnum.EMPLOYEE;
   const navigate = useNavigate();
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
@@ -88,11 +90,11 @@ const   Reimbursement: React.FC = () => {
   const [reimbursement, setReimbursement] =
     useState<IReimbursement>(initialReimbursement);
 
-    const initialMonth: MonthPickerValue = {
+  const initialMonth: MonthPickerValue = {
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
   };
-    const [month, setMonth] = useState<MonthPickerValue>(initialMonth);
+  const [month, setMonth] = useState<MonthPickerValue>(initialMonth);
 
   const [activeCard, setActiveCard] = useState<string>("");
   const [cards, setCards] = useState<FilterCardItem[]>([
@@ -112,7 +114,9 @@ const   Reimbursement: React.FC = () => {
       amount: 0,
       activeColor: "bg-pending",
       textColor: "text-pending",
-      icon: <i className="fa-solid fa-mug-hot text-xs sm:text-sm md:text-md"></i>,
+      icon: (
+        <i className="fa-solid fa-mug-hot text-xs sm:text-sm md:text-md"></i>
+      ),
     },
     {
       id: statusEnum.APPROVED,
@@ -121,7 +125,9 @@ const   Reimbursement: React.FC = () => {
       amount: 0,
       activeColor: "bg-success",
       textColor: "text-success",
-      icon: <i className="fa-solid fa-user-plus text-xs sm:text-sm md:text-md"></i>,
+      icon: (
+        <i className="fa-solid fa-user-plus text-xs sm:text-sm md:text-md"></i>
+      ),
     },
     {
       id: statusEnum.REJECTED,
@@ -130,13 +136,21 @@ const   Reimbursement: React.FC = () => {
       amount: 0,
       activeColor: "bg-danger",
       textColor: "text-danger",
-      icon: <i className="fa-solid fa-user-minus text-xs sm:text-sm md:text-md"></i>,
+      icon: (
+        <i className="fa-solid fa-user-minus text-xs sm:text-sm md:text-md"></i>
+      ),
     },
   ]);
 
   // useEffect for get branch
   useEffect(() => {
-    fetchReimbursementList({ page, limit, search, status: activeCard, ...month });
+    fetchReimbursementList({
+      page,
+      limit,
+      search,
+      status: activeCard,
+      ...month,
+    });
   }, [page, limit, search, activeCard, month]);
 
   useEffect(() => {
@@ -212,7 +226,11 @@ const   Reimbursement: React.FC = () => {
 
   // handle click add new
   const handleOnAdd = () => {
-    navigate(isEmployee ? employeePathNames.ADD_REIMBURSEMENT : pathNames.ADD_REIMBURSEMENT);
+    navigate(
+      isEmployee
+        ? employeePathNames.ADD_REIMBURSEMENT
+        : pathNames.ADD_REIMBURSEMENT,
+    );
   };
 
   // handle status open close
@@ -272,7 +290,7 @@ const   Reimbursement: React.FC = () => {
       search,
       status: "",
       isDownload: true,
-      password
+      password,
     });
   };
 
@@ -281,21 +299,19 @@ const   Reimbursement: React.FC = () => {
       <TopBar
         title="Reimbursement Claims"
         actionButtons={
-          <div className="flex gap-2">
-            <div className="flex items-center gap-2 w-[150px]">
-              <MonthPicker
-                placeholder="Select Month"
-                value={month}
-                onChange={handleMonthChange}
-                position="bottomCenter"
-              />
-            </div>
-          <Button
-            name="Add Expense"
-            size="sm"
-            onClick={handleOnAdd}
-            leftIcon={<i className="fa-solid fa-plus"></i>}
-          />
+          <div className="flex mx-auto gap-2">
+            <MonthPicker
+              placeholder="Select Month"
+              value={month}
+              onChange={handleMonthChange}
+              position="bottomCenter"
+            />
+            <Button
+              name="Add Expense"
+              size="sm"
+              onClick={handleOnAdd}
+              leftIcon={<i className="fa-solid fa-plus"></i>}
+            />
           </div>
         }
         isSearch

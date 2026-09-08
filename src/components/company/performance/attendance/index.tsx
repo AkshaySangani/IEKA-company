@@ -209,7 +209,7 @@ const Attendance: React.FC = () => {
       <TopBar
         title="All Attendances"
         actionButtons={
-          <div className="flex gap-2">
+          <div className="flex mx-auto gap-2">
             <DatePickerField
               value={date}
               onChange={(date: string): void => {

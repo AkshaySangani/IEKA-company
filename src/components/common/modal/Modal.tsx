@@ -28,7 +28,7 @@ const Modal = ({
   showFooter = true,
   isDownload = false,
   onDownload = () => {},
-  ref = null
+  ref = null,
 }: ModalProps) => {
   return (
     <div
@@ -61,30 +61,32 @@ const Modal = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="shrink-0 bg-[#212837] px-4 py-3 flex items-center justify-between">
-          <h5 className="text-white text-base font-medium">{title}</h5>
+        <div className="shrink-0 bg-[#212837] px-4 py-2.5 flex items-center justify-between">
+          <h5 className="text-white text-lg sm:text-base font-medium">{title}</h5>
 
           <div className="flex items-center gap-2">
-            {isDownload && <Button
-              type="button"
-              size="sm"
-              onClick={(e) => {
-                e.preventDefault();
-                onDownload();
-              }}
-              variant="secondary"
-              leftIcon={<i className="fa-solid fa-download text-white"></i>}
-            />}
-            <Button
-              type="button"
-              size="sm"
+            {isDownload && (
+              <Button
+                type="button"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onDownload();
+                }}
+                variant="secondary"
+                leftIcon={<i className="fa-solid fa-download text-white"></i>}
+              />
+            )}
+
+            <div
               onClick={(e) => {
                 e.preventDefault();
                 onClose();
               }}
-              variant="secondary"
-              leftIcon={<i className="fa-solid fa-xmark text-white" />}
-            />
+              className="flex justify-center cursor-pointer items-center min-h-[40px] sm:min-h-[35px] min-w-[40px] sm:min-w-[35px] bg-btn-secondary hover:bg-btn-secondary-hover text-white"
+            >
+              <i className="fa-solid fa-xmark text-white text-[32px] sm:text-[24px]" />
+            </div>
           </div>
         </div>
 
