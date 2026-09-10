@@ -102,91 +102,85 @@ export default function DateRangePicker({
 
   return (
     <div className="relative">
-      <TextField
-        label={label}
-        required={required}
-        error={error}
-        value={value}
-        placeholder="DD-MM-YYYY - DD-MM-YYYY"
-        onChange={handleInputChange}
-        onClick={() => pickerRef.current?.setOpen(true)}
-        icon={
-          <i
-            className="fa-regular fa-calendar"
-            onClick={() => pickerRef.current?.setOpen(true)}
-          ></i>
+      {label && (
+        <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
+          {label} {required && <span className="text-error">*</span>}
+        </label>
+      )}
+      <DatePicker
+        ref={pickerRef}
+        selected={tempStartDate}
+        startDate={tempStartDate}
+        endDate={tempEndDate}
+        selectsRange
+        shouldCloseOnSelect={false}
+        dateFormat={DATE_FORMAT}
+        customInput={
+          <TextField
+            className="w-full"
+            placeholder={DATE_FORMAT}
+            error={error}
+            icon={<i className="fa-regular fa-calendar text-secondary/60"></i>}
+          />
         }
-      />
+        minDate={minDate}
+        maxDate={maxDate}
+        onChange={(dates) => {
+          const [start, end] = dates;
 
-      <div className="absolute left-[50%] top-6 translate-x-[-50%] z-[999999]">
-        <DatePicker
-          ref={pickerRef}
-          selected={tempStartDate}
-          startDate={tempStartDate}
-          endDate={tempEndDate}
-          selectsRange
-          shouldCloseOnSelect={false}
-          dateFormat={DATE_FORMAT}
-          customInput={<div />}
-          minDate={minDate}
-          maxDate={maxDate}
-          onChange={(dates) => {
-            const [start, end] = dates;
+          setTempStartDate(start);
+          setTempEndDate(end);
 
-            setTempStartDate(start);
-            setTempEndDate(end);
+          if (start && end) {
+            setValue(
+              `${format(start, DATE_FORMAT)} - ${format(end, DATE_FORMAT)}`,
+            );
+          } else if (start) {
+            setValue(format(start, DATE_FORMAT));
+          } else {
+            setValue("");
+          }
+        }}
+      >
+        <div className="flex items-center justify-end gap-2 border-t pt-2 px-0.5">
+          <button
+            type="button"
+            className="rounded border px-3 py-1.5 text-sm"
+            onClick={() => {
+              setTempStartDate(null);
+              setTempEndDate(null);
 
-            if (start && end) {
-              setValue(
-                `${format(start, DATE_FORMAT)} - ${format(end, DATE_FORMAT)}`,
-              );
-            } else if (start) {
-              setValue(format(start, DATE_FORMAT));
-            } else {
+              // if (startDate && endDate) {
+              //   setValue(
+              //     `${format(startDate, DATE_FORMAT)} - ${format(
+              //       endDate,
+              //       DATE_FORMAT,
+              //     )}`,
+              //   );
+              // } else if (startDate) {
+              //   setValue(format(startDate, DATE_FORMAT));
+              // } else {
               setValue("");
-            }
-          }}
-        >
-          <div className="flex items-center justify-end gap-2 border-t pt-2 px-0.5">
-            <button
-              type="button"
-              className="rounded border px-3 py-1.5 text-sm"
-              onClick={() => {
-                setTempStartDate(null);
-                setTempEndDate(null);
+              // }
 
-                // if (startDate && endDate) {
-                //   setValue(
-                //     `${format(startDate, DATE_FORMAT)} - ${format(
-                //       endDate,
-                //       DATE_FORMAT,
-                //     )}`,
-                //   );
-                // } else if (startDate) {
-                //   setValue(format(startDate, DATE_FORMAT));
-                // } else {
-                  setValue("");
-                // }
+              pickerRef.current?.setOpen(false);
+            }}
+          >
+            Clear
+          </button>
 
-                pickerRef.current?.setOpen(false);
-              }}
-            >
-              Clear
-            </button>
-
-            <button
-              type="button"
-              className="rounded bg-primary px-3 py-1.5 text-sm text-white"
-              onClick={() => {
-                onChange([tempStartDate, tempEndDate]);
-                pickerRef.current?.setOpen(false);
-              }}
-            >
-              Apply
-            </button>
-          </div>
-        </DatePicker>
-      </div>
+          <button
+            type="button"
+            className="rounded bg-primary px-3 py-1.5 text-sm text-white"
+            onClick={() => {
+              onChange([tempStartDate, tempEndDate]);
+              pickerRef.current?.setOpen(false);
+            }}
+          >
+            Apply
+          </button>
+        </div>
+      </DatePicker>
     </div>
   );
 }

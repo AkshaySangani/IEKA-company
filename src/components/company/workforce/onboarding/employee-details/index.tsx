@@ -25,6 +25,7 @@ import TextAreaField from "../../../../common/text-area/TextAreaField";
 
 export interface IEmployee {
   _id: string;
+  userId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -108,6 +109,7 @@ export interface IDocument {
 
 export const initialEmployee: IEmployee = {
   _id: "",
+  userId: "",
   firstName: "",
   lastName: "",
   email: "",

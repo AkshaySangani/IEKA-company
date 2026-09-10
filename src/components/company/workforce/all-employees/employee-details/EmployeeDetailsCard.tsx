@@ -87,9 +87,8 @@ const EmployeeDetailCard: React.FC<Props> = ({
   const [assignmentHistory, setAssignmentHistory] =
     useState<HistoryPayload>(initialHistory);
 
-    // salary history states
-  const [salaryHistoryOpen, setSalaryHistoryOpen] =
-    useState<boolean>(false);
+  // salary history states
+  const [salaryHistoryOpen, setSalaryHistoryOpen] = useState<boolean>(false);
   const [salaryHistory, setSalaryHistory] =
     useState<HistoryPayload>(initialHistory);
 
@@ -157,13 +156,17 @@ const EmployeeDetailCard: React.FC<Props> = ({
       <div className="content-card bg-white border border-gray-200">
         {/* Header */}
         <div className="bg-primary p-2.5 flex items-center gap-4">
-          <div className="w-[100px] bg-white flex items-center justify-center">
-            <Image
-              src={employeeData.profileImage}
-              alt={employeeData.firstName}
-              className="max-h-16 object-contain"
-            />
-          </div>
+          <Image
+            src={employeeData.profileImage}
+            alt={employeeData.firstName}
+            className="w-20
+            h-20
+            min-w-20
+            min-h-20
+            shrink-0
+            object-cover
+            rounded-full"
+          />
           <div>
             <h2 className="text-lg text-white font-medium">
               {employeeData.firstName} {employeeData.lastName}
@@ -491,7 +494,6 @@ const EmployeeDetailCard: React.FC<Props> = ({
         handleOpenClose={handleSalaryHistoryOpenClose}
         history={salaryHistory}
       />
-      
     </>
   );
 };

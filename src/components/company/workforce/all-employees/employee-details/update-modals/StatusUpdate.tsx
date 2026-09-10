@@ -28,31 +28,59 @@ export default function StatusUpdate({
   status,
   refreshData,
 }: StatusUpdateProps) {
-  const [statusLoading,setStatusLoading] = useState<boolean>(false);
+  const [statusLoading, setStatusLoading] = useState<boolean>(false);
   const initialFormData: StatusFormData = {
     status: status,
     remarks: "",
   };
   const [formData, setFormData] = useState<StatusFormData>(initialFormData);
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof StatusFormData, string>>
+  >({});
 
   const handleChange = (field: keyof StatusFormData, value: string) => {
-    setFormData(prev => ({...prev, [field]: value}))
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors(prev => ({
+      ...prev, [field]: ""
+    }))
+  };
+
+  // handle validate fields
+  const validate = () => {
+    const newErrors: Partial<Record<keyof StatusFormData, string>> = {};
+
+    if (!formData.status) {
+      newErrors.status = "Status is required";
+    }
+
+    if (!formData.remarks.trim()) {
+      newErrors.remarks = "Remarks are required";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length) {
+      return false;
+    }
+
+    return true;
   };
 
   const handleStatusSubmit = async () => {
-      setStatusLoading(true);
-  
-      const response = await updateEmployeeStatus(formData, employeeData._id);
-      if (response.success) {
-        refreshData();
-      }
-      setStatusLoading(false);
-    };
+    if (!validate()) return;
+    setStatusLoading(true);
+
+    const response = await updateEmployeeStatus(formData, employeeData._id);
+    if (response.success) {
+      refreshData();
+    }
+    setStatusLoading(false);
+  };
   return (
     <Modal
       isOpen={active}
       title={`${employeeData.firstName} ${employeeData.lastName}`}
-      width = "max-w-2xl"
+      width="max-w-2xl"
       onClose={() => setActive(false)}
       loading={statusLoading}
       handleOnConfirm={handleStatusSubmit}
@@ -77,17 +105,25 @@ export default function StatusUpdate({
             name="status"
             value={formData.status}
             options={statusOptions}
+            error={errors.status}
             onChange={(value) => handleChange("status", value)}
           />
           <TextAreaField
+            required
             label="Remarks"
             name="remarks"
             value={formData.remarks}
             placeholder="Enter remarks..."
+            error={errors.remarks}
             onChange={(e) => handleChange("remarks", e.target.value)}
           />
         </div>
-        {formData.status === statusEnum.ACTIVE && <Note variant="danger" message="After active this employee all rights of this employee are accessible."/>}
+        {formData.status === statusEnum.ACTIVE && (
+          <Note
+            variant="danger"
+            message="After active this employee all rights of this employee are accessible."
+          />
+        )}
       </div>
     </Modal>
   );

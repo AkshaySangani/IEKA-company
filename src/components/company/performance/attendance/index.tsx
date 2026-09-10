@@ -8,7 +8,7 @@ import {
   FilterCardItem,
   LeaveDuration,
 } from "../../../../types/common-types";
-import { pathNames, statusMessage } from "../../../../constants/constants";
+import { statusMessage } from "../../../../constants/constants";
 import AttendanceTable from "./AttendanceTable";
 import {
   getAttendanceCount,
