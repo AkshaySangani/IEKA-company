@@ -28,7 +28,7 @@ export default function PolicyTable({
   const columns: ColumnDef<IPolicy>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

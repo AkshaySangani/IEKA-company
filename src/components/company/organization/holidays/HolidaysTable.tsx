@@ -33,7 +33,7 @@ export default function HolidaysTable({
   const columns: ColumnDef<IHoliday>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

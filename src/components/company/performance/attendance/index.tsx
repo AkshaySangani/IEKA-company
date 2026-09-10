@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Button from "../../../common/button/Button";
 import TopBar from "../../../common/topbar/TopBar";
 import PageLoader from "../../../common/loader/PageLoader";
 import Pagination from "../../../common/pagination/Pagination";
@@ -11,7 +10,6 @@ import {
 } from "../../../../types/common-types";
 import { pathNames, statusMessage } from "../../../../constants/constants";
 import AttendanceTable from "./AttendanceTable";
-import { useNavigate } from "react-router-dom";
 import {
   getAttendanceCount,
   getAttendanceList,
@@ -58,7 +56,6 @@ export interface ILocation {
 }
 
 const Attendance: React.FC = () => {
-  const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [search, setSearch] = useState<string>("");
@@ -175,11 +172,6 @@ const Attendance: React.FC = () => {
     }
   };
 
-  // handle click add new
-  const handleOnAdd = () => {
-    navigate(pathNames.ADD_DEPARTMENT);
-  };
-
   // handle search branch
   const handleOnSearch = (value: string) => {
     setSearch(value);
@@ -209,7 +201,6 @@ const Attendance: React.FC = () => {
       <TopBar
         title="All Attendances"
         actionButtons={
-          <div className="flex mx-auto gap-2">
             <DatePickerField
               value={date}
               onChange={(date: string): void => {
@@ -217,13 +208,6 @@ const Attendance: React.FC = () => {
                 setPage(1);
               }}
             />
-            <Button
-              name="Add New"
-              size="sm"
-              onClick={handleOnAdd}
-              leftIcon={<i className="fa-solid fa-plus"></i>}
-            />
-          </div>
         }
         isSearch
         searchPlaceholder="Search attendance..."

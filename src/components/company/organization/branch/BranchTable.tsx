@@ -34,7 +34,7 @@ export default function BranchTable({
   const columns: ColumnDef<IBranch>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

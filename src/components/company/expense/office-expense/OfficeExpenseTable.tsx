@@ -45,7 +45,7 @@ export default function OfficeExpenseTable({
   const columns: ColumnDef<IOfficeExpense>[] = [
     {
       header: "#",
-      className: " text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

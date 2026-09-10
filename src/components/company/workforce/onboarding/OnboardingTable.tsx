@@ -39,7 +39,7 @@ export default function OnboardingsTable({
   const columns: ColumnDef<IOnboarding>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

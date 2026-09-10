@@ -63,7 +63,7 @@ export default function ResignedEmployeeTable({
   const columns: ColumnDef<ResignationRequest>[] = [
     {
       header: "#",
-      className: " text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

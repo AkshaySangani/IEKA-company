@@ -24,27 +24,27 @@ export default function ReimbursementDetails({
   const columns: ColumnDef<IReimbursement>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {
       header: "Expense Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => row.name,
     },
     {
       header: "Amount",
-      className: "w-[15%]",
+      className: "",
       render: (row) => getFloatValue(row.amount),
     },
     {
       header: "Expense Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatDate(row.date),
     },
     {
       header: "Status",
-      className: "w-[15%]",
+      className: "",
       render: () => (
         <span className={`font-medium text-sm ${statusColor[statusEnum.ACTIVE]}`}>
               {statusMessage[statusEnum.ACTIVE]}

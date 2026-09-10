@@ -50,23 +50,23 @@ export default function EmployeePayslipTable({
   const columns: ColumnDef<IEmployeePayroll>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {
       header: "Month",
-      className: "w-[15%]",
+      className: "",
       render: (row) => formatMonthYear(row.payrollMonth, row.payrollYear),
     },
     {
       header: "Amount",
-      className: "w-[15%]",
+      className: "",
       render: (row) =>
         `${currency.INR}${getFloatValue(row.totals.netPayAmount)}`,
     },
     {
       header: "Provident Fund (PF)",
-      className: "w-[15%]",
+      className: "",
       render: (row) => {
         const PF = row.salaryBreakdown.find(
           (ele) => ele.name === deductionEnum.PROFESSIONAL_TAX,
@@ -76,7 +76,7 @@ export default function EmployeePayslipTable({
     },
     {
       header: "ESIC",
-      className: "w-[15%]",
+      className: "",
       render: (row) => {
         const ESIC = row.salaryBreakdown.find(
           (ele) => ele.name === deductionEnum.ESIC,
@@ -86,7 +86,7 @@ export default function EmployeePayslipTable({
     },
     {
       header: "Salary slip",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <i
           className="fa-solid fa-eye cursor-pointer"

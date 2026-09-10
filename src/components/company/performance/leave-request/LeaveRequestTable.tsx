@@ -38,7 +38,7 @@ export default function LeaveRequestTable({
   const columns: ColumnDef<ILeaveRequest>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

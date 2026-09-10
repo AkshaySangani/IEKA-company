@@ -24,7 +24,7 @@ export default function AttendanceTable({
   const columns: ColumnDef<IUserAttendance>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

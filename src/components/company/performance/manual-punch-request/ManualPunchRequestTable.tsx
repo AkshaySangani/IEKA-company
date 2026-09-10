@@ -25,12 +25,12 @@ export default function ManualPunchRequestTable({
   const columns: ColumnDef<IPunchManualRequest>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     ...(!isEmployee ? [{
       header: "Employee Name",
-      className: "w-[25%]",
+      className: "",
       isSticky: true,
       render: (row: IPunchManualRequest) => (
         <PersonInfo
@@ -46,12 +46,12 @@ export default function ManualPunchRequestTable({
     }]:[]),
     {
       header: "Punch For Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => <span className={isEmployee ? "text-primary font-medium" : ""}>{formatDate(row.attendanceDate)}</span>,
     },
     {
       header: "Punch Time",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <div className="flex items-center gap-1">
           {row.inTime && (
@@ -66,7 +66,7 @@ export default function ManualPunchRequestTable({
     },
     {
       header: "Punch Type",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <span>
           {row.isManualPunchIn && row.isManualPunchOut

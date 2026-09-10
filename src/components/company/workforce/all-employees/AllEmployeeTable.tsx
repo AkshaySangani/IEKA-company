@@ -44,7 +44,7 @@ export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
   const columns: ColumnDef<IEmployee>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

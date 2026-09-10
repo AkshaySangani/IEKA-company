@@ -38,12 +38,12 @@ export default function EmployeePayrollTable({
   const columns: ColumnDef<IEmployeePayroll>[] = [
     {
       header: "#",
-      className: "w-[5%] text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {
       header: "Employee Name",
-      className: "w-[20%]",
+      className: "",
       render: (row) => (
         <PersonInfo
           personInfo={{
@@ -58,12 +58,12 @@ export default function EmployeePayrollTable({
     },
     {
       header: "Performance",
-      className: "w-[15%]",
+      className: "",
       render: (row) => `${row.attendance.presentDays}/${monthDays}`,
     },
     {
       header: "Salary",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <div>
           <div className="font-medium text-gray-900 text-sm">
@@ -74,7 +74,7 @@ export default function EmployeePayrollTable({
     },
     {
       header: "Reimbursement",
-      className: "w-[15%]",
+      className: "",
       render: (row) =>
         row.totals.reimbursementsAmount ? (
           <div className="flex items-center gap-2">
@@ -89,7 +89,7 @@ export default function EmployeePayrollTable({
     },
     {
       header: "Total Payable",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         return (
           <div>

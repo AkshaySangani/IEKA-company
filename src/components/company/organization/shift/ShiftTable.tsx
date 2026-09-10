@@ -36,7 +36,7 @@ export default function ShiftTable({
   const columns: ColumnDef<IShift>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

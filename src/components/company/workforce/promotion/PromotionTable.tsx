@@ -67,7 +67,7 @@ export default function PromotionTable({
   const columns: ColumnDef<IPromotion>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

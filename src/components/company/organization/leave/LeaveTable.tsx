@@ -29,7 +29,7 @@ export default function LeaveTable({
   const columns: ColumnDef<ILeave>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {

@@ -67,7 +67,7 @@ export default function TerminationTable({
   const columns: ColumnDef<ITermination>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {
