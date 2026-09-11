@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Modal from "../../../common/modal/Modal";
 import TextField from "../../../common/text-field/TextField";
 import TextAreaField from "../../../common/text-area/TextAreaField";
@@ -33,6 +33,7 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
   holiday,
 }) => {
   const [loading, setLoading] = useState(false);
+  const modalRef = useRef(null);
 
   const initialFormData: HolidayFormData = {
     name: "",
@@ -192,8 +193,9 @@ const AddHoliday: React.FC<IAddHolidayProps> = ({
       onClose={handleClose}
       loading={loading}
       handleOnConfirm={handleSubmit}
+      
     >
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4" ref={modalRef}>
         <YearPicker
           label="Effective Year"
           required

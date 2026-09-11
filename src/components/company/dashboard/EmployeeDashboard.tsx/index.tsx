@@ -185,24 +185,24 @@ const EmployeeDashboard = () => {
       prev.map((card) => {
         switch (card.id) {
           case "":
-            return { ...card, amount: stats.total };
+            return { ...card, amount: stats.amount.total };
 
           case statusEnum.PENDING:
             return {
               ...card,
-              amount: stats.pending,
+              amount: stats.amount.pending,
             };
 
           case statusEnum.APPROVED:
             return {
               ...card,
-              amount: stats.approved,
+              amount: stats.amount.approved,
             };
 
           case statusEnum.REJECTED:
             return {
               ...card,
-              amount: stats.rejected,
+              amount: stats.amount.rejected,
             };
 
           default:

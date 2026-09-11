@@ -48,8 +48,8 @@ const OverallExpense: React.FC = () => {
       title: "Total Expense",
       count: 0,
       amount: 0,
-      activeColor: "bg-pendingBlur",
-      textColor: "bg-pendingLight text-pending",
+      activeColor: "!bg-pendingBlur",
+      textColor: "bg-white text-pending",
       trendDetails: null,
     },
     {
@@ -57,8 +57,8 @@ const OverallExpense: React.FC = () => {
       title: "Reimbursement",
       count: 0,
       amount: 0,
-      activeColor: "bg-dangerBlur",
-      textColor: "bg-dangerLight text-danger",
+      activeColor: "!bg-dangerBlur",
+      textColor: "bg-white text-danger",
       trendDetails: null,
     },
     {
@@ -66,8 +66,8 @@ const OverallExpense: React.FC = () => {
       title: "Office Expense",
       count: 0,
       amount: 0,
-      activeColor: "bg-successBlur",
-      textColor: "bg-successLight text-success",
+      activeColor: "!bg-successBlur",
+      textColor: "bg-white text-success",
       trendDetails: null,
     },
     // {
@@ -159,7 +159,7 @@ const OverallExpense: React.FC = () => {
             placeholder="Select Month"
             value={month}
             onChange={setMonth}
-            position="left"
+            pickerClassName="right-0"
           />
         }
       />

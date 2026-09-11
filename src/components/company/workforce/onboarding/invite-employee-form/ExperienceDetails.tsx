@@ -67,7 +67,6 @@ const ExperienceDetails = ({
       className: "pr-2 pl-2",
       render: (experience, index) => (
         <DatePickerField
-          label="PF Joining Date"
           name="startDate"
           value={experience.startDate}
           onChange={(date: string): void =>
@@ -82,7 +81,6 @@ const ExperienceDetails = ({
       className: "pr-2 pl-2",
       render: (experience, index) => (
         <DatePickerField
-          label="PF Joining Date"
           name="endDate"
           value={experience.endDate}
           onChange={(date: string): void =>

@@ -226,7 +226,7 @@ const EmployeePayroll: React.FC = () => {
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
-              position="left"
+              pickerClassName="right-0"
             />
           </div>
         }

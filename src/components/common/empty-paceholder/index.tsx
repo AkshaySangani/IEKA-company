@@ -1,11 +1,13 @@
 import React from "react";
-import Info from "../../../assets/icons/Info";
+import Image from "../image";
+import NoDataFound from "../../../assets/images/NoDataFound.jpeg";
 
 interface EmptyPlaceholderProps {
   title?: string;
   description?: string;
   icon?: React.ReactNode;
   className?: string;
+  imageClassName?: string;
   titleClassName?: string;
   showDescription?: boolean;
   descriptionClassName?: string;
@@ -14,8 +16,9 @@ interface EmptyPlaceholderProps {
 const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   title = "No Data Found",
   description = "There is currently no data available to display.",
-  icon = <Info size={50}/>,
+  icon,
   className = "",
+  imageClassName = "",
   titleClassName = "",
   showDescription = true,
   descriptionClassName = ""
@@ -26,7 +29,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
     >
       {/* Icon */}
       <div className=" text-5xl text-gray-400">
-        {icon || <i className="fa-solid fa-folder-open"></i>}
+        {icon || <Image fallbackSrc={NoDataFound} className={`w-14 h-14 object-contain ${imageClassName}`}/>}
       </div>
 
       {/* Title */}

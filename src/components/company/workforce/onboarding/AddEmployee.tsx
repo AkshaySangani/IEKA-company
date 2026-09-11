@@ -36,10 +36,10 @@ const AddEmployee: React.FC<IAddEmployeeProps> = ({
         </label>
         <Link
           to={url}
-          className="text-primary hover:underline text-ellipsis"
+          className="text-primary hover:underline truncate w-full"
           target="_blank"
         >
-          {url}
+          {url}{url}
         </Link>
         <Button name="Copy" size="sm" className="w-fit" onClick={() => copyToClipboard(url)} leftIcon={<i className="fa-solid fa-copy"></i>} />
       </div>

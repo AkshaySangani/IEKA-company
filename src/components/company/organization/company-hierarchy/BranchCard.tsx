@@ -41,7 +41,7 @@ export default function BranchCard({ branch }: BranchCardProps) {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between py-1.5 px-2 sm:px-2.5 sm:py-2 gap-1.5 sm:gap-2">
+        <div className="flex flex-col flex-1 justify-between py-1.5 px-2 sm:px-2.5 sm:py-2 gap-1.5 sm:gap-2">
           {/* Address */}
           <div className="">
             <p className="text-[13px] text-[#5c5c5c] line-clamp-2">
@@ -91,7 +91,7 @@ export default function BranchCard({ branch }: BranchCardProps) {
                   <EmptyPlaceholder
                     title="No Departments found for this shift."
                     description="It seems there is no any department added in this shift. please add department."
-                    icon={<Info size={20} />}
+                    imageClassName="!w-10 !h-10"
                     className="h-[100px] !gap-1"
                     titleClassName="!text-md"
                     showDescription={false}
@@ -103,7 +103,7 @@ export default function BranchCard({ branch }: BranchCardProps) {
             <EmptyPlaceholder
               title="No Shifts found for this branch."
               description="It seems there is no any shift added in this branch. please add shift."
-              icon={<Info size={20} />}
+              // icon={<Info size={20} />}
               titleClassName="!text-lg"
               className="!py-3 h-[250px]"
               descriptionClassName="!text-xs"

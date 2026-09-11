@@ -90,6 +90,7 @@ const ManualPunchRequest: React.FC = () => {
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
+              pickerClassName="right-0"
             />
           </div>
           <Button

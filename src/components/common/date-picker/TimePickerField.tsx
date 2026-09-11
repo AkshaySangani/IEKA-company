@@ -123,50 +123,49 @@ export default function TimePickerField({
   };
 
   return (
-    <div className="relative min-w-[50px]">
-      <TextField
-        label={label}
-        required={required}
-        error={error}
-        value={inputValue}
-        placeholder={placeholder}
-        onChange={handleInputChange}
-        onClick={openPicker}
-        icon={
-          <i
-            className="fa-regular fa-clock cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation();
-              openPicker();
-            }}
+    <div className="w-full">
+      <DatePicker
+        ref={pickerRef}
+        selected={tempTime}
+        onChange={handleTimeChange}
+        onClickOutside={(e) => e.stopPropagation()}
+        customInput={
+          <TextField
+            label={label}
+            required={required}
+            error={error}
+            value={inputValue}
+            placeholder={"HH:mm"}
+            onChange={handleInputChange}
+            onClick={openPicker}
+            icon={
+              <i
+                className="fa-regular fa-clock cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openPicker();
+                }}
+              />
+            }
+            className="w-full"
           />
         }
-        className="w-full"
+        showTimeSelect
+        showTimeSelectOnly
+        timeIntervals={timeIntervals}
+        timeCaption="Time"
+        dateFormat="HH:mm"
+        timeFormat="HH:mm"
+        shouldCloseOnSelect
+        /**
+         * Important:
+         * Render popup outside modal's overflow container
+         */
+        // popperContainer={({ children }) =>
+        //   createPortal(children, document.body)
+        // }
+        // popperClassName="time-picker-popper"
       />
-
-      <div className="absolute left-1/2 top-6 z-[99999] -translate-x-1/2">
-        <DatePicker
-          ref={pickerRef}
-          selected={tempTime}
-          onChange={handleTimeChange}
-          customInput={<div />}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={timeIntervals}
-          timeCaption="Time"
-          dateFormat="HH:mm"
-          timeFormat="HH:mm"
-          shouldCloseOnSelect
-          /**
-           * Important:
-           * Render popup outside modal's overflow container
-           */
-          popperContainer={({ children }) =>
-            createPortal(children, document.body)
-          }
-          popperClassName="time-picker-popper"
-        />
-      </div>
     </div>
   );
 }

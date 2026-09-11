@@ -93,7 +93,7 @@ export default function LeaveAndManualCard({
 
         {/* Month */}
         <div className="shrink-0">
-          <MonthPicker value={month} onChange={handleSelectMonth} />
+          <MonthPicker value={month} onChange={handleSelectMonth} pickerClassName="right-0"/>
         </div>
       </div>
 

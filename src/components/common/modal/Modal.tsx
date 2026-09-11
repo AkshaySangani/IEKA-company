@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../button/Button";
+import { Toaster } from "react-hot-toast";
+import useDevice from "../../../hooks/useDevice";
 
 interface ModalProps {
   isOpen: boolean;
@@ -30,7 +32,9 @@ const Modal = ({
   showFooter = true,
   isDownload = false,
   onDownload = () => {},
+  ref = null,
 }: ModalProps) => {
+  const {isMobile} = useDevice();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const [shouldRender, setShouldRender] = useState(false);
@@ -142,53 +146,38 @@ const Modal = ({
     <dialog
       ref={dialogRef}
       onCancel={handleCancel}
-      onClick={handleDialogClick}
+      // onClick={handleDialogClick}
       className={`
     w-full
-    ${width}
-
+     
+    ${isMobile ? "max-w-[95%]" : width}
     max-h-[calc(100vh-2rem)]
-
     p-0
-
-    
-
     bg-white
     shadow-xl
-
-    overflow-hidden
-
-    /*
-     * Mobile
-     * Center vertically
-     */
     my-auto
-
-    /*
-     * Desktop
-     * Align near top
-     */
     md:mt-8
     md:mb-auto
-    md:mx-auto
-
+    mx-auto
     transition-all
     duration-300
     ease-out
-
     ${
       isVisible && !isClosing
         ? "translate-y-0 opacity-100"
         : "-translate-y-10 opacity-0"
     }
-
     backdrop:bg-black/45
     backdrop:transition-opacity
     backdrop:duration-300
 
     ${isVisible && !isClosing ? "backdrop:opacity-100" : "backdrop:opacity-0"}
   `}
+      style={{ overflow: "unset" }}
     >
+      {/* <Toaster
+      position="top-center"
+    /> */}
       {/* Header */}
       <div className="shrink-0 bg-[#212837] px-4 py-2.5 flex items-center justify-between">
         <h5 className="text-white text-lg sm:text-base font-medium">{title}</h5>
@@ -242,6 +231,7 @@ const Modal = ({
           p-3
           sm:p-4
         "
+        ref={ref}
       >
         {children}
       </div>

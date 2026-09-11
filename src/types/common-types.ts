@@ -216,8 +216,8 @@ export enum AttendanceMethodNames {
 }
 
 export enum AttendanceViewEnum {
-  CALENDER_VIEW = "Calender View",
-  TABLE_VIEW = "Table View",
+  CALENDER_VIEW = "Calender",
+  TABLE_VIEW = "Table",
 }
 
 export enum deductionEnum {

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { createPortal } from "react-dom";
+import TextField from "../text-field/TextField";
 
 export interface MonthPickerValue {
   month: number; // 0 - 11
@@ -14,10 +14,10 @@ interface MonthPickerProps {
   value?: MonthPickerValue;
   placeholder?: string;
   disabled?: boolean;
-  position?: PickerPosition;
   // Minimum selectable month
   minDate?: MonthPickerValue;
   onChange: (value: MonthPickerValue) => void;
+  pickerClassName?: string;
 }
 
 const MONTHS: { [key: number]: string } = {
@@ -35,33 +35,19 @@ const MONTHS: { [key: number]: string } = {
   12: "Dec",
 };
 
-type PickerPosition =
-  | "top"
-  | "topCenter"
-  | "bottom"
-  | "bottomCenter"
-  | "left"
-  | "right";
-
 const MonthPicker: React.FC<MonthPickerProps> = ({
   label,
   required,
   error,
   value,
   placeholder = "Select Month",
-  position = "bottomCenter",
   disabled,
   minDate,
   onChange,
+  pickerClassName = ""
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const [positio, setPosition] = useState({
-    top: 0,
-    left: 0,
-  });
 
   const today = new Date();
 
@@ -114,58 +100,8 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
     return `${MONTHS[value.month]} ${value.year}`;
   }, [value]);
 
-  const DROPDOWN_WIDTH = 235;
-  const DROPDOWN_HEIGHT = 285;
-  const GAP = 20;
-
   const handleClickOnInput = () => {
     if (disabled) return;
-
-    const rect = inputRef.current?.getBoundingClientRect();
-
-    if (!rect) return;
-
-    let top = 0;
-    let left = 0;
-
-    switch (position) {
-      case "top":
-        top = rect.top + window.scrollY - DROPDOWN_HEIGHT + GAP;
-        left = rect.left + window.scrollX;
-        break;
-
-      case "topCenter":
-        top = rect.top + window.scrollY - DROPDOWN_HEIGHT - GAP;
-        left = rect.left + window.scrollX + rect.width / 2 - DROPDOWN_WIDTH / 2;
-        break;
-
-      case "bottom":
-        top = rect.bottom + window.scrollY - GAP + 20;
-        left = rect.left + window.scrollX;
-        break;
-
-      case "bottomCenter":
-        top = rect.bottom + window.scrollY - GAP + 20;
-        left = rect.left + window.scrollX + rect.width / 2 - DROPDOWN_WIDTH / 2;
-        break;
-
-      case "left":
-        top = rect.bottom + window.scrollY - GAP + 20;
-        left = rect.left + window.scrollX - 85;
-        break;
-
-      case "right":
-        top = rect.top + window.scrollY;
-        left = rect.right + window.scrollX + GAP;
-        break;
-
-      default:
-        top = rect.bottom + window.scrollY + GAP;
-        left = rect.left + window.scrollX;
-    }
-
-    setPosition({ top, left });
-
     setOpen((prev) => !prev);
   };
 
@@ -183,42 +119,22 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
 
   return (
     <div className="relative" ref={wrapperRef}>
-      {label && (
-        <label className="mb-2 block text-sm font-medium text-inputLabel">
-          {label}
-          {required && <span className="text-error"> *</span>}
-        </label>
-      )}
 
-      <input
-        ref={inputRef}
-        readOnly
+      <TextField
         disabled={disabled}
-        value={inputValue}
-        placeholder={placeholder}
         onClick={handleClickOnInput}
-        className={`
-          w-full cursor-pointer border border-inputBorder bg-white
-          px-[15px] py-[5px] text-sm font-medium leading-[30px] sm:leading-[25px]
-          outline-none focus:border-inputFocus
-          placeholder:text-sm placeholder:font-normal
-          disabled:bg-disabledBg
-            disabled:text-disabledText
-            disabled:placeholder:text-disabledText
-            disabled:cursor-not-allowed
-          ${error ? "border-error" : ""}
-        `}
+        value={inputValue || ""}
+        placeholder={placeholder}
+        error={error}
+        label={label}
+        required={required}
+        className="w-full cursor-pointer"
       />
 
       {open &&
-        createPortal(
           <div
             ref={dropdownRef}
-            className="fixed z-[9999] w-[235px] rounded border bg-white shadow-lg"
-            style={{
-              top: positio.top,
-              left: positio.left,
-            }}
+            className={`absolute top-full z-[9999] w-[235px] rounded border mt-1 bg-white shadow-lg ${pickerClassName}`}
           >
             {/* Header */}
 
@@ -342,11 +258,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
                 })}
               </div>
             )}
-          </div>,
-          document.body,
-        )}
-
-      {error && <p className="mt-1 text-xs text-error">{error}</p>}
+          </div>}
     </div>
   );
 };

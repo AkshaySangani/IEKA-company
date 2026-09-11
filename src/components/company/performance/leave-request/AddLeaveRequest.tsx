@@ -692,7 +692,7 @@ const AddLeaveRequest: React.FC = () => {
       duration: row.duration as LeaveDuration,
     }));
     return {
-      userId: !self ? user._id : formData.userId,
+      userId: (!self || isEmployee) ? user._id : formData.userId,
       reason: formData.reason,
       leaves: leaves,
     };

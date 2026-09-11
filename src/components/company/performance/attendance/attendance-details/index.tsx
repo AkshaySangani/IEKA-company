@@ -35,13 +35,13 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
   const options: TabOption[] = [
     {
       label: AttendanceViewEnum.CALENDER_VIEW,
-      icon: <i className="fa-regular fa-calendar-check"></i>,
+      icon: <i className="fa-regular fa-calendar-check text-[24px] sm:text-md"></i>,
       activeColor: "bg-primaryPurple",
       bgColor: "bg-white",
     },
     {
       label: AttendanceViewEnum.TABLE_VIEW,
-      icon: <i className="fa-solid fa-table-cells-large"></i>,
+      icon: <i className="fa-solid fa-table-cells-large text-[24px] sm:text-md"></i>,
       activeColor: "bg-primaryPurple",
       bgColor: "bg-white",
     },
@@ -117,10 +117,10 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
     <>
       {/* Month Picker */}
       <div
-        className={`flex ${id ? "justify-end" : "justify-between"} items-center border-b border-slate-200 bg-white px-4 py-1.5`}
+        className={`flex ${id ? "justify-end" : ""} flex-col gap-2 sm:flex-row items-center border-b border-slate-200 bg-white px-4 py-1.5`}
       >
         {!id && (
-          <div className="flex gap-3">
+          <div className="flex w-full gap-3">
             <PersonInfo
               personInfo={{
                 profileImage: employee.profileImage,
@@ -128,14 +128,14 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
                 lastName: employee.lastName,
                 description: `${employee.userId} | ${roleNames[employee.role]}`,
               }}
-              className="border-r pr-3 border-inputBorder"
+              className="max-w-[200px] border-r pr-3 border-inputBorder"
               imageClassName="rounded-0 w-[50px] h-[50px]"
               personClassName="text-black !text-md !font-[500]"
             />
             <Tabs active={active} options={options} onChange={setActive} />
           </div>
         )}
-        <div className="flex gap-3">
+        <div className="flex w-full gap-3 justify-end">
           <Button
             name="Overview"
             size="sm"

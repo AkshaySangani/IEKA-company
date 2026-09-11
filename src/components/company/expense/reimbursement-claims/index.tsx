@@ -304,7 +304,7 @@ const Reimbursement: React.FC = () => {
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
-              position="bottomCenter"
+              pickerClassName="right-0"
             />
             <Button
               name="Add Expense"

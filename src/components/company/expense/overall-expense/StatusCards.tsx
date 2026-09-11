@@ -28,7 +28,7 @@ const StatusCards = ({
       {cards.map((card) => (
         <div
           onClick={() => handleCardClick(card)}
-          className="content-card border border-gray-200  p-5 transition-all duration-200 hover:-translate-y-[5px] cursor-pointer"
+          className={`content-card border border-gray-200 ${card.activeColor}  p-5 transition-all duration-200 hover:-translate-y-[5px] cursor-pointer`}
         >
           <div className="flex items-start justify-between">
             <div>

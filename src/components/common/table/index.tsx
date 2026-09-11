@@ -1,4 +1,5 @@
 import React from "react";
+import EmptyPlaceholder from "../empty-paceholder";
 
 // Define the shape of a single column definition
 export interface ColumnDef<T> {
@@ -130,15 +131,12 @@ export function CustomTable<T>({
               <td
                 colSpan={columns.length}
                 className="
-                  text-center
-                  py-6
-                  sm:py-8
+                  py-3
+                  sm:py-6
                   px-3
-                  text-gray-500
-                  whitespace-nowrap
                 "
               >
-                No data available
+                <EmptyPlaceholder className="max-h-[180px]"/>
               </td>
             </tr>
           ) : (

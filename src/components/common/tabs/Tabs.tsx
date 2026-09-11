@@ -33,7 +33,8 @@ const Tabs: React.FC<TabsProps> = ({
               inline-flex items-center gap-1.5
               rounded-full
               border
-              px-3.5 py-2
+              py-3
+              px-3.5 sm:py-2
               text-sm font-medium
               transition-all duration-200
               ${
@@ -49,7 +50,7 @@ const Tabs: React.FC<TabsProps> = ({
               </span>
             )}
 
-            <span>{option.label}</span>
+            <span className="hidden sm:block">{option.label}</span>
           </button>
         );
       })}

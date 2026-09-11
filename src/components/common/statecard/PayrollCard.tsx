@@ -77,7 +77,7 @@ const PayrollStatCard: React.FC<PayrollCardProps> = ({
             ${iconBgColor}
           `}
           >
-            ₹
+            {icon}
           </div>
 
         <span className="truncate text-lg font-medium text-secondary lg:text-lg">

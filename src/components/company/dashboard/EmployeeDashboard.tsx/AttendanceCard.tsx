@@ -72,7 +72,7 @@ export default function AttendanceCard({
         </div>
 
         {/* Date Filter */}
-        <MonthPicker value={month} onChange={handleSelectMonth} />
+        <MonthPicker value={month} onChange={handleSelectMonth} pickerClassName="right-0"/>
       </div>
 
       {/* Attendance */}

@@ -82,9 +82,7 @@ export default function ReimbursementCard({
         </div>
 
         {/* Date Filter */}
-        {/* <div className="w-full sm:w-auto"> */}
-        <MonthPicker value={selected} onChange={setSelected} />
-        {/* </div> */}
+        <MonthPicker value={selected} onChange={setSelected} pickerClassName="right-0"/>
       </div>
 
       <div className="flex flex-col justify-between">

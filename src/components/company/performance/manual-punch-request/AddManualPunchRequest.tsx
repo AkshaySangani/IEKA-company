@@ -356,7 +356,7 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
     <Modal
       isOpen={isOpen}
       title={"Add Manual Punch Request"}
-      width="max-w-lg"
+      width="max-w-xl"
       onClose={onClose}
       handleOnConfirm={handleOnConfirm}
     >

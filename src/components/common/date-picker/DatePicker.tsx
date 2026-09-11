@@ -5,13 +5,13 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import TextField from "../text-field/TextField";
 import { DateFormat, formatDate } from "../../../utils/date-format";
-import { createPortal } from "react-dom";
 
 interface Props {
   label?: string;
   name?: string;
   required?: boolean;
   error?: string;
+  disabled?: boolean;
 
   // String value: "2026-9-8"
   value: string;
@@ -34,12 +34,18 @@ export default function DatePickerField({
   minDate,
   maxDate,
   onChange,
-  dateFormat = DateFormat.DEFAULT,
+  disabled = false,
+  dateFormat = DateFormat.DEFAULT
 }: Props) {
-  const pickerRef = useRef<DatePicker>(null);
 
-  //   const [inputValue, setInputValue] = useState("");
+  const [open, setOpen] = useState(false);
   const [tempDate, setTempDate] = useState<Date | null>(null);
+
+  const handleClick = () => {
+    if (disabled) return;
+
+    setOpen((prev) => !prev);
+  };
 
   /**
    * Convert "2026-9-8" -> Date
@@ -71,43 +77,6 @@ export default function DatePickerField({
     // setInputValue(dateToDisplayString(date));
   }, [selectedValue]);
 
-  /**
-   * Handle manual input
-   * Input format: DD-MM-YYYY
-   */
-  //   const parseInputDate = (value: string): Date | null => {
-  //     const [day, month, year] = value.trim().split("-").map(Number);
-
-  //     if (!day || !month || !year) return null;
-
-  //     const date = new Date(year, month - 1, day);
-
-  //     if (
-  //       date.getDate() !== day ||
-  //       date.getMonth() !== month - 1 ||
-  //       date.getFullYear() !== year
-  //     ) {
-  //       return null;
-  //     }
-
-  //     return date;
-  //   };
-
-  //   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const text = e.target.value;
-
-  //     setInputValue(text);
-
-  //     const date = parseInputDate(text);
-
-  //     if (date) {
-  //       setTempDate(date);
-
-  //       // Send "2026-9-8"
-  //       onChange(formatDate(date, DateFormat.ISO_DATE));
-  //     }
-  //   };
-
   const handleDateChange = (date: Date | null) => {
     setTempDate(date);
 
@@ -116,11 +85,13 @@ export default function DatePickerField({
 
       // Send "2026-9-8"
       onChange(formatDate(date, DateFormat.ISO_DATE));
+      setOpen(false);
     } else {
       //   setInputValue("");
 
       // Send empty string when cleared
       onChange("");
+      setOpen(false);
     }
   };
 
@@ -132,7 +103,9 @@ export default function DatePickerField({
         </label>
       )}
       <DatePicker
-        ref={pickerRef}
+        // ref={pickerRef}
+        open={open}
+        onInputClick={handleClick}
         selected={tempDate}
         dateFormat={dateFormat}
         placeholderText="DD-MM-YYYY"
@@ -141,21 +114,22 @@ export default function DatePickerField({
             className="w-full"
             name={name}
             error={error}
-            icon={<i className="fa-regular fa-calendar text-secondary/60"></i>}
+            disabled={disabled}
+            icon={<i className="fa-regular fa-calendar text-secondary/60" onClick={handleClick}></i>}
           />
         }
         minDate={minDate}
         maxDate={maxDate}
         onChange={handleDateChange}
         shouldCloseOnSelect
-        popperPlacement="top-start"
+        
+        // popperPlacement="top-start"
         /**
          * Important:
          * Render popup outside modal's overflow container
          */
-        popperContainer={({ children }) =>
-          createPortal(children, document.body)
-        }
+        // popperContainer={renderPopper}
+        // popperClassName="date-picker-popper"
       />
     </div>
   );

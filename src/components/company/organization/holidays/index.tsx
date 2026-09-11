@@ -238,6 +238,7 @@ const Holiday = () => {
                 placeholder="Select Year"
                 value={year}
                 onChange={handleYearChange}
+                pickerClassName="right-0"
               />
             </div>
             <Button
