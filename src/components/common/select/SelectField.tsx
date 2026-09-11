@@ -1,8 +1,4 @@
-import Select, {
-  MultiValue,
-  SingleValue,
-  StylesConfig,
-} from "react-select";
+import Select, { MultiValue, SingleValue, StylesConfig } from "react-select";
 import useDevice from "../../../hooks/useDevice";
 
 export interface SelectOption {
@@ -23,6 +19,7 @@ interface SelectFieldProps {
   isMenuPortalTarget?: boolean;
   onChange: (value: any) => void;
   menuPortalTarget?: HTMLElement | null;
+  className?: string;
 }
 
 const SelectField = ({
@@ -38,8 +35,9 @@ const SelectField = ({
   isMenuPortalTarget = true,
   menuPortalTarget,
   onChange,
+  className,
 }: SelectFieldProps) => {
-  const {isMobile } = useDevice();
+  const { isMobile } = useDevice();
   const customStyles: StylesConfig<SelectOption, boolean> = {
     control: (base, state) => ({
       ...base,
@@ -64,13 +62,13 @@ const SelectField = ({
     }),
 
     placeholder: (base, state) => ({
-  ...base,
-  fontSize: "var(--font-sm)",
-  fontWeight: 400,
-  transition: "all 0.2s ease",
-  transform: state.isFocused ? "translateX(8px)" : "translateX(0)",
-  opacity: state.isFocused ? 0.7 : 1,
-}),
+      ...base,
+      fontSize: "var(--font-sm)",
+      fontWeight: 400,
+      transition: "all 0.2s ease",
+      transform: state.isFocused ? "translateX(8px)" : "translateX(0)",
+      opacity: state.isFocused ? 0.7 : 1,
+    }),
 
     input: (base) => ({
       ...base,
@@ -100,8 +98,8 @@ const SelectField = ({
       backgroundColor: state.isSelected
         ? "#5897fb"
         : state.isFocused
-        ? "#f5f9ff"
-        : "#fff",
+          ? "#f5f9ff"
+          : "#fff",
       color: state.isSelected ? "#fff" : "inherit",
       "&:active": {
         backgroundColor: "#5897fb",
@@ -127,8 +125,8 @@ const SelectField = ({
   };
 
   return (
-    <div id={`field-${name}`} className="w-full">
-       {label && (
+    <div id={`field-${name}`} className={`w-full $${className}`}>
+      {label && (
         <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
           {label} {required && <span className="text-error">*</span>}
         </label>
@@ -143,18 +141,20 @@ const SelectField = ({
         isDisabled={isDisabled}
         isMulti={isMulti}
         styles={customStyles}
-        {...(isMenuPortalTarget ? {menuPortalTarget: menuPortalTarget ? menuPortalTarget : document.body}:{})}
+        {...(isMenuPortalTarget
+          ? {
+              menuPortalTarget: menuPortalTarget
+                ? menuPortalTarget
+                : document.body,
+            }
+          : {})}
         menuPlacement="auto"
         onChange={(
-          option: SingleValue<SelectOption> | MultiValue<SelectOption>
+          option: SingleValue<SelectOption> | MultiValue<SelectOption>,
         ) => onChange(option || "")}
       />
 
-      {error && (
-        <div className="mt-1 text-xs text-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="mt-1 text-xs text-error">{error}</div>}
     </div>
   );
 };

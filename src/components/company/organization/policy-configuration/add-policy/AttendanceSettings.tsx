@@ -120,8 +120,9 @@ const AttendanceSettings = ({
           Late Mark Setting
         </h3>
 
-        <div className="space-y-6 ml-2">
-          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
+        <div className="space-y-6 ml-0 sm:ml-2">
+          {/* Late Mark Rule */}
+          <div className="flex  gap-3 text-sm text-secondary flex-row flex-wrap items-center sm:gap-3">
             <span>Applicable Late Mark if punch in is after</span>
 
             <div className="w-28">
@@ -137,6 +138,7 @@ const AttendanceSettings = ({
                     "lateRule",
                   )
                 }
+                className="w-full"
               />
             </div>
 
@@ -155,13 +157,15 @@ const AttendanceSettings = ({
                     "lateRule",
                   )
                 }
+                className="w-full"
               />
             </div>
 
-            <span> minutes from shift end.</span>
+            <span>minutes from shift end.</span>
           </div>
 
-          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
+          {/* Late Count Rule */}
+          <div className="flex gap-3 text-sm text-secondary flex-row flex-wrap items-center sm:gap-3">
             <span>After</span>
 
             <div className="w-24">
@@ -177,6 +181,7 @@ const AttendanceSettings = ({
                     "lateRule",
                   )
                 }
+                className="w-full"
               />
             </div>
 
@@ -195,18 +200,20 @@ const AttendanceSettings = ({
                     "lateRule",
                   )
                 }
+                className="w-full"
               />
             </div>
 
             <span>day(s) salary will be deducted.</span>
           </div>
 
-          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
+          {/* Full Day Percentage */}
+          <div className="flex flex-col gap-3 text-sm text-secondary sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <span>
               Marked absent if total working shift hours are less than
             </span>
 
-            <div className="w-36">
+            <div className="w-full sm:w-36">
               <SelectField
                 value={
                   data.lateRule.minFullDayPercentage
@@ -216,7 +223,7 @@ const AttendanceSettings = ({
                       )
                     : ""
                 }
-                name={"minFullDayPercentage"}
+                name="minFullDayPercentage"
                 options={percentageOption}
                 onChange={(option) =>
                   handleChange(
@@ -230,12 +237,13 @@ const AttendanceSettings = ({
             </div>
           </div>
 
-          <div className="flex flex-wrap text-sm text-secondary items-center gap-3">
+          {/* Half Day Percentage */}
+          <div className="flex flex-col gap-3 text-sm text-secondary sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <span>
               Marked half day if total working shift hours are less than
             </span>
 
-            <div className="w-36">
+            <div className="w-full sm:w-36">
               <SelectField
                 value={
                   data.lateRule.minHalfDayPercentage
@@ -245,7 +253,7 @@ const AttendanceSettings = ({
                       )
                     : ""
                 }
-                name={"minHalfDayPercentage"}
+                name="minHalfDayPercentage"
                 options={percentageOption}
                 onChange={(option) =>
                   handleChange(
@@ -258,6 +266,7 @@ const AttendanceSettings = ({
               />
             </div>
           </div>
+
           {errors["lateRule.minHalfDayPercentage"] && (
             <div className="mt-1 text-xs text-error">
               {errors["lateRule.minHalfDayPercentage"]}
@@ -269,27 +278,28 @@ const AttendanceSettings = ({
       {/* Manual Punch */}
 
       <div className="border-b pb-4 border-inputBorder">
-        <h3 className="mb-5 text-md font-medium text-primary">
+        <h3 className="mb-2 sm:mb-5 text-md font-medium text-primary">
           Manual Punch Request
         </h3>
 
-        <div className="space-y-2 ml-2">
-          <div className="flex items-center text-sm text-secondary gap-4">
+        <div className="space-y-2 ml-0 sm:ml-2">
+          <div className="flex flex-col sm:flex-row sm:items-center text-sm text-secondary gap-2 sm:gap-4">
             <span>Manual Punch Request?</span>
-
-            <SelectField
-              value={
-                data?.manualPunch?.enabled
-                  ? yesNoOption.find((ele) => ele?.value === "YES")
-                  : yesNoOption.find((ele) => ele?.value === "NO")
-              }
-              isDisabled={!!editPolicyId}
-              name={"enabled"}
-              options={yesNoOption}
-              onChange={(option) =>
-                handleChange("enabled", option.value === "YES", "manualPunch")
-              }
-            />
+            <div className="w-full sm:w-36">
+              <SelectField
+                value={
+                  data?.manualPunch?.enabled
+                    ? yesNoOption.find((ele) => ele?.value === "YES")
+                    : yesNoOption.find((ele) => ele?.value === "NO")
+                }
+                isDisabled={!!editPolicyId}
+                name={"enabled"}
+                options={yesNoOption}
+                onChange={(option) =>
+                  handleChange("enabled", option.value === "YES", "manualPunch")
+                }
+              />
+            </div>
           </div>
 
           {data.manualPunch.enabled && (
