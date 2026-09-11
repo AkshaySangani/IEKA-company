@@ -1,25 +1,28 @@
-
 import { IEmployeeLeaveRequest } from ".";
 import { useState } from "react";
-import { HistoryPayload, initialHistory } from "../../../apis/history/history.api";
+import {
+  HistoryPayload,
+  initialHistory,
+} from "../../../apis/history/history.api";
 import { ColumnDef, CustomTable } from "../../common/table";
-import { formatDate } from "../../../utils/date-format";
+import { DateFormat, formatDate } from "../../../utils/date-format";
 import InfoIcon from "../../../assets/icons/Info";
 import { statusColor, statusMessage } from "../../../constants/constants";
-import { HistoryFieldEnum, LeaveDurationNames } from "../../../types/common-types";
+import {
+  HistoryFieldEnum,
+  LeaveDurationNames,
+} from "../../../types/common-types";
 import HistoryModal from "../../common/modal/HistoryModal";
 import { getFirstCharacter } from "../../../utils/helper";
 import Description from "../../common/description";
-
 
 interface IEmployeeLeaveRequestListProps {
   leaves: IEmployeeLeaveRequest[];
 }
 
 export default function EmployeeLeaveRequestTable({
-  leaves
+  leaves,
 }: IEmployeeLeaveRequestListProps) {
-
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
@@ -34,20 +37,34 @@ export default function EmployeeLeaveRequestTable({
     {
       header: "Leave Date",
       className: "",
-      render: (row) => <div className="flex items-center gap-2"><span className="text-primary font-medium border-r border-inputBorder pr-1">{formatDate(row.startDate)}</span>
-      <span className="border-r text-xs border-inputBorder pr-1">{LeaveDurationNames[row.duration]}</span>
-      <span className="text-xs">{getFirstCharacter(row.leaveId.name)}</span>
-      </div>,
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <span className="text-primary font-medium border-r border-inputBorder pr-1">
+            {formatDate(row.startDate)}
+          </span>
+          <span className="border-r text-xs border-inputBorder pr-1">
+            {LeaveDurationNames[row.duration]}
+          </span>
+          <span className="text-xs">{getFirstCharacter(row.leaveId.name)}</span>
+        </div>
+      ),
     },
     {
       header: "Reason",
       className: "",
-      render: (row) => (<Description value={row.reason} />),
+      render: (row) => <Description value={row.reason} />,
     },
     {
       header: "Request Date",
       className: "w-[15%]",
-      render: (row) => <span>{formatDate(row.createdAt)}</span>,
+      render: (row) => (
+        <div className="flex flex-col gap-1">
+          {formatDate(row.createdAt)}
+          <span className="text-grayText text-xs">
+            {formatDate(row.createdAt, DateFormat.TIME_24)}
+          </span>
+        </div>
+      ),
     },
     {
       header: "Status",

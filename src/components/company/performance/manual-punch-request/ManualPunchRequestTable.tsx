@@ -1,12 +1,7 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
-import {
-  roleNames,
-} from "../../../../constants/constants";
+import { roleNames } from "../../../../constants/constants";
 import PersonInfo from "../../../common/person-info";
-import {
-  DateFormat,
-  formatDate,
-} from "../../../../utils/date-format";
+import { DateFormat, formatDate } from "../../../../utils/date-format";
 import { IPunchManualRequest } from "../../../../types/company/performance/manual-punch-request.types";
 import { useAuthStore } from "../../../../store/auth-store";
 import { RoleEnum } from "../../../../types/common-types";
@@ -16,9 +11,9 @@ interface IPunchManualRequestListProps {
 }
 
 export default function ManualPunchRequestTable({
-  manualPunchRequests
+  manualPunchRequests,
 }: IPunchManualRequestListProps) {
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
   const isEmployee = user.role === RoleEnum.EMPLOYEE;
 
   // Define configuration structures with isolated column custom components
@@ -28,26 +23,34 @@ export default function ManualPunchRequestTable({
       className: "",
       render: (_, index) => index + 1,
     },
-    ...(!isEmployee ? [{
-      header: "Employee Name",
-      className: "",
-      isSticky: true,
-      render: (row: IPunchManualRequest) => (
-        <PersonInfo
-          personInfo={{
-            profileImage: row.userId.profileImage,
-            firstName: row.userId.firstName,
-            lastName: row.userId.lastName,
-            description: `${row.userId.userId} | ${roleNames[row.userId.role]}`,
-          }}
-          personClassName="text-secondary"
-        />
-      ),
-    }]:[]),
+    ...(!isEmployee
+      ? [
+          {
+            header: "Employee Name",
+            className: "",
+            isSticky: true,
+            render: (row: IPunchManualRequest) => (
+              <PersonInfo
+                personInfo={{
+                  profileImage: row.userId.profileImage,
+                  firstName: row.userId.firstName,
+                  lastName: row.userId.lastName,
+                  description: `${row.userId.userId} | ${roleNames[row.userId.role]}`,
+                }}
+                personClassName="text-secondary"
+              />
+            ),
+          },
+        ]
+      : []),
     {
       header: "Punch For Date",
       className: "",
-      render: (row) => <span className={isEmployee ? "text-primary font-medium" : ""}>{formatDate(row.attendanceDate)}</span>,
+      render: (row) => (
+        <span className={isEmployee ? "text-primary font-medium" : ""}>
+          {formatDate(row.attendanceDate)}
+        </span>
+      ),
     },
     {
       header: "Punch Time",
@@ -80,7 +83,14 @@ export default function ManualPunchRequestTable({
     {
       header: "	Request Date",
       className: "w-[15%]",
-      render: (row) => <span>{formatDate(row.updatedAt)}</span>,
+      render: (row) => (
+        <div className="flex flex-col gap-1">
+          {formatDate(row.updatedAt)}
+          <span className="text-grayText text-xs">
+            {formatDate(row.updatedAt, DateFormat.TIME_24)}
+          </span>
+        </div>
+      ),
     },
   ];
 

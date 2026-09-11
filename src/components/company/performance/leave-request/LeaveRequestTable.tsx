@@ -4,7 +4,7 @@ import { ILeaveRequest } from ".";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PersonInfo from "../../../common/person-info";
-import { formatDate } from "../../../../utils/date-format";
+import { DateFormat, formatDate } from "../../../../utils/date-format";
 import {
   HistoryPayload,
   initialHistory,
@@ -72,7 +72,14 @@ export default function LeaveRequestTable({
     {
       header: "Request Date",
       className: "",
-      render: (row) => <span>{formatDate(row.createdAt)}</span>,
+      render: (row) => (
+        <div className="flex flex-col gap-1">
+          {formatDate(row.createdAt)}
+          <span className="text-grayText text-xs">
+            {formatDate(row.createdAt, DateFormat.TIME_24)}
+          </span>
+        </div>
+      ),
     },
     {
       header: "Status",
