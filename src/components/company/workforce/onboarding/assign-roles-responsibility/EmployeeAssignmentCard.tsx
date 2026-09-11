@@ -94,8 +94,7 @@ const EmployeeAssignmentCard = ({
           <div>
             <div className="mt-3 inline-flex bg-blue-50 p-2">
               <div className="pr-6">
-                <p className="font-medium text-xs text-primary">
-                  <i className="fa-solid fa-sun mr-2" />
+                <p className="font-medium text-sm text-primary">
                   {shift.name}
                 </p>
 

@@ -104,6 +104,7 @@ export default function FilterModal({
           options={branchOptions}
           onChange={(option) => handleSelectFilter("branchId", option.value)}
           menuPortalTarget={modalRef.current}
+          isMenuPortalTarget
         />
         <SelectField
           label="Shift"
@@ -133,6 +134,7 @@ export default function FilterModal({
             handleSelectFilter("departmentId", option.value)
           }
           menuPortalTarget={modalRef.current}
+          isMenuPortalTarget
         />
       </div>
     </Modal>

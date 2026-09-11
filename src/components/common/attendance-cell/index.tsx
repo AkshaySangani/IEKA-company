@@ -1,6 +1,7 @@
 import React from "react";
 import { LocateFixed } from "lucide-react";
-import { AttendanceMethodNames } from "../../../types/common-types";
+import { AttendanceMethodNames, RoleEnum } from "../../../types/common-types";
+import { useAuthStore } from "../../../store/auth-store";
 
 export enum LeaveType {
   CL = "CL",
@@ -87,6 +88,8 @@ interface PunchInfoProps {
 }
 
 const PunchInfo: React.FC<PunchInfoProps> = ({ punch, onClick }) => {
+  const {user} = useAuthStore();
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
   return (
     <div className="text-center flex items-center gap-2">
       <div className="font-medium text-sm leading-none border-r border-secondary/50 pr-2">
@@ -96,7 +99,7 @@ const PunchInfo: React.FC<PunchInfoProps> = ({ punch, onClick }) => {
       <div className="flex items-center justify-center gap-1 text-[10px] text-gray-500">
         <span className="capitalize">{punch.source}</span>
 
-        <LocateFixed size={15} className="text-indigo-500 cursor-pointer" onClick={onClick} strokeWidth={2} />
+        {!isEmployee && <LocateFixed size={15} className="text-indigo-500 cursor-pointer" onClick={onClick} strokeWidth={2} />}
       </div>
     </div>
   );

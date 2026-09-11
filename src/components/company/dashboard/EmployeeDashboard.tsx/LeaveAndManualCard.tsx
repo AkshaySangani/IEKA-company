@@ -49,7 +49,7 @@ export default function LeaveAndManualCard({
   const hasData = leaves.length > 0 || manualPunch.length > 0;
 
   return (
-    <div className="content-card p-3 sm:p-4 relative overflow-hidden">
+    <div className="content-card p-3 sm:p-4 relative">
       <PageLoader loading={loading} />
 
       {/* Header */}

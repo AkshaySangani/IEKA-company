@@ -19,12 +19,14 @@ import { getEmployeeDetails } from "../../../../../apis/workforce/onboardings.ap
 import { IUserAttendance } from "..";
 import { pathNames, roleNames } from "../../../../../constants/constants";
 import { IUser } from "../../../../../types/user.types";
+import useDevice from "../../../../../hooks/useDevice";
 
 interface EmployeeAttendanceDetailsProps {
   id?: string;
 }
 
 const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
+  const {isMobile} = useDevice();
   const navigate = useNavigate();
   const params = useParams();
   const userId: string = params.id ?? id ?? "";
@@ -49,7 +51,7 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
 
   // active tab state
   const [active, setActive] = useState<AttendanceViewEnum>(
-    AttendanceViewEnum.CALENDER_VIEW,
+    isMobile ? AttendanceViewEnum.TABLE_VIEW : AttendanceViewEnum.CALENDER_VIEW,
   );
 
   // employee attendance details state
