@@ -122,6 +122,7 @@ export default function DatePickerField({
         maxDate={maxDate}
         onChange={handleDateChange}
         shouldCloseOnSelect
+        onClickOutside={() => setOpen(false)}
         
         // popperPlacement="top-start"
         /**

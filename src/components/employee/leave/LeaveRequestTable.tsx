@@ -31,7 +31,7 @@ export default function EmployeeLeaveRequestTable({
   const columns: ColumnDef<IEmployeeLeaveRequest>[] = [
     {
       header: "#",
-      className: "text-center text-gray-500",
+      className: "",
       render: (_, index) => index + 1,
     },
     {
@@ -56,7 +56,7 @@ export default function EmployeeLeaveRequestTable({
     },
     {
       header: "Request Date",
-      className: "w-[15%]",
+      className: "",
       render: (row) => (
         <div className="flex flex-col gap-1">
           {formatDate(row.createdAt)}
@@ -68,7 +68,7 @@ export default function EmployeeLeaveRequestTable({
     },
     {
       header: "Status",
-      className: "w-[10%]",
+      className: "",
       render: (row) => {
         return (
           <div className="flex items-center gap-1.5">

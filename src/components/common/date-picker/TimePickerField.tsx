@@ -128,7 +128,10 @@ export default function TimePickerField({
         ref={pickerRef}
         selected={tempTime}
         onChange={handleTimeChange}
-        onClickOutside={(e) => e.stopPropagation()}
+        onClickOutside={(e) => {
+          e.stopPropagation();
+          pickerRef.current?.setOpen(false);
+        }}
         customInput={
           <TextField
             label={label}
