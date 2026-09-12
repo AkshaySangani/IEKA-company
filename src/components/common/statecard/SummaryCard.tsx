@@ -40,7 +40,7 @@ export default function SummaryCard({
 
   return (
     <div
-      className={`content-card relative min-w-0 overflow-hidden ${className}`}
+      className={` relative min-w-0 overflow-hidden ${className}`}
     >
       <div
         className="
@@ -93,9 +93,8 @@ export default function SummaryCard({
             truncate
             text-base
             font-medium
-            uppercase
             tracking-wide
-            text-textSecondary
+            text-secondary
             sm:mt-3
           "
         >
