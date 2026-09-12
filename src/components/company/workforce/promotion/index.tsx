@@ -18,7 +18,10 @@ import {
 } from "../../../../apis/workforce/promotion.api";
 import { promotionStatusOptions } from "../../../../constants/constants";
 import Button from "../../../common/button/Button";
-import { getEmployees } from "../../../../apis/workforce/all-employee.api";
+import {
+  getEmployees,
+  getManagedEmployee,
+} from "../../../../apis/workforce/all-employee.api";
 import { IEmployee } from "../all-employees";
 import AddPromotion from "./AddPromotion";
 import PromotionTable from "./PromotionTable";
@@ -64,7 +67,7 @@ export const initialPromotion: IPromotion = {
     lastName: "",
     profileImage: "",
     role: RoleEnum.EMPLOYEE,
-    userId: ""
+    userId: "",
   },
   designationId: {
     _id: "",
@@ -138,18 +141,12 @@ const Promotion = () => {
   };
 
   const fetchEmployees = async () => {
-    const response = await getEmployees({
-      page: 1,
-      limit: 200,
-      search: "",
-      status: statusEnum.ACTIVE,
-    });
+    const response = await getManagedEmployee("");
     if (response.success) {
       setEmployees(
-        response?.data?.employee?.map((ele: IEmployee) => ({
+        response?.data?.map((ele: IEmployee) => ({
           label: `${ele.firstName} ${ele.lastName} | ${ele.userId}`,
           value: ele._id,
-          designation: ele?.designationId?.name,
         })),
       );
     } else setEmployees([]);
@@ -284,7 +281,7 @@ const Promotion = () => {
       search,
       status: "",
       isDownload: true,
-      password
+      password,
     });
   };
 
