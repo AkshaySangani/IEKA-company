@@ -28,7 +28,7 @@ export default function ManualPunchRequestTable({
           {
             header: "Employee Name",
             className: "",
-            isSticky: true,
+            // isSticky: true,
             render: (row: IPunchManualRequest) => (
               <PersonInfo
                 personInfo={{

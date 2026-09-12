@@ -44,7 +44,7 @@ export default function LeaveRequestTable({
     {
       header: "Employee Name",
       className: "",
-      isSticky: true,
+      // isSticky: true,
       render: (row) => (
         <PersonInfo
           personInfo={{
