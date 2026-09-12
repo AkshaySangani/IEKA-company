@@ -210,9 +210,9 @@ const ResignedEmployees = () => {
   const handleUpdateStatus = (employeeDetails: ResignationRequest, type: "status" | "update") => {
     if(type === "status"){
       if (employeeDetails.status === statusEnum.ACCEPTED) {
-        handleStatusOpenClose();
-      } else {
         handleResignation();
+      } else {
+        handleStatusOpenClose();
       }
       setEmployeeDetails(employeeDetails);
     } else {
