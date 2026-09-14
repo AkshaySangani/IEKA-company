@@ -110,15 +110,6 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
       newErrors.companyPhone = "Phone number must be 10 digits";
     }
 
-    if (!companyDetail.companyWebsite.trim()) {
-      newErrors.companyWebsite = "Company Website is required.";
-    } else if (
-      companyDetail.companyWebsite.trim() &&
-      !regex.urlRegex.test(String(companyDetail.companyWebsite))
-    ) {
-      newErrors.companyWebsite = "Invalid website url.";
-    }
-
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -268,7 +259,6 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
 
           {/* Company Website */}
           <TextField
-            required
             label="Company Website"
             placeholder="Enter company website"
             value={companyDetail.companyWebsite}
