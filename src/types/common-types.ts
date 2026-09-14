@@ -31,6 +31,7 @@ export enum statusEnum {
   ABSENT = "ABSENT",
   ON_LEAVE = "ON_LEAVE",
   CANCEL = "CANCEL",
+  CANCELED = "CANCELED",
   TERMINATE = "TERMINATE",
   PROMOTED = "PROMOTED",
   HOLD = "HOLD",

@@ -72,8 +72,8 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
   const [employee, setEmployee] = useState<IUser>(initialState);
 
   const [selectedMonth, setSelectedMonth] = useState({
-    month: 8,
-    year: 2026,
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear(),
   });
 
   useEffect(() => {
@@ -138,12 +138,12 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
           </div>
         )}
         <div className="flex w-full gap-3 justify-end">
-          <Button
+          {/* <Button
             name="Overview"
             size="sm"
             onClick={() => {}}
             leftIcon={<i className="fa-solid fa-list-check"></i>}
-          />
+          /> */}
           <MonthPicker value={selectedMonth} onChange={setSelectedMonth} />
           {!id && (
             <Button

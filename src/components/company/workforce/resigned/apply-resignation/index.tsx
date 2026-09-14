@@ -16,18 +16,17 @@ import TextAreaField from "../../../../common/text-area/TextAreaField";
 import Button from "../../../../common/button/Button";
 import UserImage from "../../../../../assets/images/User-Image.png";
 import PageLoader from "../../../../common/loader/PageLoader";
-import DatePickerField from "../../../../common/date-picker/DatePicker";
 
 export default function ApplyResignation({
   show,
   handleOpenClose,
   resignationId,
+  refreshData = () => {}
 }: ApplyResignationProps) {
   const { user } = useAuthStore();
 
   const [formData, setFormData] = useState<IResignationForm>({
     userId: user?._id,
-    lastWorkingDate: "",
     reason: "",
   });
 
@@ -103,20 +102,6 @@ export default function ApplyResignation({
       newErrors.reason = "Reason must be at least 3 characters.";
     }
 
-    if (!formData.lastWorkingDate) {
-      newErrors.lastWorkingDate = "Last working date is required.";
-    } else {
-      const selectedDate = new Date(formData.lastWorkingDate);
-      const today = new Date();
-
-      // Remove time from today's date
-      today.setHours(0, 0, 0, 0);
-
-      if (selectedDate < today) {
-        newErrors.lastWorkingDate = "Last working date cannot be in the past.";
-      }
-    }
-
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -128,7 +113,6 @@ export default function ApplyResignation({
   const resetForm = () => {
     setFormData({
       userId: user?._id || "",
-      lastWorkingDate: "",
       reason: "",
     });
 
@@ -150,13 +134,6 @@ export default function ApplyResignation({
 
       const payload = {
         userId: user._id,
-
-        // Convert yyyy-mm-dd to ISO date
-        lastWorkingDate: formatDate(
-          formData.lastWorkingDate,
-          DateFormat.ISO_DATE,
-        ),
-
         reason: formData.reason.trim(),
       };
 
@@ -168,6 +145,7 @@ export default function ApplyResignation({
       // After successful API call
       if (response.success) {
         handleResetForm();
+        refreshData();
       }
     } catch (error) {
       console.error("Failed to apply resignation:", error);
@@ -212,18 +190,6 @@ export default function ApplyResignation({
             error={errors.reason}
           />
 
-          {/* Last Working Date */}
-          <DatePickerField
-            label="Last Working Date"
-            required
-            name="lastWorkingDate"
-            value={formData.lastWorkingDate}
-            error={errors.lastWorkingDate}
-            onChange={(date: string): void =>
-              handleChange("lastWorkingDate", date)
-            }
-            minDate={new Date()}
-          />
         </div>
 
         {/* Actions */}

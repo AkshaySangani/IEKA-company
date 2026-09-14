@@ -60,9 +60,9 @@ const TopBar = ({
     <>
       <div className="sticky border-b border-borderPrimary px-2 py-1 sm:py-0 sm:px-[25px] z-50">
         <div className="flex min-h-[50px] items-center justify-between">
-          <div className="max-[991px]:hidden lg:block">
+          {!isMobile && <div className="block">
             <h1 className="text-[18px] leading-7 font-medium ">{title}</h1>
-          </div>
+          </div>}
           <div
             className={`flex items-center gap-2 ${isMobile ? "w-full justify-end flex-wrap" : "shrink-0"}`}
           >

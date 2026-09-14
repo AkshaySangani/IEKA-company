@@ -25,7 +25,6 @@ export interface OfficeExpenseFormData {
   documents: File[];
 }
 
-
 export const getOfficeExpenseList = (payload: {
   search: string;
   status?: string;
@@ -36,9 +35,17 @@ export const getOfficeExpenseList = (payload: {
   isDownload?: boolean;
   password?: string;
 }) => {
-  const { page, limit, search, status, month, isDownload = false, password = "" } = payload;
+  const {
+    page,
+    limit,
+    search,
+    status,
+    month,
+    isDownload = false,
+    password = "",
+  } = payload;
   return apiRequest.get<ApiResponse>(
-    `/expense/officeExpense?page=${page}${limit ? `&limit=${limit}`:""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${month?.year ? `&year=${month.year}` : ""}${month?.month ? `&month=${month.month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
+    `/expense/officeExpense?page=${page}${limit ? `&limit=${limit}` : ""}${search ? `&search=${search}` : ""}${status ? `&status=${status}` : ""}${month?.year ? `&year=${month.year}` : ""}${month?.month ? `&month=${month.month}` : ""}${isDownload ? `&isDownload=${isDownload}` : ""}${password ? `&csvPassword=${password}` : ""}`,
   );
 };
 
@@ -48,14 +55,15 @@ export const addOfficeExpense = (payload: FormData) =>
   });
 
 export const getOfficeExpenseById = (officeExpenseId: string) => {
-  return apiRequest.get<ApiResponse>(`/expense/officeExpense/${officeExpenseId}`);
+  return apiRequest.get<ApiResponse>(
+    `/expense/officeExpense/${officeExpenseId}`,
+  );
 };
 
-export const getOfficeExpenseCount = ({
-    month,
-    year
-}: MonthPickerValue) => {
-  return apiRequest.get<ApiResponse>(`/expense/officeExpense/count?year=${year}&month=${month}`);
+export const getOfficeExpenseCount = ({ month, year }: MonthPickerValue) => {
+  return apiRequest.get<ApiResponse>(
+    `/expense/officeExpense/count?year=${year}&month=${month}`,
+  );
 };
 
 export const updateOfficeExpenseStatus = (
@@ -65,6 +73,15 @@ export const updateOfficeExpenseStatus = (
   },
   officeExpenseId: string = "",
 ) =>
-  apiRequest.patch(`/expense/officeExpense/status/${officeExpenseId}`, payload, {
+  apiRequest.patch(
+    `/expense/officeExpense/status/${officeExpenseId}`,
+    payload,
+    {
+      showSuccessToast: true,
+    },
+  );
+
+export const deleteOfficeExpense = (officeExpenseId: string = "") =>
+  apiRequest.delete(`/expense/officeExpense/${officeExpenseId}`, {
     showSuccessToast: true,
   });

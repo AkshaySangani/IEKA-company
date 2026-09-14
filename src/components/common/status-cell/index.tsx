@@ -10,6 +10,9 @@ interface StatusCellProps {
   onHistory?: () => void;
 
   showHistory?: boolean;
+
+  isDeletable?: boolean;
+  onDelete?: () => void;
 }
 
 const StatusCell = ({
@@ -18,6 +21,8 @@ const StatusCell = ({
   onEdit,
   onHistory,
   showHistory = true,
+  isDeletable,
+  onDelete = () => {}
 }: StatusCellProps) => {
   return (
     <div className="flex items-center gap-1">
@@ -44,6 +49,15 @@ const StatusCell = ({
           <i
             className="fa-solid fa-pen-to-square cursor-pointer text-lg sm:text-sm text-grayText/70"
             onClick={onEdit}
+          />
+        )}
+      </div>
+
+      <div className="flex w-5 shrink-0 items-center justify-center">
+        {isDeletable && (
+          <i
+            className="fa-regular fa-trash-can cursor-pointer text-lg sm:text-md text-danger"
+            onClick={onDelete}
           />
         )}
       </div>

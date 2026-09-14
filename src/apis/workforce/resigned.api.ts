@@ -20,6 +20,10 @@ export const getResignedEmployeeById = (resignationId: string) => {
   return apiRequest.get<ApiResponse>(`/workforce/resignation/${resignationId}`);
 };
 
+export const getResignationByEmployeeId = (userId: string) => {
+  return apiRequest.get<ApiResponse>(`/workforce/resignation/${userId}`);
+};
+
 export const getResignedEmployeeCount = () => {
   return apiRequest.get<ApiResponse>(`/workforce/resignation/count`);
 };

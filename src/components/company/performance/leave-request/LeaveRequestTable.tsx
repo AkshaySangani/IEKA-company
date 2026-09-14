@@ -13,19 +13,24 @@ import {
   HistoryFieldEnum,
   LeaveDurationNames,
   RoleEnum,
+  statusEnum,
 } from "../../../../types/common-types";
 import HistoryModal from "../../../common/modal/HistoryModal";
 import StatusCell from "../../../common/status-cell";
 import { useAuthStore } from "../../../../store/auth-store";
+import ActionModal from "../../../common/modal/ActionModal";
+import { deleteLeaveRequest } from "../../../../apis/performance/leave-request.api";
 
 interface ILeaveRequestListProps {
   leaves: ILeaveRequest[];
   handleUpdateStatus: (value: ILeaveRequest) => void;
+  refreshData: () => void;
 }
 
 export default function LeaveRequestTable({
   leaves,
   handleUpdateStatus,
+  refreshData,
 }: ILeaveRequestListProps) {
   const { user } = useAuthStore();
   const navigate = useNavigate();
@@ -33,6 +38,19 @@ export default function LeaveRequestTable({
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const [expenseId, setExpenseId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleAction = (row?: ILeaveRequest) => {
+    setActionOpen((prev) => !prev);
+    if (row && row?._id) {
+      setExpenseId(row._id);
+    } else {
+      setExpenseId("");
+    }
+  };
 
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<ILeaveRequest>[] = [
@@ -87,17 +105,30 @@ export default function LeaveRequestTable({
       render: (row) => {
         const isManager =
           user.role === RoleEnum.MANAGER && row.userId._id === user._id;
+        const isDeletable =
+          row.userId._id === user._id && row.status === statusEnum.PENDING;
         return (
           <StatusCell
             status={row.status}
             isEditable={!isManager}
             onHistory={() => handleShowHistory(row)}
             onEdit={() => handleUpdateStatus(row)}
+            isDeletable={isDeletable}
+            onDelete={() => handleAction(row)}
           />
         );
       },
     },
   ];
+
+  const handleOnConfirm = async () => {
+    setLoading(true);
+    const response = await deleteLeaveRequest(expenseId);
+    if (response.success) {
+      refreshData();
+    }
+    setLoading(false);
+  };
 
   // handle history open
   const handleHistoryOpenClose = () => {
@@ -123,6 +154,13 @@ export default function LeaveRequestTable({
         handleOpenClose={handleHistoryOpenClose}
         history={history}
         isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
+      />
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to delete this leave request?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
       />
     </>
   );

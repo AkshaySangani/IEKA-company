@@ -87,3 +87,8 @@ export const getLeaveBucket = (year: number, userId: string) => {
     `/performance/leave-request/bucket?year=${year}&userId=${userId}`,
   );
 };
+
+export const deleteLeaveRequest = (leaveRequestId: string = "") =>
+  apiRequest.delete(`/performance/leave-request/${leaveRequestId}`, {
+    showSuccessToast: true,
+  });

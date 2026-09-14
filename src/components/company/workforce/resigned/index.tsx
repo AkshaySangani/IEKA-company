@@ -6,19 +6,19 @@ import {
   RoleEnum,
   statusEnum,
 } from "../../../../types/common-types";
-import StatusUpdateModal from "../../../common/modal/StatusModal";
 import PageLoader from "../../../common/loader/PageLoader";
 import ResignedEmployeeTable from "./ResignedEmployeeTable";
 import {
   getResignedEmployeeCount,
   getResignedEmployees,
-  updateResignedEmployeeStatus, 
+  updateResignedEmployeeStatus,
 } from "../../../../apis/workforce/resigned.api";
 import Pagination from "../../../common/pagination/Pagination";
 import { acceptStatusOptions } from "../../../../constants/constants";
 import Button from "../../../common/button/Button";
 import ApplyResignation from "./apply-resignation";
 import { useAuthStore } from "../../../../store/auth-store";
+import StatusUpdateModal from "./StatusUpdate";
 
 export interface ResignationRequest {
   _id: string;
@@ -38,11 +38,21 @@ export interface ResignationUser {
   lastName: string;
   profileImage: string;
   role: RoleEnum;
-  departmentId: Department;
+  departmentId: IBaseEntity;
+  designationId?: IBaseEntity;
+  branchId?: IBaseEntity;
+  shiftId?: IShift;
   userId: string;
 }
 
-export interface Department {
+export interface IShift {
+  _id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface IBaseEntity {
   _id: string;
   name: string;
 }
@@ -60,7 +70,7 @@ export const initialEmployee: ResignationRequest = {
       _id: "",
       name: "",
     },
-    userId: ""
+    userId: "",
   },
   lastWorkingDate: "",
   mailSent: false,
@@ -72,8 +82,8 @@ export const initialEmployee: ResignationRequest = {
 
 const ResignedEmployees = () => {
   const { user } = useAuthStore();
-    const isManager = user?.role === RoleEnum.MANAGER;
-    const isEmployee = user?.role === RoleEnum.EMPLOYEE;
+  const isManager = user?.role === RoleEnum.MANAGER;
+  const isEmployee = user?.role === RoleEnum.EMPLOYEE;
   const [activeCard, setActiveCard] = useState<string>("");
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -207,8 +217,11 @@ const ResignedEmployees = () => {
   };
 
   // handle update status
-  const handleUpdateStatus = (employeeDetails: ResignationRequest, type: "status" | "update") => {
-    if(type === "status"){
+  const handleUpdateStatus = (
+    employeeDetails: ResignationRequest,
+    type: "status" | "update",
+  ) => {
+    if (type === "status") {
       handleStatusOpenClose();
       setEmployeeDetails(employeeDetails);
     } else {
@@ -218,12 +231,14 @@ const ResignedEmployees = () => {
 
   const handleStatusSubmit = async (formData: {
     status: statusEnum;
+    lastWorkingDate?: string;
     remarks: string;
   }) => {
     setStatusLoading(true);
 
     const payload = {
       status: formData.status.trim(),
+      lastWorkingDate: formData.lastWorkingDate,
       remarks: formData.remarks,
     };
 
@@ -274,7 +289,7 @@ const ResignedEmployees = () => {
         onSearch={handleOnSearch}
         isExcel
         actionButtons={
-          (isEmployee || isManager) ? (
+          isEmployee || isManager ? (
             <Button
               name="Add New"
               size="sm"
@@ -316,7 +331,11 @@ const ResignedEmployees = () => {
         loading={statusLoading}
         options={acceptStatusOptions}
       />
-      <ApplyResignation show={show} handleOpenClose={handleOpenClose} resignationId={resignationId}/>
+      <ApplyResignation
+        show={show}
+        handleOpenClose={handleOpenClose}
+        resignationId={resignationId}
+      />
     </>
   );
 };

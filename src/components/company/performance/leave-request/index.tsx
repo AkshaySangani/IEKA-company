@@ -23,8 +23,8 @@ import { IUser } from "../../../../types/user.types";
 import { useAuthStore } from "../../../../store/auth-store";
 
 export interface ILeaveId {
-    _id: string;
-    name: string;
+  _id: string;
+  name: string;
 }
 export interface ILeaveRequest {
   _id: string;
@@ -55,7 +55,7 @@ export const initialLeaveRequest: ILeaveRequest = {
   },
   leaveId: {
     _id: "",
-    name: ""
+    name: "",
   },
   startDate: "",
   endDate: "",
@@ -72,7 +72,7 @@ export const initialLeaveRequest: ILeaveRequest = {
 
 const LeaveRequest: React.FC = () => {
   const { user } = useAuthStore();
-    const isEmployee = user.role === RoleEnum.EMPLOYEE;
+  const isEmployee = user.role === RoleEnum.EMPLOYEE;
   const navigate = useNavigate();
   const [statusOpen, setStatusOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -187,7 +187,11 @@ const LeaveRequest: React.FC = () => {
 
   // handle click add new
   const handleOnAdd = () => {
-    navigate(isEmployee ? employeePathNames.ADD_LEAVE_REQUEST : pathNames.ADD_LEAVE_REQUEST);
+    navigate(
+      isEmployee
+        ? employeePathNames.ADD_LEAVE_REQUEST
+        : pathNames.ADD_LEAVE_REQUEST,
+    );
   };
 
   // handle status open close
@@ -239,7 +243,7 @@ const LeaveRequest: React.FC = () => {
       search,
       status: "",
       isDownload: true,
-      password
+      password,
     });
   };
 
@@ -271,6 +275,10 @@ const LeaveRequest: React.FC = () => {
         <LeaveRequestTable
           leaves={leaveList}
           handleUpdateStatus={handleUpdateStatus}
+          refreshData={() => {
+            fetchLeaveRequestList({ page, limit, search, status: activeCard });
+            fetchLeaveCounts();
+          }}
         />
         <Pagination
           totalRecords={total}

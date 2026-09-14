@@ -80,6 +80,12 @@ const STATUS_CONFIG: Record<
     icon: <i className="fa-solid fa-circle-xmark"></i>,
   },
 
+  [statusEnum.CANCELED]: {
+    label: "Canceled",
+    className: "text-danger",
+    icon: <i className="fa-solid fa-circle-xmark"></i>,
+  },
+
   [statusEnum.PRESENT]: {
     label: "Present",
     className: "text-success",

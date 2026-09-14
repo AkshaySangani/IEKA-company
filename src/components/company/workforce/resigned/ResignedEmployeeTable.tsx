@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { DateFormat, formatDate } from "../../../../utils/date-format";
 import Badge from "../../../common/badge/Badge";
 import MailSendModal from "../../../common/modal/MailSendModal";
-import { sendResignMail } from "../../../../apis/workforce/resigned.api";
+import { sendResignMail, updateResignedEmployeeStatus } from "../../../../apis/workforce/resigned.api";
 import HistoryModal from "../../../common/modal/HistoryModal";
 import {
   HistoryPayload,
@@ -22,6 +22,7 @@ import { useAuthStore } from "../../../../store/auth-store";
 import Description from "../../../common/description";
 import StatusCell from "../../../common/status-cell";
 import MailStatusCell from "../../../common/mail-status-cell";
+import ActionModal from "../../../common/modal/ActionModal";
 
 interface ResignationRequestListProps {
   resignedEmployees: ResignationRequest[];
@@ -43,6 +44,9 @@ export default function ResignedEmployeeTable({
   const [mailOpen, setMailOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [show, setShow] = useState<boolean>(false);
+  const [resignationId, setResignationId] = useState<string>("");
+
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
@@ -59,6 +63,34 @@ export default function ResignedEmployeeTable({
     setMailOpen(false);
     setResignDetails(initialEmployee);
   };
+
+  const handleStatusSubmit = async () => {
+        setLoading(true);
+    
+        const payload = {
+          status: statusEnum.CANCELED,
+          remarks: "Canceled",
+        };
+    
+        const response = await updateResignedEmployeeStatus(
+          payload,
+          resignationId,
+        );
+        if (response.success) {
+          refreshData();
+        }
+        setLoading(false);
+      };
+  
+    // handle Cancel resignation open close
+    const handleOpenClose = (resignation?: ResignationRequest | null) => {
+      setShow((prev) => !prev);
+      if (resignation) {
+        setResignationId(resignation._id);
+      } else {
+        setResignationId("");
+      }
+    };
 
   const columns: ColumnDef<ResignationRequest>[] = [
     {
@@ -126,8 +158,10 @@ export default function ResignedEmployeeTable({
     {
       header: "Certificate",
       className: "",
-      render: (row) =>
-        row.status === statusEnum.ACCEPTED ? (
+      render: (row) => {
+        const isManager =
+          row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
+        return row.status === statusEnum.ACCEPTED && !isManager ? (
           <div className="flex gap-2">
             <Badge
               label="Relieving"
@@ -146,7 +180,7 @@ export default function ResignedEmployeeTable({
               onClick={() => navigate(`${pathNames.FNF_LETTER}/${row._id}`)}
             />
           </div>
-        ) : "-",
+        ) : "-"}
     },
     {
       header: "Status",
@@ -157,8 +191,8 @@ export default function ResignedEmployeeTable({
         return (
           <StatusCell
             status={row.status}
-            isEditable={row.status !== statusEnum.ACCEPTED && !isManager}
-            onEdit={() => handleUpdateStatus(row, "status")}
+            isEditable={row.status !== statusEnum.ACCEPTED}
+            onEdit={() => isManager ? handleOpenClose() : handleUpdateStatus(row, "status")}
             onHistory={() =>
               handleShowHistory(row, HistoryFieldEnum.ResignationStatus)
             }
@@ -312,6 +346,14 @@ export default function ResignedEmployeeTable({
         handleOpenClose={handleHistoryOpenClose}
         history={history}
         isMailHistory={history.field === HistoryFieldEnum.ResignationMail}
+      />
+
+      <ActionModal
+        isOpen={show}
+        title={`Are you sure you want to cancel resignation request ?`}
+        loading={loading}
+        handleOpenClose={handleOpenClose}
+        handleSubmit={handleStatusSubmit}
       />
     </>
   );

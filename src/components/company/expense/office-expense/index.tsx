@@ -362,6 +362,10 @@ const OfficeExpense: React.FC = () => {
         <OfficeExpenseTable
           officeExpenses={officeExpenses}
           handleUpdateStatus={handleUpdateStatus}
+          refreshData={() => {
+            fetchOfficeExpenseList({ page, limit, search, status: activeCard, month });
+            fetchOfficeExpenseCount();
+          }}
         />
         <Pagination
           totalRecords={total}

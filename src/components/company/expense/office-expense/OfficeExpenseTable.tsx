@@ -13,19 +13,23 @@ import {
   HistoryPayload,
   initialHistory,
 } from "../../../../apis/history/history.api";
-import { HistoryFieldEnum, RoleEnum } from "../../../../types/common-types";
+import { HistoryFieldEnum, RoleEnum, statusEnum } from "../../../../types/common-types";
 import HistoryModal from "../../../common/modal/HistoryModal";
 import { useAuthStore } from "../../../../store/auth-store";
 import StatusCell from "../../../common/status-cell";
+import ActionModal from "../../../common/modal/ActionModal";
+import { deleteOfficeExpense } from "../../../../apis/expense/office-expense.api";
 
 interface IOfficeExpenseListProps {
   officeExpenses: IOfficeExpense[];
   handleUpdateStatus: (value: IOfficeExpense) => void;
+  refreshData: () => void;
 }
 
 export default function OfficeExpenseTable({
   officeExpenses,
   handleUpdateStatus,
+  refreshData
 }: IOfficeExpenseListProps) {
   const navigate = useNavigate();
   const {user} = useAuthStore();
@@ -33,6 +37,19 @@ export default function OfficeExpenseTable({
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+  
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const [expenseId, setExpenseId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleAction = (row?: IOfficeExpense) => {
+    setActionOpen((prev) => !prev);
+    if(row && row?._id){
+      setExpenseId(row._id)
+    } else {
+      setExpenseId("");
+    }
+  };
 
   const handleEditDepartmentDetails = (officeExpenseId: string) => {
     navigate(pathNames.OFFICE_EXPENSE_DETAILS, {
@@ -117,17 +134,29 @@ export default function OfficeExpenseTable({
       className: "",
       render: (row) => {
         const isManager = user.role === RoleEnum.MANAGER;
+        const isDeletable = row.assignedBy._id === user._id && row.status === statusEnum.PENDING;
         return (
           <StatusCell
             status={row.status}
             isEditable={!isManager}
             onHistory={() => handleShowHistory(row)}
             onEdit={() => handleUpdateStatus(row)}
+            isDeletable={isDeletable}
+            onDelete={() => handleAction(row)}
           />
         );
       },
     },
   ];
+
+  const handleOnConfirm = async () => {
+    setLoading(true);
+    const response = await deleteOfficeExpense(expenseId);
+    if(response.success){
+      refreshData();
+    }
+    setLoading(false);
+  };
 
   // handle history open
   const handleHistoryOpenClose = () => {
@@ -154,6 +183,13 @@ export default function OfficeExpenseTable({
         history={history}
         isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
       />  
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to delete this expense?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
+      />
     </>
   );
 }

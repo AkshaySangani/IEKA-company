@@ -15,18 +15,26 @@ import {
   HistoryPayload,
   initialHistory,
 } from "../../../../apis/history/history.api";
-import { HistoryFieldEnum, RoleEnum } from "../../../../types/common-types";
+import {
+  HistoryFieldEnum,
+  RoleEnum,
+  statusEnum,
+} from "../../../../types/common-types";
 import { useAuthStore } from "../../../../store/auth-store";
 import StatusCell from "../../../common/status-cell";
+import { deleteReimbursement } from "../../../../apis/expense/reimbursement.api";
+import ActionModal from "../../../common/modal/ActionModal";
 
 interface IReimbursementListProps {
   reimbursements: IReimbursement[];
   handleUpdateStatus: (value: IReimbursement) => void;
+  refreshData: () => void;
 }
 
 export default function DepartmentTable({
   reimbursements,
   handleUpdateStatus,
+  refreshData,
 }: IReimbursementListProps) {
   const { user } = useAuthStore();
   const isEmployee = user.role === RoleEnum.EMPLOYEE;
@@ -36,12 +44,31 @@ export default function DepartmentTable({
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const [expenseId, setExpenseId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleAction = (row?: IReimbursement) => {
+    console.log("action");
+    setActionOpen((prev) => !prev);
+    if (row && row?._id) {
+      setExpenseId(row._id);
+    } else {
+      setExpenseId("");
+    }
+  };
+
   const handleShowDetails = (reimbursementId: string) => {
-    navigate(isEmployee ? employeePathNames.REIMBURSEMENT_DETAILS : pathNames.REIMBURSEMENT_DETAILS, {
-      state: {
-        reimbursementId,
+    navigate(
+      isEmployee
+        ? employeePathNames.REIMBURSEMENT_DETAILS
+        : pathNames.REIMBURSEMENT_DETAILS,
+      {
+        state: {
+          reimbursementId,
+        },
       },
-    });
+    );
   };
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IReimbursement>[] = [
@@ -118,17 +145,30 @@ export default function DepartmentTable({
       render: (row) => {
         const isManager =
           row?.userId._id === user._id && user.role === RoleEnum.MANAGER;
+        const isDeletable =
+          row.userId._id === user._id && row.status === statusEnum.PENDING;
         return (
           <StatusCell
             status={row.status}
             isEditable={!isManager && !isEmployee}
             onHistory={() => handleShowHistory(row)}
             onEdit={() => handleUpdateStatus(row)}
+            isDeletable={isDeletable}
+            onDelete={() => handleAction(row)}
           />
         );
       },
     },
   ];
+
+  const handleOnConfirm = async () => {
+    setLoading(true);
+    const response = await deleteReimbursement(expenseId);
+    if (response.success) {
+      refreshData();
+    }
+    setLoading(false);
+  };
 
   // handle history open
   const handleHistoryOpenClose = () => {
@@ -154,6 +194,13 @@ export default function DepartmentTable({
         handleOpenClose={handleHistoryOpenClose}
         history={history}
         isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
+      />
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to delete this reimbursement?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
       />
     </>
   );

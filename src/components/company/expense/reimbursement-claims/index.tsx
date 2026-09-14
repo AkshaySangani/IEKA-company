@@ -330,6 +330,16 @@ const Reimbursement: React.FC = () => {
         <ReimbursementTable
           reimbursements={reimbursementList}
           handleUpdateStatus={handleUpdateStatus}
+          refreshData={() => {
+            fetchReimbursementList({
+              page,
+              limit,
+              search,
+              status: activeCard,
+              ...month,
+            });
+            fetchReimbursementCount();
+          }}
         />
         <Pagination
           totalRecords={total}

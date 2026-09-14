@@ -2,11 +2,11 @@ export interface ApplyResignationProps {
   show: boolean;
   handleOpenClose: () => void;
   resignationId?: string;
+  refreshData?: () => void;
 }
 
 export interface IResignationForm {
   userId: string;
-  lastWorkingDate: string;
   reason: string;
 }
 

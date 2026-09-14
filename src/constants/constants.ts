@@ -88,7 +88,8 @@ export const pathNames = {
   ADD_OFFICE_EXPENSE: "/expense/office-expense/add-expense",
   OFFICE_EXPENSE_DETAILS: "/expense/office-expense/expense-details",
   EMPLOYEE_PAYROLL: "/expense/payroll",
-  EMPLOYEE_PAYROLL_PERFORMANCE_ID: "/expense/payroll/employee-payroll-performance/:id",
+  EMPLOYEE_PAYROLL_PERFORMANCE_ID:
+    "/expense/payroll/employee-payroll-performance/:id",
   EMPLOYEE_PAYROLL_PERFORMANCE: "/expense/payroll/employee-payroll-performance",
 
   // Pay Slip
@@ -97,20 +98,23 @@ export const pathNames = {
   PAY_SLIP_DISCLAIMER: "/pay-slip/earnings/payslip-disclaimer",
   DEDUCTION: "/pay-slip/deductions",
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
-  EMPLOYEE_PAY_SLIP_DETAILS_ID: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details/:id",
-  EMPLOYEE_PAY_SLIP_DETAILS: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details",
-  EMPLOYEE_PAY_SLIP_DOWNLOAD: "/pay-slip/all-employee-pay-slip/pay-slip-download",
+  EMPLOYEE_PAY_SLIP_DETAILS_ID:
+    "/pay-slip/all-employee-pay-slip/employee-pay-slip-details/:id",
+  EMPLOYEE_PAY_SLIP_DETAILS:
+    "/pay-slip/all-employee-pay-slip/employee-pay-slip-details",
+  EMPLOYEE_PAY_SLIP_DOWNLOAD:
+    "/pay-slip/all-employee-pay-slip/pay-slip-download",
 
   // profile route
-  MY_PROFILE:"/my-profile",
+  MY_PROFILE: "/my-profile",
 
   // profile route for employee and manager
-  PROFILE:"/profile"
+  PROFILE: "/profile",
 } as const;
 
-  // =========================
-  // Employee Routes
-  // =========================
+// =========================
+// Employee Routes
+// =========================
 export const employeePathNames = {
   DASHBOARD: "/",
   PERFORMANCE: "/performance",
@@ -125,8 +129,8 @@ export const employeePathNames = {
   RESIGNATION: "/resignation",
   PAY_SLIP: "/pay_slip",
   PAY_SLIP_DOWNLOAD: "/pay_slip/pay-slip-download",
-  PROFILE:"/profile"
-}
+  PROFILE: "/profile",
+};
 
 export const roleBasePaths: ObjectType = {
   [RoleEnum.MANAGER]: [
@@ -166,9 +170,12 @@ export const roleBasePaths: ObjectType = {
     // pay-slip
     employeePathNames.PAY_SLIP,
     employeePathNames.PAY_SLIP_DOWNLOAD,
+    pathNames.EMPLOYEE_PAY_SLIP_DETAILS_ID,
+    pathNames.EMPLOYEE_PAY_SLIP_DETAILS,
+    pathNames.EMPLOYEE_PAY_SLIP_DOWNLOAD,
 
     // profile route for employee and manager
-  employeePathNames.PROFILE
+    employeePathNames.PROFILE,
   ],
 
   [RoleEnum.OWNER]: Object.values(pathNames),
@@ -320,7 +327,7 @@ export const manageExtraMenuItems: MenuItem[] = [
     icon: "fa-solid fa-file-circle-check",
     path: employeePathNames.PAY_SLIP,
   },
-]
+];
 export const employeeMenuItems: MenuItem[] = [
   {
     label: "Dashboard",
@@ -349,7 +356,7 @@ export const employeeMenuItems: MenuItem[] = [
   {
     label: "Apply Reimbursement",
     icon: "fa-solid fa-road-circle-check",
-    path: employeePathNames.REIMBURSEMENT
+    path: employeePathNames.REIMBURSEMENT,
   },
   {
     label: "Pay slip",

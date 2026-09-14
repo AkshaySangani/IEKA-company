@@ -1,5 +1,6 @@
 import { ColumnDef, CustomTable } from "../../../common/table";
 import {
+  employeePathNames,
   pathNames,
   roleNames,
 } from "../../../../constants/constants";
@@ -28,8 +29,11 @@ export default function AllEmployeeTable({ allEmployees }: IEmployeeListProps) {
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
 
   const handleOnClick = (row: IEmployee) => {
-    if(location.pathname === pathNames.ALL_EMPLOYEE_PAY_SLIP){
-      navigate(`${pathNames.EMPLOYEE_PAY_SLIP_DETAILS}/${row?._id}`)
+    if (
+      location.pathname === pathNames.ALL_EMPLOYEE_PAY_SLIP ||
+      location.pathname === employeePathNames.PAY_SLIP
+    ) {
+      navigate(`${pathNames.EMPLOYEE_PAY_SLIP_DETAILS}/${row?._id}`);
     } else {
       navigate(pathNames.EMPLOYEE_DETAILS, {
         state: {

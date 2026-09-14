@@ -43,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({
 
     success: "",
 
-    danger: "bg-btn-danger hover:bg-btn-danger-hover text-white",
+    danger: "bg-btn-danger hover:bg-btn-danger-hover text-danger",
 
     dangerOutline: "bg-danger/40 hover:bg-btn-danger-hover text-error",
 
