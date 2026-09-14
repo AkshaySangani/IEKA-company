@@ -11,10 +11,10 @@ import {
 } from "../../../../../../constants/constants";
 import TextField from "../../../../../common/text-field/TextField";
 import { DateFormat, formatDate } from "../../../../../../utils/date-format";
-import { IEmployee } from "../../../onboarding/employee-details";
 import { regex } from "../../../../../../constants/validation-regex";
 import { GenderEnum } from "../../../../../../types/common-types";
 import DatePickerField from "../../../../../common/date-picker/DatePicker";
+import { IEmployee } from "..";
 
 interface IPersonalDetailsForm {
   firstName: string;

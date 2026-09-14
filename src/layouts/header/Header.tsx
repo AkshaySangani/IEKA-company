@@ -85,7 +85,10 @@ export const pathLabel = {
   EMPLOYEE_PAY_SLIP_DOWNLOAD: "Pay Slip Download",
 
   // profile route
-  MY_PROFILE:"My Profile"
+  MY_PROFILE: "My Profile",
+
+  // profile route for employee and manager
+  PROFILE: "My Profile",
 } as const;
 
 export const getPathLabel = (pathname: string): string => {
@@ -109,17 +112,14 @@ export const getPathLabel = (pathname: string): string => {
       }
 
       return pathParts.every(
-        (part, index) =>
-          part.startsWith(":") || part === pathnameParts[index],
+        (part, index) => part.startsWith(":") || part === pathnameParts[index],
       );
     }
 
     return false;
   });
 
-  return matchedKey
-    ? pathLabel[matchedKey] || matchedKey
-    : "";
+  return matchedKey ? pathLabel[matchedKey] || matchedKey : "";
 };
 
 const Header = ({ setIsOpen, isOpen }: HeaderProps) => {
@@ -157,7 +157,9 @@ const Header = ({ setIsOpen, isOpen }: HeaderProps) => {
         {/* Mobile Page Title */}
 
         <div className="ml-3 min-w-0 max-[991px]:block lg:hidden">
-          <h1 className="truncate text-lg font-semibold text-black">{pathName}</h1>
+          <h1 className="truncate text-lg font-semibold text-black">
+            {pathName}
+          </h1>
         </div>
       </div>
 

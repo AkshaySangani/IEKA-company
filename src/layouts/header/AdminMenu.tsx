@@ -6,10 +6,11 @@ import Modal from "../../components/common/modal/Modal";
 import Image from "../../components/common/image";
 
 import { removeLocalStorageData } from "../../utils/helper";
-import { roleNames, storageKeys } from "../../constants/constants";
+import { pathNames, roleNames, storageKeys } from "../../constants/constants";
 import { useAuthStore } from "../../store/auth-store";
 import { logoutApi } from "../../apis/auth/auth.api";
 import useDevice from "../../hooks/useDevice";
+import { RoleEnum } from "../../types/common-types";
 
 const AdminMenu = () => {
   const { isMobile } = useDevice();
@@ -95,7 +96,7 @@ const AdminMenu = () => {
             <ul className="list-none p-0">
               <li>
                 <NavLink
-                  to="/my-profile"
+                  to={user.role === RoleEnum.OWNER ?  pathNames.MY_PROFILE : pathNames.PROFILE}
                   onClick={handleMenuOenClose}
                   className="flex items-center px-[15px] py-[10px] text-sm text-[#333] hover:bg-[#faf8fa]"
                 >

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Accordion from "../../../../../common/accordian";
 import { ColumnDef, CustomTable } from "../../../../../common/table";
-import { IEducation, IEmployee } from "../../../onboarding/employee-details";
+import { IEducation } from "../../../onboarding/employee-details";
 import { config } from "../../../../../../utils/config";
 import { downloadFile } from "../../../../../../utils/helper";
+import { IEmployee } from "..";
 
 interface EductionDetailsProps {
   employee: IEmployee;

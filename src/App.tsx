@@ -70,6 +70,7 @@ import PayslipDownloadPage from "./pages/company/pay-slip/pay-slip-download";
 import { useEffect, useState } from "react";
 import SplashScreen from "./components/splash-screen";
 import { useIsPWA } from "./hooks/useIsPWA";
+import ProfilePage from "./pages/company/profile";
 
 function App() {
   const isPWA = useIsPWA();
@@ -312,7 +313,8 @@ function App() {
             element={<EmployeeResignationPage />}
           />
 
-          <Route path="my-profile" element={<MyProfilePage />} />
+          <Route path={pathNames.MY_PROFILE} element={<MyProfilePage />} />
+          <Route path={pathNames.PROFILE} element={<ProfilePage />} />
           <Route path="change-password" element={<ChangePasswordPage />} />
         </Route>
 

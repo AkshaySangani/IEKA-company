@@ -270,6 +270,17 @@ api.interceptors.response.use(
     }
 
     // ======================
+    // Bad Request
+    // ======================
+    if (status === 400) {
+      return Promise.reject({
+        success: false,
+        message:
+          error.response.data?.message || error?.message || "Bad Request",
+      });
+    }
+
+    // ======================
     // SERVER ERROR
     // ======================
     if (status >= 500) {

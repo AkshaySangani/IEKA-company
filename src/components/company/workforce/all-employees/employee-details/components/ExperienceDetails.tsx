@@ -2,9 +2,10 @@ import { useState } from "react";
 import Accordion from "../../../../../common/accordian";
 import { ColumnDef, CustomTable } from "../../../../../common/table";
 import { formatDate } from "../../../../../../utils/date-format";
-import { IEmployee, IExperience } from "../../../onboarding/employee-details";
+import { IExperience } from "../../../onboarding/employee-details";
 import { config } from "../../../../../../utils/config";
 import { downloadFile } from "../../../../../../utils/helper";
+import { IEmployee } from "..";
 
 interface ExperienceDetailsProps {
   employee: IEmployee;

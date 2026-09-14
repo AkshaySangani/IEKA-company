@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Modal from "../../common/modal/Modal";
 import ImageUpload from "../../common/image-upload";
 import TextField from "../../common/text-field/TextField";
-import { useAuthStore } from "../../../store/auth-store";
 import { IAdminProfile } from ".";
 import { regex } from "../../../constants/validation-regex";
 import { updateProfile } from "../../../apis/admin/my-profile";
@@ -28,7 +27,6 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
   profile,
   getAdminProfile,
 }: PersonalDetailsProps) => {
-  const { setUser } = useAuthStore();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 

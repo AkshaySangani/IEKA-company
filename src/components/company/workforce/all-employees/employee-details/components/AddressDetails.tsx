@@ -3,7 +3,7 @@ import DetailRow from "../../../../../common/detail-row";
 import Accordion from "../../../../../common/accordian";
 import Modal from "../../../../../common/modal/Modal";
 import TextAreaField from "../../../../../common/text-area/TextAreaField";
-import { IEmployee } from "../../../onboarding/employee-details";
+import { IEmployee } from "..";
 
 interface AddressDetailsProps {
   employee: IEmployee;

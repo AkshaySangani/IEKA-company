@@ -47,7 +47,7 @@ export interface IEmployee {
   firstName: string;
   lastName: string;
   email: string;
-  phone: number;
+  phone: number | string;
 
   gender: GenderEnum;
   profileImage: string;
@@ -232,7 +232,7 @@ export const initialEmployeeResponse: IEmployeeResponse = {
   },
 };
 
-const initialEmployeeOtherDetails: IEmployeeDetails = {
+export const initialEmployeeOtherDetails: IEmployeeDetails = {
   _id: "",
   userId: "",
   parents: {

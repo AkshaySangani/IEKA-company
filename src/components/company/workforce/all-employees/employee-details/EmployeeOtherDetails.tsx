@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import PersonDetails from "./components/PersonalDetails";
 import ParentsDetails from "./components/ParentsDetails";
@@ -21,8 +20,6 @@ interface EmployeeOtherDetailsProps {
 }
 
 const EmployeeOtherDetails = ({employee, employeeDetails, fetchEmployeeOtherDetails}: EmployeeOtherDetailsProps) => {
-  const location = useLocation();
-  const employeeId = location?.state?.employeeId;
 
   const [loading, setLoading] = useState<boolean>(false);  
 
@@ -36,7 +33,7 @@ const EmployeeOtherDetails = ({employee, employeeDetails, fetchEmployeeOtherDeta
   };
   return (
     <>
-      {employeeId ? (
+      {employeeDetails._id ? (
         <div className="content-card bg-white border border-gray-200 p-3 sm:p-4 space-y-2">
           <PersonDetails
             employee={employee.user}

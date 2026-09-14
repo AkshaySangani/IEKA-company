@@ -8,6 +8,8 @@ import Image from "../../common/image";
 import DetailRow from "../../common/detail-row";
 import TextAreaField from "../../common/text-area/TextAreaField";
 import { regex } from "../../../constants/validation-regex";
+import { useAuthStore } from "../../../store/auth-store";
+import { RoleEnum } from "../../../types/common-types";
 
 interface CompanyDetailsProps {
   companyDetails: ICompanyDetails;
@@ -35,6 +37,8 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
   companyDetails,
   getAdminProfile,
 }: CompanyDetailsProps) => {
+  const {user} = useAuthStore();
+  const isOwner = user.role === RoleEnum.OWNER;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
@@ -165,9 +169,9 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
         <div className="flex flex-col gap-2">
           <div className="flex justify-between pb-2 border-b text-secondary font-medium">
             <h2>Company Details</h2>
-            <div onClick={() => setIsOpen((prev) => !prev)}>
+            {isOwner && <div onClick={() => setIsOpen((prev) => !prev)}>
               <i className="fa-solid fa-pen-to-square cursor-pointer text-secondary/60"></i>
-            </div>
+            </div>}
           </div>
           <DetailRow
             label={"Company Email"}
