@@ -4,9 +4,10 @@ import ImageUpload from "../../common/image-upload";
 import TextField from "../../common/text-field/TextField";
 import { ICompanyDetails } from ".";
 import { updateProfile } from "../../../apis/admin/my-profile";
-import { regex } from "../../../constants/validation-regex";
 import Image from "../../common/image";
-import { useAuthStore } from "../../../store/auth-store";
+import DetailRow from "../../common/detail-row";
+import TextAreaField from "../../common/text-area/TextAreaField";
+import { regex } from "../../../constants/validation-regex";
 
 interface CompanyDetailsProps {
   companyDetails: ICompanyDetails;
@@ -18,6 +19,8 @@ interface CompanyDetailForm {
   companyEmail: string;
   gstin: string;
   companyLogo: File | string | null;
+  companyAddress: string;
+  companyPhone: number;
 }
 
 interface FormErrors {
@@ -25,14 +28,13 @@ interface FormErrors {
   companyEmail?: string;
   gstin?: string;
   companyLogo?: string;
+  companyPhone?: string;
 }
 
 const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
   companyDetails,
-  getAdminProfile
+  getAdminProfile,
 }: CompanyDetailsProps) => {
-
-  const {setUser} = useAuthStore();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
@@ -41,6 +43,8 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
     companyEmail: companyDetails?.companyEmail || "",
     gstin: companyDetails?.gstin || "",
     companyLogo: companyDetails?.companyLogo || null,
+    companyAddress: companyDetails.companyAddress,
+    companyPhone: companyDetails.companyPhone
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -53,6 +57,8 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
         companyEmail: companyDetails?.companyEmail || "",
         gstin: companyDetails?.gstin || "",
         companyLogo: companyDetails?.companyLogo || null,
+        companyAddress: companyDetails.companyAddress,
+        companyPhone: companyDetails.companyPhone
       });
 
       setErrors({});
@@ -89,19 +95,11 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
       newErrors.companyLogo = "Company Logo is required";
     }
 
-    if (!companyDetail.companyEmail.trim()) {
-      newErrors.companyEmail = "Company email is required";
-    } else if (!regex.email.test(companyDetail.companyEmail)) {
-      newErrors.companyEmail = "Enter a valid email";
-    }
-    
-    if (!companyDetail.gstin.trim()) {
-      newErrors.gstin = "GST IN number is required";
-    } else if (
-      companyDetail.gstin &&
-      !regex.gstRegex.test(companyDetail.gstin.trim().toUpperCase())
+    if (
+      companyDetail.companyPhone &&
+      !regex.phone.test(String(companyDetail.companyPhone))
     ) {
-      newErrors.gstin = "Enter a valid GST IN number";
+      newErrors.companyPhone = "Phone number must be 10 digits";
     }
 
     setErrors(newErrors);
@@ -120,9 +118,12 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
     const formData = new FormData();
 
     formData.append("companyName", companyDetail.companyName);
-
-    formData.append("companyEmail", companyDetail.companyEmail);
-
+    companyDetail.companyEmail &&
+      formData.append("companyEmail", companyDetail.companyEmail);
+    companyDetail.companyPhone &&
+      formData.append("companyPhone", String(companyDetail.companyPhone));
+    companyDetail.companyAddress &&
+      formData.append("companyAddress", companyDetail.companyAddress);
     formData.append("gstin", companyDetail.gstin);
 
     if (companyDetail.companyLogo) {
@@ -134,7 +135,6 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
     if (response?.success) {
       setIsOpen(false);
       getAdminProfile();
-      setUser(response?.data)      
     }
 
     setLoading(false);
@@ -142,35 +142,46 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
 
   return (
     <>
-      <div className="companyDetailsCard content-card border grid-cols-1">
-        <div className="companyHeader">
-          <div className="employee_pic">
-            <Image src={companyDetails?.companyLogo} alt="CompanyLogo" />
+      <div className="content-card border flex flex-col gap-2 p-2 sm:p-4">
+        <div className="bg-primary p-2.5 flex items-center gap-4">
+          <div className="bg-white">
+            <Image
+              src={companyDetails.companyLogo}
+              alt={companyDetails.companyName}
+              className="w-28
+            h-18
+            min-w-28
+            min-h-18
+            shrink-0
+            object-contain"
+            />
           </div>
-          <div className="employee_name">{companyDetails?.companyName}</div>
+          <div className="">
+            <h2 className="text-lg text-white font-medium">
+              {companyDetail.companyName}
+            </h2>
+          </div>
         </div>
-        <div className="employeedetail_parts">
-          <div className="titlelabel">
-            Company Details{" "}
-            <div
-              className="action_btn ml_10"
-              onClick={() => setIsOpen((prev) => !prev)}
-            >
-              <i className="fa-solid fa-pen-to-square"></i>
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between pb-2 border-b text-secondary font-medium">
+            <h2>Company Details</h2>
+            <div onClick={() => setIsOpen((prev) => !prev)}>
+              <i className="fa-solid fa-pen-to-square cursor-pointer text-secondary/60"></i>
             </div>
           </div>
-          <div className="employee_detailsitems">
-            <div className="employee_detail_single">
-              <div className="label">Company Email</div>
-              <div className="labelvalue">{companyDetails?.companyEmail}</div>
-            </div>
-            <div className="employee_detail_single">
-              <div className="label">GST IN No.</div>
-              <div className="labelvalue">
-                {companyDetails?.gstin ? companyDetails?.gstin : "-"}
-              </div>
-            </div>
-          </div>
+          <DetailRow
+            label={"Company Email"}
+            value={companyDetail.companyEmail}
+          />
+          <DetailRow
+            label={"Company Phone No."}
+            value={companyDetail.companyPhone}
+          />
+          <DetailRow
+            label={"Company Address"}
+            value={companyDetail.companyAddress}
+          />
+          <DetailRow label={"GST IN No."} value={companyDetail.gstin} />
         </div>
       </div>
       <Modal
@@ -181,51 +192,65 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
         confirmButtonName="Save"
         loading={loading}
       >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Company Logo */}
-            <ImageUpload
-              label="Company Logo"
-              value={companyDetail?.companyLogo}
-              required
-              onChange={(file) => {
-                handleChange(file, "companyLogo");
-              }}
-              error={errors.companyLogo}
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Company Logo */}
+          <ImageUpload
+            label="Company Logo"
+            value={companyDetail?.companyLogo}
+            required
+            onChange={(file) => {
+              handleChange(file, "companyLogo");
+            }}
+            error={errors.companyLogo}
+          />
 
-            {/* Empty column for alignment */}
-            <div></div>
+          {/* Empty column for alignment */}
+          <div></div>
 
-            {/* Company Name */}
-            <TextField
-              required
-              label="Company Name"
-              placeholder="Enter company name"
-              value={companyDetail.companyName}
-              error={errors.companyName}
-              onChange={(e) => handleChange(e.target.value, "companyName")}
-            />
+          {/* Company Name */}
+          <TextField
+            required
+            label="Company Name"
+            placeholder="Enter company name"
+            value={companyDetail.companyName}
+            error={errors.companyName}
+            onChange={(e) => handleChange(e.target.value, "companyName")}
+          />
 
-            {/* Company Email */}
-            <TextField
-              required
-              label="Company Email"
-              placeholder="Enter company email"
-              value={companyDetail.companyEmail}
-              error={errors.companyEmail}
-              onChange={(e) => handleChange(e.target.value, "companyEmail")}
-            />
+          {/* Company Email */}
+          <TextField
+            label="Company Email"
+            placeholder="Enter company email"
+            value={companyDetail.companyEmail}
+            onChange={(e) => handleChange(e.target.value, "companyEmail")}
+          />
 
-            {/* GST Number */}
-            <TextField
-              required
-              label="GST IN Number"
-              placeholder="Enter GST Number"
-              value={companyDetail.gstin}
-              error={errors.gstin}
-              onChange={(e) => handleChange(e.target.value, "gstin")}
-            />
-          </div>
+          <TextField
+            label="Company Phone No."
+            type="number"
+            min={10}
+            placeholder="Enter company phone no."
+            value={companyDetail.companyPhone}
+            onChange={(e) => handleChange(e.target.value, "companyPhone")}
+          />
+
+          {/* GST Number */}
+          <TextField
+            label="GST IN Number"
+            placeholder="Enter GST Number"
+            value={companyDetail.gstin}
+            onChange={(e) => handleChange(e.target.value, "gstin")}
+          />
+
+          {/* Address */}
+          <TextAreaField
+            label="Company Address"
+            name={"companyAddress"}
+            placeholder="Enter GST Number"
+            value={companyDetail.companyAddress}
+            onChange={(e) => handleChange(e.target.value, "companyAddress")}
+          />
+        </div>
       </Modal>
     </>
   );

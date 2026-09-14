@@ -1,4 +1,3 @@
-import { Info } from "lucide-react";
 import { IDepartment } from ".";
 import { roleNames, statusBgColor } from "../../../../constants/constants";
 import EmptyPlaceholder from "../../../common/empty-paceholder";

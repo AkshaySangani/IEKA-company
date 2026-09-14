@@ -157,7 +157,7 @@ export default function ResignedEmployeeTable({
         return (
           <StatusCell
             status={row.status}
-            isEditable={row.status !== statusEnum.REJECTED && !isManager}
+            isEditable={row.status !== statusEnum.ACCEPTED && !isManager}
             onEdit={() => handleUpdateStatus(row, "status")}
             onHistory={() =>
               handleShowHistory(row, HistoryFieldEnum.ResignationStatus)

@@ -4,7 +4,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import TextField from "../text-field/TextField";
-import { createPortal } from "react-dom";
 
 interface Props {
   label?: string;

@@ -19,7 +19,6 @@ import {
 import { promotionStatusOptions } from "../../../../constants/constants";
 import Button from "../../../common/button/Button";
 import {
-  getEmployees,
   getManagedEmployee,
 } from "../../../../apis/workforce/all-employee.api";
 import { IEmployee } from "../all-employees";

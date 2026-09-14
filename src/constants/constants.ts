@@ -99,7 +99,10 @@ export const pathNames = {
   ALL_EMPLOYEE_PAY_SLIP: "/pay-slip/all-employee-pay-slip",
   EMPLOYEE_PAY_SLIP_DETAILS_ID: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details/:id",
   EMPLOYEE_PAY_SLIP_DETAILS: "/pay-slip/all-employee-pay-slip/employee-pay-slip-details",
-  EMPLOYEE_PAY_SLIP_DOWNLOAD: "/pay-slip/all-employee-pay-slip/pay-slip-download"
+  EMPLOYEE_PAY_SLIP_DOWNLOAD: "/pay-slip/all-employee-pay-slip/pay-slip-download",
+
+  // profile route
+  MY_PROFILE:"/my-profile"
 } as const;
 
   // =========================
@@ -118,7 +121,10 @@ export const employeePathNames = {
   REIMBURSEMENT_DETAILS: "/reimbursement/reimbursement-details",
   RESIGNATION: "/resignation",
   PAY_SLIP: "/pay_slip",
-  PAY_SLIP_DOWNLOAD: "/pay_slip/pay-slip-download"
+  PAY_SLIP_DOWNLOAD: "/pay_slip/pay-slip-download",
+
+  // profile route
+  MY_PROFILE:"/my-profile"
 }
 
 export const roleBasePaths: ObjectType = {

@@ -12,7 +12,7 @@ import ResignedEmployeeTable from "./ResignedEmployeeTable";
 import {
   getResignedEmployeeCount,
   getResignedEmployees,
-  updateResignedEmployeeStatus,
+  updateResignedEmployeeStatus, 
 } from "../../../../apis/workforce/resigned.api";
 import Pagination from "../../../common/pagination/Pagination";
 import { acceptStatusOptions } from "../../../../constants/constants";
@@ -209,19 +209,11 @@ const ResignedEmployees = () => {
   // handle update status
   const handleUpdateStatus = (employeeDetails: ResignationRequest, type: "status" | "update") => {
     if(type === "status"){
-      if (employeeDetails.status === statusEnum.ACCEPTED) {
-        handleResignation();
-      } else {
-        handleStatusOpenClose();
-      }
+      handleStatusOpenClose();
       setEmployeeDetails(employeeDetails);
     } else {
       handleOpenClose(employeeDetails);
     }
-  };
-
-  const handleResignation = () => {
-    setEmployeeDetails(initialEmployee);
   };
 
   const handleStatusSubmit = async (formData: {

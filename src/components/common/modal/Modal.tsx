@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../button/Button";
-import { Toaster } from "react-hot-toast";
+// import { Toaster } from "react-hot-toast";
 import useDevice from "../../../hooks/useDevice";
 
 interface ModalProps {
@@ -70,6 +70,7 @@ const Modal = ({
 
       return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line
   }, [isOpen]);
 
   /**
@@ -99,6 +100,7 @@ const Modal = ({
         setIsVisible(true);
       });
     });
+    // eslint-disable-next-line
   }, [shouldRender, isClosing]);
 
   /**
@@ -115,25 +117,25 @@ const Modal = ({
   /**
    * Close when clicking outside dialog
    */
-  const handleDialogClick = (event: React.MouseEvent<HTMLDialogElement>) => {
-    const dialog = dialogRef.current;
+  // const handleDialogClick = (event: React.MouseEvent<HTMLDialogElement>) => {
+  //   const dialog = dialogRef.current;
 
-    if (!dialog || isClosing) {
-      return;
-    }
+  //   if (!dialog || isClosing) {
+  //     return;
+  //   }
 
-    const rect = dialog.getBoundingClientRect();
+  //   const rect = dialog.getBoundingClientRect();
 
-    const clickedOutside =
-      event.clientX < rect.left ||
-      event.clientX > rect.right ||
-      event.clientY < rect.top ||
-      event.clientY > rect.bottom;
+  //   const clickedOutside =
+  //     event.clientX < rect.left ||
+  //     event.clientX > rect.right ||
+  //     event.clientY < rect.top ||
+  //     event.clientY > rect.bottom;
 
-    if (clickedOutside) {
-      onClose();
-    }
-  };
+  //   if (clickedOutside) {
+  //     onClose();
+  //   }
+  // };
 
   /**
    * Don't render dialog when completely closed

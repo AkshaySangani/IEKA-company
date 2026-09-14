@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -35,9 +35,8 @@ export default function DatePickerField({
   maxDate,
   onChange,
   disabled = false,
-  dateFormat = DateFormat.DEFAULT
+  dateFormat = DateFormat.DEFAULT,
 }: Props) {
-
   const [open, setOpen] = useState(false);
   const [tempDate, setTempDate] = useState<Date | null>(null);
 
@@ -115,7 +114,12 @@ export default function DatePickerField({
             name={name}
             error={error}
             disabled={disabled}
-            icon={<i className="fa-regular fa-calendar text-secondary/60" onClick={handleClick}></i>}
+            icon={
+              <i
+                className="fa-regular fa-calendar text-secondary/60"
+                onClick={handleClick}
+              ></i>
+            }
           />
         }
         minDate={minDate}
@@ -123,7 +127,7 @@ export default function DatePickerField({
         onChange={handleDateChange}
         shouldCloseOnSelect
         onClickOutside={() => setOpen(false)}
-        
+
         // popperPlacement="top-start"
         /**
          * Important:

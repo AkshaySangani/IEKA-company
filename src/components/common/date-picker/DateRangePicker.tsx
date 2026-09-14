@@ -58,48 +58,6 @@ export default function DateRangePicker({
     }
   }, [startDate, endDate]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const text = e.target.value;
-
-    setValue(text);
-
-    const parts = text.split(" - ");
-
-    if (parts.length === 2) {
-      const start = parseDate(parts[0]);
-      const end = parseDate(parts[1]);
-
-      if (start && end) {
-        setTempStartDate(start);
-        setTempEndDate(end);
-      }
-    } else if (parts.length === 1) {
-      const start = parseDate(parts[0]);
-
-      if (start) {
-        onChange([start, endDate]); // <-- updates current month while typing
-      }
-    }
-  };
-
-  const parseDate = (value: string): Date | null => {
-    const [day, month, year] = value.trim().split("-").map(Number);
-
-    if (!day || !month || !year) return null;
-
-    const date = new Date(year, month - 1, day);
-
-    if (
-      date.getDate() !== day ||
-      date.getMonth() !== month - 1 ||
-      date.getFullYear() !== year
-    ) {
-      return null;
-    }
-
-    return date;
-  };
-
   return (
     <div className="relative">
       {label && (
@@ -117,6 +75,7 @@ export default function DateRangePicker({
         dateFormat={DATE_FORMAT}
         customInput={
           <TextField
+            value={value}
             className="w-full"
             placeholder={DATE_FORMAT}
             error={error}

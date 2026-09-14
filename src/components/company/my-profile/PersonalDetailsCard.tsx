@@ -8,6 +8,8 @@ import { regex } from "../../../constants/validation-regex";
 import { updateProfile } from "../../../apis/admin/my-profile";
 import Image from "../../common/image";
 import { statusColor, statusMessage } from "../../../constants/constants";
+import DetailRow from "../../common/detail-row";
+import UserImage from "../../../assets/images/User-Image.png";
 
 interface PersonalDetailsProps {
   profile: IAdminProfile;
@@ -16,31 +18,31 @@ interface PersonalDetailsProps {
 
 interface ProfileForm {
   profileImage: File | string | null;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
-}
-
-interface FormErrors {
-  profileImage?: string;
-  email?: string;
-  phone?: string;
 }
 
 const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
   profile,
   getAdminProfile,
 }: PersonalDetailsProps) => {
-  const {setUser} = useAuthStore();
+  const { setUser } = useAuthStore();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
   const [profileDetail, setUserDetail] = useState<ProfileForm>({
-    profileImage: profile?.profileImage || null,
+    profileImage: profile?.profileImage || "",
     email: profile?.email || "",
     phone: profile?.phone || "",
+    firstName: profile?.firstName || "",
+    lastName: profile?.lastName || "",
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof ProfileForm, string>>
+  >({});
 
   useEffect(() => {
     if (isOpen) {
@@ -48,6 +50,8 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
         profileImage: profile?.profileImage || null,
         email: profile?.email || "",
         phone: profile?.phone || "",
+        firstName: profile?.firstName || "",
+        lastName: profile?.lastName || "",
       });
 
       setErrors({});
@@ -73,13 +77,21 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
 
   // validate form field
   const validateForm = () => {
-    const newErrors: FormErrors = {};
+    const newErrors: Partial<Record<keyof ProfileForm, string>> = {};
 
-    // if (!profileDetail.email.trim()) {
-    //   newErrors.email = "Email is required";
-    // } else if (!regex.email.test(profileDetail.email)) {
-    //   newErrors.email = "Enter a valid email address";
-    // }
+    if (!profileDetail.firstName) {
+      newErrors.firstName = "First name is required";
+    }
+    if (!profileDetail.lastName) {
+      newErrors.lastName = "Last name is required.";
+    }
+
+    if (!profileDetail.email.trim()) {
+      newErrors.email = "Email is required";
+    }
+    if (!regex.email.test(profileDetail.email)) {
+      newErrors.email = "Enter a valid email address";
+    }
 
     if (!profileDetail.profileImage) {
       newErrors.profileImage = "Profile Image is required";
@@ -104,8 +116,9 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
 
     const formData = new FormData();
 
-    // formData.append("email", profileDetail.email);
-
+    formData.append("firstName", profileDetail.firstName);
+    formData.append("lastName", profileDetail.lastName);
+    formData.append("email", profileDetail.email);
     formData.append("phone", profileDetail.phone);
 
     if (profileDetail.profileImage) {
@@ -117,7 +130,6 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
     if (response?.success) {
       getAdminProfile();
       setIsOpen(false);
-      setUser(response?.data)
     }
 
     setLoading(false);
@@ -125,55 +137,40 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
 
   return (
     <>
-      <div className="companyDetailsCard secondcard content-card border">
-        <div className="employebody">
-          <div className="employeedetail_parts">
-            <div className="titlelabel">
-              Personal Details{" "}
-              <div
-                className="action_btn ml_10"
-                onClick={() => setIsOpen((prev) => !prev)}
-              >
-                <i className="fa-solid fa-pen-to-square"></i>
-              </div>
-            </div>
-            <div className="flex justify-center py-[10px] bg-gray-200">
-              <Image src={profile?.profileImage} alt="UserProfile" width="80" />
-            </div>
-
-            <div className="employee_detailsitems">
-              {/* <div className="employee_detail_single">
-                <div className="label">User Id.</div>
-                <div className="labelvalue curruntmultidiv">
-                  <div className="curruntvalue">589845</div>
-                </div>
-              </div> */}
-              <div className="employee_detail_single">
-                <div className="label">Name</div>
-                <div className="labelvalue curruntmultidiv">
-                  <div className="curruntvalue">
-                    {profile?.firstName} {profile?.lastName}
-                  </div>
-                </div>
-              </div>
-              <div className="employee_detail_single">
-                <div className="label">Status</div>
-                <div className="labelvalue curruntmultidiv">
-                  <div className="curruntvalue">
-                    <span className={`status font-medium ${statusColor[profile?.status]}`}>{statusMessage[profile?.status]}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="employee_detail_single">
-                <div className="label">Email</div>
-                <div className="labelvalue">{profile?.email}</div>
-              </div>
-              <div className="employee_detail_single">
-                <div className="label">Phone No.</div>
-                <div className="labelvalue">{profile?.phone}</div>
-              </div>
-            </div>
+      <div className="content-card border p-2 sm:p-4 flex flex-col gap-2">
+        <div className="flex justify-between pb-2 border-b text-secondary font-medium">
+          <h2>Personal Details</h2>
+          <div onClick={() => setIsOpen((prev) => !prev)}>
+            <i className="fa-solid fa-pen-to-square cursor-pointer text-secondary/60"></i>
           </div>
+        </div>
+        <div className="flex justify-center py-[10px] bg-gray-200">
+          <Image
+            src={profile?.profileImage}
+            fallbackSrc={UserImage}
+            alt={profile.firstName}
+            className="w-16 h-16 rounded-full object-contain"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <DetailRow label={"User Id."} value={profile.userId} />
+          <DetailRow
+            label={"Name"}
+            value={`${profile.firstName} ${profile.lastName}`}
+          />
+          <DetailRow
+            label={"Status"}
+            value={
+              <span
+                className={`font-medium text-sm ${statusColor[profile.status] ?? "text-secondary"}`}
+              >
+                {statusMessage[profile.status]}
+              </span>
+            }
+          />
+          <DetailRow label={"Email"} value={profile.email} />
+          <DetailRow label={"Phone No."} value={profile.phone} />
         </div>
       </div>
       <Modal
@@ -184,27 +181,59 @@ const PersonalDetailsCard: React.FC<PersonalDetailsProps> = ({
         loading={loading}
         confirmButtonName="Save"
       >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Person Picture  */}
-            <ImageUpload
-              label="Person Picture "
-              required
-              value={profileDetail?.profileImage}
-              error={errors.profileImage}
-              onChange={(file) => {
-                handleChange(file, "profileImage");
-              }}
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Person Picture  */}
+          <ImageUpload
+            label="Person Picture "
+            required
+            value={profileDetail?.profileImage}
+            error={errors.profileImage}
+            onChange={(file) => {
+              handleChange(file, "profileImage");
+            }}
+          />
 
-            {/* Empty column for alignment */}
-            <div></div>
+          {/* Empty column for alignment */}
+          <div></div>
 
-            {/* Email */}
-            {/* <TextField label="Email" placeholder="Enter your email" /> */}
+          {/* First Name */}
+          <TextField
+            label="First Name"
+            value={profileDetail.firstName}
+            placeholder="Enter your first name"
+            error={errors.firstName}
+            onChange={(e) => handleChange(e.target.value, "firstName")}
+          />
 
-            {/* Phone No. */}
-            <TextField label="Phone No." type="number" error={errors.phone} onChange={(e) => handleChange(e.target.value, "phone")} value={profileDetail?.phone} placeholder="Phone No. xxxxx xxxxx" />
-          </div>
+          {/* last Name */}
+          <TextField
+            label="Last Name"
+            value={profileDetail.lastName}
+            placeholder="Enter your last name"
+            error={errors.lastName}
+            onChange={(e) => handleChange(e.target.value, "lastName")}
+          />
+
+          {/* Email */}
+          <TextField
+            label="Email"
+            placeholder="Enter your email"
+            error={errors.email}
+            value={profileDetail.email}
+            onChange={(e) => handleChange(e.target.value, "email")}
+          />
+
+          {/* Phone No. */}
+          <TextField
+            label="Phone No."
+            type="number"
+            min={10}
+            error={errors.phone}
+            onChange={(e) => handleChange(e.target.value, "phone")}
+            value={profileDetail?.phone}
+            placeholder="Phone No. xxxxx xxxxx"
+          />
+        </div>
       </Modal>
     </>
   );

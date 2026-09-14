@@ -83,6 +83,9 @@ export const pathLabel = {
   EMPLOYEE_PAY_SLIP_DETAILS: "Employee Pay Slip Details",
   EMPLOYEE_PAY_SLIP_DETAILS_ID: "Employee Pay Slip Details",
   EMPLOYEE_PAY_SLIP_DOWNLOAD: "Pay Slip Download",
+
+  // profile route
+  MY_PROFILE:"My Profile"
 } as const;
 
 export const getPathLabel = (pathname: string): string => {

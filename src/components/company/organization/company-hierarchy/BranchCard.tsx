@@ -10,7 +10,6 @@ import PersonInfo from "../../../common/person-info";
 import { roleNames, statusBgColor } from "../../../../constants/constants";
 import { BranchTypeEnum } from "../../../../types/common-types";
 import EmptyPlaceholder from "../../../common/empty-paceholder";
-import { Info } from "lucide-react";
 
 interface BranchCardProps {
   branch: IBranch;
