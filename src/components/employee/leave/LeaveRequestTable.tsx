@@ -6,26 +6,43 @@ import {
 } from "../../../apis/history/history.api";
 import { ColumnDef, CustomTable } from "../../common/table";
 import { DateFormat, formatDate } from "../../../utils/date-format";
-import InfoIcon from "../../../assets/icons/Info";
-import { statusColor, statusMessage } from "../../../constants/constants";
 import {
   HistoryFieldEnum,
   LeaveDurationNames,
+  statusEnum,
 } from "../../../types/common-types";
 import HistoryModal from "../../common/modal/HistoryModal";
 import { getFirstCharacter } from "../../../utils/helper";
 import Description from "../../common/description";
+import StatusCell from "../../common/status-cell";
+import ActionModal from "../../common/modal/ActionModal";
+import { deleteLeaveRequest } from "../../../apis/performance/leave-request.api";
 
 interface IEmployeeLeaveRequestListProps {
   leaves: IEmployeeLeaveRequest[];
+  refreshData: () => void;
 }
 
 export default function EmployeeLeaveRequestTable({
   leaves,
+  refreshData = () => {},
 }: IEmployeeLeaveRequestListProps) {
   // history states
   const [historyOpen, setHistoryOpen] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryPayload>(initialHistory);
+
+  const [actionOpen, setActionOpen] = useState<boolean>(false);
+  const [expenseId, setExpenseId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleAction = (row?: IEmployeeLeaveRequest) => {
+    setActionOpen((prev) => !prev);
+    if (row && row?._id) {
+      setExpenseId(row._id);
+    } else {
+      setExpenseId("");
+    }
+  };
 
   // Define configuration structures with isolated column custom components
   const columns: ColumnDef<IEmployeeLeaveRequest>[] = [
@@ -70,14 +87,15 @@ export default function EmployeeLeaveRequestTable({
       header: "Status",
       className: "",
       render: (row) => {
+        const isDeletable = row.status === statusEnum.PENDING;
         return (
-          <div className="flex items-center gap-1.5">
-            {/* Info SVG icon asset matching your design layout */}
-            <InfoIcon onClick={() => handleShowHistory(row)} />
-            <span className={`font-medium text-sm ${statusColor[row.status]}`}>
-              {statusMessage[row.status]}
-            </span>
-          </div>
+          <StatusCell
+            status={row.status}
+            isEditable={false}
+            onHistory={() => handleShowHistory(row)}
+            isDeletable={isDeletable}
+            onDelete={() => handleAction(row)}
+          />
         );
       },
     },
@@ -99,6 +117,15 @@ export default function EmployeeLeaveRequestTable({
     });
   };
 
+  const handleOnConfirm = async () => {
+    setLoading(true);
+    const response = await deleteLeaveRequest(expenseId);
+    if (response.success) {
+      refreshData();
+    }
+    setLoading(false);
+  };
+
   return (
     <>
       <CustomTable columns={columns} data={leaves} />
@@ -107,6 +134,13 @@ export default function EmployeeLeaveRequestTable({
         handleOpenClose={handleHistoryOpenClose}
         history={history}
         isMailHistory={history.field === HistoryFieldEnum.PromotionMail}
+      />
+      <ActionModal
+        isOpen={actionOpen}
+        title={`Are you sure you want to delete this leave request?`}
+        loading={loading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
       />
     </>
   );

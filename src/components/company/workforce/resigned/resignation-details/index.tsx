@@ -71,10 +71,10 @@ const ResignationDetails: React.FC = () => {
   };
 
   // handle Apply resignation open close
-  const handleOpenClose = (resignation?: ResignationRequest | null) => {
+  const handleOpenClose = (resignationId?: string) => {
     setShow((prev) => !prev);
-    if (resignation) {
-      setResignationId(resignation._id);
+    if (resignationId) {
+      setResignationId(resignationId);
     } else {
       setResignationId("");
     }
@@ -98,7 +98,7 @@ const ResignationDetails: React.FC = () => {
               <Button
                 name="Add New"
                 size="sm"
-                onClick={() => handleOpenClose(resignation)}
+                onClick={() => handleOpenClose(user._id)}
                 leftIcon={<i className="fa-solid fa-plus"></i>}
               />
             )}
@@ -173,7 +173,7 @@ const ResignationDetails: React.FC = () => {
               </div>
 
               <div className="text-md font-semibold text-secondary">
-                {resignation.userId.firstName}
+                {formatDate(resignation.createdAt)}
               </div>
             </div>
 

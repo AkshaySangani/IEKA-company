@@ -166,18 +166,18 @@ export default function ResignedEmployeeTable({
             <Badge
               label="Relieving"
               onClick={() =>
-                navigate(`${pathNames.RELIEVING_LETTER}/${row._id}`)
+                navigate(`${pathNames.RELIEVING_LETTER}/${row.userId?._id}`)
               }
             />
             <Badge
               label="Experience"
               onClick={() =>
-                navigate(`${pathNames.EXPERIENCE_LETTER}/${row._id}`)
+                navigate(`${pathNames.EXPERIENCE_LETTER}/${row.userId?._id}`)
               }
             />
             <Badge
               label="F & F"
-              onClick={() => navigate(`${pathNames.FNF_LETTER}/${row._id}`)}
+              onClick={() => navigate(`${pathNames.FNF_LETTER}/${row.userId?._id}`)}
             />
           </div>
         ) : "-"}

@@ -225,6 +225,10 @@ const EmployeeLeaveRequest: React.FC = () => {
         />
         <EmployeeLeaveRequestTable
           leaves={leaveList}
+          refreshData={() => {
+            fetchEmployeeLeaveRequestList({ page, limit, search, status: activeCard });
+            fetchLeaveCounts();
+          }}
         />
         <Pagination
           totalRecords={total}

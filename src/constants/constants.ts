@@ -145,6 +145,12 @@ export const roleBasePaths: ObjectType = {
     pathNames.TERMINATION_LETTER_ID,
     pathNames.TERMINATION_LETTER,
     pathNames.PROMOTION,
+    pathNames.RELIEVING_LETTER,
+    pathNames.EXPERIENCE_LETTER,
+    pathNames.FNF_LETTER,
+    pathNames.RELIEVING_LETTER_ID,
+    pathNames.EXPERIENCE_LETTER_ID,
+    pathNames.FNF_LETTER_ID,
 
     // Performance
     pathNames.PERFORMANCE,
