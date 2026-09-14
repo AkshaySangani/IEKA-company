@@ -14,9 +14,7 @@ interface ResignCertificatesProps {
   title: string;
 }
 
-const ResignCertificates = ({
-  title,
-}: ResignCertificatesProps) => {
+const ResignCertificates = ({ title }: ResignCertificatesProps) => {
   const { id } = useParams();
 
   const [data, setData] = useState<LetterData>(initialLetterData);
@@ -48,7 +46,7 @@ const ResignCertificates = ({
 
       const lastWorkingDate = formatDate(
         termination?.lastWorkingDate,
-        DateFormat.ISO_DATE
+        DateFormat.ISO_DATE,
       );
 
       setData((prev) => ({
@@ -56,11 +54,16 @@ const ResignCertificates = ({
 
         candidateName,
 
-        jobTitle: termination?.designationId?.name,
+        jobTitle: termination?.userId?.designationId?.name,
 
         terminationDate: formatDate(
           new Date().toISOString(),
-          DateFormat.ISO_DATE
+          DateFormat.ISO_DATE,
+        ),
+
+        joiningDate: formatDate(
+          termination?.userId?.createdAt,
+          DateFormat.ISO_DATE,
         ),
 
         lastWorkingDate,
@@ -76,10 +79,7 @@ const ResignCertificates = ({
     <>
       <PageLoader loading={loading} />
 
-      <Certificate
-        letterData={data}
-        title={title}
-      />
+      <Certificate letterData={data} title={title} />
     </>
   );
 };

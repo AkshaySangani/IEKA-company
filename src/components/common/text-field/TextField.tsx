@@ -6,6 +6,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
   required?: boolean;
   mainClassName?: string;
+  readOnly?: boolean;
 }
 
 const TextField: React.FC<InputProps> = ({
@@ -15,6 +16,7 @@ const TextField: React.FC<InputProps> = ({
   className = "",
   mainClassName = "",
   required,
+  readOnly = false,
   ...props
 }) => {
   const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
@@ -60,6 +62,7 @@ const TextField: React.FC<InputProps> = ({
           onChange={handleChange}
           onWheel={handleWheel}
           autoComplete={"off"}
+          readOnly={readOnly}
           className={`
             min-w-full
             border border-inputBorder

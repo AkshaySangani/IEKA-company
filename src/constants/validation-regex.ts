@@ -6,5 +6,6 @@ export const regex = {
   ifscCode: /^[A-Z]{4}0[A-Z0-9]{6}$/,
   aadhaarCard: /^\d{12}$/,
   panCard: /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
-  dlNumber: /^[A-Z]{2}-?\d{2}\d{11,13}$/
+  dlNumber: /^[A-Z]{2}-?\d{2}\d{11,13}$/,
+  urlRegex: /^(https?:\/\/)?([\w-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/
 };

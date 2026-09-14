@@ -29,7 +29,7 @@ export default function TerminationLetter() {
       setData((prev) => ({
         ...prev,
         candidateName: `${termination?.userId?.firstName} ${termination?.userId?.lastName}`,
-        jobTitle: termination?.designationId?.name,
+        jobTitle: termination?.userId?.designationId?.name,
         terminationDate: formatDate(termination?.createdAt,DateFormat.ISO_DATE),
         lastWorkingDate: formatDate(termination?.lastWorkingDate,DateFormat.ISO_DATE),
         effectiveDate: formatDate(termination?.lastWorkingDate,DateFormat.ISO_DATE),

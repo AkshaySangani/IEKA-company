@@ -175,7 +175,7 @@ const LetterPreview: React.FC<LetterPreviewProps> = ({
             <Draggable
               id="contact"
               defaultPosition={{
-                x: 380,
+                x: 370,
                 y: 965,
               }}
             >
@@ -193,7 +193,7 @@ const LetterPreview: React.FC<LetterPreviewProps> = ({
             <Draggable
               id="email"
               defaultPosition={{
-                x: 515,
+                x: 490,
                 y: 965,
               }}
             >

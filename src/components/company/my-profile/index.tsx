@@ -14,6 +14,7 @@ export interface ICompanyDetails {
   companyPhone: number;
   companyAddress: string;
   companyLogo: string;
+  companyWebsite: string;
 }
 
 export interface IAdminProfile {
@@ -52,6 +53,7 @@ const MyProfile = () => {
     companyPhone: 0,
     companyAddress: "",
     companyLogo: "",
+    companyWebsite: ""
   });
 
   useEffect(() => {

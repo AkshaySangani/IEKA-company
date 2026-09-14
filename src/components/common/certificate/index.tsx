@@ -87,10 +87,10 @@ export const initialLetterData: LetterData = {
   showLogo: true,
   showAuthPerson: true,
   showDesignation: true,
-  showAddress: true,
-  showContact: true,
-  showEmail: true,
-  showWebsite: true,
+  showAddress: false,
+  showContact: false,
+  showEmail: false,
+  showWebsite: false,
 };
 
 interface CertificateProps {
@@ -116,7 +116,7 @@ const Certificate = ({ title, letterData }: CertificateProps) => {
           ...letterData,
         }));
         if(letterData?.candidateName){
-        fetchCompanyData();
+          fetchCompanyData();
         }
       }
     })();
@@ -134,7 +134,7 @@ const Certificate = ({ title, letterData }: CertificateProps) => {
         contact: response?.data?.companyPhone || "",
         designation:  "Co-Founder",
         email: response?.data?.companyEmail || "",
-        website: response?.data?.website || "",
+        website: response?.data?.companyWebsite || "",
       }));
     }
   };

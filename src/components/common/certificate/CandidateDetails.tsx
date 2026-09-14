@@ -13,10 +13,7 @@ const CandidateDetails: React.FC<CandidateDetailsProps> = ({
   data,
   setData,
 }) => {
-  const handleChange = (
-    field: keyof LetterData,
-    value: string | boolean
-  ) => {
+  const handleChange = (field: keyof LetterData, value: string | boolean) => {
     setData((prev) => ({
       ...prev,
       [field]: value,
@@ -39,48 +36,63 @@ const CandidateDetails: React.FC<CandidateDetailsProps> = ({
       placeholder: "Enter job title",
     },
     {
-      label: title === "Termination Letter" ? "Termination Date" : title === "Promotion Letter" ? "Promotion Date" : "Generation Date",
+      label:
+        title === "Termination Letter"
+          ? "Termination Date"
+          : title === "Promotion Letter"
+            ? "Promotion Date"
+            : "Generation Date",
       key: "terminationDate",
       showKey: "showTerminationDate",
       type: "date",
     },
-    ...(title === "Promotion Letter" ? [{
-      label: "Promotion From",
-      key: "promotionFrom",
-      showKey: "showPromotionFrom",
-      type: "text",
-    },
-    {
-      label: "Promotion To",
-      key: "promotionTo",
-      showKey: "showPromotionTo",
-      type: "text",
-    },{
-      label: "Effective Date",
-      key: "effectiveDate",
-      showKey: "showEffectiveDate",
-      type: "date",
-    },]:[]),
-    ...(title !== "Promotion Letter" && title !== "Termination Letter" ? [
-    {
-      label: "Start Date",
-      key: "joiningDate",
-      showKey: "showJoiningDate",
-      type: "date",
-    },]:[]),
-    {
-      label: "Last Working Date",
-      key: "lastWorkingDate",
-      showKey: "showLastWorkingDate",
-      type: "date",
-    },
+    ...(title === "Promotion Letter"
+      ? [
+          {
+            label: "Promotion From",
+            key: "promotionFrom",
+            showKey: "showPromotionFrom",
+            type: "text",
+          },
+          {
+            label: "Promotion To",
+            key: "promotionTo",
+            showKey: "showPromotionTo",
+            type: "text",
+          },
+          {
+            label: "Effective Date",
+            key: "effectiveDate",
+            showKey: "showEffectiveDate",
+            type: "date",
+          },
+        ]
+      : []),
+    ...(title !== "Promotion Letter" && title !== "Termination Letter"
+      ? [
+          {
+            label: "Start Date",
+            key: "joiningDate",
+            showKey: "showJoiningDate",
+            type: "date",
+          },
+        ]
+      : []),
+    ...(title !== "Promotion Letter"
+      ? [
+          {
+            label: "Last Working Date",
+            key: "lastWorkingDate",
+            showKey: "showLastWorkingDate",
+            type: "date",
+          },
+        ]
+      : []),
   ];
 
   return (
     <div className="content-card p-4">
-        <h2 className="text-md font-medium text-slate-800">
-          Candidate Details
-        </h2>
+      <h2 className="text-md font-medium text-slate-800">Candidate Details</h2>
 
       <div className="space-y-3 mt-2 pl-2">
         {fields.map((field) => (
@@ -92,7 +104,7 @@ const CandidateDetails: React.FC<CandidateDetailsProps> = ({
                 onChange={(e) =>
                   handleChange(
                     field.showKey as keyof LetterData,
-                    e.target.checked
+                    e.target.checked,
                   )
                 }
               />
@@ -107,10 +119,7 @@ const CandidateDetails: React.FC<CandidateDetailsProps> = ({
               value={data[field.key as keyof LetterData] as string}
               placeholder={field.placeholder}
               onChange={(e) =>
-                handleChange(
-                  field.key as keyof LetterData,
-                  e.target.value
-                )
+                handleChange(field.key as keyof LetterData, e.target.value)
               }
               className="h-8 !w-52"
             />

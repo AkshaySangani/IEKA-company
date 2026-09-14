@@ -209,11 +209,11 @@ export enum AttendanceMethodEnum {
 }
 
 export enum AttendanceMethodNames {
-  MOBILE = "Mobile",
+  MOBILE = "App",
   WEB = "Web",
   BIOMETRIC = "Biometric",
   QR = "QR",
-  SYSTEM = "System",
+  SYSTEM = "Aut",
 }
 
 export enum AttendanceViewEnum {

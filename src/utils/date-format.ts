@@ -12,6 +12,7 @@ export enum DateFormat {
   FULL_MONTH_YEAR = "MMMM yyyy", // August 2026
   FULL_DATE = "dd MMM yyyy", // 01 Jul 2026
   FULL_DATE_TIME = "dd MMM yyyy, hh:mm a", // 01 Jul 2026, 10:30 AM
+  FULL_TIME = "hh:mm:ss a", // 10:30:00 AM
   DAY_DATE = "EEEE, dd MMM yyyy", // Wednesday, 01 Jul 2026
   ISO_DATE = "yyyy-MM-dd", // 2026-07-01
   YEAR = "yyyy", // 2026

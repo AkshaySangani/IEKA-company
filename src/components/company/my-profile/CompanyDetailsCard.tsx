@@ -23,6 +23,7 @@ interface CompanyDetailForm {
   companyLogo: File | string | null;
   companyAddress: string;
   companyPhone: number;
+  companyWebsite: string;
 }
 
 interface FormErrors {
@@ -31,13 +32,14 @@ interface FormErrors {
   gstin?: string;
   companyLogo?: string;
   companyPhone?: string;
+  companyWebsite?: string;
 }
 
 const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
   companyDetails,
   getAdminProfile,
 }: CompanyDetailsProps) => {
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
   const isOwner = user.role === RoleEnum.OWNER;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
@@ -48,7 +50,8 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
     gstin: companyDetails?.gstin || "",
     companyLogo: companyDetails?.companyLogo || null,
     companyAddress: companyDetails.companyAddress,
-    companyPhone: companyDetails.companyPhone
+    companyPhone: companyDetails.companyPhone,
+    companyWebsite: companyDetails.companyWebsite,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -62,7 +65,8 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
         gstin: companyDetails?.gstin || "",
         companyLogo: companyDetails?.companyLogo || null,
         companyAddress: companyDetails.companyAddress,
-        companyPhone: companyDetails.companyPhone
+        companyPhone: companyDetails.companyPhone,
+        companyWebsite: companyDetails.companyWebsite,
       });
 
       setErrors({});
@@ -106,6 +110,15 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
       newErrors.companyPhone = "Phone number must be 10 digits";
     }
 
+    if (!companyDetail.companyWebsite.trim()) {
+      newErrors.companyWebsite = "Company Website is required.";
+    } else if (
+      companyDetail.companyWebsite.trim() &&
+      !regex.urlRegex.test(String(companyDetail.companyWebsite))
+    ) {
+      newErrors.companyWebsite = "Invalid website url.";
+    }
+
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
@@ -128,6 +141,7 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
       formData.append("companyPhone", String(companyDetail.companyPhone));
     companyDetail.companyAddress &&
       formData.append("companyAddress", companyDetail.companyAddress);
+    formData.append("companyWebsite", companyDetail.companyWebsite);
     formData.append("gstin", companyDetail.gstin);
 
     if (companyDetail.companyLogo) {
@@ -169,9 +183,11 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
         <div className="flex flex-col gap-2">
           <div className="flex justify-between pb-2 border-b text-secondary font-medium">
             <h2>Company Details</h2>
-            {isOwner && <div onClick={() => setIsOpen((prev) => !prev)}>
-              <i className="fa-solid fa-pen-to-square cursor-pointer text-secondary/60"></i>
-            </div>}
+            {isOwner && (
+              <div onClick={() => setIsOpen((prev) => !prev)}>
+                <i className="fa-solid fa-pen-to-square cursor-pointer text-secondary/60"></i>
+              </div>
+            )}
           </div>
           <DetailRow
             label={"Company Email"}
@@ -186,6 +202,10 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
             value={companyDetail.companyAddress}
           />
           <DetailRow label={"GST IN No."} value={companyDetail.gstin} />
+          <DetailRow
+            label={"Company Website"}
+            value={companyDetail.companyWebsite}
+          />
         </div>
       </div>
       <Modal
@@ -244,6 +264,16 @@ const CompanyDetailsCard: React.FC<CompanyDetailsProps> = ({
             placeholder="Enter GST Number"
             value={companyDetail.gstin}
             onChange={(e) => handleChange(e.target.value, "gstin")}
+          />
+
+          {/* Company Website */}
+          <TextField
+            required
+            label="Company Website"
+            placeholder="Enter company website"
+            value={companyDetail.companyWebsite}
+            error={errors.companyWebsite}
+            onChange={(e) => handleChange(e.target.value, "companyWebsite")}
           />
 
           {/* Address */}
