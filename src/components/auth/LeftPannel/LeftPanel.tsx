@@ -35,7 +35,7 @@ const LeftPanel = () => {
               text-lg leading-[34px] pb-[3px]
             "
           >
-            Welcome to Mysuit
+            Workforce management system
           </div>
 
           <div className="flex flex-col mt-3">
@@ -85,8 +85,7 @@ const LeftPanel = () => {
               text-base leading-[22px]
             "
           >
-            Streamline your workforce, expense, communications and company
-            assets with the power of modern technology at all in one place.
+            Streamline your workforce, expense, & performance with the power of modern technology at all in one place.
           </div>
         </div>
       </div>

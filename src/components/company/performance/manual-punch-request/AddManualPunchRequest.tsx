@@ -59,6 +59,9 @@ const punchTypeOption: IOption[] = [
   },
 ];
 
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
 /* -------------------------------------------------------------------------- */
 /*                              COMPONENT                                     */
 /* -------------------------------------------------------------------------- */
@@ -429,7 +432,7 @@ const AddManualPunchRequest: React.FC<AddManualPunchRequestProps> = ({
               value={
                 formData.manual.date
               }
-              maxDate={new Date()}
+              maxDate={yesterday}
               onChange={(date: string): void => {
                 handleManualChange("date", date);
               }}

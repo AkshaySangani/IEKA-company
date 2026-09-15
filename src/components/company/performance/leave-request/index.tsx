@@ -253,7 +253,7 @@ const LeaveRequest: React.FC = () => {
         title="All Leave Requests"
         actionButtons={
           <Button
-            name="Add Leave"
+            name="Add New"
             size="sm"
             onClick={handleOnAdd}
             leftIcon={<i className="fa-solid fa-plus"></i>}

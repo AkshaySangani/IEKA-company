@@ -128,6 +128,7 @@ const ExpenseStatCard: React.FC<ExpenseStatCardProps> = ({
             md:h-9
             md:w-9
             ${activeColor}
+            md:text-[22px]
           `}
         >
           ₹

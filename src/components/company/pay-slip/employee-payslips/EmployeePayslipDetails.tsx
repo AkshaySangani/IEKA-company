@@ -170,6 +170,7 @@ export const EmployeePayslipDetails = ({ id }: EmployeePayslipDetailsProps) => {
               value={year}
               onChange={handleYearChange}
               pickerClassName="right-0"
+              className="w-28"
             />
 
             {isOwner && (

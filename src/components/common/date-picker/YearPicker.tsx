@@ -10,6 +10,7 @@ interface YearPickerProps {
   placeholder?: string;
   onChange: (year: number) => void;
   disabled?: boolean;
+  className?: string;
   pickerClassName?: string;
 }
 
@@ -21,6 +22,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
   placeholder = "Select Year",
   onChange,
   disabled,
+  className = "",
   pickerClassName = "",
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -62,7 +64,7 @@ const YearPicker: React.FC<YearPickerProps> = ({
   };
 
   return (
-    <div className="relative" ref={ref}>
+    <div className={`relative ${className}`} ref={ref}>
 
       <TextField
         disabled={disabled}

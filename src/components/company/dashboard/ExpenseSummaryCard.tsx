@@ -117,13 +117,13 @@ export default function ExpenseSummaryCard({
         <div className="py-4 sm:py-5">
           <div className="flex flex-col">
             <div className="flex items-center gap-1">
-              <div className="h-[45px] w-[45px] sm:h-[45px] sm:w-[45px] rounded-full bg-primaryBlue flex items-center justify-center">
-                <span className="text-3xl font-medium text-white">
+              <div className="h-[45px] w-[45px] sm:h-[40px] sm:w-[40px] rounded-full bg-primaryBlue flex items-center justify-center">
+                <span className="text-2xl font-medium text-white">
                   {currency.INR}
                 </span>
               </div>
 
-              <span className="text-2xl font-medium text-secondary sm:text-[26px]">
+              <span className="text-2xl font-medium text-secondary sm:text-xl">
                 {total?.amount && getFloatValue(total.amount)}
               </span>
             </div>

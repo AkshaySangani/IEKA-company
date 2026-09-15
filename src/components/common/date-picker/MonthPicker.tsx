@@ -17,6 +17,7 @@ interface MonthPickerProps {
   // Minimum selectable month
   minDate?: MonthPickerValue;
   onChange: (value: MonthPickerValue) => void;
+  className?: string;
   pickerClassName?: string;
 }
 
@@ -44,6 +45,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
   disabled,
   minDate,
   onChange,
+  className = "",
   pickerClassName = ""
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -118,7 +120,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
   };
 
   return (
-    <div className="relative" ref={wrapperRef}>
+    <div className={`relative ${className}`} ref={wrapperRef}>
 
       <TextField
         disabled={disabled}

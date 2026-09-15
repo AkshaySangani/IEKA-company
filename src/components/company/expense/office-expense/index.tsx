@@ -336,7 +336,8 @@ const OfficeExpense: React.FC = () => {
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
-              pickerClassName="right-0"
+              pickerClassName="-right-14 sm:right-0"
+              className="w-28"
             />
             <Button
               name="Add New"

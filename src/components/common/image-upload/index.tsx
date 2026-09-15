@@ -2,13 +2,14 @@ import { Ref, useEffect, useRef, useState } from "react";
 import Image from "../image";
 
 interface ImageUploadProps {
-  label: string;
+  label?: string;
   name?: string;
   required?: boolean;
   value?: string | File | null;
   onChange?: (file: File | null) => void;
   error?: string;
   ref?: Ref<HTMLDivElement>;
+  inputClassName?: string;
 }
 
 const ImageUpload = ({
@@ -18,7 +19,8 @@ const ImageUpload = ({
   value = "",
   onChange,
   error,
-  ref
+  ref,
+  inputClassName
 }: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -82,7 +84,7 @@ const ImageUpload = ({
   };
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="overflow-hidden">
       {label && (
         <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
           {label} {required && <span className="text-error">*</span>}
@@ -99,7 +101,7 @@ const ImageUpload = ({
                   id="logo-upload"
                   type="file"
                   accept="image/*"
-                  className="cursor-pointer"
+                  className={`cursor-pointer ${inputClassName}`}
                   onChange={handleFileChange}
                 />
           </div>

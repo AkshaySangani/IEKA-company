@@ -153,13 +153,14 @@ const OverallExpense: React.FC = () => {
   return (
     <>
       <TopBar
-        title="Office Expense"
+        title="Overall Expense"
         actionButtons={
           <MonthPicker
             placeholder="Select Month"
             value={month}
             onChange={setMonth}
             pickerClassName="right-0"
+            className="w-28"
           />
         }
       />

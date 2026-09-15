@@ -232,15 +232,13 @@ const Holiday = () => {
         title="All Holidays"
         actionButtons={
           <div className="flex gap-2">
-            <div className="flex items-center gap-2 w-[150px]">
-              <label className="font-medium">Year</label>
               <YearPicker
                 placeholder="Select Year"
                 value={year}
                 onChange={handleYearChange}
                 pickerClassName="right-0"
+                className="w-28"
               />
-            </div>
             <Button
               name="Add New"
               size="sm"

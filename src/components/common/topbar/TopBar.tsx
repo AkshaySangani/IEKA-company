@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import XLSX from "../../../assets/images/xls.png";
 import PDF from "../../../assets/images/pdf_icon.png";
 import TextField from "../text-field/TextField";
@@ -6,7 +6,7 @@ import DownloadModal from "../download-modal/DownloadModal";
 import useDevice from "../../../hooks/useDevice";
 
 interface TopBarProps {
-  title?: string;
+  title?: string | ReactNode;
   actionButtons?: React.ReactNode;
   handleDownloadExcel?: (password: string) => void;
   handleDownloadPdfClick?: () => void;

@@ -16,7 +16,7 @@ const AuthLayout: React.FC = () => {
           max-lg:my-4
           max-lg:w-full
           max-lg:max-w-[500px]
-          max-lg:py-[60px]"
+          max-lg:py-[60px] gap-4"
       >
         <AuthLogo />
         <Outlet />

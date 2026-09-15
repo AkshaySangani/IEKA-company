@@ -19,7 +19,7 @@ export default function BranchCard({ branch }: BranchCardProps) {
     <>
       <div className="content-card">
         {/* Header */}
-        <div className="flex items-center justify-between bg-[#4F79C7] px-5 py-3 text-white">
+        <div className="flex items-center justify-between bg-primary px-3 py-2 text-white">
           <div className="flex items-center gap-2">
             <i className="fa-regular fa-building"></i>
             <div className="flex items-center gap-2 ">

@@ -88,6 +88,7 @@ const TextField: React.FC<InputProps> = ({
             disabled:text-disabledText
             disabled:placeholder:text-disabledText
             disabled:cursor-not-allowed
+            rounded-0
             ${error ? "border-error" : ""}
             ${icon ? "mr-2 pr-10" : ""}
             ${className}

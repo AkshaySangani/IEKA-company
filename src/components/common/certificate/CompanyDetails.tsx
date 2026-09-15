@@ -78,7 +78,7 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = ({ data, setData }) => {
       <div className="space-y-3 mt-2 pl-2">
         {/* Company Logo */}
 
-        <div className="">
+        <div className="flex items-center justify-between">
           <div className="mb-2 flex items-center gap-2">
             <TextField
               type="checkbox"
@@ -91,8 +91,8 @@ const CompanyDetails: React.FC<CompanyDetailsProps> = ({ data, setData }) => {
             </label>
           </div>
 
-          <div className="flex items-center gap-3">
-            <ImageUpload onChange={handleLogoChange} label={""} />
+          <div className="flex items-center gap-3 w-52">
+            <ImageUpload onChange={handleLogoChange} inputClassName={"text-sm"}/>
           </div>
         </div>
 

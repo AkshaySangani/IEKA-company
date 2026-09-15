@@ -59,7 +59,9 @@ const TextAreaField: React.FC<TextAreaProps> = ({
             placeholder:text-sm
             placeholder:font-normal
             focus:placeholder:pl-[10px]
-          text-sm
+          text-base
+            sm:text-sm
+            rounded-0
            ${className}
         `}
       />

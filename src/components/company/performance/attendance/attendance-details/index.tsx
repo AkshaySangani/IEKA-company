@@ -144,7 +144,7 @@ const EmployeeAttendanceDetails = ({ id }: EmployeeAttendanceDetailsProps) => {
             onClick={() => {}}
             leftIcon={<i className="fa-solid fa-list-check"></i>}
           /> */}
-          <MonthPicker value={selectedMonth} onChange={setSelectedMonth} />
+          <MonthPicker value={selectedMonth} onChange={setSelectedMonth} className="w-28"/>
           {!id && (
             <Button
               size="sm"

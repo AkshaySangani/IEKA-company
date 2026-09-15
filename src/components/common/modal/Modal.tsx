@@ -34,7 +34,7 @@ const Modal = ({
   onDownload = () => {},
   ref = null,
 }: ModalProps) => {
-  const {isMobile} = useDevice();
+  const { isMobile } = useDevice();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const [shouldRender, setShouldRender] = useState(false);
@@ -91,6 +91,10 @@ const Modal = ({
     if (!dialog.open) {
       dialog.showModal();
     }
+
+    requestAnimationFrame(() => {
+      (document.activeElement as HTMLElement)?.blur();
+    });
 
     // Important:
     // First render happens with translate-y-10

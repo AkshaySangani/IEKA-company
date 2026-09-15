@@ -279,9 +279,8 @@ const EmployeePayrollPerformance = () => {
             personClassName="text-black !text-md !font-[500]"
           />
         </div>
-        <div className="flex gap-3 items-center">
-          <span className="text-sm font-medium">Month</span>
-          <MonthPicker value={selectedMonth} onChange={setSelectedMonth} pickerClassName="right-0" />
+        <div className="flex gap-3 items-center ml-1">
+          <MonthPicker value={selectedMonth} onChange={setSelectedMonth} pickerClassName="right-0" className="w-28"/>
           <Button
             size="sm"
             variant={"danger"}

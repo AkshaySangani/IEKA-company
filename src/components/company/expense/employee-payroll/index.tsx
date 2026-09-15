@@ -220,15 +220,13 @@ const EmployeePayroll: React.FC = () => {
       <TopBar
         title="Employees Payroll"
         actionButtons={
-          <div className="flex items-center gap-2 w-[150px]">
-            {/* <label className="font-medium">Month</label> */}
             <MonthPicker
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
               pickerClassName="right-0"
+              className="w-28"
             />
-          </div>
         }
         isSearch
         searchPlaceholder="Search employeePayroll..."

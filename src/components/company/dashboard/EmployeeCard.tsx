@@ -261,7 +261,7 @@ const EmployeeCard = () => {
         <div className="relative flex min-h-[115px] overflow-hidden bg-primaryBlur sm:min-h-[130px]">
           {/* Greeting + Punch */}
           <div className="relative z-10 flex flex-1 flex-col items-start justify-center px-4 py-4 sm:px-6">
-            <div className="text-lg font-medium text-primaryLight sm:text-2xl">
+            <div className="text-lg font-medium text-primaryLight sm:text-xl">
               {getGreeting()} !
             </div>
             {!isOwner && (

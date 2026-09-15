@@ -84,15 +84,13 @@ const ManualPunchRequest: React.FC = () => {
         title="All Punch Requests"
         actionButtons={
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 w-[150px]">
-            {/* <label className="font-medium">Month</label> */}
             <MonthPicker
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
               pickerClassName="right-0"
+              className="w-28"
             />
-          </div>
           <Button
             name="Add New"
             size="sm"

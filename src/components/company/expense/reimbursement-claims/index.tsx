@@ -299,15 +299,16 @@ const Reimbursement: React.FC = () => {
       <TopBar
         title="Reimbursement Claims"
         actionButtons={
-          <div className="flex mx-auto gap-2">
+          <div className="flex gap-2">
             <MonthPicker
               placeholder="Select Month"
               value={month}
               onChange={handleMonthChange}
-              pickerClassName="right-0"
+              pickerClassName="-right-14 sm:right-0"
+              className="w-28"
             />
             <Button
-              name="Add Expense"
+              name="Add New"
               size="sm"
               onClick={handleOnAdd}
               leftIcon={<i className="fa-solid fa-plus"></i>}

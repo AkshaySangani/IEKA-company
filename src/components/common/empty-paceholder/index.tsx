@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "../image";
-import NoDataFound from "../../../assets/images/NoDataFound.jpeg";
+import NoDataFound from "../../../assets/images/NoDataFound.png";
 
 interface EmptyPlaceholderProps {
   title?: string;

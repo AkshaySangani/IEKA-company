@@ -64,7 +64,7 @@ const EmployeeDashboard = () => {
       title: "Pending",
       count: 0,
       amount: 0,
-      activeColor: "#fff0f0",
+      activeColor: "#eef3ff",
       textColor: "bg-pending",
       icon: <i className="fa-solid fa-mug-hot"></i>,
     },

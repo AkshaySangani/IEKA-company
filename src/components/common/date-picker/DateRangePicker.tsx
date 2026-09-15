@@ -59,7 +59,7 @@ export default function DateRangePicker({
   }, [startDate, endDate]);
 
   return (
-    <div className="relative">
+    <div className="flex flex-col">
       {label && (
         <label className="mb-2 block text-sm font-medium leading-4 text-inputLabel">
           {label} {required && <span className="text-error">*</span>}
