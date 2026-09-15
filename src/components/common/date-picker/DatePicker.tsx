@@ -114,6 +114,11 @@ export default function DatePickerField({
             name={name}
             error={error}
             disabled={disabled}
+            readOnly
+            inputMode="none"
+            onKeyDown={(event) => event.preventDefault()}
+            onPaste={(event) => event.preventDefault()}
+            onFocus={(event) => event.currentTarget.blur()}
             icon={
               <i
                 className="fa-regular fa-calendar text-secondary/60"

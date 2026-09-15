@@ -76,6 +76,11 @@ export default function DateRangePicker({
         customInput={
           <TextField
             value={value}
+            readOnly
+            inputMode="none"
+            onKeyDown={(event) => event.preventDefault()}
+            onPaste={(event) => event.preventDefault()}
+            onFocus={(event) => event.currentTarget.blur()}
             className="w-full"
             placeholder={DATE_FORMAT}
             error={error}
