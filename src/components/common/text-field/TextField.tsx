@@ -68,7 +68,9 @@ const TextField: React.FC<InputProps> = ({
             min-h-[46px] sm:min-h-[36px]
             border border-inputBorder
             bg-white
-            py-[5px] px-[20px] sm:px-[15px]
+            px-[15px]
+            sm:py-[5px]
+            py-[10px]
             text-base
             sm:text-sm
             font-medium
