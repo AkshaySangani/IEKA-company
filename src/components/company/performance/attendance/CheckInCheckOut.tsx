@@ -44,7 +44,6 @@ export default function CheckInCheckOut({
                 : undefined,
 
             inLeave:
-              (attendance.lateMinutes && attendance.isHalfDay) ||
               (attendance.isHalfDay &&
                 attendance.leaveRequestId &&
                 attendance.leaveRequestId.duration === LeaveDuration.FIRST_HALF)
@@ -57,7 +56,6 @@ export default function CheckInCheckOut({
                 : undefined,
 
             outLeave:
-              (attendance.earlyExitMinutes && attendance.isHalfDay) ||
               (attendance.isHalfDay &&
                 attendance.leaveRequestId &&
                 attendance.leaveRequestId.duration ===
