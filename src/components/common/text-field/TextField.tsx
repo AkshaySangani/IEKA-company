@@ -65,15 +65,14 @@ const TextField: React.FC<InputProps> = ({
           readOnly={readOnly}
           className={`
             min-w-full
+            min-h-[46px] sm:min-h-[36px]
             border border-inputBorder
             bg-white
-            px-[15px]
-            sm:py-[5px]
-            py-[10px]
+            py-[5px] px-[20px] sm:px-[15px]
             text-base
             sm:text-sm
             font-medium
-            ${props.type === "date" ? "leading-[25px]" : "leading-[27px]"}
+            leading-[25px]
             text-inputValue
             outline-none
             placeholder:transition-all

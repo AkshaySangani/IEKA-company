@@ -46,7 +46,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
   minDate,
   onChange,
   className = "",
-  pickerClassName = ""
+  pickerClassName = "",
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -121,7 +121,6 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
 
   return (
     <div className={`relative ${className}`} ref={wrapperRef}>
-
       <TextField
         disabled={disabled}
         onClick={handleClickOnInput}
@@ -131,69 +130,74 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
         label={label}
         required={required}
         className="w-full cursor-pointer"
+        readOnly
+        inputMode="none"
+        onKeyDown={(event) => event.preventDefault()}
+        onPaste={(event) => event.preventDefault()}
+        onFocus={(event) => event.currentTarget.blur()}
       />
 
-      {open &&
-          <div
-            ref={dropdownRef}
-            className={`absolute top-full z-[9999] w-[235px] rounded border mt-1 bg-white shadow-lg ${pickerClassName}`}
-          >
-            {/* Header */}
+      {open && (
+        <div
+          ref={dropdownRef}
+          className={`absolute top-full z-[9999] w-[235px] rounded border mt-1 bg-white shadow-lg ${pickerClassName}`}
+        >
+          {/* Header */}
 
-            <div className="flex items-center justify-between px-4 py-1 border-b bg-disabledBg">
-              <button
-                type="button"
-                onClick={() => {
-                  if (showYears) {
-                    setStartYear((prev) => prev - 10);
-                  } else {
-                    setSelectedYear((prev) => prev - 1);
-                  }
-                }}
-              >
-                <ChevronLeft size={18} />
-              </button>
+          <div className="flex items-center justify-between px-4 py-1 border-b bg-disabledBg">
+            <button
+              type="button"
+              onClick={() => {
+                if (showYears) {
+                  setStartYear((prev) => prev - 10);
+                } else {
+                  setSelectedYear((prev) => prev - 1);
+                }
+              }}
+            >
+              <ChevronLeft size={18} />
+            </button>
 
-              <button
-                type="button"
-                onClick={() => setShowYears((prev) => !prev)}
-                className="text-[18px] font-medium"
-              >
-                {showYears ? `${startYear}-${startYear + 9}` : selectedYear}
-              </button>
+            <button
+              type="button"
+              onClick={() => setShowYears((prev) => !prev)}
+              className="text-[18px] font-medium"
+            >
+              {showYears ? `${startYear}-${startYear + 9}` : selectedYear}
+            </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  if (showYears) {
-                    setStartYear((prev) => prev + 10);
-                  } else {
-                    setSelectedYear((prev) => prev + 1);
-                  }
-                }}
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                if (showYears) {
+                  setStartYear((prev) => prev + 10);
+                } else {
+                  setSelectedYear((prev) => prev + 1);
+                }
+              }}
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
 
-            {/* Years */}
+          {/* Years */}
 
-            {showYears ? (
-              <div className="grid grid-cols-3 gap-1 p-2">
-                {years.map((year) => {
-                  const disabledYear =
-                    year === startYear - 1 || year === startYear + 10;
+          {showYears ? (
+            <div className="grid grid-cols-3 gap-1 p-2">
+              {years.map((year) => {
+                const disabledYear =
+                  year === startYear - 1 || year === startYear + 10;
 
-                  return (
-                    <button
-                      key={year}
-                      type="button"
-                      disabled={disabledYear}
-                      onClick={() => {
-                        setSelectedYear(year);
-                        setShowYears(false);
-                      }}
-                      className={`
+                return (
+                  <button
+                    key={year}
+                    type="button"
+                    disabled={disabledYear}
+                    onClick={() => {
+                      setSelectedYear(year);
+                      setShowYears(false);
+                    }}
+                    className={`
                         rounded-md p-2 text-lg transition
                         ${
                           selectedYear === year
@@ -206,42 +210,41 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
                             : "text-gray-700"
                         }
                       `}
-                    >
-                      {year}
-                    </button>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="grid grid-cols-3 p-1">
-                {Object.keys(MONTHS).map((month) => {
-                  const monthNumber = Number(month);
+                  >
+                    {year}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 p-1">
+              {Object.keys(MONTHS).map((month) => {
+                const monthNumber = Number(month);
 
-                  const disabledMonth = isMonthDisabled(
-                    monthNumber,
-                    selectedYear,
-                  );
+                const disabledMonth = isMonthDisabled(
+                  monthNumber,
+                  selectedYear,
+                );
 
-                  const isSelected =
-                    value?.month === monthNumber &&
-                    value?.year === selectedYear;
+                const isSelected =
+                  value?.month === monthNumber && value?.year === selectedYear;
 
-                  return (
-                    <button
-                      key={month}
-                      type="button"
-                      disabled={disabledMonth}
-                      onClick={() => {
-                        if (disabledMonth) return;
+                return (
+                  <button
+                    key={month}
+                    type="button"
+                    disabled={disabledMonth}
+                    onClick={() => {
+                      if (disabledMonth) return;
 
-                        onChange({
-                          month: monthNumber,
-                          year: selectedYear,
-                        });
+                      onChange({
+                        month: monthNumber,
+                        year: selectedYear,
+                      });
 
-                        setOpen(false);
-                      }}
-                      className={`
+                      setOpen(false);
+                    }}
+                    className={`
           mx-auto flex items-center justify-center
           rounded-md px-2 py-2 text-[18px] transition
 
@@ -253,14 +256,15 @@ const MonthPicker: React.FC<MonthPickerProps> = ({
                 : "hover:bg-primaryBlur"
           }
         `}
-                    >
-                      {MONTHS[monthNumber]}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>}
+                  >
+                    {MONTHS[monthNumber]}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

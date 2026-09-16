@@ -331,7 +331,7 @@ const OfficeExpense: React.FC = () => {
       <TopBar
         title="Office & Assets Expense"
         actionButtons={
-          <div className="flex mx-auto gap-2">
+          <div className="flex gap-2">
             <MonthPicker
               placeholder="Select Month"
               value={month}

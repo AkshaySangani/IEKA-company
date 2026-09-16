@@ -140,6 +140,11 @@ export default function TimePickerField({
             placeholder={"HH:mm"}
             onChange={handleInputChange}
             onClick={openPicker}
+             readOnly
+            inputMode="none"
+            onKeyDown={(event) => event.preventDefault()}
+            onPaste={(event) => event.preventDefault()}
+            onFocus={(event) => event.currentTarget.blur()}
             icon={
               <i
                 className="fa-regular fa-clock cursor-pointer"

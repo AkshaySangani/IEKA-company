@@ -65,7 +65,6 @@ const YearPicker: React.FC<YearPickerProps> = ({
 
   return (
     <div className={`relative ${className}`} ref={ref}>
-
       <TextField
         disabled={disabled}
         onClick={handleClick}
@@ -75,6 +74,11 @@ const YearPicker: React.FC<YearPickerProps> = ({
         label={label}
         required={required}
         className="w-full cursor-pointer"
+        readOnly
+        inputMode="none"
+        onKeyDown={(event) => event.preventDefault()}
+        onPaste={(event) => event.preventDefault()}
+        onFocus={(event) => event.currentTarget.blur()}
       />
 
       {open && (
