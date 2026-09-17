@@ -24,11 +24,11 @@
     "zustand": "^5.0.14"
   },
   "scripts": {
-  "start": "react-app-rewired start",
-  "build": "react-app-rewired build",
-  "test": "react-app-rewired test",
-  "eject": "react-scripts eject"
-},
+    "start": "node init && react-app-rewired start",
+    "build": "node init && react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
