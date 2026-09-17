@@ -23,6 +23,7 @@ import { DateFormat, formatDate } from "../../../utils/date-format";
 import PageLoader from "../../common/loader/PageLoader";
 import LocationPermissionModal from "../../common/modal/LocationPermissionModal";
 import { useAuthStore } from "../../../store/auth-store";
+import ActionModal from "../../common/modal/ActionModal";
 
 interface IBranch {
   _id: string;
@@ -95,7 +96,10 @@ export interface IPunchInfo {
 const EmployeeCard = () => {
   const { user } = useAuthStore();
   const [loading, setLoading] = useState<boolean>(false);
+  const [punchLoading, setPunchLoading] = useState<boolean>(false);
   const [locationOpen, setLocationOpen] = useState<boolean>(false);
+
+  const [actionOpen, setActionOpen] = useState<string>("");
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -143,10 +147,10 @@ const EmployeeCard = () => {
    * Punch In
    */
   const setPunchIn = async () => {
-    if (loading) return;
+    if (punchLoading) return;
 
     try {
-      setLoading(true);
+      setPunchLoading(true);
 
       const payload = await getLocationPayload();
 
@@ -163,7 +167,7 @@ const EmployeeCard = () => {
     } catch (error) {
       console.error("Punch In Error", error);
     } finally {
-      setLoading(false);
+      setPunchLoading(false);
     }
   };
 
@@ -171,10 +175,10 @@ const EmployeeCard = () => {
    * Punch Out
    */
   const setPunchOut = async () => {
-    if (loading) return;
+    if (punchLoading) return;
 
     try {
-      setLoading(true);
+      setPunchLoading(true);
 
       const payload = await getLocationPayload();
 
@@ -192,7 +196,7 @@ const EmployeeCard = () => {
     } catch (error) {
       console.error("Punch Out Error", error);
     } finally {
-      setLoading(false);
+      setPunchLoading(false);
     }
   };
 
@@ -253,6 +257,20 @@ const EmployeeCard = () => {
       .join(":");
   };
 
+  const handleAction = (punchType?: "in" | "out") => {
+    if(punchType){
+      setActionOpen(punchType)
+    } else setActionOpen("");
+  };
+
+  const handleOnConfirm = async () => {
+    if(actionOpen === "in"){
+      await setPunchIn()
+    } else if(actionOpen === "out"){
+      await setPunchOut();
+    } else return;
+  }
+
   return (
     <>
       <div className="w-full relative p-3 sm:p-4 content-card">
@@ -302,9 +320,7 @@ const EmployeeCard = () => {
                     onClick={
                       isPunchedOut
                         ? () => {}
-                        : isPunchedIn
-                          ? setPunchOut
-                          : setPunchIn
+                        : () => handleAction(isPunchedIn ? "out" : "in")
                     }
                     className="mt-3 inline-flex h-9 items-center gap-2 rounded-sm border border-primaryLight bg-white px-3 text-sm font-medium text-primaryLight transition hover:bg-primaryLight hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
@@ -417,6 +433,14 @@ const EmployeeCard = () => {
       <LocationPermissionModal
         isOpen={locationOpen}
         onClose={() => setLocationOpen(false)}
+      />
+
+      <ActionModal
+        isOpen={actionOpen !== ""}
+        title={`Are you sure you want to punch ${actionOpen}?`}
+        loading={punchLoading}
+        handleOpenClose={handleAction}
+        handleSubmit={handleOnConfirm}
       />
     </>
   );

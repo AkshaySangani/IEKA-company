@@ -81,6 +81,7 @@ const TextField: React.FC<InputProps> = ({
             placeholder:duration-400
             placeholder:ease-in-out
             focus:border-inputFocus
+            focus:rounded-0
             sm:placeholder:text-sm
             placeholder:text-md
             placeholder:font-normal
