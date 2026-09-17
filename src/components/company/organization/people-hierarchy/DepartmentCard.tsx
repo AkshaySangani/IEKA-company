@@ -9,7 +9,7 @@ interface DepartmentCardProps {
 export default function DepartmentCard({ department }: DepartmentCardProps) {
   return (
     <>
-      <div className="content-card p-1.5 sm:p-2.5">
+      <div className="content-card p-1.5 sm:p-2.5 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between bg-[#4F79C7] px-2 sm:px-3 py-1 text-white">
           <div className="flex items-center gap-2 ">
@@ -65,11 +65,11 @@ export default function DepartmentCard({ department }: DepartmentCardProps) {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col justify-between py-4 px-2">
+          <div className={`flex flex-col justify-between py-4 px-2 ${department.manager ? "" : "flex-1"}`}>
             <EmptyPlaceholder
               title="No employee(s) found."
               description="It seems employee assigned for this manager/shift."
-              className="!h-[100px]"
+              className={department.manager ? "!h-[150px]" : ""}
             />
           </div>
         )}
